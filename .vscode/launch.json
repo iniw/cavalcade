@@ -7,7 +7,6 @@
             "request": "attach",
             "program": "${env:CSGO}\\csgo.exe",
             "processName": "csgo.exe",
-            //"processId": "${command:pickProcess}",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
