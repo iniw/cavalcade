@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "cavalcade-debug",
+            "type": "cppvsdbg",
+            "request": "attach",
+            "program": "${env:CSGO}\\csgo.exe",
+            "processName": "csgo.exe",
+            //"processId": "${command:pickProcess}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "console": "externalTerminal"
+        }
+    ]
+}

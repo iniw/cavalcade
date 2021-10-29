@@ -1,0 +1,19 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "cppStandard": "c++20",
+            "intelliSenseMode": "msvc-x64",
+            "windowsSdkVersion": "10.0.19041.0",
+            "configurationProvider": "ms-vscode.cmake-tools",
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "${default}",
+                "path": [
+                    "${workspaceFolder}"
+                ]
+            }
+        }
+    ],
+    "version": 4
+}
