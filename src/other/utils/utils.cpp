@@ -11,5 +11,5 @@ BOOL utils::create_thread( DWORD WINAPI function( unk ), unk parameter ) {
 }
 
 void utils::sleep( u32 time ) {
-	std::this_thread::sleep_for( std::chrono::milliseconds( time ) );
+	std::this_thread::sleep_for( chr::milliseconds( time ) );
 }

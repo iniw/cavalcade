@@ -4,8 +4,6 @@
 #include "../log_level/log_level.hpp"
 
 namespace io {
-	namespace fs = std::filesystem;
-
 	enum dirs
 	{
 		DOCS,    // user/documents
@@ -36,7 +34,6 @@ namespace io {
 
 		bool create_directories( );
 	};
-
 } // namespace io
 
 #include "files.inl"

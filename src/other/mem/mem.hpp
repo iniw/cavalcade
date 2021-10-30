@@ -3,15 +3,14 @@
 
 #include "module_info/module_info.hpp"
 #include "types/address.hpp"
-#include "types/bit_vector.hpp"
 #include "types/buffer.hpp"
 #include "types/detour.hpp"
 #include "types/section.hpp"
 #include "types/stack.hpp"
+
 #include "win32/win32.hpp"
 
 namespace mem {
-
 	struct mem {
 	private:
 

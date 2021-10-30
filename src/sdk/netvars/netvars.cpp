@@ -35,9 +35,7 @@ bool sdk::netvars::init( ) {
 }
 
 ptr sdk::netvars::get( u32 netvar_hash ) {
-	HENFORCE( m_offsets.contains( netvar_hash ), "invalid netvar name: {}", netvar_hash );
-
-	return m_offsets[ netvar_hash ];
+	return m_offsets.at( netvar_hash );
 }
 
 ptr sdk::netvars::find_in_datamap( const data_map* map, u32 netvar_hash ) {

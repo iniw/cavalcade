@@ -12,7 +12,6 @@ namespace mem {
 		struct {
 			PLH::CapstoneDisassembler* capstone;
 			PLH::x86Detour* x86_detour;
-
 		} m_plh;
 
 	public:
@@ -20,8 +19,7 @@ namespace mem {
 		constexpr detour( ) = default;
 
 		detour( address addr ) : m_og{ 0u } {
-			m_address = addr;
-
+			m_address        = addr;
 			m_plh.capstone   = nullptr;
 			m_plh.x86_detour = nullptr;
 		}
@@ -29,7 +27,6 @@ namespace mem {
 		bool hook( unk target ) {
 			m_plh.capstone   = new PLH::CapstoneDisassembler( PLH::Mode::x86 );
 			m_plh.x86_detour = new PLH::x86Detour( m_address, reinterpret_cast< u64 >( target ), &m_og, *m_plh.capstone );
-
 			return m_plh.x86_detour->hook( );
 		}
 

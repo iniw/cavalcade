@@ -1,6 +1,7 @@
 #ifndef WIN32_HPP
 #define WIN32_HPP
 
+// these are just helper types
 namespace mem::win32 {
 	enum EXCEPTION_DISPOSITION : u32
 	{

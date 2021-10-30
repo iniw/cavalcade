@@ -24,7 +24,7 @@ void io::io::unload( ) {
 }
 
 std::filesystem::path& io::io::get_dir( dirs id ) {
-	return m_files.m_directories[id];
+	return m_files.m_directories[ id ];
 }
 
 BOOL io::io::think( UINT msg, WPARAM w_param, LPARAM l_param ) {

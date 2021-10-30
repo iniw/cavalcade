@@ -44,7 +44,7 @@ void mem::mem::unload( ) {
 }
 
 mem::module_info& mem::mem::get( u32 name_hash ) {
-	return m_modules[ name_hash ];
+	return m_modules.at( name_hash );
 }
 
 void mem::mem::add_addresses( ) {

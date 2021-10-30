@@ -10,9 +10,8 @@ namespace io {
 		WARNING,
 		DISASTER,
 	};
-
+	
 	namespace detail {
-
 		struct log_option {
 		private:
 

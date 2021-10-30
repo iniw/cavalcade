@@ -2,7 +2,6 @@
 #define MOVE_DATA_HPP
 
 namespace sdk {
-
 	struct move_data {
 		bool m_first_run_of_functions : 1;
 		bool m_game_code_moved_player : 1;
@@ -32,8 +31,7 @@ namespace sdk {
 		f32 m_constraint_speed_factor;
 		bool m_constraint_past_radius;
 		math::v3f m_abs_origin;
-	}
-
+	};
 } // namespace sdk
 
 #endif // MOVE_DATA_HPP

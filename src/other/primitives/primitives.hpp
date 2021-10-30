@@ -24,4 +24,8 @@ using cwstr = const wchar_t*;
 
 using unk = void*;
 
+// are these healthy?
+namespace fs  = std::filesystem;
+namespace chr = std::chrono;
+
 #endif // PRIMITIVES_HPP

@@ -80,7 +80,7 @@ namespace jm {
 
 			std::uint64_t value = key;
 			for ( std::size_t i = 0; i < idx_offset && i + idx * idx_offset < N; ++i )
-				value ^= ( std::uint64_t{ static_cast< cast_type >( str[i + idx * idx_offset] ) }
+				value ^= ( std::uint64_t{ static_cast< cast_type >( str[ i + idx * idx_offset ] ) }
 				           << ( ( i % idx_offset ) * 8 * value_size ) );
 
 			return value;
@@ -107,7 +107,7 @@ namespace jm {
 		constexpr static inline std::uint64_t alignment = 16;
 #endif
 
-		alignas( alignment ) std::uint64_t _storage[sizeof...( Keys )];
+		alignas( alignment ) std::uint64_t _storage[ sizeof...( Keys ) ];
 
 	public:
 
@@ -238,7 +238,7 @@ namespace jm {
 
 	template< class L, std::size_t Size, std::size_t... Indices >
 	xor_string( L l, std::integral_constant< std::size_t, Size >, std::index_sequence< Indices... > )
-		-> xor_string< std::remove_const_t< std::remove_reference_t< decltype( l( )[0] ) > >, Size,
+		-> xor_string< std::remove_const_t< std::remove_reference_t< decltype( l( )[ 0 ] ) > >, Size,
 	                   std::integer_sequence< std::uint64_t, detail::key8< Indices >( )... >, std::index_sequence< Indices... > >;
 } // namespace jm
 

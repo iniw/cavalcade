@@ -12,10 +12,10 @@ namespace sdk::interfaces {
 		virtual void release( ) override                 = 0;
 		virtual const math::v3f& get_abs_origin( ) const = 0;
 		virtual const math::ang& get_abs_angles( ) const = 0;
-
-		data_map* get_data_map( ) { return mem::call_v_func< data_map*, 15 >( this ); }
-
-		data_map* get_pred_data_map( ) { return mem::call_v_func< data_map*, 17 >( this ); }
+		
+		VFUNC(data_map*, get_data_map, 15, (  ) );
+		
+		VFUNC(data_map*, get_pred_data_map, 17, (  ) );
 	};
 } // namespace sdk::interfaces
 
