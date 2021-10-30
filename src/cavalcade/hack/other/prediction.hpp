@@ -23,7 +23,6 @@ namespace hack::other {
 
 		void update( );
 	};
-
 } // namespace hack::other
 
 #endif // PREDICTION_HPP
