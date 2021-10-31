@@ -17,6 +17,7 @@
 #include "ent_list.hpp"
 #include "prediction.hpp"
 #include "mdl_cache.hpp"
+#include "game_movement.hpp"
 
 namespace sdk::interfaces {
 	struct registry {

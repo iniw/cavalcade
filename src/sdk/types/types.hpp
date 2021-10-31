@@ -18,6 +18,7 @@
 #include "cs_weapon_info.hpp"
 #include "move_data.hpp"
 #include "move_helper.hpp"
+#include "client_state.hpp"
 
 #include "interfaces/interfaces.hpp"
 

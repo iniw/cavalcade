@@ -42,6 +42,8 @@ namespace sdk {
 
 		DATAFIELD_PRED( move_type, get_move_type, "m_MoveType" );
 
+		DATAFIELD_PRED( i32, get_impulse, "m_nImpulse" );
+
 		auto set_local_view_angles( const math::ang& view_angles ) {
 			return mem::call_v_func< void, idx::SET_LOCAL_VIEW_ANGLES, const math::ang& >( this, view_angles );
 		}
@@ -58,6 +60,18 @@ namespace sdk {
 				HASH_CT( "C_BasePlayer::SimulatePlayerSimulatedEntities" ) );
 
 			return function( this );
+		}
+
+		auto update_button_state( i32 cmd_mask ) {
+			auto& buttons = get_buttons( );
+
+			get_button_last( ) = buttons;
+
+			buttons             = cmd_mask;
+			i32 buttons_changed = get_button_last( ) ^ buttons;
+
+			get_button_pressed( )  = buttons_changed & buttons;
+			get_button_released( ) = buttons_changed & ( ~buttons );
 		}
 	};
 } // namespace sdk

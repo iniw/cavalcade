@@ -19,8 +19,11 @@ namespace sdk {
 		interfaces::ent_list* m_ent_list;
 		interfaces::prediction* m_prediction;
 		interfaces::mdl_cache* m_mdl_cache;
+		interfaces::game_movement* m_game_movement;
 
 		globals* m_globals;
+		move_helper* m_move_helper;
+		client_state* m_client_state;
 
 	public:
 
