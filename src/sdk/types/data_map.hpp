@@ -17,11 +17,8 @@ namespace sdk {
 		i32 m_field_offset[ TD_OFFSET_COUNT ];
 		u8 m_field_size;
 		i8 m_flags;
-
 		PAD( 0xC );
-
 		data_map* m_type_description;
-
 		PAD( 0x18 );
 	};
 

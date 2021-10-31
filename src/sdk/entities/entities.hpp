@@ -1,6 +1,8 @@
 #ifndef ENTITIES_HPP
 #define ENTITIES_HPP
 
+#include "../netvars/netvars.hpp"
+
 #include "base_entity.hpp"
 #include "base_combat_character.hpp"
 #include "base_player.hpp"

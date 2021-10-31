@@ -13,8 +13,6 @@ namespace sdk {
 
 		NETVAR( i32, get_entity_quality, "DT_BaseAttributableItem->m_iEntityQuality" );
 
-		NETVAR_PTR( char, get_custom_name, "DT_BaseAttributableItem->m_szCustomName" );
-
 		NETVAR( i32, get_fallback_paint_kit, "DT_BaseAttributableItem->m_nFallbackPaintKit" );
 
 		NETVAR( i32, get_fallback_seed, "DT_BaseAttributableItem->m_nFallbackSeed" );
@@ -22,6 +20,8 @@ namespace sdk {
 		NETVAR( f32, get_fallback_wear, "DT_BaseAttributableItem->m_flFallbackWear" );
 
 		NETVAR( i32, get_fallback_stat_trak, "DT_BaseAttributableItem->m_nFallbackStatTrak" );
+
+		PNETVAR( char, get_custom_name, "DT_BaseAttributableItem->m_szCustomName" );
 	};
 } // namespace sdk
 

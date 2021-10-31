@@ -43,10 +43,6 @@ void mem::mem::unload( ) {
 		v.restore( );
 }
 
-mem::module_info& mem::mem::get( u32 name_hash ) {
-	return m_modules.at( name_hash );
-}
-
 void mem::mem::add_addresses( ) {
 #define ADD_PATTERN_REL( module_name, addr_name, pattern )                                                                       \
 	m_modules[ HASH_CT( module_name ) ].add_pattern( HASH_CT( addr_name ), STB( pattern ), true )
@@ -147,7 +143,7 @@ void mem::mem::add_addresses( ) {
 
 bool mem::mem::validate_addresses( ) {
 	for ( auto& [ k, v ] : m_modules )
-		if ( !v.validate_addresses( ) )
+		if ( !v.validate( ) )
 			return false;
 
 	return true;

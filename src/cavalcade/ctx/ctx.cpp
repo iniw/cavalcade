@@ -67,7 +67,7 @@ void cavalcade::ctx::iter_players( const std::function< void( sdk::cs_player* ) 
 		return;
 
 	for ( i32 i = 1; i <= g_csgo.m_globals->m_max_clients; i++ ) {
-		auto player = g_csgo.m_entity_list->get< sdk::cs_player* >( i );
+		auto player = g_csgo.m_ent_list->get< sdk::cs_player* >( i );
 		if ( !player )
 			continue;
 

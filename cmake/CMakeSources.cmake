@@ -7,6 +7,7 @@ set(SOURCES
     src/cavalcade/hack/other/prediction.cpp
     
     src/cavalcade/hooks/functions/base_player.cpp
+    src/cavalcade/hooks/functions/chlc_client.cpp
     src/cavalcade/hooks/hooks.cpp
 
     # --- other ---

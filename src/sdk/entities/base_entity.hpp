@@ -15,6 +15,18 @@ namespace sdk {
 			IS_WEAPON          = 166
 		};
 
+		VFUNC( void, think, idx::THINK, ( ) );
+
+		VFUNC( cstr, get_class_name, idx::GET_CLASS_NAME, ( ) );
+
+		VFUNC( u32, physics_solid_mask, idx::PHYSICS_SOLID_MASK, ( ) );
+
+		VFUNC( bool, is_alive, idx::IS_ALIVE, ( ) );
+
+		VFUNC( bool, is_player, idx::IS_PLAYER, ( ) );
+
+		VFUNC( bool, is_weapon, idx::IS_WEAPON, ( ) );
+
 		NETVAR( i32, get_effects, "DT_BaseEntity->m_fEffects" );
 
 		NETVAR( math::v3f, get_origin, "DT_BaseEntity->m_vecOrigin" );
@@ -33,19 +45,21 @@ namespace sdk {
 
 		NETVAR_OFFSET( f32, get_old_sim_time, "DT_BaseEntity->m_flSimulationTime", 0x4 );
 
-		NETVAR_DATAMAP( math::matrix_3x4, get_coordinate_frame, "m_rgflCoordinateFrame" );
+		DATAFIELD( math::matrix_3x4, get_coordinate_frame, "m_rgflCoordinateFrame" );
 
-		VFUNC( void, think, idx::THINK, ( ) );
+		auto physics_run_think( i32 think_method = 0 ) {
+			static auto function = g_mem[ HASH_CT( "client.dll" ) ].get_address< bool( __thiscall* )( void*, i32 ) >(
+				HASH_CT( "C_BaseEntity::PhysicsRunThink" ) );
 
-		VFUNC( cstr, get_class_name, idx::GET_CLASS_NAME, ( ) );
+			return function( this, think_method );
+		}
 
-		VFUNC( u32, physics_solid_mask, idx::PHYSICS_SOLID_MASK, ( ) );
+		auto check_has_think_function( bool is_thinking = false ) {
+			static auto function = g_mem[ HASH_CT( "client.dll" ) ].get_address< void( __thiscall* )( void*, bool ) >(
+				HASH_CT( "C_BaseEntity::CheckHasThinkFunction" ) );
 
-		VFUNC( bool, is_alive, idx::IS_ALIVE, ( ) );
-
-		VFUNC( bool, is_player, idx::IS_PLAYER, ( ) );
-
-		VFUNC( bool, is_weapon, idx::IS_WEAPON, ( ) );
+			return function( this, is_thinking );
+		}
 
 		static void set_prediction_random_seed( u32 value ) {
 			static auto pred_random_seed = g_mem[ HASH_CT( "client.dll" ) ]

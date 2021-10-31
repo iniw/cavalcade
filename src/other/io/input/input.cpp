@@ -18,8 +18,6 @@ BOOL io::input::think( UINT msg, WPARAM w_param, LPARAM l_param ) {
 	u32 key_id          = 0;
 	key_state key_state = key_state::UP;
 
-	u64 time = LI_FN( GetTickCount64 )( );
-
 	switch ( msg ) {
 	case WM_KEYDOWN:
 
@@ -79,6 +77,8 @@ BOOL io::input::think( UINT msg, WPARAM w_param, LPARAM l_param ) {
 
 		return LI_FN( CallWindowProcA )( s_og, cavalcade::window, msg, w_param, l_param );
 	}
+
+	u64 time = LI_FN( GetTickCount64 )( );
 
 	if ( key_state == key_state::UP && m_keys[ key_id ].m_state == key_state::DOWN )
 		m_keys[ key_id ] = { key_state::RELEASED, time };

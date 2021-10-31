@@ -16,7 +16,8 @@ namespace sdk {
 		interfaces::client_dll* m_client_dll;
 		interfaces::engine* m_engine;
 		interfaces::cvars* m_cvars;
-		interfaces::entity_list* m_entity_list;
+		interfaces::ent_list* m_ent_list;
+		interfaces::prediction* m_prediction;
 
 		globals* m_globals;
 

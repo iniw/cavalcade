@@ -4,9 +4,6 @@
         "CMAKE_TOOLCHAIN_FILE": "C:/dev/vcpkg/scripts/buildsystems/vcpkg.cmake",
         "VCPKG_TARGET_TRIPLET": "x86-windows-static"
     },
-    "editor.formatOnSave": true,
-    "editor.quickSuggestionsDelay": 0,
-    "editor.quickSuggestions": true,
     "C_Cpp.formatting": "clangFormat",
     "C_Cpp.clang_format_path": "C:/Program Files/LLVM/bin/clang-format.exe",
     "clang-format.assumeFilename": ".clang-format",
@@ -82,6 +79,15 @@
         "iostream": "cpp",
         "numbers": "cpp",
         "stop_token": "cpp",
-        "thread": "cpp"
-    }
+        "thread": "cpp",
+        "*.rh": "cpp"
+    },
+    "todo-tree.general.tags": [
+        "BUG",
+        "FIXME",
+        "TODO",
+        "XXX",
+        "NOTE"
+    ],
+    "todo-tree.general.statusBar": "tags"
 }

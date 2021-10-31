@@ -17,6 +17,7 @@
 #include "globals.hpp"
 #include "cs_weapon_info.hpp"
 #include "move_data.hpp"
+#include "move_helper.hpp"
 
 #include "interfaces/interfaces.hpp"
 

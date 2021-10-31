@@ -1,12 +1,12 @@
 #include "../mem.hpp"
 
 mem::module_info::module_info( address dll_base ) {
-	m_dll_base = dll_base;
+	m_module_base = dll_base;
 
-	m_bitmap = m_dll_base.as< u8* >( );
+	m_bitmap = m_module_base.as< u8* >( );
 
-	m_dos_header = reinterpret_cast< PIMAGE_DOS_HEADER >( m_dll_base.as< ptr >( ) );
-	m_nt_headers = reinterpret_cast< PIMAGE_NT_HEADERS >( m_dll_base + m_dos_header->e_lfanew );
+	m_dos_header = reinterpret_cast< PIMAGE_DOS_HEADER >( m_module_base.as< ptr >( ) );
+	m_nt_headers = reinterpret_cast< PIMAGE_NT_HEADERS >( m_module_base + m_dos_header->e_lfanew );
 
 	m_size = m_nt_headers->OptionalHeader.SizeOfImage;
 
@@ -63,11 +63,10 @@ mem::address mem::module_info::search_byte_array( const i32* bytes, u32 size, co
 
 void mem::module_info::add_address( u32 name_hash, address address ) {
 	ENFORCE( address, "bad address, name: {}", name_hash );
-
 	m_addresses[ name_hash ] = address;
 }
 
-bool mem::module_info::validate_addresses( ) {
+bool mem::module_info::validate( ) {
 	if ( m_addresses.empty( ) )
 		return true;
 
@@ -79,7 +78,8 @@ bool mem::module_info::validate_addresses( ) {
 }
 
 bool mem::module_info::hook( u32 name_hash, unk custom_fn ) {
-	return m_addresses[ name_hash ].hook( custom_fn );
+	ENFORCE( m_addresses.contains( name_hash ), "invalid hook name: {}", name_hash );
+	return m_addresses.at( name_hash ).hook( custom_fn );
 }
 
 void mem::module_info::restore( ) {

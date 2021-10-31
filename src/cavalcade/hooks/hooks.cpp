@@ -6,4 +6,6 @@ bool cavalcade::hooks::init( ) {
 
 	if ( !g_mem[ HASH_CT( "client.dll" ) ].hook( HASH_CT( "C_BasePlayer::CreateMove" ), &base_player::create_move ) )
 		return false;
+
+	return true;
 }

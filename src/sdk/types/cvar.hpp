@@ -30,20 +30,13 @@ namespace sdk {
 		VFUNC( void, set_value, idx::SET_VALUE_I32, ( i32 value ), value );
 
 		PAD( 0x19 );
-
 		cvar* m_parent;
-
 		PAD( 0x4 );
-
 		str m_string;
-
 		PAD( 0x4 );
-
 		f32 m_f32;
 		i32 m_i32;
-
 		PAD( 0xA );
-
 		utl_vector< change_callback_t > m_change_callbacks;
 	};
 } // namespace sdk

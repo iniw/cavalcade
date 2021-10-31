@@ -1,9 +1,12 @@
 #ifndef NETVARS_HPP
 #define NETVARS_HPP
 
-#include "../types/types.hpp"
-
 namespace sdk {
+
+	struct data_map;
+	struct recv_table;
+	struct recv_prop;
+
 	struct netvars {
 	private:
 

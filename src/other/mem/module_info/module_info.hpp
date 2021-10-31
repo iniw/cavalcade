@@ -11,18 +11,18 @@ namespace mem {
 	struct module_info {
 	private:
 
+		u32 m_size;
+
 		u8* m_bitmap;
 		PIMAGE_DOS_HEADER m_dos_header;
 		PIMAGE_NT_HEADERS m_nt_headers;
 
 		std::unordered_map< u32, section > m_sections;
+		std::unordered_map< u32, detour > m_addresses;
 
 	public:
 
-		address m_dll_base;
-		u32 m_size;
-
-		std::unordered_map< u32, detour > m_addresses;
+		address m_module_base;
 
 	public:
 
@@ -30,7 +30,7 @@ namespace mem {
 
 		module_info( address dll_base );
 
-		operator address( ) { return m_dll_base; }
+		operator address( ) { return m_module_base; }
 
 		template< u32 size >
 		address find_pattern( const std::array< i32, size >& pattern, u32 section_hash = HASH_CT( ".text" ) );
@@ -40,7 +40,7 @@ namespace mem {
 
 		void add_address( u32 name_hash, address address );
 
-		bool validate_addresses( );
+		bool validate( );
 
 		bool hook( u32 name_hash, unk custom_fn );
 

@@ -25,9 +25,6 @@
 
 #define LI_MODULE( name ) ::li::detail::lazy_module< ::li::detail::khash( name ) >( )
 
-// NOTE only std::forward is used from this header.
-// If there is a need to eliminate this dependency the function itself is very small.
-
 #ifndef LAZY_IMPORTER_NO_FORCEINLINE
 #	if defined( _MSC_VER )
 #		define LAZY_IMPORTER_FORCEINLINE __forceinline

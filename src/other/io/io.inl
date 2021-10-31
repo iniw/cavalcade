@@ -3,13 +3,14 @@
 
 template< typename... VA >
 inline std::string io::format( std::string_view fmt, VA&&... args ) {
-	return fmt::vformat( fmt, fmt::make_format_args( args... ) );
+	return fmt::vformat( fmt, fmt::make_format_args( std::forward< VA >( args )... ) );
 }
 
 template< auto state >
 bool io::io::key_state( u8 key_id ) {
 	auto& key_info = m_input.m_keys[ key_id ];
 
+	// TODO(wini): think of a better way to handle this
 	if constexpr ( state == key_state::RELEASED ) {
 		u64 time_delta = LI_FN( GetTickCount64 )( ) - key_info.m_time;
 
@@ -32,7 +33,6 @@ void io::io::log( std::string_view str, VA&&... args ) {
 	auto fmt = format( str, std::forward< VA >( args )... );
 
 	m_console.print< level >( fmt );
-
 	m_files.log< level >( fmt );
 }
 

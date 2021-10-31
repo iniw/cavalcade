@@ -80,7 +80,7 @@ namespace mem::win32 {
 				u8 IsLegacyProcess              : 1;
 				u8 IsImageDynamicallyRelocated  : 1;
 				u8 SkipPatchingUser32Forwarders : 1;
-				u8 SpareBits                    : 1 // 3;
+				u8 SpareBits                    : 1;
 			};
 		};
 

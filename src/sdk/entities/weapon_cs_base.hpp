@@ -11,6 +11,10 @@ namespace sdk {
 			GET_CS_WEAPON_INFO = 461
 		};
 
+		VFUNC( f32, get_max_speed, idx::GET_MAX_SPEED, ( ) );
+
+		VFUNC( cs_weapon_info*, get_cs_weapon_info, idx::GET_CS_WEAPON_INFO, ( ) );
+
 		NETVAR( bool, is_burst_mode, "DT_WeaponCSBase->m_bBurstMode" );
 
 		NETVAR( f32, get_fire_ready_time, "DT_WeaponCSBase->m_flPostponeFireReadyTime" );
@@ -22,10 +26,6 @@ namespace sdk {
 		NETVAR( i32, get_view_model_index, "DT_BaseCombatWeapon->m_nViewModelIndex" );
 
 		NETVAR( f32, get_next_primary_attack, "DT_BaseCombatWeapon->m_flNextPrimaryAttack" );
-
-		VFUNC( f32, get_max_speed, idx::GET_MAX_SPEED, ( ) );
-
-		VFUNC( cs_weapon_info*, get_cs_weapon_info, idx::GET_CS_WEAPON_INFO, ( ) );
 	};
 } // namespace sdk
 

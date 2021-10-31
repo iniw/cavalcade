@@ -27,7 +27,7 @@ namespace io {
 
 		BOOL think( UINT msg, WPARAM w_param, LPARAM l_param );
 
-		fs::path& get_dir( dirs id );
+		fs::path& directory( dirs id );
 
 		template< auto state = key_state::DOWN >
 		bool key_state( u8 key_id );

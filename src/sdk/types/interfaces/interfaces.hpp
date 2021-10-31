@@ -8,12 +8,14 @@
 #include "entities/client_collideable.hpp"
 #include "entities/client_renderable.hpp"
 #include "entities/client_thinkable.hpp"
+#include "entities/client_alpha_property.hpp"
 #include "entities/client_unknown.hpp"
 
 #include "client_dll.hpp"
 #include "cvars.hpp"
 #include "engine.hpp"
-#include "entity_list.hpp"
+#include "ent_list.hpp"
+#include "prediction.hpp"
 
 namespace sdk::interfaces {
 	struct registry {

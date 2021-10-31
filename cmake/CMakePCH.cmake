@@ -54,12 +54,12 @@ set(PCH
     <polyhook2/CapstoneDisassembler.hpp>
 
     # --- other ---
+    src/other/primitives/primitives.hpp
+
     src/cavalcade/cavalcade.hpp
     
-    src/other/primitives/primitives.hpp
     src/other/macros/macros.hpp
-    src/other/hash/hash.hpp # ensures that hash::SEED is the same across translation units
-    
+    src/other/hash/hash.hpp # ensures that hash::SEED is the same across translation units    
     
     # these two aren't necessary, i just want every file to have quick access to them;
     # mostly for debug purposes

@@ -18,18 +18,13 @@ namespace mem {
 
 	public:
 
-		module_info& operator[]( u32 name_hash ) {
-			ENFORCE( m_modules.contains( name_hash ), "invalid name: {}", name_hash );
-			return m_modules[ name_hash ];
-		}
+		module_info& operator[]( u32 name_hash ) { return m_modules.at( name_hash ); }
 
 		bool init( );
 
 		bool setup( );
 
 		void unload( );
-
-		module_info* get( u32 name_hash );
 
 	private:
 

@@ -1,6 +1,3 @@
-#ifndef BASE_PLAYER_HPP
-#define BASE_PLAYER_HPP
-
 #include "../hooks.hpp"
 
 bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 input_sample_time, sdk::user_cmd* cmd ) {
@@ -14,11 +11,7 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 
 	g_hack.m_prediction.update( );
 
-	g_hack.m_movement.think( );
-
 	g_hack.m_prediction.start( );
-
-	g_hack.m_backtracking.think( );
 
 	g_hack.m_prediction.end( );
 
@@ -26,5 +19,3 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 
 	return false;
 }
-
-#endif // BASE_PLAYER_HPP

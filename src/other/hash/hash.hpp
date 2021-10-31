@@ -8,10 +8,11 @@
 #include "../utils/cx/cx.hpp"
 
 namespace hash {
-	constexpr inline u32 SEED = utils::cx::rng( );
+	constexpr inline u32 SEED = utils::cx::rng();
 } // namespace hash
 
 #define HASH_RT( str ) hash::xxhash::gen( str, hash::SEED )
 #define HASH_CT( str ) utils::cx::data< hash::xxhash::gen( str, hash::SEED ) >::value
+#define MD5( seed ) hash::md5::gen( seed )
 
 #endif // HASH_HPP

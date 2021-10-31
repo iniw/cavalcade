@@ -28,44 +28,42 @@ void mem::module_info::add_pattern( u32 name_hash, const std::array< i32, size >
 
 template< typename T >
 T mem::module_info::export_fn( u32 name_hash, bool in_memory ) {
-	const auto exports = reinterpret_cast< IMAGE_EXPORT_DIRECTORY* >( rva_to_offset(
-		m_dll_base.add( m_nt_headers->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_EXPORT ].VirtualAddress ), m_nt_headers,
+	auto exports = reinterpret_cast< IMAGE_EXPORT_DIRECTORY* >( rva_to_offset(
+		m_module_base.add( m_nt_headers->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_EXPORT ].VirtualAddress ), m_nt_headers,
 		in_memory ) );
 
-	auto names = m_dll_base.add< u32* >( rva_to_offset( exports->AddressOfNames, m_nt_headers, in_memory ) );
+	auto names = m_module_base.add< u32* >( rva_to_offset( exports->AddressOfNames, m_nt_headers, in_memory ) );
 
 	auto ordinal_index = static_cast< u32 >( -1 );
 
 	for ( u32 i = 0; i < exports->NumberOfFunctions; i++ ) {
-		auto function_name = m_dll_base.add< cstr >( rva_to_offset( names[ i ], m_nt_headers, in_memory ) );
+		auto function_name = m_module_base.add< cstr >( rva_to_offset( names[ i ], m_nt_headers, in_memory ) );
 
 		if ( HASH_RT( function_name ) == name_hash ) {
 			ordinal_index = i;
-			break;
 		}
+		break;
 	}
 
 	if ( ordinal_index > exports->NumberOfFunctions )
 		return T( );
 
-	const auto ordinals  = m_dll_base.add< u16* >( rva_to_offset( exports->AddressOfNameOrdinals, m_nt_headers, in_memory ) );
-	const auto addresses = m_dll_base.add< u32* >( rva_to_offset( exports->AddressOfFunctions, m_nt_headers, in_memory ) );
+	auto ordinals  = m_module_base.add< u16* >( rva_to_offset( exports->AddressOfNameOrdinals, m_nt_headers, in_memory ) );
+	auto addresses = m_module_base.add< u32* >( rva_to_offset( exports->AddressOfFunctions, m_nt_headers, in_memory ) );
 
-	return m_dll_base.add< T >( rva_to_offset( addresses[ ordinals[ ordinal_index ] ], m_nt_headers, in_memory ) );
+	return m_module_base.add< T >( rva_to_offset( addresses[ ordinals[ ordinal_index ] ], m_nt_headers, in_memory ) );
 }
 
 template< typename T >
 T mem::module_info::get_og( u32 name_hash ) {
-	HENFORCE( m_addresses.contains( name_hash ), "invalid og name: {}", name_hash );
-
-	return ( T )m_addresses[ name_hash ].m_og;
+	ENFORCE( m_addresses.contains( name_hash ), "invalid og name: {}", name_hash );
+	return ( T )m_addresses.at( name_hash ).m_og;
 }
 
 template< typename T >
 T mem::module_info::get_address( u32 name_hash ) {
-	HENFORCE( m_addresses.contains( name_hash ), "invalid address name: {}", name_hash );
-
-	return m_addresses[ name_hash ].as< T >( );
+	ENFORCE( m_addresses.contains( name_hash ), "invalid address name: {}", name_hash );
+	return m_addresses.at( name_hash ).as< T >( );
 }
 
 #endif // MODULE_INFO_INL

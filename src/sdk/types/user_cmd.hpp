@@ -4,7 +4,6 @@
 namespace sdk {
 	struct user_cmd {
 		PAD( 0x4 );
-
 		i32 m_command_number;
 		i32 m_tick_count;
 		math::ang m_view_angles;

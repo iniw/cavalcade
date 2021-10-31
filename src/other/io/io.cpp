@@ -16,15 +16,13 @@ bool io::io::init( ) {
 }
 
 void io::io::unload( ) {
-	m_console.unload( );
-
 	m_input.unload( );
-
 	m_files.unload( );
+	m_console.unload( );
 }
 
-std::filesystem::path& io::io::get_dir( dirs id ) {
-	return m_files.m_directories[ id ];
+std::filesystem::path& io::io::directory( dirs id ) {
+	return m_files.m_directories.at( id );
 }
 
 BOOL io::io::think( UINT msg, WPARAM w_param, LPARAM l_param ) {

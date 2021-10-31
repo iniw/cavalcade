@@ -9,7 +9,7 @@ bool sdk::netvars::init( ) {
 
 #ifdef NETVARS_DUMP_FILE
 
-	m_file.open( g_io.get_dir( io::dirs::NETVARS ).append( "netvars.bm" ), std::ios::trunc );
+	m_file.open( g_io.directory( io::dirs::NETVARS ).append( "netvars.bm" ), std::ios::trunc );
 	if ( !m_file.good( ) )
 		return false;
 
@@ -70,19 +70,19 @@ void sdk::netvars::store( std::string_view table_name, const recv_table* table, 
 #endif
 
 	for ( auto i = 0; i < table->m_props; ++i ) {
-		const auto prop = &table->m_props_ptr[ i ];
+		auto prop = &table->m_props_ptr[ i ];
 		if ( !prop || std::isdigit( prop->m_var_name[ 0 ] ) )
 			continue;
 
 		if ( HASH_RT( prop->m_var_name ) == HASH_CT( "baseclass" ) )
 			continue;
 
-		const auto child = prop->m_data_table;
+		auto child = prop->m_data_table;
 
 		if ( child && child->m_props && child->m_net_table_name[ 0 ] == 'D' && prop->m_recv_type == prop_type::DATATABLE )
 			store( table_name, child, prop->m_offset + offset, depth + 1 );
 
-		const auto hash = HASH_RT( io::format( XOR( "{}->{}" ), table_name, prop->m_var_name ) );
+		auto hash = HASH_RT( io::format( XOR( "{}->{}" ), table_name, prop->m_var_name ) );
 
 		if ( !m_offsets[ hash ] ) {
 			m_offsets[ hash ] = prop->m_offset + offset;

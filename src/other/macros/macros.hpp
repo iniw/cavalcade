@@ -31,15 +31,15 @@ public:
 
 #define NETVAR( type, name, netvar ) OFFSET( type, name, g_netvars.get( HASH_CT( netvar ) ) )
 
-#define NETVAR_PTR( type, name, netvar ) PTR_OFFSET( type, name, g_netvars.get( HASH_CT( netvar ) ) )
+#define PNETVAR( type, name, netvar ) PTR_OFFSET( type, name, g_netvars.get( HASH_CT( netvar ) ) )
 
 #define NETVAR_OFFSET( type, name, netvar, offset ) OFFSET( type, name, g_netvars.get( HASH_CT( netvar ) ) + offset )
 
-#define NETVAR_OFFSET_PTR( type, name, netvar, offset ) PTR_OFFSET( type, name, g_netvars.get( HASH_CT( netvar ) ) + offset )
+#define PNETVAR_OFFSET( type, name, netvar, offset ) PTR_OFFSET( type, name, g_netvars.get( HASH_CT( netvar ) ) + offset )
 
-#define NETVAR_DATAMAP( type, name, netvar ) OFFSET( type, name, g_netvars.find_in_datamap( get_data_map( ), HASH_CT( netvar ) ) )
+#define DATAFIELD( type, name, netvar ) OFFSET( type, name, g_netvars.find_in_datamap( get_data_map( ), HASH_CT( netvar ) ) )
 
-#define NETVAR_DATAMAP_PRED( type, name, netvar )                                                                                \
+#define DATAFIELD_PRED( type, name, netvar )                                                                                     \
 	OFFSET( type, name, g_netvars.find_in_datamap( get_pred_data_map( ), HASH_CT( netvar ) ) )
 
 #endif // MACROS_HPP

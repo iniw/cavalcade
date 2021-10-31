@@ -3,8 +3,8 @@
 #include "ctx/ctx.hpp"
 #include "hooks/hooks.hpp"
 
-DWORD WINAPI cavalcade::init( unk dllmain_handle ) {
-	handle = static_cast< HMODULE >( dllmain_handle );
+DWORD WINAPI cavalcade::init( unk module_handle ) {
+	handle = static_cast< HMODULE >( module_handle );
 	window = LI_FN( FindWindowA )( XOR( "Valve001" ), nullptr );
 
 	HENFORCE( g_io.init( ), "failed to initialize io" );
@@ -35,7 +35,6 @@ DWORD WINAPI cavalcade::init( unk dllmain_handle ) {
 
 DWORD WINAPI cavalcade::unload( BOOL exit_type ) {
 	g_mem.unload( );
-
 	g_io.unload( );
 
 	LI_FN( FreeLibraryAndExitThread )( handle, exit_type );
