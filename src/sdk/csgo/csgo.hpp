@@ -18,6 +18,7 @@ namespace sdk {
 		interfaces::cvars* m_cvars;
 		interfaces::ent_list* m_ent_list;
 		interfaces::prediction* m_prediction;
+		interfaces::mdl_cache* m_mdl_cache;
 
 		globals* m_globals;
 

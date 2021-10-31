@@ -19,9 +19,7 @@ T sdk::csgo::find_interface( mem::module_info& the_module, u32 name_hash, bool r
 		if ( remove_numbers )
 			name.erase( std::remove_if( name.begin( ), name.end( ), []( char ch ) { return std::isdigit( ch ); } ), name.end( ) );
 
-		auto hash = HASH_RT( name );
-
-		if ( hash == name_hash ) {
+		if ( HASH_RT( name ) == name_hash ) {
 			auto interface_address = interface_node->m_create_fn( );
 			if ( !interface_address )
 				return T( );

@@ -14,6 +14,8 @@ namespace sdk {
 		NETVAR_OFFSET( bool, is_using_new_anim_state, "DT_CSPlayer->m_flLastExoJumpTime", 0x8 );
 
 		bool is_enemy( base_player* player );
+
+		void post_think( );
 	};
 } // namespace sdk
 

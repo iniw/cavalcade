@@ -15,11 +15,11 @@ set(OPTIONS_DEBUG
 
 set(OPTIONS_RELWITHDEBINFO 
 
-    /O2 
-    /Ob2 
-    /Oi 
-    /Ot 
-    /Zi 
+    /O2
+    /Ob2
+    /Oi
+    /Ot
+    /Zi
     /MT
     /DNDEBUG
 
@@ -27,11 +27,11 @@ set(OPTIONS_RELWITHDEBINFO
 
 set(OPTIONS_RELEASE 
 
-    /O2 
-    /Ob2 
-    /Oi 
-    /Ot 
-    /GL 
+    /O2
+    /Ob2
+    /Oi
+    /Ot
+    /GL
     /DNDEBUG
     /MT
 
@@ -41,16 +41,16 @@ set(OPTIONS_RELEASE
 
 set(LINKER_OPTIONS_RELWITHDEBINFO 
 
-    /debug 
+    /debug
     /INCREMENTAL
 
 )
 
 set(LINKER_OPTIONS_RELEASE 
 
-    /LTCG:incremental 
-    /INCREMENTAL:NO 
-    /OPT:REF 
+    /LTCG:incremental
+    /INCREMENTAL:NO
+    /OPT:REF
     /OPT:ICF
-    
+
 )

@@ -1,7 +1,7 @@
 #include "../hooks.hpp"
 
 bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 input_sample_time, sdk::user_cmd* cmd ) {
-	static auto og = g_mem[ HASH_CT( "client.dll" ) ].get_og< create_move_fn >( HASH_CT( "C_BasePlayer::CreateMove" ) );
+	static auto og = g_mem[ CLIENT_DLL ].get_og< create_move_fn >( HASH_CT( "C_BasePlayer::CreateMove" ) );
 
 	if ( !cmd->m_command_number )
 		return og( ecx, input_sample_time, cmd );

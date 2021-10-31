@@ -9,5 +9,6 @@
 #include "def_idx.hpp"
 #include "frame_stage.hpp"
 #include "weapon_type.hpp"
+#include "flags.hpp"
 
 #endif // ENUMS_HPP

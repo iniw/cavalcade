@@ -48,24 +48,22 @@ namespace sdk {
 		DATAFIELD( math::matrix_3x4, get_coordinate_frame, "m_rgflCoordinateFrame" );
 
 		auto physics_run_think( i32 think_method = 0 ) {
-			static auto function = g_mem[ HASH_CT( "client.dll" ) ].get_address< bool( __thiscall* )( void*, i32 ) >(
+			static auto function = g_mem[ CLIENT_DLL ].get_address< bool( __thiscall* )( void*, i32 ) >(
 				HASH_CT( "C_BaseEntity::PhysicsRunThink" ) );
 
 			return function( this, think_method );
 		}
 
 		auto check_has_think_function( bool is_thinking = false ) {
-			static auto function = g_mem[ HASH_CT( "client.dll" ) ].get_address< void( __thiscall* )( void*, bool ) >(
+			static auto function = g_mem[ CLIENT_DLL ].get_address< void( __thiscall* )( void*, bool ) >(
 				HASH_CT( "C_BaseEntity::CheckHasThinkFunction" ) );
 
 			return function( this, is_thinking );
 		}
 
 		static void set_prediction_random_seed( u32 value ) {
-			static auto pred_random_seed = g_mem[ HASH_CT( "client.dll" ) ]
-			                                   .get_address( HASH_CT( "C_BaseEntity->m_nPredictionRandomSeed" ) )
-			                                   .add( 0x4 )
-			                                   .to< i32* >( );
+			static auto pred_random_seed =
+				g_mem[ CLIENT_DLL ].get_address( HASH_CT( "C_BaseEntity->m_nPredictionRandomSeed" ) ).add( 0x4 ).to< i32* >( );
 
 			if ( !value ) {
 				*pred_random_seed = -1;
@@ -76,7 +74,7 @@ namespace sdk {
 		}
 
 		static void set_prediction_player( base_entity* player ) {
-			static auto pred_player = g_mem[ HASH_CT( "client.dll" ) ]
+			static auto pred_player = g_mem[ CLIENT_DLL ]
 			                              .get_address( HASH_CT( "C_BaseEntity->m_pPredictionPlayer" ) )
 			                              .add( 0x5 )
 			                              .to< base_entity** >( );

@@ -16,6 +16,7 @@
 #include "engine.hpp"
 #include "ent_list.hpp"
 #include "prediction.hpp"
+#include "mdl_cache.hpp"
 
 namespace sdk::interfaces {
 	struct registry {

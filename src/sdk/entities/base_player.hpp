@@ -32,8 +32,6 @@ namespace sdk {
 
 		PNETVAR_OFFSET( user_cmd*, get_current_cmd, "DT_BasePlayer->m_hViewEntity", -0x4 );
 
-		DATAFIELD_PRED( move_type, get_move_type, "m_MoveType" );
-
 		DATAFIELD_PRED( i32, get_buttons, "m_nButtons" );
 
 		DATAFIELD_PRED( i32, get_button_last, "m_afButtonLast" );
@@ -42,15 +40,24 @@ namespace sdk {
 
 		DATAFIELD_PRED( i32, get_button_released, "m_afButtonReleased" );
 
-		/*
+		DATAFIELD_PRED( move_type, get_move_type, "m_MoveType" );
 
-	N_ADD_VARIABLE_OFFSET(int, GetButtonDisabled, "CBasePlayer->m_hViewEntity", -0xC);
-	N_ADD_VARIABLE_OFFSET(int, GetButtonForced, "CBasePlayer->m_hViewEntity", -0x8);
-	N_ADD_PVARIABLE_OFFSET(CUserCmd*, GetCurrentCommand, "CBasePlayer->m_hViewEntity", -0x4); // @ida: client.dll @ [89 BE ? ? ? ?
-	E8 ? ? ? ? 85 FF + 0x2]
-		*/
 		auto set_local_view_angles( const math::ang& view_angles ) {
 			return mem::call_v_func< void, idx::SET_LOCAL_VIEW_ANGLES, const math::ang& >( this, view_angles );
+		}
+
+		auto post_think_v_physics( ) {
+			static auto function = g_mem[ CLIENT_DLL ].get_address< bool( __thiscall* )( base_player* ) >(
+				HASH_CT( "C_BasePlayer::PostThinkVPhysics" ) );
+
+			return function( this );
+		}
+
+		auto simulate_player_simulated_entities( ) {
+			static auto function = g_mem[ CLIENT_DLL ].get_address< void( __thiscall* )( base_player* ) >(
+				HASH_CT( "C_BasePlayer::SimulatePlayerSimulatedEntities" ) );
+
+			return function( this );
 		}
 	};
 } // namespace sdk
