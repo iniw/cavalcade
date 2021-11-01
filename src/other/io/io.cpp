@@ -1,5 +1,7 @@
 #include "io.hpp"
 
+#include "imgui.h"
+
 bool io::io::init( ) {
 	if ( !m_console.init( ) )
 		return false;

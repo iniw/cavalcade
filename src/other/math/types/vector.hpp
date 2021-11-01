@@ -7,6 +7,7 @@ enum
 	X = 0,
 	Y,
 	Z,
+	W,
 
 	X2 = 2,
 	Y2 = 3,
@@ -48,14 +49,14 @@ namespace math {
 		// this is extremely unsafe, oh well
 		constexpr vector( const T* ptr ) {
 			static_assert( N >= 2, "vector requires a min. dimension of 2" );
-
 			std::copy( ptr, ptr + N, m_data.begin( ) );
 		}
 
 		// thanks para
-		template< number... VA >
-		constexpr vector( VA... args ) : m_data{ static_cast< T >( std::forward< VA >( args ) )... } {
+		template< typename... VA >
+		constexpr vector( VA... args ) : m_data{ static_cast< T >( args )... } {
 			static_assert( N >= 2, "vector requires a min. dimension of 2" );
+			static_assert( sizeof...( VA ) == N, "invalid number of arguments" );
 		}
 
 		constexpr auto operator<=>( const vec_t& ) const = default;

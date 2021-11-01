@@ -13,7 +13,7 @@ namespace sdk {
 
 	public:
 
-		interfaces::client_dll* m_client_dll;
+		interfaces::client* m_client;
 		interfaces::engine* m_engine;
 		interfaces::cvars* m_cvars;
 		interfaces::ent_list* m_ent_list;
@@ -24,8 +24,8 @@ namespace sdk {
 		globals* m_globals;
 		move_helper* m_move_helper;
 		client_state* m_client_state;
-
-	public:
+		client_mode_shared* m_client_mode_shared;
+		IDirect3DDevice9* m_d3d9_device;
 
 		bool init( );
 	};

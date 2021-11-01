@@ -19,6 +19,7 @@
 #include "move_data.hpp"
 #include "move_helper.hpp"
 #include "client_state.hpp"
+#include "client_mode_shared.hpp"
 
 #include "interfaces/interfaces.hpp"
 

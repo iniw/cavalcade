@@ -45,15 +45,13 @@ namespace cavalcade {
 			static bool __fastcall create_move( sdk::cs_player* ecx, unk, f32 input_sample_time, sdk::user_cmd* cmd );
 		};
 
-		// struct d3d9_device {
-		//     using end_scene_fn = HRESULT( __stdcall* )( IDirect3DDevice9* );
-		//     static HRESULT D3DAPI end_scene( IDirect3DDevice9* device );
+		struct d3d9_device {
+			using end_scene_fn = HRESULT( __stdcall* )( IDirect3DDevice9* );
+			static HRESULT D3DAPI end_scene( IDirect3DDevice9* device );
 
-		//     using reset_fn = HRESULT( __stdcall* )( IDirect3DDevice9*, D3DPRESENT_PARAMETERS* );
-		//     static HRESULT D3DAPI reset( IDirect3DDevice9* device, D3DPRESENT_PARAMETERS*
-		//     presentation_params );
-
-		// };
+			using reset_fn = HRESULT( __stdcall* )( IDirect3DDevice9*, D3DPRESENT_PARAMETERS* );
+			static HRESULT D3DAPI reset( IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* presentation_params );
+		};
 
 		struct engine_client {
 			using is_hltv_fn = bool( __thiscall* )( unk );

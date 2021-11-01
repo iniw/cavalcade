@@ -87,6 +87,7 @@
         "FIXME",
         "TODO",
         "XXX",
+        
         "NOTE"
     ],
     "todo-tree.general.statusBar": "tags"

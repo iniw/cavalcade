@@ -3,7 +3,7 @@
 #include "../csgo/csgo.hpp"
 
 bool sdk::netvars::init( ) {
-	auto list = g_csgo.m_client_dll->get_all_classes( );
+	auto list = g_csgo.m_client->get_all_classes( );
 	if ( !list )
 		return false;
 
@@ -98,7 +98,7 @@ void sdk::netvars::store( std::string_view table_name, const recv_table* table, 
 }
 
 std::string sdk::netvars::get_type( const recv_prop* prop ) {
-	static auto std_recv_proxies = g_csgo.m_client_dll->get_std_recv_proxies( );
+	static auto std_recv_proxies = g_csgo.m_client->get_std_recv_proxies( );
 
 	switch ( prop->m_recv_type ) {
 	case prop_type::INT:

@@ -4,7 +4,7 @@
 #include "../client_class.hpp"
 
 namespace sdk::interfaces {
-	struct client_dll {
+	struct client {
 		enum idx
 		{
 			GET_ALL_CLASSES      = 8,

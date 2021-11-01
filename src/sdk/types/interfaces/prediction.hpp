@@ -12,13 +12,13 @@ namespace sdk::interfaces {
 		PAD( 0xD );
 		bool m_is_first_time_predicted;
 
-		VFUNC( void, update, 3, ( i32 start_frame, bool valid_frame, i32 incoming_acknowledged, i32 outgoing_command ),
-		       start_frame, valid_frame, incoming_acknowledged, outgoing_command );
+		VFUNC( void, update, 3, ( i32 start_frame, bool valid_frame, i32 incoming_acknowledged, i32 outgoing_command ), start_frame, valid_frame,
+		       incoming_acknowledged, outgoing_command );
 
 		VFUNC( void, check_moving_ground, 18, ( cs_player * player, f64 frametime ), player, frametime );
 
-		VFUNC( void, setup_move, 20, ( cs_player * player, user_cmd* cmd, move_helper* helper, move_data* move_data ), player,
-		       cmd, helper, move_data );
+		VFUNC( void, setup_move, 20, ( cs_player * player, user_cmd* cmd, move_helper* helper, move_data* move_data ), player, cmd, helper,
+		       move_data );
 
 		VFUNC( void, finish_move, 21, ( cs_player * player, user_cmd* cmd, move_data* move_data ), player, cmd, move_data );
 

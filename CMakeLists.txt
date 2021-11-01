@@ -56,6 +56,14 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
 
 find_package(fmt CONFIG REQUIRED)
 find_package(PolyHook_2 CONFIG REQUIRED)
+find_package(Freetype REQUIRED)
 
-# link
-target_link_libraries(${CMAKE_PROJECT_NAME} fmt::fmt PolyHook_2::PolyHook_2)
+# thanks para
+link_directories("$ENV{DXSDK_DIR}/Lib/x86")
+include_directories("$ENV{DXSDK_DIR}/Include")
+find_library(D3D9_LIBRARY d3d9.lib PATHS "$ENV{DXSDK_DIR}/Lib/x86")  
+find_library(D3DX9_LIBRARY d3dx9.lib PATHS "$ENV{DXSDK_DIR}/Lib/x86")
+
+include_directories("src/other/render/imgui")
+
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE fmt::fmt PolyHook_2::PolyHook_2 Freetype::Freetype ${D3D9_LIBRARY} ${D3DX9_LIBRARY})

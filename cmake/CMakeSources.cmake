@@ -8,6 +8,7 @@ set(SOURCES
     
     src/cavalcade/hooks/functions/base_player.cpp
     src/cavalcade/hooks/functions/chlc_client.cpp
+    src/cavalcade/hooks/functions/d3d9_device.cpp
     src/cavalcade/hooks/hooks.cpp
 
     # --- other ---
@@ -26,6 +27,17 @@ set(SOURCES
     src/other/utils/utils.cpp
     # math
     src/other/math/math.cpp
+    # render
+    src/other/render/imgui/misc/freetype/imgui_freetype.cpp
+    src/other/render/imgui/imgui_draw.cpp
+    src/other/render/imgui/imgui_impl_dx9.cpp
+    src/other/render/imgui/imgui_tables.cpp
+    src/other/render/imgui/imgui_widgets.cpp
+    src/other/render/imgui/imgui.cpp
+
+    src/other/render/geometry/rect/rect.cpp
+    src/other/render/geometry/font/font.cpp
+    src/other/render/render.cpp
 
     # --- sdk ---
     src/sdk/csgo/csgo.cpp
@@ -34,6 +46,5 @@ set(SOURCES
     src/sdk/entities/cs_player.cpp
 
     # --- dllmain ---
-    src/dllmain.cpp
-    
+    src/dllmain.cpp   
 )

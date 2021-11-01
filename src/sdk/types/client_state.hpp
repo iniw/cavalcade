@@ -18,7 +18,7 @@ namespace sdk {
 		PAD( 0x7 );
 		i32 m_view_entity;
 		i32 m_player_slot;
-		char m_level_name[ max_path ];
+		char m_level_name[ MAX_PATH ];
 		char m_level_name_short[ 80 ];
 		char m_map_group_name[ 80 ];
 		char m_last_level_name_short[ 80 ];

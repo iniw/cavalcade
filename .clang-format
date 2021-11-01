@@ -25,7 +25,7 @@ BinPackParameters: true
 BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Attach
 BreakBeforeConceptDeclarations: false
-ColumnLimit: 130
+ColumnLimit: 150
 Cpp11BracedListStyle: false
 EmptyLineAfterAccessModifier: Always
 EmptyLineBeforeAccessModifier: LogicalBlock
@@ -34,6 +34,7 @@ IndentAccessModifiers: false
 IndentCaseLabels: false
 IndentGotoLabels: true
 IndentPPDirectives: AfterHash
+IndentRequires: true
 IndentWidth: 4
 KeepEmptyLinesAtTheStartOfBlocks: false
 Language: Cpp

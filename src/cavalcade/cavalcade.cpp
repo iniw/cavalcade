@@ -19,6 +19,8 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
 
 	HENFORCE( g_ctx.init( ), "failed to initialize ctx" );
 
+	HENFORCE( g_render.init( ), "failed to initialize renderer" );
+
 	HENFORCE( g_hooks.init( ), "failed to initialize hooks" );
 
 #ifdef DEV
@@ -35,9 +37,13 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
 
 DWORD WINAPI cavalcade::unload( BOOL exit_type ) {
 	g_mem.unload( );
+
+	g_render.unload( );
+
 	g_io.unload( );
 
-	LI_FN( FreeLibraryAndExitThread )( handle, exit_type );
+	LI_FN( FreeLibraryAndExitThread )
+	( handle, exit_type );
 
 	return exit_type;
 }

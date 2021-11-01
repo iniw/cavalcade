@@ -41,8 +41,8 @@ T mem::module_info::export_fn( u32 name_hash, bool in_memory ) {
 
 		if ( HASH_RT( function_name ) == name_hash ) {
 			ordinal_index = i;
+			break;
 		}
-		break;
 	}
 
 	if ( ordinal_index > exports->NumberOfFunctions )
