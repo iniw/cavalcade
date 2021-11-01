@@ -8,7 +8,7 @@
             "configurationProvider": "ms-vscode.cmake-tools",
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
-                "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db",
+                "databaseFilename": "${workspaceFolder}/.vscode/browse/browse.vc.db",
                 "path": [
                     "${workspaceFolder}"
                 ]
