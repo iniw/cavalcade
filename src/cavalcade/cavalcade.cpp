@@ -21,9 +21,9 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
 
 	H_ENFORCE( g_render.init( ), "failed to initialize renderer" );
 
-	H_ENFORCE( g_hooks.init( ), "failed to initialize hooks" );
+	H_ENFORCE( g_gui.init( ), "failed to initialize gui" );
 
-	g_gui.init( );
+	H_ENFORCE( g_hooks.init( ), "failed to initialize hooks" );
 
 #ifdef DEV
 

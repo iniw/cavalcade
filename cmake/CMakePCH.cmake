@@ -23,6 +23,7 @@ set(PCH
     <numbers>
     <thread>
     <optional>
+    <variant>
     # string
     <string>
     <string_view>

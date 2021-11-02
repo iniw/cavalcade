@@ -2,9 +2,14 @@
 #include "objects/objects.hpp"
 
 bool gui::gui::init( ) {
-	auto& window = m_windows.emplace_back( objects::window::make( "cavalde_gui", { 300, 300 } ) );
+	auto window = objects::window::make( "main", "cavalde_gui", { 300, 300 } );
 
-	return window != nullptr;
+	auto checkbox = window->add< objects::checkbox >( "check", "test" );
+
+	// add all of our windows
+	m_windows.push_back( window );
+
+	return !m_windows.empty( );
 }
 
 void gui::gui::render( ) {

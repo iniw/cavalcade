@@ -2,7 +2,10 @@ set(SOURCES
 
     # --- cavalcade ---
     # gui
+    src/cavalcade/gui/objects/base/base_object.cpp
+    src/cavalcade/gui/objects/base/base_parent.cpp
     src/cavalcade/gui/objects/window/window.cpp
+    src/cavalcade/gui/objects/checkbox/checkbox.cpp
     src/cavalcade/gui/gui.cpp
     
     src/cavalcade/ctx/ctx.cpp

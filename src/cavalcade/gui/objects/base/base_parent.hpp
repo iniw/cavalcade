@@ -6,37 +6,34 @@
 namespace gui::objects {
 	struct scrollbar;
 
-	struct base_parent : base_object, std::enable_shared_from_this< base_parent > {
+	struct base_parent : public base_object, std::enable_shared_from_this< base_parent > {
 	protected:
-
-		// a list of our children
-		std::vector< base_ptr > m_children;
 
 		// the position used to place new children
 		render::point m_cursor;
+
+		// a list of our children
+		std::vector< base_ptr > m_children;
 
 		// our current scrollbar object, if it exists
 		std::shared_ptr< scrollbar > m_scrollbar;
 
 	public:
 
-		parent_ptr get( ) {
-			return shared_from_this( );
-		}
+		virtual ~base_parent( ) = default;
 
 		// the function used to add new children
-		template< object T, typename... VA >
-		std::shared_ptr< T >& add( VA&&... args ) {
-			std::shared_ptr< T > child = std::make_shared< T >( std::forward< VA >( args )... );
+		template< typename T, typename... VA >
+		std::shared_ptr< T > add( VA&&... args );
 
-			child->init( get( ) );
+		// returns m_cursor
+		const render::point& get_cursor( );
 
-			child->identify( );
+		// offsets m_cursor[ Y ] by the offset + the style's object padding
+		void push_cursor( i32 offset );
 
-			on_add_child( child );
-
-			return m_children.emplace_back( child );
-		}
+		// returns a shared_ptr instance of ourselves
+		parent_ptr get( );
 
 	protected:
 
@@ -44,26 +41,20 @@ namespace gui::objects {
 		// it might be of interest to most objects that inherent from base_parent to automatically
 		// initialize their scrollbar as soon as a child's area gets past it's own, BUT, that might not apply to
 		// every object, e.g: tabs. so until i figure out something smarter this is going to stay here
-		virtual void on_add_child( base_ptr child ) {
-			// TODO(wini): initialize our scrollbar if the child's area extends beyond ours
-		}
+		virtual void on_add_child( base_ptr child );
 
 		// just some wrappers for easier maintainability
 		// TOOD(wini): focus system by sorting the children
 
-		void render_children( ) {
-			for ( auto& child : m_children )
-				child->render( );
-		}
+		// renders all of our children, if we have any
+		void render_children( );
 
-		bool think_children( ) {
-			for ( auto& child : m_children )
-				if ( child->think( ) )
-					return child->m_time = m_time = GetTickCount64( );
-
-			return false;
-		}
+		// calls think() for all of our children, if we have any
+		// returns true as soon as one of them returns true
+		bool think_children( );
 	};
 } // namespace gui::objects
+
+#include "base_parent.inl"
 
 #endif // BASE_PARENT_HPP

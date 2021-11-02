@@ -388,19 +388,29 @@ namespace math {
 
 		// NOTE(wini): these aren't animated.
 		constexpr vec_t shrink( const T& amt ) {
+			static_assert( N == 4, "shrink requires a 4 dimensional vector" );
+
 			vec_t vec = *this;
 
-			for ( u32 i = 0; i < N; i++ )
-				vec[ i ] -= amt;
+			for ( u32 i = 0; i < 2; i++ )
+				vec[ i ] += amt;
+
+			for ( u32 i = 2; i < 4; i++ )
+				vec[ i ] -= amt * 2;
 
 			return vec;
 		}
 
 		constexpr vec_t expand( const T& amt ) {
+			static_assert( N == 4, "expand requires a 4 dimensional vector" );
+
 			vec_t vec = *this;
 
-			for ( u32 i = 0; i < N; i++ )
-				vec[ i ] += amt;
+			for ( u32 i = 0; i < 2; i++ )
+				vec[ i ] -= amt;
+
+			for ( u32 i = 2; i < 4; i++ )
+				vec[ i ] += amt * 2;
 
 			return vec;
 		}
@@ -412,13 +422,31 @@ namespace math {
 		}
 
 		constexpr vector< T, 2 > pos( ) const {
-			static_assert( N == 4, "width requires a 4 dimensional vector" );
+			static_assert( N == 4, "pos requires a 4 dimensional vector" );
 
 			return vector< T, 2 >( m_data[ X ], m_data[ Y ] );
 		}
 
+		constexpr vec_t& pos( const vector< T, 2 >& other ) {
+			static_assert( N == 4, "pos requires a 4 dimensional vector" );
+
+			m_data[ X ] = other[ X ];
+			m_data[ Y ] = other[ Y ];
+
+			return *this;
+		}
+
+		constexpr vec_t& size( const vector< T, 2 >& other ) {
+			static_assert( N == 4, "size requires a 4 dimensional vector" );
+
+			m_data[ X2 ] = other[ X ];
+			m_data[ Y2 ] = other[ Y ];
+
+			return *this;
+		}
+
 		constexpr vector< T, 2 > size( ) const {
-			static_assert( N == 4, "width requires a 4 dimensional vector" );
+			static_assert( N == 4, "size requires a 4 dimensional vector" );
 
 			return vector< T, 2 >( m_data[ X2 ], m_data[ Y2 ] );
 		}

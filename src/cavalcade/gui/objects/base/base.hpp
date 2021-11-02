@@ -18,7 +18,8 @@ namespace gui::objects {
 	enum class type
 	{
 		NONE = 0,
-		WINDOW
+		WINDOW,
+		CHECKBOX
 	};
 
 	// list of flags that every object has
@@ -28,7 +29,7 @@ namespace gui::objects {
 		// set to true when hovered
 		HOVERED = 0,
 		// set to true when we are being interacted with
-		// this will always be set if think() returned true
+		// if this is active think() returned true
 		ACTIVE,
 		// mostly a debugging flag
 		// prevents think() from being called
@@ -36,9 +37,21 @@ namespace gui::objects {
 		// :)
 		MAX
 	};
+
+	// NOTE(wini): unused rn, can maybe go back to it later
+	// used by every object that inherits from base_child
+	// bool: used by - checkbox
+	// i32: used by - slider
+	// f32: used by - slider
+	// using child_var = std::variant< bool, i32, f32 >;
+
+	// used in base_object::identify() to separate the names of objects
+	constexpr cstr NAME_SEPARATOR = ":";
+
 } // namespace gui::objects
 
 #include "base_object.hpp"
+#include "base_child.hpp"
 #include "base_parent.hpp"
 
 #endif // BASE_HPP

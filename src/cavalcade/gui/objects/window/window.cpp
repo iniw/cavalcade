@@ -1,39 +1,39 @@
 #include "window.hpp"
 
-gui::objects::window::window( std::string_view label, const render::size& size ) {
-	// NOTE(wini): a bit of a hack but kind of required since
-	// this is the only object that doesn't get added through the add() function
-	s_object_count++;
-
+gui::objects::window::window( std::string_view name, std::string_view label, const render::size& size ) {
+	// basic identification
+	m_name = name;
 	m_type = type::WINDOW;
 
-	// TODO(wini): center it to the middle of the screen
-	m_static_rect = render::rect( 250, 250, size[ X ], size[ Y ] );
+	// NOTE(wini): a bit of a hack but required since
+	// this is the only object that gets created manually
+	identify( );
 
-	// TODO(wini): this "10" is the harcoded margin
+	m_label = label;
+
+	// TODO(wini): center it to the middle of the screen
+	m_static_rect = render::rect( 100, 100, size[ X ], size[ Y ] );
+
+	// TODO(wini): this "5" is the harcoded margin
 	// refer to the comment about a styling system
-	m_dynamic_rect = m_static_rect.shrink( 10 );
+	m_dynamic_rect = m_static_rect.shrink( 5 );
 
 	// position our cursor right below the label
 	m_cursor = m_dynamic_rect.pos( );
 	m_cursor[ Y ] += g_render.text_size< render::font::MENU >( m_label )[ Y ];
+
+	m_label_pos = render::point( m_dynamic_rect[ X ] + m_dynamic_rect[ WIDTH ] / 2, m_dynamic_rect[ Y ] );
 }
 
 // TODO(wini): a nice pallete/styling system that gives us the proper color based
 // on our current flags, e.g: darker when DISABLED, brigther when ACTIVE
 void gui::objects::window::render( ) {
-	g_render.rectangle_filled( m_static_rect, render::color::black( ) ).outline( render::color::red( ) );
+	g_render.rectangle_filled( m_static_rect, render::color::black( ) ).outline( render::color::gray( ) );
 
-	g_render.rectangle_filled( m_dynamic_rect, render::color::black( ) ).outline( render::color::gray( ) );
+	g_render.rectangle_filled( m_dynamic_rect, render::color::black( ) )
+		.outline( m_flags.test( flags::HOVERED ) ? render::color::gray( ) : render::color::white( ) );
 
-	auto rect_pos  = m_static_rect.pos( );
-	auto rect_size = m_static_rect.size( );
-
-	// TODO(wini): cache this value, it's pointless to calculate it every frame
-	auto center = render::point( rect_pos[ X ] + rect_size[ X ] / 2, rect_pos[ Y ] );
-
-	// render our label
-	g_render.text< render::font::MENU >( center, m_label, render::color::white( ), render::align::X_CENTER );
+	g_render.text< render::font::MENU >( m_label_pos, m_label, render::color::white( ), render::align::X_CENTER );
 
 	// NOTE(wini): purely for debugging purposes
 	// render our cursor pos
@@ -43,9 +43,14 @@ void gui::objects::window::render( ) {
 }
 
 bool gui::objects::window::think( ) {
+	// TODO(wini): moving and resizing (this is gonna be hard)
+
 	// should maybe reset HOVERED and ACTIVE?
 	if ( m_flags.test( flags::DISABLED ) )
 		return false;
+
+	// reset all flags
+	m_flags.reset( );
 
 	m_flags.set( flags::HOVERED, g_io.mouse_pos( ).in_rect( m_static_rect ) );
 
