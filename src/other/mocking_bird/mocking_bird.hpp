@@ -77,6 +77,8 @@ namespace mocking_bird {
 #define MOCKING_REGION( ... )                                                                                                                        \
 	try {                                                                                                                                            \
 		__VA_ARGS__                                                                                                                                  \
-	} catch ( const mocking_bird::exception& err ) { }
+	} catch ( const mocking_bird::exception& err ) {                                                                                                 \
+		g_io.log< io::log_level::WARNING >( "MOCK failed, line: {}, fn: {}\n", err.what( ).line( ), err.what( ).function_name( ) );                  \
+	}
 
 #endif /* MOCKING_BIRD_HPP */
