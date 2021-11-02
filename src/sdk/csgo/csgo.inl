@@ -30,7 +30,7 @@ T sdk::csgo::find_interface( mem::module_info& the_module, u32 name_hash, bool r
 		interface_node = interface_node->m_next;
 	}
 
-	MOCKING_REGION_NO_RET( MOCK ENFORCE( true, "invalid interface name: {}", name_hash ); );
+	ENFORCE( true, "invalid interface name: {}", name_hash );
 
 	return nullptr;
 }

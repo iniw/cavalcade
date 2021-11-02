@@ -5,7 +5,12 @@
 bool mem::mem::init( ) {
 	const auto PEB = reinterpret_cast< win32::PEB* >( __readfsdword( 0x30 ) );
 
-	MOCKING_REGION( MOCK PEB; MOCK PEB->Ldr->InMemoryOrderModuleList.Flink; )
+	MOCKING_TRY;
+
+	MOCK PEB;
+	MOCK PEB->Ldr->InMemoryOrderModuleList.Flink;
+
+	MOCKING_CATCH( return false );
 
 	auto list = &PEB->Ldr->InMemoryOrderModuleList;
 

@@ -10,7 +10,12 @@
 bool render::render::init( ) {
 	m_d3d9.m_device = g_csgo.m_d3d9_device;
 
-	MOCKING_REGION( MOCK m_imgui.init( m_d3d9.m_device ); MOCK FONT_GET( font::MENU ).init( "C:\\Windows\\Fonts\\segoeui.ttf", 14.f ); );
+	MOCKING_TRY;
+
+	MOCK m_imgui.init( m_d3d9.m_device );
+	MOCK FONT_GET( font::MENU ).init( "C:\\Windows\\Fonts\\segoeui.ttf", 14.f );
+
+	MOCKING_CATCH( return false );
 
 	update_screen_size( g_csgo.m_client_mode_shared->m_root_size );
 
@@ -115,7 +120,13 @@ void render::render::d3d9::restore_render_states( ) {
 }
 
 bool render::render::imgui::init( IDirect3DDevice9* device ) {
-	MOCKING_REGION( MOCK m_ctx = ImGui::CreateContext( ); MOCK m_io = &ImGui::GetIO( ); MOCK ImGui_ImplDX9_Init( device ); );
+	MOCKING_TRY;
+
+	MOCK m_ctx = ImGui::CreateContext( );
+	MOCK m_io  = &ImGui::GetIO( );
+	MOCK ImGui_ImplDX9_Init( device );
+
+	MOCKING_CATCH( return false );
 
 	return true;
 }
