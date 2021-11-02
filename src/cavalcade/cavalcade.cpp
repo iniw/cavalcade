@@ -7,21 +7,21 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
 	handle = static_cast< HMODULE >( module_handle );
 	window = LI_FN( FindWindowA )( XOR( "Valve001" ), nullptr );
 
-	HENFORCE( g_io.init( ), "failed to initialize io" );
+	H_ENFORCE( g_io.init( ), "failed to initialize io" );
 
-	HENFORCE( g_mem.init( ), "failed to initialize mem" );
+	H_ENFORCE( g_mem.init( ), "failed to initialize mem" );
 
-	HENFORCE( g_csgo.init( ), "failed to initialize csgo" );
+	H_ENFORCE( g_csgo.init( ), "failed to initialize csgo" );
 
-	HENFORCE( g_mem.setup( ), "failed to initialize addresses" );
+	H_ENFORCE( g_mem.setup( ), "failed to initialize addresses" );
 
-	HENFORCE( g_netvars.init( ), "failed to initialize netvars" );
+	H_ENFORCE( g_netvars.init( ), "failed to initialize netvars" );
 
-	HENFORCE( g_ctx.init( ), "failed to initialize ctx" );
+	H_ENFORCE( g_ctx.init( ), "failed to initialize ctx" );
 
-	HENFORCE( g_render.init( ), "failed to initialize renderer" );
+	H_ENFORCE( g_render.init( ), "failed to initialize renderer" );
 
-	HENFORCE( g_hooks.init( ), "failed to initialize hooks" );
+	H_ENFORCE( g_hooks.init( ), "failed to initialize hooks" );
 
 	g_gui.init( );
 

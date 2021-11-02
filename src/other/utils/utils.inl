@@ -2,7 +2,7 @@
 #define UTILS_INL
 
 template< bool abort, typename... VA >
-void utils::enforce( bool expression, std::string_view id, std::string_view msg, VA&&... fmt ) {
+bool utils::enforce( bool expression, std::string_view id, std::string_view msg, VA&&... fmt ) {
 	constexpr io::log_level level = abort ? io::log_level::DISASTER : io::log_level::WARNING;
 
 	if ( !expression ) {
@@ -19,6 +19,8 @@ void utils::enforce( bool expression, std::string_view id, std::string_view msg,
 		if constexpr ( abort )
 			cavalcade::unload( EXIT_FAILURE );
 	}
+
+	return expression;
 }
 
 #endif // UTILS_INL

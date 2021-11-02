@@ -62,7 +62,7 @@ mem::address mem::module_info::search_byte_array( const i32* bytes, u32 size, co
 }
 
 void mem::module_info::add_address( u32 name_hash, address address ) {
-	ENFORCE( address, "bad address, name: {}", name_hash );
+	MOCKING_REGION( MOCK ENFORCE( address, "bad address, name: {}", name_hash ); );
 	m_addresses[ name_hash ] = address;
 }
 
@@ -78,7 +78,7 @@ bool mem::module_info::validate( ) {
 }
 
 bool mem::module_info::hook( u32 name_hash, unk custom_fn ) {
-	ENFORCE( m_addresses.contains( name_hash ), "invalid hook name: {}", name_hash );
+	MOCKING_REGION( MOCK ENFORCE( m_addresses.contains( name_hash ), "invalid hook, name: {}", name_hash ); );
 	return m_addresses.at( name_hash ).hook( custom_fn );
 }
 

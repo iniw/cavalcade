@@ -16,12 +16,12 @@ template< u32 size >
 void mem::module_info::add_pattern( u32 name_hash, const std::array< i32, size >& pattern, bool relative ) {
 	auto address = find_pattern( pattern );
 
-	ENFORCE( address, "bad pattern, pattern: {} | name: {}", pattern, name_hash );
+	MOCKING_REGION( MOCK ENFORCE( address, "bad pattern, pattern: {} | name: {}", pattern, name_hash ); );
 
 	if ( relative )
 		address = address.relative( );
 
-	ENFORCE( address, "bad relative address, pattern: {} | name: {}", pattern, name_hash );
+	MOCKING_REGION( MOCK ENFORCE( address, "bad relative address, pattern: {} | name: {}", pattern, name_hash ); );
 
 	m_addresses[ name_hash ] = address;
 }
@@ -55,13 +55,13 @@ T mem::module_info::export_fn( u32 name_hash, bool in_memory ) {
 
 template< typename T >
 T mem::module_info::get_og( u32 name_hash ) {
-	ENFORCE( m_addresses.contains( name_hash ), "invalid og name: {}", name_hash );
+	MOCKING_REGION( MOCK ENFORCE( m_addresses.contains( name_hash ), "invalid og, name: {}", name_hash ); );
 	return ( T )m_addresses.at( name_hash ).m_og;
 }
 
 template< typename T >
 T mem::module_info::get_address( u32 name_hash ) {
-	ENFORCE( m_addresses.contains( name_hash ), "invalid address name: {}", name_hash );
+	MOCKING_REGION( MOCK ENFORCE( m_addresses.contains( name_hash ), "invalid address, name: {}", name_hash ); );
 	return m_addresses.at( name_hash ).as< T >( );
 }
 

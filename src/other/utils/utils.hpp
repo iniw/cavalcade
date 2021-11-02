@@ -10,13 +10,13 @@ namespace utils {
 	void sleep( u32 time );
 
 	template< bool abort, typename... VA >
-	inline void enforce( bool expression, std::string_view id, std::string_view msg, VA&&... fmt );
+	inline bool enforce( bool expression, std::string_view id, std::string_view msg, VA&&... fmt );
 } // namespace utils
 
 // normal enforce, replaces assert( )
 #define ENFORCE( expression, msg, ... ) utils::enforce< false >( expression, XOR( #expression ), XOR( msg ), __VA_ARGS__ )
 // hard enforce, unloads the cheat on fail
-#define HENFORCE( expression, msg, ... ) utils::enforce< true >( expression, XOR( #expression ), XOR( msg ), __VA_ARGS__ )
+#define H_ENFORCE( expression, msg, ... ) utils::enforce< true >( expression, XOR( #expression ), XOR( msg ), __VA_ARGS__ )
 
 #include "utils.inl"
 
