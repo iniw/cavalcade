@@ -29,6 +29,10 @@ namespace io {
 
 		fs::path& directory( dirs id );
 
+		math::v2i mouse_pos( );
+
+		f32 mouse_scroll( );
+
 		template< auto state = key_state::DOWN >
 		bool key_state( u8 key_id );
 

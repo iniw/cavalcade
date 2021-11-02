@@ -61,13 +61,21 @@ namespace math {
 
 		constexpr auto operator<=>( const vec_t& ) const = default;
 
-		constexpr T& operator[]( u32 idx ) { return m_data[ idx ]; }
+		constexpr T& operator[]( u32 idx ) {
+			return m_data[ idx ];
+		}
 
-		constexpr const T& operator[]( u32 idx ) const { return m_data[ idx ]; }
+		constexpr const T& operator[]( u32 idx ) const {
+			return m_data[ idx ];
+		}
 
-		constexpr T& at( u32 idx ) { return m_data.at( idx ); }
+		constexpr T& at( u32 idx ) {
+			return m_data.at( idx );
+		}
 
-		constexpr const T& at( u32 idx ) const { return m_data.at( idx ); }
+		constexpr const T& at( u32 idx ) const {
+			return m_data.at( idx );
+		}
 
 		constexpr vector& operator=( const vec_t& other ) {
 			for ( u32 i = 0; i < N; i++ )
@@ -283,7 +291,9 @@ namespace math {
 			return *this;
 		}
 
-		constexpr const arr_t& data( ) const { return m_data; }
+		constexpr const arr_t& data( ) const {
+			return m_data;
+		}
 
 		constexpr bool empty( ) const {
 			for ( u32 i = 0; i < N; i++ )
@@ -293,11 +303,17 @@ namespace math {
 			return true;
 		}
 
-		constexpr T dist_to( const vec_t& other ) const { return ( other - ( *this ) ).length( ); }
+		constexpr T dist_to( const vec_t& other ) const {
+			return ( other - ( *this ) ).length( );
+		}
 
-		constexpr f32 length_2d( ) const { return std::hypotf( m_data[ X ], m_data[ Y ] ); }
+		constexpr f32 length_2d( ) const {
+			return std::hypotf( m_data[ X ], m_data[ Y ] );
+		}
 
-		constexpr T length( ) const { return std::sqrt( length_sqr( ) ); }
+		constexpr T length( ) const {
+			return std::sqrt( length_sqr( ) );
+		}
 
 		constexpr T length_sqr( ) const {
 			T buf = static_cast< T >( 0 );
@@ -308,17 +324,19 @@ namespace math {
 			return buf;
 		}
 
-		constexpr void fill( const T& value ) { m_data.fill( value ); }
+		constexpr void fill( const T& value ) {
+			m_data.fill( value );
+		}
 
-		constexpr void normalize( ) { ( *this ) /= length( ); }
+		constexpr void normalize( ) {
+			( *this ) /= length( );
+		}
 
 		constexpr vec_t cross_product( const vec_t& other, const bool normalize_cross_product = false ) const {
 			static_assert( N == 3, "cross product requires a 3 dimensional vector" );
 
-			vec_t vec = { m_data[ 1 ] * other[ 2 ] - m_data[ 2 ] * other[ 1 ],
-				          m_data[ 2 ] * other[ 0 ] - m_data[ 0 ] * other[ 2 ], m_data[ 0 ] * other[ 1 ] - m_data[ 1 ] * other[ 0 ]
-
-			};
+			vec_t vec = { m_data[ 1 ] * other[ 2 ] - m_data[ 2 ] * other[ 1 ], m_data[ 2 ] * other[ 0 ] - m_data[ 0 ] * other[ 2 ],
+				          m_data[ 0 ] * other[ 1 ] - m_data[ 1 ] * other[ 0 ] };
 
 			if ( normalize_cross_product )
 				vec.normalize( );
@@ -365,6 +383,24 @@ namespace math {
 				m_data[ i ] = std::ceil( m_data[ i ] );
 
 			return *this;
+		}
+
+		constexpr bool in_rect( const vector< T, 4 >& rect ) {
+			static_assert( N == 2, "in_rect requires a 2 dimensional vector" );
+
+			return m_data[ X ] > rect[ X ] && m_data[ Y ] > rect[ Y ] && m_data[ X ] < rect[ X ] + rect[ X2 ] && m_data[ Y ] < rect[ Y ] + rect[ Y2 ];
+		}
+
+		constexpr vector< T, 2 > pos( ) const {
+			static_assert( N == 4, "width requires a 4 dimensional vector" );
+
+			return vector< T, 2 >( m_data[ X ], m_data[ Y ] );
+		}
+
+		constexpr vector< T, 2 > size( ) const {
+			static_assert( N == 4, "width requires a 4 dimensional vector" );
+
+			return vector< T, 2 >( m_data[ X2 ], m_data[ Y2 ] );
 		}
 
 		constexpr T width( ) const {

@@ -1,7 +1,13 @@
 set(SOURCES
 
     # --- cavalcade ---
+    # gui
+    src/cavalcade/gui/objects/window/window.cpp
+    src/cavalcade/gui/gui.cpp
+    
     src/cavalcade/ctx/ctx.cpp
+    
+    
     src/cavalcade/cavalcade.cpp
     
     src/cavalcade/hack/other/prediction.cpp

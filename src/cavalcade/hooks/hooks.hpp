@@ -3,6 +3,7 @@
 
 #include "../ctx/ctx.hpp"
 #include "../hack/hack.hpp"
+#include "../gui/gui.hpp"
 
 namespace cavalcade {
 	struct hooks {
@@ -15,8 +16,8 @@ namespace cavalcade {
 			static bool __fastcall should_skip_animation_frame( unk ecx, unk edx );
 
 			using build_transformations_fn = void( __thiscall* )( sdk::cs_player*, unk, unk, unk, unk, i32, unk );
-			static void __fastcall build_transformations( sdk::cs_player* ecx, unk, unk hdr, unk pos, unk q, unk camera_transform,
-			                                              i32 bone_mask, unk bone_computed );
+			static void __fastcall build_transformations( sdk::cs_player* ecx, unk, unk hdr, unk pos, unk q, unk camera_transform, i32 bone_mask,
+			                                              unk bone_computed );
 		};
 
 		struct csgo_player_anim_state {
@@ -26,8 +27,8 @@ namespace cavalcade {
 
 		struct c_cs_player {
 			using do_extra_bone_processing_fn = void( __thiscall* )( unk, unk, unk, unk, unk, unk, unk );
-			static void __fastcall do_extra_bone_processing( unk ecx, unk, unk studio_hdr, unk pos, unk q, unk bone_to_world,
-			                                                 unk bone_computed, unk ik_context );
+			static void __fastcall do_extra_bone_processing( unk ecx, unk, unk studio_hdr, unk pos, unk q, unk bone_to_world, unk bone_computed,
+			                                                 unk ik_context );
 		};
 
 		struct chlc_client {
@@ -60,8 +61,7 @@ namespace cavalcade {
 
 		struct sequence_transitioner {
 			using check_for_sequence_change_fn = void( __thiscall* )( unk, unk, i32, bool, bool );
-			static void __fastcall check_for_sequence_change( unk ecx, unk, unk hdr, i32 cur_sequence, bool force_new_sequence,
-			                                                  bool interpolate );
+			static void __fastcall check_for_sequence_change( unk ecx, unk, unk hdr, i32 cur_sequence, bool force_new_sequence, bool interpolate );
 		};
 
 		struct weapon_cs_base {

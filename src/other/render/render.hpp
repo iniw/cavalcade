@@ -98,6 +98,9 @@ namespace render {
 		template< align alignment = align::NONE >
 		geometry::rect rectangle( const point& pos, const size& size, color col, f32 thickness = 1.f );
 
+		template< align alignment = align::NONE >
+		geometry::rect rectangle( const rect& rect, color col, f32 thickness = 1.f );
+
 		template< font font_choice >
 		size text( const point& pos, std::string_view text, color col );
 

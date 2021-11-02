@@ -1,6 +1,6 @@
 #include "io.hpp"
 
-#include "imgui.h"
+#include "../../cavalcade/gui/gui.hpp"
 
 bool io::io::init( ) {
 	if ( !m_console.init( ) )
@@ -27,8 +27,20 @@ std::filesystem::path& io::io::directory( dirs id ) {
 	return m_files.m_directories.at( id );
 }
 
+math::v2i io::io::mouse_pos( ) {
+	return m_input.m_mouse.pos;
+}
+
+f32 io::io::mouse_scroll( ) {
+	return m_input.m_mouse.scroll_amt;
+}
+
 BOOL io::io::think( UINT msg, WPARAM w_param, LPARAM l_param ) {
-	return m_input.think( msg, w_param, l_param );
+	BOOL ret = m_input.think( msg, w_param, l_param );
+
+	g_gui.think( );
+
+	return ret;
 }
 
 BOOL CALLBACK io::wnd_proc( HWND window, UINT msg, WPARAM w_param, LPARAM l_param ) {

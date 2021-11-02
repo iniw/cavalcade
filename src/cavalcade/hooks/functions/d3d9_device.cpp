@@ -5,11 +5,7 @@ HRESULT D3DAPI cavalcade::hooks::d3d9_device::end_scene( IDirect3DDevice9* devic
 
 	g_render.begin( );
 
-	g_render.rectangle( { 500, 500 }, { 100, 100 }, render::color::white( ), 1.f ).outline( render::color::black(  ) );
-
-	auto size = g_render.text< render::font::MENU >( { 200, 200 }, "test", render::color::white( ) );
-
-	g_render.rectangle( { 200, 200 }, size, render::color::red( ) ).outline( );
+	g_gui.render( );
 
 	g_render.end( );
 

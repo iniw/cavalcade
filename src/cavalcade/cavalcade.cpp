@@ -23,6 +23,8 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
 
 	HENFORCE( g_hooks.init( ), "failed to initialize hooks" );
 
+	g_gui.init( );
+
 #ifdef DEV
 
 	while ( !g_io.key_state( VK_END ) )

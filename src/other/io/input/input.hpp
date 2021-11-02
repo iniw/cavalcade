@@ -1,6 +1,8 @@
 #ifndef INPUT_HPP
 #define INPUT_HPP
 
+#include "../../math/types/vector.hpp"
+
 namespace io {
 	enum key_state
 	{
@@ -30,6 +32,11 @@ namespace io {
 
 		std::array< key_info, 255 > m_keys;
 		static inline std::array< std::string, 255 > s_key_names = { };
+
+		struct {
+			math::v2i pos;
+			f32 scroll_amt;
+		} m_mouse;
 
 	public:
 

@@ -1,5 +1,7 @@
 #include "input.hpp"
 
+#include "../../math/types/vector.hpp"
+
 bool io::input::init( LONG_PTR wnd_proc ) {
 	s_og = reinterpret_cast< WNDPROC >( LI_FN( SetWindowLongA )( cavalcade::window, GWLP_WNDPROC, wnd_proc ) );
 
@@ -19,60 +21,56 @@ BOOL io::input::think( UINT msg, WPARAM w_param, LPARAM l_param ) {
 	key_state key_state = key_state::UP;
 
 	switch ( msg ) {
-	case WM_KEYDOWN:
+	case WM_MOUSEMOVE:
+		POINT p;
+		if ( GetCursorPos( &p ) && ScreenToClient( cavalcade::window, &p ) )
+			m_mouse.pos = math::v2i( p.x, p.y );
 
+		break;
+	case WM_MOUSEWHEEL:
+		m_mouse.scroll_amt -= static_cast< f32 >( GET_WHEEL_DELTA_WPARAM( w_param ) ) / static_cast< f32 >( WHEEL_DELTA );
+
+		break;
+	case WM_KEYDOWN:
 		key_id    = w_param;
 		key_state = key_state::DOWN;
 
 		break;
-
 	case WM_KEYUP:
-
 		key_id    = w_param;
 		key_state = key_state::UP;
 
 		break;
-
 	case WM_LBUTTONDOWN:
 	case WM_LBUTTONUP:
-
 		key_id    = VK_LBUTTON;
 		key_state = msg == WM_LBUTTONUP ? key_state::UP : key_state::DOWN;
 
 		break;
-
 	case WM_RBUTTONDOWN:
 	case WM_RBUTTONUP:
-
 		key_id    = VK_RBUTTON;
 		key_state = msg == WM_RBUTTONUP ? key_state::UP : key_state::DOWN;
 
 		break;
-
 	case WM_MBUTTONDOWN:
 	case WM_MBUTTONUP:
-
 		key_id    = VK_MBUTTON;
 		key_state = msg == WM_MBUTTONUP ? key_state::UP : key_state::DOWN;
 
 		break;
-
 	case WM_XBUTTONDOWN:
 	case WM_XBUTTONUP:
-
 		key_id    = GET_XBUTTON_WPARAM( w_param ) == XBUTTON1 ? VK_XBUTTON1 : VK_XBUTTON2;
 		key_state = msg == WM_XBUTTONUP ? key_state::UP : key_state::DOWN;
 
 		break;
-
 	case WM_KILLFOCUS:
 	case WM_SETFOCUS:
-
 		for ( auto& key : m_keys )
 			key.m_state = key_state::UP;
 
 		break;
-
 	default:
 
 		return LI_FN( CallWindowProcA )( s_og, cavalcade::window, msg, w_param, l_param );
