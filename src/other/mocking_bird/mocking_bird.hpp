@@ -74,11 +74,20 @@ namespace mocking_bird {
 } // namespace mocking_bird
 
 #define MOCK mocking_bird::raiser{ std::source_location::current( ) },
-#define MOCKING_REGION( ... )                                                                                                                        \
+// NOTE(para): @iniw your symbol name reusage is very unsafe. example: try MOCKING_REGION on io struct without global preface
+#define MOCKING_REGION_IMPL( ... )                                                                                                                   \
 	try {                                                                                                                                            \
 		__VA_ARGS__                                                                                                                                  \
 	} catch ( const mocking_bird::exception& err ) {                                                                                                 \
-		g_io.log< io::log_level::WARNING >( "MOCK failed, line: {}, fn: {}\n", err.what( ).line( ), err.what( ).function_name( ) );                  \
+		g_io.log< ::io::log_level::WARNING >( "MOCK failed, line: {} | file: {} | fn: {}", err.what( ).line( ), err.what( ).file_name( ),            \
+		                                      err.what( ).function_name( ) );
+
+#define MOCKING_REGION( ... )                                                                                                                        \
+	MOCKING_REGION_IMPL( __VA_ARGS__ ) return false;                                                                                                 \
+	}
+
+#define MOCKING_REGION_NO_RET( ... )                                                                                                                 \
+	MOCKING_REGION_IMPL( __VA_ARGS__ )                                                                                                               \
 	}
 
 #endif /* MOCKING_BIRD_HPP */

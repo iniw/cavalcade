@@ -3,14 +3,7 @@
 #include "../../cavalcade/gui/gui.hpp"
 
 bool io::io::init( ) {
-	if ( !m_console.init( ) )
-		return false;
-
-	if ( !m_input.init( reinterpret_cast< LONG_PTR >( wnd_proc ) ) )
-		return false;
-
-	if ( !m_files.init( ) )
-		return false;
+	MOCKING_REGION( MOCK m_console.init( ); MOCK m_input.init( reinterpret_cast< LONG_PTR >( wnd_proc ) ); MOCK m_files.init( ); );
 
 	log( XOR( "initialized io" ) );
 

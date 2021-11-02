@@ -2,29 +2,21 @@
 
 bool io::console::init( ) {
 #ifdef IO_LOG_CONSOLE
-	if ( !AllocConsole( ) )
-		return false;
+	MOCKING_REGION( MOCK AllocConsole( );
 
-	freopen_s( reinterpret_cast< _iobuf** >( stdout ), "CONOUT$", "w", stdout );
+	                freopen_s( reinterpret_cast< _iobuf** >( stdout ), "CONOUT$", "w", stdout );
 
-	SetConsoleTitleA( "cavalcade" );
+	                SetConsoleTitleA( "cavalcade" );
 
-	HANDLE handle = GetStdHandle( STD_OUTPUT_HANDLE );
-	if ( !handle )
-		return false;
+	                HANDLE handle = GetStdHandle( STD_OUTPUT_HANDLE ); MOCK handle;
 
-	DWORD mode = 0;
-	GetConsoleMode( handle, &mode );
+	                DWORD mode = 0; GetConsoleMode( handle, &mode );
 
-	mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
-
-	return SetConsoleMode( handle, mode );
-
+	                mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING; return SetConsoleMode( handle, mode ); );
 #endif
 
 	return true;
 }
-
 void io::console::unload( ) {
 #ifdef IO_LOG_CONSOLE
 

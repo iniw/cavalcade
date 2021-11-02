@@ -62,7 +62,7 @@ mem::address mem::module_info::search_byte_array( const i32* bytes, u32 size, co
 }
 
 void mem::module_info::add_address( u32 name_hash, address address ) {
-	MOCKING_REGION( MOCK ENFORCE( address, "bad address, name: {}", name_hash ); );
+	MOCKING_REGION_NO_RET( MOCK ENFORCE( address, "bad address, name: {}", name_hash ); );
 	m_addresses[ name_hash ] = address;
 }
 

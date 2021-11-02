@@ -19,7 +19,7 @@ namespace gui::objects {
 		u64 m_time;
 
 		// our flags
-		std::bitset< flags::MAX - 1 > m_flags;
+		std::bitset< flags::MAX > m_flags;
 
 		// our label
 		std::string m_label;
