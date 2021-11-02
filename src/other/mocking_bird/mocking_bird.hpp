@@ -73,8 +73,8 @@ namespace mocking_bird {
 	};
 } // namespace mocking_bird
 
-#define mock mocking_bird::raiser{ std::source_location::current( ) },
-#define mocking_region( ... )                                                                                                                        \
+#define MOCK mocking_bird::raiser{ std::source_location::current( ) },
+#define MOCKING_REGION( ... )                                                                                                                        \
 	try {                                                                                                                                            \
 		__VA_ARGS__                                                                                                                                  \
 	} catch ( const mocking_bird::exception& err ) { }
