@@ -1,3 +1,6 @@
 .vscode\browse\
 build
 checks.json
+*.DB
+*.DB-shm
+*.DB-wal

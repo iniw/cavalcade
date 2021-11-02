@@ -30,7 +30,12 @@ bool io::io::key_state( u8 key_id ) {
 
 template< io::log_level level, typename... VA >
 void io::io::log( std::string_view str, VA&&... args ) {
-	auto fmt = format( str, std::forward< VA >( args )... );
+	// NOTE(para): the ambiguity of this rose from the symbol reusage, the
+	// linker tried to resolve the presence of a "format" in the structure
+	// because the scope 'reuses' itself because it's contextual
+	// we're preheading this with the global namespace (no name) to signify that we want to take
+	// format from the namespace
+	auto fmt = ::io::format( str, std::forward< VA >( args )... );
 
 	m_console.print< level >( fmt );
 	m_files.log< level >( fmt );
