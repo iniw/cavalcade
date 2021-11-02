@@ -4,14 +4,7 @@
 #include "objects/objects.hpp"
 
 namespace gui {
-
-	// NOTE(wini): these are kinda random and aren't going to be used for long
-	namespace pallete {
-		inline auto DARK  = render::color( 25, 25, 25 );
-		inline auto LIGHT = render::color( 65, 65, 65 );
-	}; // namespace pallete
-
-	struct gui {
+	struct impl {
 	private:
 
 		// NOTE(wini): this is some future-proofing for when we want to;
@@ -28,6 +21,6 @@ namespace gui {
 	};
 } // namespace gui
 
-inline gui::gui g_gui;
+inline gui::impl g_gui;
 
 #endif // GUI_HPP

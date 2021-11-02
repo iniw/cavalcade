@@ -27,7 +27,7 @@ namespace render {
 		MAX
 	};
 
-	struct render {
+	struct impl {
 	private:
 
 		// TODO(wini): move these two structs to their own files/folders
@@ -121,7 +121,7 @@ namespace render {
 	};
 } // namespace render
 
-inline render::render g_render;
+inline render::impl g_render;
 
 #include "render.inl"
 

@@ -7,7 +7,7 @@
 
 #define FONT_GET( font ) m_fonts[ ENUM_IDX( font ) ]
 
-bool render::render::init( ) {
+bool render::impl::init( ) {
 	m_d3d9.m_device = g_csgo.m_d3d9_device;
 
 	MOCKING_TRY;
@@ -26,39 +26,39 @@ bool render::render::init( ) {
 
 #undef FONT_GET
 
-void render::render::unload( ) {
+void render::impl::unload( ) {
 	ImGui_ImplDX9_Shutdown( );
 	ImGui::DestroyContext( );
 }
 
-void render::render::begin( ) {
+void render::impl::begin( ) {
 	m_imgui.begin( );
 
 	m_d3d9.backup_render_states( );
 }
 
-void render::render::end( ) {
+void render::impl::end( ) {
 	m_imgui.end( );
 
 	m_d3d9.restore_render_states( );
 }
 
-void render::render::update_screen_size( const math::v2i& screen_size ) {
+void render::impl::update_screen_size( const math::v2i& screen_size ) {
 	m_imgui.m_io->DisplaySize.x = static_cast< f32 >( screen_size[ X ] );
 	m_imgui.m_io->DisplaySize.y = static_cast< f32 >( screen_size[ Y ] );
 }
 
-void render::render::pre_reset( ) {
+void render::impl::pre_reset( ) {
 	ImGui_ImplDX9_InvalidateDeviceObjects( );
 }
 
-void render::render::post_reset( ) {
+void render::impl::post_reset( ) {
 	update_screen_size( g_csgo.m_engine->get_screen_size( ) );
 
 	ImGui_ImplDX9_CreateDeviceObjects( );
 }
 
-render::point render::render::handle_alignment( align alignment, const point& pos, const size& size ) {
+render::point render::impl::handle_alignment( align alignment, const point& pos, const size& size ) {
 	point out = pos;
 
 	switch ( alignment ) {
@@ -90,7 +90,7 @@ render::point render::render::handle_alignment( align alignment, const point& po
 	}
 }
 
-void render::render::d3d9::backup_render_states( ) {
+void render::impl::d3d9::backup_render_states( ) {
 	m_device->CreateStateBlock( D3DSBT_PIXELSTATE, &m_backup.state_block );
 
 	m_backup.state_block->Capture( );
@@ -103,7 +103,7 @@ void render::render::d3d9::backup_render_states( ) {
 	m_device->GetPixelShader( &m_backup.pixel_shader );
 }
 
-void render::render::d3d9::restore_render_states( ) {
+void render::impl::d3d9::restore_render_states( ) {
 	m_backup.state_block->Apply( );
 	release( m_backup.state_block );
 
@@ -119,7 +119,7 @@ void render::render::d3d9::restore_render_states( ) {
 	m_device->SetRenderState( D3DRS_SRGBWRITEENABLE, m_backup.srgb_write );
 }
 
-bool render::render::imgui::init( IDirect3DDevice9* device ) {
+bool render::impl::imgui::init( IDirect3DDevice9* device ) {
 	MOCKING_TRY;
 
 	MOCK m_ctx = ImGui::CreateContext( );
@@ -131,7 +131,7 @@ bool render::render::imgui::init( IDirect3DDevice9* device ) {
 	return true;
 }
 
-void render::render::imgui::begin( ) {
+void render::impl::imgui::begin( ) {
 	ImGui_ImplDX9_NewFrame( );
 
 	auto& style = ImGui::GetStyle( );
@@ -144,7 +144,7 @@ void render::render::imgui::begin( ) {
 	geometry::base_shape::s_draw_list = ImGui::GetForegroundDrawList( );
 }
 
-void render::render::imgui::end( ) {
+void render::impl::imgui::end( ) {
 	ImGui::EndFrame( );
 
 	ImGui::Render( );

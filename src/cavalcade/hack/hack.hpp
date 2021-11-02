@@ -4,11 +4,11 @@
 #include "other/prediction.hpp"
 
 namespace hack {
-	struct hack {
+	struct impl {
 		other::prediction m_prediction;
 	};
 } // namespace hack
 
-inline hack::hack g_hack;
+inline hack::impl g_hack;
 
 #endif // HACK_HPP

@@ -2,7 +2,7 @@
 
 #include "../../sdk/csgo/csgo.hpp"
 
-bool mem::mem::init( ) {
+bool mem::impl::init( ) {
 	const auto PEB = reinterpret_cast< win32::PEB* >( __readfsdword( 0x30 ) );
 
 	MOCKING_TRY;
@@ -29,7 +29,7 @@ bool mem::mem::init( ) {
 	return !m_modules.empty( );
 }
 
-bool mem::mem::setup( ) {
+bool mem::impl::setup( ) {
 	add_addresses( );
 
 	if ( !validate_addresses( ) )
@@ -40,12 +40,12 @@ bool mem::mem::setup( ) {
 	return true;
 }
 
-void mem::mem::unload( ) {
+void mem::impl::unload( ) {
 	for ( auto& [ k, v ] : m_modules )
 		v.restore( );
 }
 
-void mem::mem::add_addresses( ) {
+void mem::impl::add_addresses( ) {
 #define ADD_PATTERN_REL( module_name, addr_name, pattern ) m_modules[ module_name ].add_pattern( HASH_CT( addr_name ), STB( pattern ), true )
 #define ADD_PATTERN( module_name, addr_name, pattern )     m_modules[ module_name ].add_pattern( HASH_CT( addr_name ), STB( pattern ) )
 #define ADD_ADDRESS( module_name, addr_name, address )     m_modules[ module_name ].add_address( HASH_CT( addr_name ), address )
@@ -139,7 +139,7 @@ void mem::mem::add_addresses( ) {
 #undef ADD_ADDRESS
 }
 
-bool mem::mem::validate_addresses( ) {
+bool mem::impl::validate_addresses( ) {
 	for ( auto& [ k, v ] : m_modules )
 		if ( !v.validate( ) )
 			return false;

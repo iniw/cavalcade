@@ -11,7 +11,7 @@
 #include "win32/win32.hpp"
 
 namespace mem {
-	struct mem {
+	struct impl {
 	private:
 
 		std::unordered_map< u32, module_info > m_modules;
@@ -42,7 +42,7 @@ namespace mem {
 	inline T call_v_func( address thisptr, VA... args );
 } // namespace mem
 
-inline mem::mem g_mem;
+inline mem::impl g_mem;
 
 #include "mem.inl"
 

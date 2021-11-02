@@ -2,31 +2,31 @@
 #define RENDER_INL
 
 template< render::align alignment >
-render::geometry::rect render::render::rectangle( const point& pos, const size& size, color col, f32 thickness ) {
+render::geometry::rect render::impl::rectangle( const point& pos, const size& size, color col, f32 thickness ) {
 	auto correct_pos = handle_alignment( alignment, pos, size );
 	return draw_shape< geometry::rect >( pos, correct_pos, col.to_imgui( ), thickness );
 }
 
 template< render::align alignment >
-render::geometry::rect render::render::rectangle( const rect& rect, color col, f32 thickness ) {
+render::geometry::rect render::impl::rectangle( const rect& rect, color col, f32 thickness ) {
 	auto correct_pos = handle_alignment( alignment, rect.pos( ), rect.size( ) );
 	return draw_shape< geometry::rect >( rect.pos( ), correct_pos, col.to_imgui( ), thickness );
 }
 
 template< render::align alignment >
-render::geometry::rect_filled render::render::rectangle_filled( const point& pos, const size& size, color col ) {
+render::geometry::rect_filled render::impl::rectangle_filled( const point& pos, const size& size, color col ) {
 	auto correct_pos = handle_alignment( alignment, pos, size );
 	return draw_shape< geometry::rect_filled >( pos, correct_pos, col.to_imgui( ) );
 }
 
 template< render::align alignment >
-render::geometry::rect_filled render::render::rectangle_filled( const rect& rect, color col ) {
+render::geometry::rect_filled render::impl::rectangle_filled( const rect& rect, color col ) {
 	auto correct_pos = handle_alignment( alignment, rect.pos( ), rect.size( ) );
 	return draw_shape< geometry::rect_filled >( rect.pos( ), correct_pos, col.to_imgui( ) );
 }
 
 template< render::font font_choice >
-render::size render::render::text( const point& pos, std::string_view text, color col, align alignment ) {
+render::size render::impl::text( const point& pos, std::string_view text, color col, align alignment ) {
 	static auto& font = m_fonts.at( ENUM_IDX( font_choice ) );
 
 	auto size = font.calc_size( text );
@@ -39,7 +39,7 @@ render::size render::render::text( const point& pos, std::string_view text, colo
 }
 
 template< render::font font_choice >
-render::size render::render::text_size( std::string_view text ) {
+render::size render::impl::text_size( std::string_view text ) {
 	static auto& font = m_fonts.at( ENUM_IDX( font_choice ) );
 
 	return font.calc_size( text );

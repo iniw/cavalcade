@@ -44,8 +44,7 @@ DWORD WINAPI cavalcade::unload( BOOL exit_type ) {
 
 	g_io.unload( );
 
-	LI_FN( FreeLibraryAndExitThread )
-	( handle, exit_type );
+	LI_FN( FreeLibraryAndExitThread )( handle, exit_type );
 
 	return exit_type;
 }

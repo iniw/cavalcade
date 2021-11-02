@@ -12,7 +12,7 @@ namespace io {
 
 	BOOL CALLBACK wnd_proc( HWND window, UINT msg, WPARAM w_param, LPARAM l_param );
 
-	struct io {
+	struct impl {
 	private:
 
 		console m_console;
@@ -44,7 +44,7 @@ namespace io {
 	};
 } // namespace io
 
-inline io::io g_io;
+inline io::impl g_io;
 
 #include "io.inl"
 
