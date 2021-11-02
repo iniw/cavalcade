@@ -4,9 +4,6 @@
 #include "../types/detour.hpp"
 #include "../types/section.hpp"
 
-#include "../../hash/hash.hpp"
-#include "../../io/io.hpp"
-
 namespace mem {
 	struct module_info {
 	private:
