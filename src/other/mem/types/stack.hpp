@@ -5,10 +5,11 @@ namespace mem {
 	struct stack {
 		ptr m_address;
 
-		stack( unk address_of_return_address )
-			: m_address{ reinterpret_cast< ptr >( address_of_return_address ) - sizeof( i32 ) } { }
+		stack( unk address_of_return_address ) : m_address{ reinterpret_cast< ptr >( address_of_return_address ) - sizeof( i32 ) } { }
 
-		stack& next( ) const { return *reinterpret_cast< stack* >( m_address ); }
+		stack& next( ) const {
+			return *reinterpret_cast< stack* >( m_address );
+		}
 
 		template< typename T = address >
 		T local( ptrdiff offset ) const {

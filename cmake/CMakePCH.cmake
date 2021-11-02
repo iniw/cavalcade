@@ -19,6 +19,7 @@ set(PCH
     <fstream>
     <compare>
     <bit>
+    <bitset>
     <numbers>
     <thread>
     # string
@@ -34,6 +35,7 @@ set(PCH
 
     # --- winapi ---
     <Windows.h>
+    <Windowsx.h>
     <WinUser.h>
     <Winternl.h>
     <intrin.h>

@@ -30,7 +30,9 @@ namespace mem {
 
 		module_info( address dll_base );
 
-		operator address( ) { return m_module_base; }
+		operator address( ) {
+			return m_module_base;
+		}
 
 		template< u32 size >
 		address find_pattern( const std::array< i32, size >& pattern, u32 section_hash = HASH_CT( ".text" ) );

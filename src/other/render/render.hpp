@@ -101,8 +101,17 @@ namespace render {
 		template< align alignment = align::NONE >
 		geometry::rect rectangle( const rect& rect, color col, f32 thickness = 1.f );
 
+		template< align alignment = align::NONE >
+		geometry::rect_filled rectangle_filled( const point& pos, const size& size, color col );
+
+		template< align alignment = align::NONE >
+		geometry::rect_filled rectangle_filled( const rect& rect, color col );
+
 		template< font font_choice >
-		size text( const point& pos, std::string_view text, color col );
+		size text( const point& pos, std::string_view text, color col, align alignment = align::NONE );
+
+		template< font font_choice >
+		size text_size( std::string_view text );
 
 		void pre_reset( );
 

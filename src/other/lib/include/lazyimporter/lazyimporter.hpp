@@ -236,14 +236,12 @@ namespace li {
 			constexpr static unsigned long long prime64 = prime;
 
 			LAZY_IMPORTER_FORCEINLINE constexpr static value_type single( value_type value, char c ) noexcept {
-				return static_cast< hash_t::value_type >( ( value ^ LAZY_IMPORTER_TOLOWER( c ) ) *
-				                                          static_cast< unsigned long long >( prime ) );
+				return static_cast< hash_t::value_type >( ( value ^ LAZY_IMPORTER_TOLOWER( c ) ) * static_cast< unsigned long long >( prime ) );
 			}
 		};
 
 		template< class CharT = char >
-		LAZY_IMPORTER_FORCEINLINE constexpr hash_t::value_type khash( const CharT* str,
-		                                                              hash_t::value_type value = hash_t::offset ) noexcept {
+		LAZY_IMPORTER_FORCEINLINE constexpr hash_t::value_type khash( const CharT* str, hash_t::value_type value = hash_t::offset ) noexcept {
 			return ( *str ? khash( str + 1, hash_t::single( value, *str ) ) : value );
 		}
 
@@ -305,13 +303,11 @@ namespace li {
 		}
 
 		LAZY_IMPORTER_FORCEINLINE const win::IMAGE_NT_HEADERS* nt_headers( const char* base ) noexcept {
-			return reinterpret_cast< const win::IMAGE_NT_HEADERS* >(
-				base + reinterpret_cast< const win::IMAGE_DOS_HEADER* >( base )->e_lfanew );
+			return reinterpret_cast< const win::IMAGE_NT_HEADERS* >( base + reinterpret_cast< const win::IMAGE_DOS_HEADER* >( base )->e_lfanew );
 		}
 
 		LAZY_IMPORTER_FORCEINLINE const win::IMAGE_EXPORT_DIRECTORY* image_export_dir( const char* base ) noexcept {
-			return reinterpret_cast< const win::IMAGE_EXPORT_DIRECTORY* >(
-				base + nt_headers( base )->OptionalHeader.DataDirectory->VirtualAddress );
+			return reinterpret_cast< const win::IMAGE_EXPORT_DIRECTORY* >( base + nt_headers( base )->OptionalHeader.DataDirectory->VirtualAddress );
 		}
 
 		LAZY_IMPORTER_FORCEINLINE const win::LDR_DATA_TABLE_ENTRY_T* ldr_data_entry( ) noexcept {
@@ -330,22 +326,27 @@ namespace li {
 			LAZY_IMPORTER_FORCEINLINE
 			exports_directory( const char* base ) noexcept : _base( base ) {
 				const auto ied_data_dir = nt_headers( base )->OptionalHeader.DataDirectory[ 0 ];
-				_ied      = reinterpret_cast< const win::IMAGE_EXPORT_DIRECTORY* >( base + ied_data_dir.VirtualAddress );
-				_ied_size = ied_data_dir.Size;
+				_ied                    = reinterpret_cast< const win::IMAGE_EXPORT_DIRECTORY* >( base + ied_data_dir.VirtualAddress );
+				_ied_size               = ied_data_dir.Size;
 			}
 
 			LAZY_IMPORTER_FORCEINLINE explicit operator bool( ) const noexcept {
 				return reinterpret_cast< const char* >( _ied ) != _base;
 			}
 
-			LAZY_IMPORTER_FORCEINLINE size_type size( ) const noexcept { return _ied->NumberOfNames; }
+			LAZY_IMPORTER_FORCEINLINE size_type size( ) const noexcept {
+				return _ied->NumberOfNames;
+			}
 
-			LAZY_IMPORTER_FORCEINLINE const char* base( ) const noexcept { return _base; }
-			LAZY_IMPORTER_FORCEINLINE const win::IMAGE_EXPORT_DIRECTORY* ied( ) const noexcept { return _ied; }
+			LAZY_IMPORTER_FORCEINLINE const char* base( ) const noexcept {
+				return _base;
+			}
+			LAZY_IMPORTER_FORCEINLINE const win::IMAGE_EXPORT_DIRECTORY* ied( ) const noexcept {
+				return _ied;
+			}
 
 			LAZY_IMPORTER_FORCEINLINE const char* name( size_type index ) const noexcept {
-				return reinterpret_cast< const char* >(
-					_base + reinterpret_cast< const unsigned long* >( _base + _ied->AddressOfNames )[ index ] );
+				return reinterpret_cast< const char* >( _base + reinterpret_cast< const unsigned long* >( _base + _ied->AddressOfNames )[ index ] );
 			}
 
 			LAZY_IMPORTER_FORCEINLINE const char* address( size_type index ) const noexcept {
@@ -370,10 +371,11 @@ namespace li {
 			LAZY_IMPORTER_FORCEINLINE safe_module_enumerator( ) noexcept : safe_module_enumerator( ldr_data_entry( ) ) { }
 
 			LAZY_IMPORTER_FORCEINLINE
-			safe_module_enumerator( const detail::win::LDR_DATA_TABLE_ENTRY_T* ldr ) noexcept
-				: value( ldr->load_order_next( ) ), head( value ) { }
+			safe_module_enumerator( const detail::win::LDR_DATA_TABLE_ENTRY_T* ldr ) noexcept : value( ldr->load_order_next( ) ), head( value ) { }
 
-			LAZY_IMPORTER_FORCEINLINE void reset( ) noexcept { value = head->load_order_next( ); }
+			LAZY_IMPORTER_FORCEINLINE void reset( ) noexcept {
+				value = head->load_order_next( );
+			}
 
 			LAZY_IMPORTER_FORCEINLINE bool next( ) noexcept {
 				value = value->load_order_next( );
@@ -388,7 +390,9 @@ namespace li {
 
 			LAZY_IMPORTER_FORCEINLINE unsafe_module_enumerator( ) noexcept : value( ldr_data_entry( ) ) { }
 
-			LAZY_IMPORTER_FORCEINLINE void reset( ) noexcept { value = ldr_data_entry( ); }
+			LAZY_IMPORTER_FORCEINLINE void reset( ) noexcept {
+				value = ldr_data_entry( );
+			}
 
 			LAZY_IMPORTER_FORCEINLINE bool next( ) noexcept {
 				value = value->load_order_next( );

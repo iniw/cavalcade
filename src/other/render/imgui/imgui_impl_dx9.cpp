@@ -62,8 +62,7 @@ struct CUSTOMVERTEX {
 #ifdef IMGUI_USE_BGRA_PACKED_COLOR
 #	define IMGUI_COL_TO_DX9_ARGB( _COL ) ( _COL )
 #else
-#	define IMGUI_COL_TO_DX9_ARGB( _COL ) \
-		( ( ( _COL )&0xFF00FF00 ) | ( ( ( _COL )&0xFF0000 ) >> 16 ) | ( ( ( _COL )&0xFF ) << 16 ) )
+#	define IMGUI_COL_TO_DX9_ARGB( _COL ) ( ( ( _COL )&0xFF00FF00 ) | ( ( ( _COL )&0xFF0000 ) >> 16 ) | ( ( ( _COL )&0xFF ) << 16 ) )
 #endif
 
 // Backend data stored in io.BackendRendererUserData to allow support for multiple Dear ImGui contexts
@@ -109,8 +108,8 @@ static void ImGui_ImplDX9_SetupRenderState( ImDrawData* draw_data ) {
 	bd->pd3dDevice->SetRenderState( D3DRS_STENCILENABLE, FALSE );
 	bd->pd3dDevice->SetRenderState( D3DRS_CLIPPING, TRUE );
 	bd->pd3dDevice->SetRenderState( D3DRS_LIGHTING, FALSE );
-	bd->pd3dDevice->SetRenderState( D3DRS_COLORWRITEENABLE, D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN |
-	                                                            D3DCOLORWRITEENABLE_BLUE | D3DCOLORWRITEENABLE_ALPHA );
+	bd->pd3dDevice->SetRenderState( D3DRS_COLORWRITEENABLE,
+	                                D3DCOLORWRITEENABLE_RED | D3DCOLORWRITEENABLE_GREEN | D3DCOLORWRITEENABLE_BLUE | D3DCOLORWRITEENABLE_ALPHA );
 	bd->pd3dDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, false );
 	bd->pd3dDevice->SetRenderState( D3DRS_MULTISAMPLEANTIALIAS, false );
 	bd->pd3dDevice->SetRenderState( D3DRS_ANTIALIASEDLINEENABLE, false );
@@ -135,10 +134,9 @@ static void ImGui_ImplDX9_SetupRenderState( ImDrawData* draw_data ) {
 		float R                  = draw_data->DisplayPos.x + draw_data->DisplaySize.x + 0.5f;
 		float T                  = draw_data->DisplayPos.y + 0.5f;
 		float B                  = draw_data->DisplayPos.y + draw_data->DisplaySize.y + 0.5f;
-		D3DMATRIX mat_identity   = { { { 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f,
-                                       1.0f } } };
-		D3DMATRIX mat_projection = { { { 2.0f / ( R - L ), 0.0f, 0.0f, 0.0f, 0.0f, 2.0f / ( T - B ), 0.0f, 0.0f, 0.0f, 0.0f, 0.5f,
-			                             0.0f, ( L + R ) / ( L - R ), ( T + B ) / ( B - T ), 0.5f, 1.0f } } };
+		D3DMATRIX mat_identity   = { { { 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f } } };
+		D3DMATRIX mat_projection = { { { 2.0f / ( R - L ), 0.0f, 0.0f, 0.0f, 0.0f, 2.0f / ( T - B ), 0.0f, 0.0f, 0.0f, 0.0f, 0.5f, 0.0f,
+			                             ( L + R ) / ( L - R ), ( T + B ) / ( B - T ), 0.5f, 1.0f } } };
 		bd->pd3dDevice->SetTransform( D3DTS_WORLD, &mat_identity );
 		bd->pd3dDevice->SetTransform( D3DTS_VIEW, &mat_identity );
 		bd->pd3dDevice->SetTransform( D3DTS_PROJECTION, &mat_projection );
@@ -159,9 +157,8 @@ void ImGui_ImplDX9_RenderDrawData( ImDrawData* draw_data ) {
 			bd->pVB = NULL;
 		}
 		bd->VertexBufferSize = draw_data->TotalVtxCount + 5000;
-		if ( bd->pd3dDevice->CreateVertexBuffer( bd->VertexBufferSize * sizeof( CUSTOMVERTEX ),
-		                                         D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY, D3DFVF_CUSTOMVERTEX, D3DPOOL_DEFAULT,
-		                                         &bd->pVB, NULL ) < 0 )
+		if ( bd->pd3dDevice->CreateVertexBuffer( bd->VertexBufferSize * sizeof( CUSTOMVERTEX ), D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
+		                                         D3DFVF_CUSTOMVERTEX, D3DPOOL_DEFAULT, &bd->pVB, NULL ) < 0 )
 			return;
 	}
 	if ( !bd->pIB || bd->IndexBufferSize < draw_data->TotalIdxCount ) {
@@ -171,8 +168,7 @@ void ImGui_ImplDX9_RenderDrawData( ImDrawData* draw_data ) {
 		}
 		bd->IndexBufferSize = draw_data->TotalIdxCount + 10000;
 		if ( bd->pd3dDevice->CreateIndexBuffer( bd->IndexBufferSize * sizeof( ImDrawIdx ), D3DUSAGE_DYNAMIC | D3DUSAGE_WRITEONLY,
-		                                        sizeof( ImDrawIdx ) == 2 ? D3DFMT_INDEX16 : D3DFMT_INDEX32, D3DPOOL_DEFAULT,
-		                                        &bd->pIB, NULL ) < 0 )
+		                                        sizeof( ImDrawIdx ) == 2 ? D3DFMT_INDEX16 : D3DFMT_INDEX32, D3DPOOL_DEFAULT, &bd->pIB, NULL ) < 0 )
 			return;
 	}
 
@@ -194,13 +190,11 @@ void ImGui_ImplDX9_RenderDrawData( ImDrawData* draw_data ) {
 	// Allocate buffers
 	CUSTOMVERTEX* vtx_dst;
 	ImDrawIdx* idx_dst;
-	if ( bd->pVB->Lock( 0, ( UINT )( draw_data->TotalVtxCount * sizeof( CUSTOMVERTEX ) ), ( void** )&vtx_dst, D3DLOCK_DISCARD ) <
-	     0 ) {
+	if ( bd->pVB->Lock( 0, ( UINT )( draw_data->TotalVtxCount * sizeof( CUSTOMVERTEX ) ), ( void** )&vtx_dst, D3DLOCK_DISCARD ) < 0 ) {
 		d3d9_state_block->Release( );
 		return;
 	}
-	if ( bd->pIB->Lock( 0, ( UINT )( draw_data->TotalIdxCount * sizeof( ImDrawIdx ) ), ( void** )&idx_dst, D3DLOCK_DISCARD ) <
-	     0 ) {
+	if ( bd->pIB->Lock( 0, ( UINT )( draw_data->TotalIdxCount * sizeof( ImDrawIdx ) ), ( void** )&idx_dst, D3DLOCK_DISCARD ) < 0 ) {
 		bd->pVB->Unlock( );
 		d3d9_state_block->Release( );
 		return;
@@ -265,9 +259,8 @@ void ImGui_ImplDX9_RenderDrawData( ImDrawData* draw_data ) {
 				const LPDIRECT3DTEXTURE9 texture = ( LPDIRECT3DTEXTURE9 )pcmd->GetTexID( );
 				bd->pd3dDevice->SetTexture( 0, texture );
 				bd->pd3dDevice->SetScissorRect( &r );
-				bd->pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, pcmd->VtxOffset + global_vtx_offset, 0,
-				                                      ( UINT )cmd_list->VtxBuffer.Size, pcmd->IdxOffset + global_idx_offset,
-				                                      pcmd->ElemCount / 3 );
+				bd->pd3dDevice->DrawIndexedPrimitive( D3DPT_TRIANGLELIST, pcmd->VtxOffset + global_vtx_offset, 0, ( UINT )cmd_list->VtxBuffer.Size,
+				                                      pcmd->IdxOffset + global_idx_offset, pcmd->ElemCount / 3 );
 			}
 		}
 		global_idx_offset += cmd_list->IdxBuffer.Size;
@@ -292,8 +285,7 @@ bool ImGui_ImplDX9_Init( IDirect3DDevice9* device ) {
 	ImGui_ImplDX9_Data* bd     = IM_NEW( ImGui_ImplDX9_Data )( );
 	io.BackendRendererUserData = ( void* )bd;
 	io.BackendRendererName     = "imgui_impl_dx9";
-	io.BackendFlags |=
-		ImGuiBackendFlags_RendererHasVtxOffset; // We can honor the ImDrawCmd::VtxOffset field, allowing for large meshes.
+	io.BackendFlags |= ImGuiBackendFlags_RendererHasVtxOffset; // We can honor the ImDrawCmd::VtxOffset field, allowing for large meshes.
 
 	bd->pd3dDevice = device;
 	bd->pd3dDevice->AddRef( );
@@ -327,8 +319,7 @@ static bool ImGui_ImplDX9_CreateFontsTexture( ) {
 #ifndef IMGUI_USE_BGRA_PACKED_COLOR
 	if ( io.Fonts->TexPixelsUseColors ) {
 		ImU32* dst_start = ( ImU32* )ImGui::MemAlloc( ( size_t )width * height * bytes_per_pixel );
-		for ( ImU32 *src = ( ImU32* )pixels, *dst = dst_start, *dst_end = dst_start + ( size_t )width * height; dst < dst_end;
-		      src++, dst++ )
+		for ( ImU32 *src = ( ImU32* )pixels, *dst = dst_start, *dst_end = dst_start + ( size_t )width * height; dst < dst_end; src++, dst++ )
 			*dst = IMGUI_COL_TO_DX9_ARGB( *src );
 		pixels = ( unsigned char* )dst_start;
 	}
@@ -336,15 +327,14 @@ static bool ImGui_ImplDX9_CreateFontsTexture( ) {
 
 	// Upload texture to graphics system
 	bd->FontTexture = NULL;
-	if ( bd->pd3dDevice->CreateTexture( width, height, 1, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &bd->FontTexture,
-	                                    NULL ) < 0 )
+	if ( bd->pd3dDevice->CreateTexture( width, height, 1, D3DUSAGE_DYNAMIC, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, &bd->FontTexture, NULL ) < 0 )
 		return false;
 	D3DLOCKED_RECT tex_locked_rect;
 	if ( bd->FontTexture->LockRect( 0, &tex_locked_rect, NULL, 0 ) != D3D_OK )
 		return false;
 	for ( int y = 0; y < height; y++ )
-		memcpy( ( unsigned char* )tex_locked_rect.pBits + ( size_t )tex_locked_rect.Pitch * y,
-		        pixels + ( size_t )width * bytes_per_pixel * y, ( size_t )width * bytes_per_pixel );
+		memcpy( ( unsigned char* )tex_locked_rect.pBits + ( size_t )tex_locked_rect.Pitch * y, pixels + ( size_t )width * bytes_per_pixel * y,
+		        ( size_t )width * bytes_per_pixel );
 	bd->FontTexture->UnlockRect( 0 );
 
 	// Store our identifier

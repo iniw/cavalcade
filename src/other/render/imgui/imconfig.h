@@ -97,21 +97,25 @@
 // This will be inlined as part of ImVec2 and ImVec4 class declarations.
 
 #include "../../math/types/vector.hpp"
-#define IM_VEC2_CLASS_EXTRA                                                                                                      \
-	ImVec2( const math::v2i& f ) {                                                                                               \
-		x = static_cast< f32 >( f[ X ] );                                                                                        \
-		y = static_cast< f32 >( f[ Y ] );                                                                                        \
-	}                                                                                                                            \
-	operator math::v2i( ) const { return math::v2i( x, y ); }
+#define IM_VEC2_CLASS_EXTRA                                                                                                                          \
+	ImVec2( const math::v2i& f ) {                                                                                                                   \
+		x = static_cast< f32 >( f[ X ] );                                                                                                            \
+		y = static_cast< f32 >( f[ Y ] );                                                                                                            \
+	}                                                                                                                                                \
+	operator math::v2i( ) const {                                                                                                                    \
+		return math::v2i( x, y );                                                                                                                    \
+	}
 
-#define IM_VEC4_CLASS_EXTRA                                                                                                      \
-	ImVec4( const math::v4i& f ) {                                                                                               \
-		x = static_cast< f32 >( f[ X ] );                                                                                        \
-		y = static_cast< f32 >( f[ Y ] );                                                                                        \
-		z = static_cast< f32 >( f[ Z ] );                                                                                        \
-		w = static_cast< f32 >( f[ W ] );                                                                                        \
-	}                                                                                                                            \
-	operator math::v4i( ) const { return math::v4i( x, y, z, w ); }
+#define IM_VEC4_CLASS_EXTRA                                                                                                                          \
+	ImVec4( const math::v4i& f ) {                                                                                                                   \
+		x = static_cast< f32 >( f[ X ] );                                                                                                            \
+		y = static_cast< f32 >( f[ Y ] );                                                                                                            \
+		z = static_cast< f32 >( f[ Z ] );                                                                                                            \
+		w = static_cast< f32 >( f[ W ] );                                                                                                            \
+	}                                                                                                                                                \
+	operator math::v4i( ) const {                                                                                                                    \
+		return math::v4i( x, y, z, w );                                                                                                              \
+	}
 
 //---- Use 32-bit vertex indices (default is 16-bit) is one way to allow large meshes with more than 64K vertices.
 // Your renderer backend will need to support it (most example renderer backends support both 16/32-bit indices).

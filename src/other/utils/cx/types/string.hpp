@@ -19,11 +19,17 @@ namespace utils::cx {
 			m_data[ str.length( ) + 1 ] = '\0';
 		}
 
-		constexpr operator cstr( ) { return &m_data.begin( ); }
+		constexpr operator cstr( ) {
+			return &m_data.begin( );
+		}
 
-		constexpr operator std::string_view( ) { return std::string_view( &m_data.begin( ), N ); }
+		constexpr operator std::string_view( ) {
+			return std::string_view( &m_data.begin( ), N );
+		}
 
-		constexpr cstr data( ) const { return &m_data.begin( ); }
+		constexpr cstr data( ) const {
+			return &m_data.begin( );
+		}
 	};
 } // namespace utils::cx
 

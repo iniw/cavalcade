@@ -10,7 +10,9 @@ namespace mem {
 
 		section( u32 start, u32 size ) : m_start{ start }, m_size{ size } { }
 
-		u32 end( ) { return m_start + m_size; }
+		u32 end( ) {
+			return m_start + m_size;
+		}
 	};
 } // namespace mem
 

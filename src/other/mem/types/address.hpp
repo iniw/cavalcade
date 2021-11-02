@@ -17,9 +17,13 @@ namespace mem {
 
 		auto operator<=>( const address& ) const = default;
 
-		operator ptr( ) const { return m_address; }
+		operator ptr( ) const {
+			return m_address;
+		}
 
-		operator unk( ) const { return reinterpret_cast< unk >( m_address ); }
+		operator unk( ) const {
+			return reinterpret_cast< unk >( m_address );
+		}
 
 		template< typename T = address >
 		T to( ) const {

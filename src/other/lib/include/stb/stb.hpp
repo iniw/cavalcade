@@ -86,7 +86,9 @@ namespace stb {
 				data[ i ] = str[ i ];
 		}
 
-		constexpr auto operator( )( ) const { return data; }
+		constexpr auto operator( )( ) const {
+			return data;
+		}
 
 		std::array< char, length + 1 > data = { };
 	};
@@ -155,22 +157,21 @@ namespace stb {
 					++traversed;
 				}
 
-				result[ 0 ] = str( )[ start ] == mask ? masked
-				                                      : detail::concat_hex( detail::char_to_hex( str( )[ start ] ),
-				                                                            detail::char_to_hex( str( )[ start + 1 ] ) );
+				result[ 0 ] = str( )[ start ] == mask
+				                  ? masked
+				                  : detail::concat_hex( detail::char_to_hex( str( )[ start ] ), detail::char_to_hex( str( )[ start + 1 ] ) );
 
 				size_t conversions = 1;
 				for ( auto i = next; i < end; ++i ) {
 					for ( auto entry : skips ) {
 						if ( entry == i && entry < end ) {
-							size_t idx    = detail::find_first_not_of_start( str( ), i + 1, delimiter );
-							bool one_char = str( )[ idx + 1 ] == delimiter;
-							result[ conversions++ ] =
-								str( )[ idx ] == mask
-									? masked
-									: ( one_char ? detail::char_to_hex( str( )[ idx ] )
-							                     : detail::concat_hex( detail::char_to_hex( str( )[ idx ] ),
-							                                           detail::char_to_hex( str( )[ idx + 1 ] ) ) );
+							size_t idx              = detail::find_first_not_of_start( str( ), i + 1, delimiter );
+							bool one_char           = str( )[ idx + 1 ] == delimiter;
+							result[ conversions++ ] = str( )[ idx ] == mask
+							                              ? masked
+							                              : ( one_char ? detail::char_to_hex( str( )[ idx ] )
+							                                           : detail::concat_hex( detail::char_to_hex( str( )[ idx ] ),
+							                                                                 detail::char_to_hex( str( )[ idx + 1 ] ) ) );
 						}
 					}
 				}

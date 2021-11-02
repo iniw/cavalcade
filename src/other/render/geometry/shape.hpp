@@ -7,7 +7,7 @@ namespace render::geometry {
 	struct base_shape {
 	protected:
 
-		color m_color;
+		u32 m_color;
 
 	public:
 
@@ -32,7 +32,8 @@ namespace render::geometry {
 		virtual void draw( ) = 0;
 	};
 
-	template< typename T > concept shape = std::is_base_of_v< base_shape, T > && !std::is_same_v< T, base_shape >;
+	template< typename T >
+	concept shape = std::is_base_of_v< base_shape, T > && !std::is_same_v< T, base_shape >;
 } // namespace render::geometry
 
 #endif // SHAPE_HPP

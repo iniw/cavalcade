@@ -80,7 +80,8 @@
         "numbers": "cpp",
         "stop_token": "cpp",
         "thread": "cpp",
-        "*.rh": "cpp"
+        "*.rh": "cpp",
+        "bitset": "cpp"
     },
     "todo-tree.general.tags": [
         "BUG",

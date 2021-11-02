@@ -12,6 +12,7 @@ AllowAllArgumentsOnNextLine: true
 AllowAllParametersOfDeclarationOnNextLine: true
 AllowShortBlocksOnASingleLine: Empty
 AllowShortCaseLabelsOnASingleLine: false
+BreakBeforeBraces: Attach
 AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Empty  
 AllowShortIfStatementsOnASingleLine: Never
@@ -23,8 +24,7 @@ BitFieldColonSpacing: Both
 BinPackArguments: true
 BinPackParameters: true
 BreakBeforeBinaryOperators: None
-BreakBeforeBraces: Attach
-BreakBeforeConceptDeclarations: false
+BreakBeforeConceptDeclarations: true
 ColumnLimit: 150
 Cpp11BracedListStyle: false
 EmptyLineAfterAccessModifier: Always

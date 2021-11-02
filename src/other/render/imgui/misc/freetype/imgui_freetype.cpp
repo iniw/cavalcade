@@ -43,9 +43,8 @@
 #include FT_SYNTHESIS_H // <freetype/ftsynth.h>
 
 #ifdef _MSC_VER
-#	pragma warning( disable : 4505 ) // unreferenced local function has been removed (stb stuff)
-#	pragma warning(                                                                                                             \
-		disable : 26812 ) // [Static Analyzer] The enum type 'xxx' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
+#	pragma warning( disable : 4505 )  // unreferenced local function has been removed (stb stuff)
+#	pragma warning( disable : 26812 ) // [Static Analyzer] The enum type 'xxx' is unscoped. Prefer 'enum class' over 'enum' (Enum.3).
 #endif
 
 #if defined( __GNUC__ )
@@ -120,14 +119,14 @@ namespace {
 
 	// Font parameters and metrics.
 	struct FontInfo {
-		uint32_t PixelHeight; // Size this font was generated with.
-		float Ascender;       // The pixel extents above the baseline in pixels (typically positive).
-		float Descender;      // The extents below the baseline in pixels (typically negative).
-		float LineSpacing; // The baseline-to-baseline distance. Note that it usually is larger than the sum of the ascender and
-		                   // descender taken as absolute values. There is also no guarantee that no glyphs extend above or below
-		                   // subsequent baselines when using this distance. Think of it as a value the designer of the font finds
-		                   // appropriate.
-		float LineGap;     // The spacing in pixels between one row's descent and the next row's ascent.
+		uint32_t PixelHeight;  // Size this font was generated with.
+		float Ascender;        // The pixel extents above the baseline in pixels (typically positive).
+		float Descender;       // The extents below the baseline in pixels (typically negative).
+		float LineSpacing;     // The baseline-to-baseline distance. Note that it usually is larger than the sum of the ascender and
+		                       // descender taken as absolute values. There is also no guarantee that no glyphs extend above or below
+		                       // subsequent baselines when using this distance. Think of it as a value the designer of the font finds
+		                       // appropriate.
+		float LineGap;         // The spacing in pixels between one row's descent and the next row's ascent.
 		float MaxAdvanceWidth; // This field gives the maximum horizontal cursor advance for all glyphs in the font.
 	};
 
@@ -138,12 +137,13 @@ namespace {
 		               unsigned int extra_user_flags ); // Initialize from an external data buffer. Doesn't copy data, and you
 		                                                // must ensure it stays valid up to this object lifetime.
 		void CloseFont( );
-		void
-		SetPixelHeight( int pixel_height ); // Change font pixel size. All following calls to RasterizeGlyph() will use this size
+		void SetPixelHeight( int pixel_height ); // Change font pixel size. All following calls to RasterizeGlyph() will use this size
 		const FT_Glyph_Metrics* LoadGlyph( uint32_t in_codepoint );
 		const FT_Bitmap* RenderGlyphAndGetInfo( GlyphInfo* out_glyph_info );
 		void BlitGlyph( const FT_Bitmap* ft_bitmap, uint32_t* dst, uint32_t dst_pitch, unsigned char* multiply_table = NULL );
-		~FreeTypeFont( ) { CloseFont( ); }
+		~FreeTypeFont( ) {
+			CloseFont( );
+		}
 
 		// [Internals]
 		FontInfo Info; // Font descriptor of the current font.
@@ -157,8 +157,7 @@ namespace {
 #define FT_CEIL( X ) ( ( ( X + 63 ) & -64 ) / 64 )
 
 	bool FreeTypeFont::InitFont( FT_Library ft_library, const ImFontConfig& cfg, unsigned int extra_font_builder_flags ) {
-		FT_Error error = FT_New_Memory_Face( ft_library, ( uint8_t* )cfg.FontData, ( uint32_t )cfg.FontDataSize,
-		                                     ( uint32_t )cfg.FontNo, &Face );
+		FT_Error error = FT_New_Memory_Face( ft_library, ( uint8_t* )cfg.FontData, ( uint32_t )cfg.FontDataSize, ( uint32_t )cfg.FontNo, &Face );
 		if ( error != 0 )
 			return false;
 		error = FT_Select_Charmap( Face, FT_ENCODING_UNICODE );
@@ -211,8 +210,7 @@ namespace {
 		// 'pixel_height' is a maximum height of an any given glyph, i.e. it's the sum of font's ascender and descender. Seems
 		// strange to me. NB: FT_Set_Pixel_Sizes() doesn't seem to get us the same result.
 		FT_Size_RequestRec req;
-		req.type =
-			( UserFlags & ImGuiFreeTypeBuilderFlags_Bitmap ) ? FT_SIZE_REQUEST_TYPE_NOMINAL : FT_SIZE_REQUEST_TYPE_REAL_DIM;
+		req.type           = ( UserFlags & ImGuiFreeTypeBuilderFlags_Bitmap ) ? FT_SIZE_REQUEST_TYPE_NOMINAL : FT_SIZE_REQUEST_TYPE_REAL_DIM;
 		req.width          = 0;
 		req.height         = ( uint32_t )pixel_height * 64;
 		req.horiResolution = 0;
@@ -339,9 +337,9 @@ namespace {
 #ifndef STB_RECT_PACK_IMPLEMENTATION // in case the user already have an implementation in the _same_ compilation unit (e.g. unity
                                      // builds)
 #	ifndef IMGUI_DISABLE_STB_RECT_PACK_IMPLEMENTATION
-#		define STBRP_ASSERT( x )                                                                                                \
-			do {                                                                                                                 \
-				IM_ASSERT( x );                                                                                                  \
+#		define STBRP_ASSERT( x )                                                                                                                    \
+			do {                                                                                                                                     \
+				IM_ASSERT( x );                                                                                                                      \
 			} while ( 0 )
 #		define STBRP_STATIC
 #		define STB_RECT_PACK_IMPLEMENTATION
@@ -358,7 +356,9 @@ struct ImFontBuildSrcGlyphFT {
 	uint32_t Codepoint;
 	unsigned int* BitmapData; // Point within one of the dst_tmp_bitmap_buffers[] array
 
-	ImFontBuildSrcGlyphFT( ) { memset( this, 0, sizeof( *this ) ); }
+	ImFontBuildSrcGlyphFT( ) {
+		memset( this, 0, sizeof( *this ) );
+	}
 };
 
 struct ImFontBuildSrcDataFT {
@@ -444,12 +444,11 @@ bool ImFontAtlasBuildWithFreeTypeEx( FT_Library ft_library, ImFontAtlas* atlas, 
 
 		for ( const ImWchar* src_range = src_tmp.SrcRanges; src_range[ 0 ] && src_range[ 1 ]; src_range += 2 )
 			for ( int codepoint = src_range[ 0 ]; codepoint <= ( int )src_range[ 1 ]; codepoint++ ) {
-				if ( dst_tmp.GlyphsSet.TestBit(
-						 codepoint ) ) // Don't overwrite existing glyphs. We could make this an option (e.g. MergeOverwrite)
+				if ( dst_tmp.GlyphsSet.TestBit( codepoint ) ) // Don't overwrite existing glyphs. We could make this an option (e.g. MergeOverwrite)
 					continue;
-				uint32_t glyph_index = FT_Get_Char_Index(
-					src_tmp.Font.Face,
-					codepoint ); // It is actually in the font? (FIXME-OPT: We are not storing the glyph_index..)
+				uint32_t glyph_index =
+					FT_Get_Char_Index( src_tmp.Font.Face,
+				                       codepoint ); // It is actually in the font? (FIXME-OPT: We are not storing the glyph_index..)
 				if ( glyph_index == 0 )
 					continue;
 
@@ -546,8 +545,7 @@ bool ImFontAtlasBuildWithFreeTypeEx( FT_Library ft_library, ImFontAtlas* atlas, 
 			// Blit rasterized pixels to our temporary buffer and keep a pointer to it.
 			src_glyph.BitmapData = ( unsigned int* )( buf_bitmap_buffers.back( ) + buf_bitmap_current_used_bytes );
 			buf_bitmap_current_used_bytes += bitmap_size_in_bytes;
-			src_tmp.Font.BlitGlyph( ft_bitmap, src_glyph.BitmapData, src_glyph.Info.Width,
-			                        multiply_enabled ? multiply_table : NULL );
+			src_tmp.Font.BlitGlyph( ft_bitmap, src_glyph.BitmapData, src_glyph.Info.Width, multiply_enabled ? multiply_table : NULL );
 
 			src_tmp.Rects[ glyph_i ].w = ( stbrp_coord )( src_glyph.Info.Width + padding );
 			src_tmp.Rects[ glyph_i ].h = ( stbrp_coord )( src_glyph.Info.Height + padding );
@@ -596,8 +594,7 @@ bool ImFontAtlasBuildWithFreeTypeEx( FT_Library ft_library, ImFontAtlas* atlas, 
 	}
 
 	// 7. Allocate texture
-	atlas->TexHeight =
-		( atlas->Flags & ImFontAtlasFlags_NoPowerOfTwoHeight ) ? ( atlas->TexHeight + 1 ) : ImUpperPowerOfTwo( atlas->TexHeight );
+	atlas->TexHeight  = ( atlas->Flags & ImFontAtlasFlags_NoPowerOfTwoHeight ) ? ( atlas->TexHeight + 1 ) : ImUpperPowerOfTwo( atlas->TexHeight );
 	atlas->TexUvScale = ImVec2( 1.0f / atlas->TexWidth, 1.0f / atlas->TexHeight );
 	if ( src_load_color ) {
 		size_t tex_size        = ( size_t )atlas->TexWidth * atlas->TexHeight * 4;
@@ -748,8 +745,8 @@ const ImFontBuilderIO* ImGuiFreeType::GetBuilderForFreeType( ) {
 	return &io;
 }
 
-void ImGuiFreeType::SetAllocatorFunctions( void* ( *alloc_func )( size_t sz, void* user_data ),
-                                           void ( *free_func )( void* ptr, void* user_data ), void* user_data ) {
+void ImGuiFreeType::SetAllocatorFunctions( void* ( *alloc_func )( size_t sz, void* user_data ), void ( *free_func )( void* ptr, void* user_data ),
+                                           void* user_data ) {
 	GImGuiFreeTypeAllocFunc         = alloc_func;
 	GImGuiFreeTypeFreeFunc          = free_func;
 	GImGuiFreeTypeAllocatorUserData = user_data;

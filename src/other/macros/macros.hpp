@@ -18,7 +18,9 @@ private:                                                                        
 public:
 
 #define VFUNC( type, name, idx, args, ... )                                                                                                          \
-	type name args { return mem::call_v_func< type, idx >( this, __VA_ARGS__ ); }
+	type name args {                                                                                                                                 \
+		return mem::call_v_func< type, idx >( this, __VA_ARGS__ );                                                                                   \
+	}
 
 #define OFFSET_THIS( type ) *reinterpret_cast< type* >( reinterpret_cast< ptr >( this ) + offset )
 

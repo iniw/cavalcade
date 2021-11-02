@@ -7,13 +7,15 @@ namespace gui::objects {
 	struct scrollbar;
 
 	struct base_parent : base_object, std::enable_shared_from_this< base_parent > {
+	protected:
+
 		// a list of our children
 		std::vector< base_ptr > m_children;
 
 		// the position used to place new children
 		render::point m_cursor;
 
-		// our current scrollbar object, if it exists;
+		// our current scrollbar object, if it exists
 		std::shared_ptr< scrollbar > m_scrollbar;
 
 	public:
@@ -24,25 +26,25 @@ namespace gui::objects {
 
 		// the function used to add new children
 		template< object T, typename... VA >
-		std::shared_ptr< T > add( VA&&... args ) {
+		std::shared_ptr< T >& add( VA&&... args ) {
 			std::shared_ptr< T > child = std::make_shared< T >( std::forward< VA >( args )... );
 
 			child->init( get( ) );
 
-			m_children.push_back( child );
+			child->identify( );
 
-			on_add_child( );
+			on_add_child( child );
 
-			return child;
+			return m_children.emplace_back( child );
 		}
 
 	protected:
 
-		// NOTE(wini): this a bit of hack/workaround about the fact that you can't virtualize templated functions;
-		// it might be of interest to most objects that inherent from base_parent to automatically;
-		// initialize their scrollbar as soon as a child's area gets past it's own, BUT, that might not apply to;
+		// NOTE(wini): this a bit of hack/workaround about the fact that you can't virtualize templated functions
+		// it might be of interest to most objects that inherent from base_parent to automatically
+		// initialize their scrollbar as soon as a child's area gets past it's own, BUT, that might not apply to
 		// every object, e.g: tabs. so until i figure out something smarter this is going to stay here
-		virtual void on_add_child( ) {
+		virtual void on_add_child( base_ptr child ) {
 			// TODO(wini): initialize our scrollbar if the child's area extends beyond ours
 		}
 

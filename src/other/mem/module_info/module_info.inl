@@ -29,8 +29,7 @@ void mem::module_info::add_pattern( u32 name_hash, const std::array< i32, size >
 template< typename T >
 T mem::module_info::export_fn( u32 name_hash, bool in_memory ) {
 	auto exports = reinterpret_cast< IMAGE_EXPORT_DIRECTORY* >( rva_to_offset(
-		m_module_base.add( m_nt_headers->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_EXPORT ].VirtualAddress ),
-		m_nt_headers, in_memory ) );
+		m_module_base.add( m_nt_headers->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_EXPORT ].VirtualAddress ), m_nt_headers, in_memory ) );
 
 	auto names = m_module_base.add< u32* >( rva_to_offset( exports->AddressOfNames, m_nt_headers, in_memory ) );
 

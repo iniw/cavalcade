@@ -50,7 +50,9 @@ namespace sdk::interfaces {
 			player->think( );
 		}
 
-		auto run_post_think( cs_player* player ) { player->post_think( ); }
+		auto run_post_think( cs_player* player ) {
+			player->post_think( );
+		}
 
 		auto finish_command( cs_player* player ) {
 			*player->get_current_cmd( ) = nullptr;

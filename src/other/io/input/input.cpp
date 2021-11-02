@@ -22,9 +22,7 @@ BOOL io::input::think( UINT msg, WPARAM w_param, LPARAM l_param ) {
 
 	switch ( msg ) {
 	case WM_MOUSEMOVE:
-		POINT p;
-		if ( GetCursorPos( &p ) && ScreenToClient( cavalcade::window, &p ) )
-			m_mouse.pos = math::v2i( p.x, p.y );
+		m_mouse.pos = math::v2i( GET_X_LPARAM( l_param ), GET_Y_LPARAM( l_param ) );
 
 		break;
 	case WM_MOUSEWHEEL:

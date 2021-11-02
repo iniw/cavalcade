@@ -15,9 +15,13 @@ namespace math {
 
 		constexpr ang& operator=( const ang& a ) = default;
 
-		constexpr ang operator+( const ang& a ) const { return ang( pitch + a.pitch, yaw + a.yaw, roll + a.roll ); }
+		constexpr ang operator+( const ang& a ) const {
+			return ang( pitch + a.pitch, yaw + a.yaw, roll + a.roll );
+		}
 
-		constexpr ang operator+( const f32 fl ) const { return ang( pitch + fl, yaw + fl, roll + fl ); }
+		constexpr ang operator+( const f32 fl ) const {
+			return ang( pitch + fl, yaw + fl, roll + fl );
+		}
 
 		constexpr ang& operator+=( const ang& a ) {
 			pitch += a.pitch;
@@ -35,9 +39,13 @@ namespace math {
 			return *this;
 		}
 
-		constexpr ang operator-( const ang& a ) const { return ang( pitch - a.pitch, yaw - a.yaw, roll - a.roll ); }
+		constexpr ang operator-( const ang& a ) const {
+			return ang( pitch - a.pitch, yaw - a.yaw, roll - a.roll );
+		}
 
-		constexpr ang operator-( const f32 fl ) const { return ang( pitch - fl, yaw - fl, roll - fl ); }
+		constexpr ang operator-( const f32 fl ) const {
+			return ang( pitch - fl, yaw - fl, roll - fl );
+		}
 
 		constexpr ang& operator-=( const ang& a ) {
 			pitch -= a.pitch;
@@ -55,9 +63,13 @@ namespace math {
 			return *this;
 		}
 
-		constexpr ang operator*( const ang& a ) const { return ang( pitch * a.pitch, yaw * a.yaw, roll * a.roll ); }
+		constexpr ang operator*( const ang& a ) const {
+			return ang( pitch * a.pitch, yaw * a.yaw, roll * a.roll );
+		}
 
-		constexpr ang operator*( const f32 fl ) const { return ang( pitch * fl, yaw * fl, roll * fl ); }
+		constexpr ang operator*( const f32 fl ) const {
+			return ang( pitch * fl, yaw * fl, roll * fl );
+		}
 
 		constexpr ang& operator*=( const ang& a ) {
 			pitch *= a.pitch;
@@ -75,9 +87,13 @@ namespace math {
 			return *this;
 		}
 
-		constexpr ang operator/( const ang& a ) const { return ang( pitch / a.pitch, yaw / a.yaw, roll / a.roll ); }
+		constexpr ang operator/( const ang& a ) const {
+			return ang( pitch / a.pitch, yaw / a.yaw, roll / a.roll );
+		}
 
-		constexpr ang operator/( const f32 fl ) const { return ang( pitch * fl, yaw * fl, roll * fl ); }
+		constexpr ang operator/( const f32 fl ) const {
+			return ang( pitch * fl, yaw * fl, roll * fl );
+		}
 
 		constexpr ang& operator/=( const ang& a ) {
 			pitch /= a.pitch;

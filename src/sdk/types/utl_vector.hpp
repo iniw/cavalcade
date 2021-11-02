@@ -14,17 +14,29 @@ namespace sdk {
 
 	public:
 
-		T& operator[]( u32 idx ) { return m_mem[ idx ]; }
+		T& operator[]( u32 idx ) {
+			return m_mem[ idx ];
+		}
 
-		const T& operator[]( u32 idx ) const { return m_mem[ idx ]; }
+		const T& operator[]( u32 idx ) const {
+			return m_mem[ idx ];
+		}
 
-		const T* begin( ) const { return m_mem.base( ); }
+		const T* begin( ) const {
+			return m_mem.base( );
+		}
 
-		const T* end( ) const { return m_mem.base( ) + m_size; }
+		const T* end( ) const {
+			return m_mem.base( ) + m_size;
+		}
 
-		u32 count( ) const { return m_size; }
+		u32 count( ) const {
+			return m_size;
+		}
 
-		void set_size( u32 val ) { m_size = val; }
+		void set_size( u32 val ) {
+			m_size = val;
+		}
 
 		void clear( ) {
 			for ( u32 i = m_size; --i >= 0; )

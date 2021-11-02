@@ -35,8 +35,7 @@ bool sdk::csgo::init( ) {
 	if ( !m_move_helper )
 		return false;
 
-	m_client_state =
-		g_mem[ ENGINE_DLL ].find_pattern( STB( "A1 ? ? ? ? 8B 88 ? ? ? ? 85 C9 75 07 " ) ).add( 0x1 ).get< client_state* >( 2 );
+	m_client_state = g_mem[ ENGINE_DLL ].find_pattern( STB( "A1 ? ? ? ? 8B 88 ? ? ? ? 85 C9 75 07 " ) ).add( 0x1 ).get< client_state* >( 2 );
 	if ( !m_client_state )
 		return false;
 
@@ -44,8 +43,7 @@ bool sdk::csgo::init( ) {
 	if ( !m_client_mode_shared )
 		return false;
 
-	m_d3d9_device =
-		g_mem[ SHADERAPIDX9_DLL ].find_pattern( STB( "A1 ? ? ? ? 50 8B 08 FF 51 0C" ) ).add( 0x1 ).get< IDirect3DDevice9* >( 2 );
+	m_d3d9_device = g_mem[ SHADERAPIDX9_DLL ].find_pattern( STB( "A1 ? ? ? ? 50 8B 08 FF 51 0C" ) ).add( 0x1 ).get< IDirect3DDevice9* >( 2 );
 	if ( !m_d3d9_device )
 		return false;
 

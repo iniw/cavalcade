@@ -10,7 +10,7 @@ namespace io {
 		WARNING,
 		DISASTER,
 	};
-	
+
 	namespace detail {
 		struct log_option {
 		private:
@@ -25,9 +25,13 @@ namespace io {
 				m_style  = style;
 			}
 
-			auto get_style( ) const { return m_style; }
+			auto get_style( ) const {
+				return m_style;
+			}
 
-			auto get_prefix( ) const { return m_prefix.data( ); }
+			auto get_prefix( ) const {
+				return m_prefix.data( );
+			}
 		};
 
 		struct level_handler {
@@ -44,7 +48,9 @@ namespace io {
 
 		public:
 
-			log_option& operator[]( log_level idx ) { return m_options[ static_cast< size_t >( idx ) ]; }
+			log_option& operator[]( log_level idx ) {
+				return m_options[ static_cast< size_t >( idx ) ];
+			}
 		};
 
 	} // namespace detail

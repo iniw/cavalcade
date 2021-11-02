@@ -16,13 +16,19 @@ namespace mem {
 
 		constexpr buffer( ) : m_size{ 0u }, m_capacity{ 0u }, m_buffer{ nullptr }, m_initial_capacity{ 0u } { }
 
-		~buffer( ) { clear( ); }
+		~buffer( ) {
+			clear( );
+		}
 
 		// no error handling, u better not pass an invalid index
 
-		T& operator[]( const u32 idx ) { return m_buffer[ idx ]; }
+		T& operator[]( const u32 idx ) {
+			return m_buffer[ idx ];
+		}
 
-		const T& operator[]( const u32 idx ) const { return m_buffer[ idx ]; }
+		const T& operator[]( const u32 idx ) const {
+			return m_buffer[ idx ];
+		}
 
 		bool init( const u32 size ) {
 			m_initial_capacity = size * sizeof( T );
@@ -132,27 +138,49 @@ namespace mem {
 			return true;
 		}
 
-		u32 size( ) const { return m_size; }
+		u32 size( ) const {
+			return m_size;
+		}
 
-		u32 size_in_bytes( ) const { return m_size * sizeof( T ); }
+		u32 size_in_bytes( ) const {
+			return m_size * sizeof( T );
+		}
 
-		bool empty( ) const { return !m_size; }
+		bool empty( ) const {
+			return !m_size;
+		}
 
-		T* begin( ) { return m_buffer; }
+		T* begin( ) {
+			return m_buffer;
+		}
 
-		const T* begin( ) const { return m_buffer; }
+		const T* begin( ) const {
+			return m_buffer;
+		}
 
-		T* end( ) { return m_buffer + m_size; }
+		T* end( ) {
+			return m_buffer + m_size;
+		}
 
-		const T* end( ) const { return m_buffer + m_size; }
+		const T* end( ) const {
+			return m_buffer + m_size;
+		}
 
-		T& front( ) { return m_buffer[ 0 ]; }
+		T& front( ) {
+			return m_buffer[ 0 ];
+		}
 
-		const T& front( ) const { return m_buffer[ 0 ]; }
+		const T& front( ) const {
+			return m_buffer[ 0 ];
+		}
 
-		T& back( ) { return m_buffer[ m_size - 1 ]; }
+		T& back( ) {
+			return m_buffer[ m_size - 1 ];
+		}
 
-		const T& back( ) const { return m_buffer[ m_size - 1 ]; }
+		const T& back( ) const {
+			return m_buffer[ m_size - 1 ];
+		}
 	};
 } // namespace mem
 

@@ -89,8 +89,7 @@ void sdk::netvars::store( std::string_view table_name, const recv_table* table, 
 
 #ifdef NETVARS_DUMP_FILE
 
-			m_file << io::format( "{}\t{} {} = 0x{:X}; \n", spacing, get_type( prop ), prop->m_var_name,
-			                      prop->m_offset + offset );
+			m_file << io::format( "{}\t{} {} = 0x{:X}; \n", spacing, get_type( prop ), prop->m_var_name, prop->m_offset + offset );
 
 #endif
 		}

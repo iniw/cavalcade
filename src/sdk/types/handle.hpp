@@ -15,9 +15,13 @@ namespace sdk {
 			ENT_ENTRY_MASK            = ( 1 << NUM_SERIAL_NUM_BITS ) - 1,
 		};
 
-		bool validate( ) const { return m_idx != INVALID_EHANDLE_INDEX; }
+		bool validate( ) const {
+			return m_idx != INVALID_EHANDLE_INDEX;
+		}
 
-		void invalidate( ) { m_idx = INVALID_EHANDLE_INDEX; }
+		void invalidate( ) {
+			m_idx = INVALID_EHANDLE_INDEX;
+		}
 
 		i32 get_index( ) const {
 			if ( !validate( ) )

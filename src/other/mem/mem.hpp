@@ -18,7 +18,9 @@ namespace mem {
 
 	public:
 
-		module_info& operator[]( u32 name_hash ) { return m_modules.at( name_hash ); }
+		module_info& operator[]( u32 name_hash ) {
+			return m_modules.at( name_hash );
+		}
 
 		bool init( );
 

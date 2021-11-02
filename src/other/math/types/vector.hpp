@@ -17,7 +17,8 @@ enum
 };
 
 namespace math {
-	template< typename T > concept number = std::is_arithmetic_v< T >;
+	template< typename T >
+	concept number = std::is_arithmetic_v< T >;
 
 	// credits to: https://www.unknowncheats.me/forum/c-and-c/157292-variadic-vector-class.html
 
@@ -383,6 +384,25 @@ namespace math {
 				m_data[ i ] = std::ceil( m_data[ i ] );
 
 			return *this;
+		}
+
+		// NOTE(wini): these aren't animated.
+		constexpr vec_t shrink( const T& amt ) {
+			vec_t vec = *this;
+
+			for ( u32 i = 0; i < N; i++ )
+				vec[ i ] -= amt;
+
+			return vec;
+		}
+
+		constexpr vec_t expand( const T& amt ) {
+			vec_t vec = *this;
+
+			for ( u32 i = 0; i < N; i++ )
+				vec[ i ] += amt;
+
+			return vec;
 		}
 
 		constexpr bool in_rect( const vector< T, 4 >& rect ) {

@@ -49,15 +49,15 @@ namespace sdk {
 		}
 
 		auto post_think_v_physics( ) {
-			static auto function = g_mem[ CLIENT_DLL ].get_address< bool( __thiscall* )( base_player* ) >(
-				HASH_CT( "C_BasePlayer::PostThinkVPhysics" ) );
+			static auto function =
+				g_mem[ CLIENT_DLL ].get_address< bool( __thiscall* )( base_player* ) >( HASH_CT( "C_BasePlayer::PostThinkVPhysics" ) );
 
 			return function( this );
 		}
 
 		auto simulate_player_simulated_entities( ) {
-			static auto function = g_mem[ CLIENT_DLL ].get_address< void( __thiscall* )( base_player* ) >(
-				HASH_CT( "C_BasePlayer::SimulatePlayerSimulatedEntities" ) );
+			static auto function =
+				g_mem[ CLIENT_DLL ].get_address< void( __thiscall* )( base_player* ) >( HASH_CT( "C_BasePlayer::SimulatePlayerSimulatedEntities" ) );
 
 			return function( this );
 		}

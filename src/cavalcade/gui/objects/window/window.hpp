@@ -5,17 +5,12 @@
 
 namespace gui::objects {
 	struct window : base_parent {
-		window( std::string_view label, const render::size& size ) {
-			m_label = label.data( );
+		window( std::string_view label, const render::size& size );
 
-			// TODO(wini): center it to the middle of the screen
-			m_static_rect = render::rect( 0, 0, size[ X ], size[ Y ] );
-
-			m_type = type::WINDOW;
+		// NOTE(wini): this is the only object that doesn't use a init function
+		void init( parent_ptr parent ) override {
+			ENFORCE( true, "windows can't be children: parent->m_id = {}", parent->m_id );
 		}
-
-		// NOTE(wini): this is the only object that doesn't require a init function
-		void init( parent_ptr parent ) override { }
 
 		void render( ) override;
 
