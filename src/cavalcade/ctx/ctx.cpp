@@ -1,61 +1,20 @@
 #include "ctx.hpp"
 
 bool cavalcade::ctx::init( ) {
-	m_cvars.cl_updaterate = g_csgo.m_cvars->find_var( XOR( "cl_updaterate" ) );
-	if ( !m_cvars.cl_updaterate )
-		return false;
-
-	m_cvars.sv_minupdaterate = g_csgo.m_cvars->find_var( XOR( "sv_minupdaterate" ) );
-	if ( !m_cvars.sv_minupdaterate )
-		return false;
-
-	m_cvars.sv_maxupdaterate = g_csgo.m_cvars->find_var( XOR( "sv_maxupdaterate" ) );
-	if ( !m_cvars.sv_maxupdaterate )
-		return false;
-
-	m_cvars.cl_interp = g_csgo.m_cvars->find_var( XOR( "cl_interp" ) );
-	if ( !m_cvars.cl_interp )
-		return false;
-
-	m_cvars.cl_interp_ratio = g_csgo.m_cvars->find_var( XOR( "cl_interp_ratio" ) );
-	if ( !m_cvars.cl_interp_ratio )
-		return false;
-
-	m_cvars.sv_client_min_interp_ratio = g_csgo.m_cvars->find_var( XOR( "sv_client_min_interp_ratio" ) );
-	if ( !m_cvars.sv_client_min_interp_ratio )
-		return false;
-
-	m_cvars.sv_client_max_interp_ratio = g_csgo.m_cvars->find_var( XOR( "sv_client_max_interp_ratio" ) );
-	if ( !m_cvars.sv_client_max_interp_ratio )
-		return false;
-
-	m_cvars.sv_maxunlag = g_csgo.m_cvars->find_var( XOR( "sv_maxunlag" ) );
-	if ( !m_cvars.sv_maxunlag )
-		return false;
-
-	m_cvars.sv_showlagcompensation_duration = g_csgo.m_cvars->find_var( XOR( "sv_showlagcompensation_duration" ) );
-	if ( !m_cvars.sv_showlagcompensation_duration )
-		return false;
-
-	m_cvars.sv_autobunnyhopping = g_csgo.m_cvars->find_var( XOR( "sv_autobunnyhopping" ) );
-	if ( !m_cvars.sv_autobunnyhopping )
-		return false;
-
-	m_cvars.mp_teammates_are_enemies = g_csgo.m_cvars->find_var( XOR( "mp_teammates_are_enemies" ) );
-	if ( !m_cvars.mp_teammates_are_enemies )
-		return false;
-
-	m_cvars.sensitivity = g_csgo.m_cvars->find_var( XOR( "sensitivity" ) );
-	if ( !m_cvars.sensitivity )
-		return false;
-
-	m_cvars.m_pitch = g_csgo.m_cvars->find_var( XOR( "m_pitch" ) );
-	if ( !m_cvars.m_pitch )
-		return false;
-
-	m_cvars.m_yaw = g_csgo.m_cvars->find_var( XOR( "m_yaw" ) );
-	if ( !m_cvars.m_yaw )
-		return false;
+	mocking_region( mock m_cvars.cl_updaterate                   = g_csgo.m_cvars->find_var( XOR( "cl_updaterate" ) );
+	                mock m_cvars.sv_minupdaterate                = g_csgo.m_cvars->find_var( XOR( "sv_minupdaterate" ) );
+	                mock m_cvars.sv_maxupdaterate                = g_csgo.m_cvars->find_var( XOR( "sv_maxupdaterate" ) );
+	                mock m_cvars.cl_interp                       = g_csgo.m_cvars->find_var( XOR( "cl_interp" ) );
+	                mock m_cvars.cl_interp_ratio                 = g_csgo.m_cvars->find_var( XOR( "cl_interp_ratio" ) );
+	                mock m_cvars.sv_client_min_interp_ratio      = g_csgo.m_cvars->find_var( XOR( "sv_client_min_interp_ratio" ) );
+	                mock m_cvars.sv_client_max_interp_ratio      = g_csgo.m_cvars->find_var( XOR( "sv_client_max_interp_ratio" ) );
+	                mock m_cvars.sv_maxunlag                     = g_csgo.m_cvars->find_var( XOR( "sv_maxunlag" ) );
+	                mock m_cvars.sv_showlagcompensation_duration = g_csgo.m_cvars->find_var( XOR( "sv_showlagcompensation_duration" ) );
+	                mock m_cvars.sv_autobunnyhopping             = g_csgo.m_cvars->find_var( XOR( "sv_autobunnyhopping" ) );
+	                mock m_cvars.mp_teammates_are_enemies        = g_csgo.m_cvars->find_var( XOR( "mp_teammates_are_enemies" ) );
+	                mock m_cvars.sensitivity                     = g_csgo.m_cvars->find_var( XOR( "sensitivity" ) );
+	                mock m_cvars.m_pitch                         = g_csgo.m_cvars->find_var( XOR( "m_pitch" ) );
+	                mock m_cvars.m_yaw                           = g_csgo.m_cvars->find_var( XOR( "m_yaw" ) ); );
 
 	g_io.log( XOR( "initialized ctx" ) );
 

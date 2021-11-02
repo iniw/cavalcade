@@ -22,6 +22,7 @@ set(PCH
     <bitset>
     <numbers>
     <thread>
+    <optional>
     # string
     <string>
     <string_view>
@@ -32,6 +33,8 @@ set(PCH
     <unordered_map>
     <vector>
     <array>
+    # data
+    <source_location>
 
     # --- winapi ---
     <Windows.h>
@@ -67,6 +70,8 @@ set(PCH
     # mostly for debug purposes
     src/other/io/io.hpp
     src/other/utils/utils.hpp
+
+    src/other/mocking_bird/mocking_bird.hpp
 
     
 )
