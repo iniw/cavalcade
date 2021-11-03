@@ -48,4 +48,4 @@ inline io::impl g_io;
 
 #include "io.inl"
 
-#endif // IO_HPP
+#endif /* IO_HPP */
