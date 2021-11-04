@@ -21,6 +21,7 @@ void gui::objects::groupbox::init( ) {
 	m_dynamic_area = m_static_area.shrink( general::padding::margin );
 	// account for our label
 	m_dynamic_area[ Y ] += label_size[ Y ];
+
 	m_dynamic_area[ HEIGHT ] -= label_size[ Y ];
 
 	m_cursor = m_dynamic_area.pos( );
@@ -54,7 +55,7 @@ bool gui::objects::groupbox::think( ) {
 
 void gui::objects::groupbox::on_add_child( base_ptr child ) {
 	if ( m_height == -1 ) {
-		m_static_area[ HEIGHT ] += child->m_static_area[ HEIGHT ];
-		m_dynamic_area[ HEIGHT ] += child->m_static_area[ HEIGHT ];
+		m_static_area[ HEIGHT ] += child->m_static_area[ HEIGHT ] + general::padding::obj_margin;
+		m_dynamic_area[ HEIGHT ] += child->m_static_area[ HEIGHT ] + general::padding::obj_margin;
 	}
 }

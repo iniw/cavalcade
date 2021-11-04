@@ -7,8 +7,6 @@ HRESULT D3DAPI cavalcade::hooks::d3d9_device::end_scene( IDirect3DDevice9* devic
 
 	g_gui.render( );
 
-	g_render.text< render::font::MENU >( { 0, 0 }, "test", render::color::white( ) );
-
 	g_render.end( );
 
 	return og( device );

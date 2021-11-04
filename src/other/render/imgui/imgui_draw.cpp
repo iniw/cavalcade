@@ -3441,7 +3441,7 @@ ImVec2 ImFont::CalcTextSizeA( float size, float max_width, float wrap_width, con
 	if ( !text_end )
 		text_end = text_begin + strlen( text_begin ); // FIXME-OPT: Need to avoid this.
 
-	const float line_height = size;
+	const float line_height = size * 0.55;
 	const float scale       = size / FontSize;
 
 	ImVec2 text_size = ImVec2( 0, 0 );
