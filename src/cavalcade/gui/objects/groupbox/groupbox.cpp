@@ -15,7 +15,7 @@ void gui::objects::groupbox::init( ) {
 	render::size label_size = g_render.text_size< render::font::MENU >( m_label );
 
 	m_static_area.pos( m_parent->get_cursor( ) );
-	m_static_area.size( { m_parent->m_dynamic_area[ WIDTH ], general::padding::margin * 4 + init_height } );
+	m_static_area.size( { m_parent->m_dynamic_area[ WIDTH ], general::padding::margin * 2 + init_height } );
 	m_static_area[ HEIGHT ] += label_size[ Y ];
 
 	m_dynamic_area = m_static_area.shrink( general::padding::margin );
