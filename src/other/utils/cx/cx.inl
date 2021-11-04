@@ -36,5 +36,3 @@ constexpr inline auto utils::cx::type_name( ) {
 
 	return ret;
 }
-
-#pragma once

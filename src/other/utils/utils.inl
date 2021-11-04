@@ -21,5 +21,3 @@ bool utils::enforce( bool expression, std::string_view id, std::string_view msg,
 
 	return expression;
 }
-
-#pragma once

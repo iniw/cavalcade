@@ -17,5 +17,3 @@ std::shared_ptr< T > gui::objects::base_parent::add( VA&&... args ) {
 	// return by the proper type
 	return std::dynamic_pointer_cast< T >( m_children.emplace_back( child ) );
 }
-
-#pragma once

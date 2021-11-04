@@ -33,5 +33,3 @@ T sdk::csgo::find_interface( mem::module_info& the_module, u32 name_hash, bool r
 
 	return nullptr;
 }
-
-#pragma once

@@ -14,5 +14,3 @@ void io::files::log( std::string_view str ) {
 
 #endif
 }
-
-#pragma once

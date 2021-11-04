@@ -13,5 +13,3 @@ void io::console::print( std::string_view str ) {
 
 #endif
 }
-
-#pragma once

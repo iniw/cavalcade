@@ -43,5 +43,3 @@ render::size render::impl::text_size( std::string_view text ) {
 
 	return font.calc_size( text );
 }
-
-#pragma once

@@ -79,5 +79,3 @@ constexpr u32 hash::xxhash::detail::read_u32le( cstr input, i32 pos ) {
 
 	return b0 | ( b1 << 8 ) | ( b2 << 16 ) | ( b3 << 24 );
 }
-
-#pragma once

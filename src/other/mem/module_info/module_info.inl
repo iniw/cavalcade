@@ -77,5 +77,3 @@ T mem::module_info::get_address( u32 name_hash ) {
 
 	return m_addresses.at( name_hash ).as< T >( );
 }
-
-#pragma once

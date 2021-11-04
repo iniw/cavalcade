@@ -10,5 +10,3 @@ inline T mem::call_v_func( address thisptr, VA... args ) {
 	using FN = T( __thiscall* )( unk, decltype( args )... );
 	return thisptr.to< FN* >( )[ I ]( thisptr, args... );
 }
-
-#pragma once

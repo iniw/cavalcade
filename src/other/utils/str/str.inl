@@ -11,5 +11,3 @@ inline T utils::str::to_upper( T&& str ) {
 	std::transform( str.begin( ), str.end( ), str.begin( ), toupper );
 	return str;
 }
-
-#pragma once

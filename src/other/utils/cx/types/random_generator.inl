@@ -21,5 +21,3 @@ constexpr u32 utils::cx::random_generator::next( ) {
 
 	return ( xorshifted >> rot ) | ( xorshifted << ( ( -rot ) & 31 ) );
 }
-
-#pragma once
