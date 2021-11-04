@@ -17,8 +17,9 @@ namespace gui::objects {
 	enum class type
 	{
 		NONE = 0,
-		WINDOW,
-		CHECKBOX
+		CHECKBOX,
+		GROUPBOX,
+		WINDOW
 	};
 
 	// list of flags that every object has

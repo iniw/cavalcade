@@ -3,10 +3,9 @@
 
 gui::objects::checkbox::checkbox( std::string_view name, std::string_view label ) {
 	// basic identification
-	m_name = name;
-	m_type = type::CHECKBOX;
-
+	m_name  = name;
 	m_label = label;
+	m_type  = type::CHECKBOX;
 }
 
 void gui::objects::checkbox::init( ) {

@@ -11,7 +11,5 @@ namespace gui::objects {
 		void render( ) override;
 
 		bool think( ) override;
-
-		using ptr = std::shared_ptr< checkbox >;
 	};
 } // namespace gui::objects

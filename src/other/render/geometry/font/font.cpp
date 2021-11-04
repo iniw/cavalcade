@@ -1,9 +1,8 @@
 #include "../../types/types.hpp"
+#include "font.hpp"
 
 #include "imgui.h"
 #include "misc/freetype/imgui_freetype.h"
-
-#include "font.hpp"
 
 bool render::geometry::font::init( std::string_view path, f32 size ) {
 	ImGuiIO* io = &ImGui::GetIO( );

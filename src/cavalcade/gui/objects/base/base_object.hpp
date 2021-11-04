@@ -58,6 +58,6 @@ namespace gui::objects {
 		virtual bool think( ) = 0;
 
 		// identifies and validates us as a valid object
-		void identify( );
+		virtual void identify( parent_ptr parent );
 	};
 } // namespace gui::objects

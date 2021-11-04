@@ -1,10 +1,13 @@
 #include "base.hpp"
 
-void gui::objects::base_object::identify( ) {
+void gui::objects::base_object::identify( parent_ptr parent ) {
 	// add to object count and set it to our idx
 	m_abs_idx = s_object_count++;
 
-	// add our parent's name, if it has one
+	// set our parent
+	m_parent = parent;
+
+	// add our parent's name, if we have one
 	if ( m_parent && !m_parent->m_name.empty( ) )
 		m_name = m_parent->m_name + NAME_SEPARATOR + m_name;
 

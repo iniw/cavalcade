@@ -21,6 +21,9 @@ namespace gui::objects {
 
 		virtual ~base_parent( ) = default;
 
+		// returns a shared_ptr instance of ourselves
+		parent_ptr get( );
+
 		// the function used to add new children
 		template< typename T, typename... VA >
 		std::shared_ptr< T > add( VA&&... args );
@@ -30,9 +33,6 @@ namespace gui::objects {
 
 		// offsets m_cursor[ Y ] by the offset + the style's object padding
 		void push_cursor( i32 offset );
-
-		// returns a shared_ptr instance of ourselves
-		parent_ptr get( );
 
 	protected:
 

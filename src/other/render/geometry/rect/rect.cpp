@@ -1,8 +1,7 @@
 #include "../types/types.hpp"
+#include "rect.hpp"
 
 #include "imgui.h"
-
-#include "rect.hpp"
 
 void render::geometry::rect::draw( ) {
 	s_draw_list->AddRect( m_point1, m_point2, m_color, 0.f, 0, m_thickness );

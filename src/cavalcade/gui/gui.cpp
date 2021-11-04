@@ -2,9 +2,25 @@
 #include "objects/objects.hpp"
 
 bool gui::impl::init( ) {
-	auto& window = m_windows.emplace_back( objects::window::make( "main", "cavalde_gui", { 300, 300 } ) );
+	auto window = objects::window::make( "main", "cavalde_gui", { 300, 300 } );
+	{
+		auto column = window->add< objects::column >( );
+		{
+			column->add< objects::checkbox >( "check2", "test2" );
+			column->add< objects::checkbox >( "check3", "test3" );
 
-	auto checkbox = window->add< objects::checkbox >( "check", "test" );
+			auto group = column->add< objects::groupbox >( "group1", "label", -1 );
+			{
+				group->add< objects::checkbox >( "check4", "test4" );
+				group->add< objects::checkbox >( "check5", "test5" );
+			}
+		}
+		window->add< objects::checkbox >( "check", "test" );
+	}
+
+	g_io.log( "initialized gui, objects: {}", objects::base_object::s_object_count );
+
+	m_windows.emplace_back( window );
 
 	return !m_windows.empty( );
 }
