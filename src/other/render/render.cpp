@@ -44,8 +44,13 @@ void render::impl::end( ) {
 }
 
 void render::impl::update_screen_size( const math::v2i& screen_size ) {
+	m_screen_size               = screen_size;
 	m_imgui.m_io->DisplaySize.x = static_cast< f32 >( screen_size[ X ] );
 	m_imgui.m_io->DisplaySize.y = static_cast< f32 >( screen_size[ Y ] );
+}
+
+const math::v2i& render::impl::get_screen_size( ) const {
+	return m_screen_size;
 }
 
 void render::impl::pre_reset( ) {

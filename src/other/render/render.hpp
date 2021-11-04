@@ -67,6 +67,8 @@ namespace render {
 			void end( );
 		} m_imgui;
 
+		math::v2i m_screen_size;
+
 		std::array< geometry::font, ENUM_IDX( font::MAX ) > m_fonts;
 
 		// helper for drawing any geometry
@@ -118,6 +120,8 @@ namespace render {
 		void post_reset( );
 
 		void update_screen_size( const math::v2i& screen_size );
+
+		const math::v2i& get_screen_size( ) const;
 	};
 } // namespace render
 

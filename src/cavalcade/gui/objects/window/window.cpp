@@ -14,7 +14,7 @@ gui::objects::window::window( std::string_view name, std::string_view label, con
 	identify( nullptr );
 
 	// center ourselves
-	auto center   = ( g_csgo.m_engine->get_screen_size( ) - size ) / 2;
+	auto center   = ( g_render.get_screen_size( ) - size ) / 2;
 	m_static_area = render::rect( center[ X ], center[ Y ], size[ X ], size[ Y ] );
 
 	render::size label_size = g_render.text_size< render::font::MENU >( m_label );
