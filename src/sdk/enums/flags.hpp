@@ -1,5 +1,4 @@
-#ifndef FLAGS_HPP
-#define FLAGS_HPP
+#pragma once
 
 namespace sdk {
 	enum flags
@@ -38,5 +37,3 @@ namespace sdk {
 		UNBLOCKABLE_BY_PLAYER = ( 1 << 31 )
 	};
 } // namespace sdk
-
-#endif // FLAGS_HPP

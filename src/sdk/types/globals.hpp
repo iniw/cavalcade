@@ -1,5 +1,4 @@
-#ifndef GLOBALS_HPP
-#define GLOBALS_HPP
+#pragma once
 
 namespace sdk {
 	struct globals {
@@ -22,5 +21,3 @@ namespace sdk {
 		i32 m_time_stamp_randomize_window;
 	};
 } // namespace sdk
-
-#endif // GLOBALS_HPP

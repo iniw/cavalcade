@@ -1,5 +1,4 @@
-#ifndef DATA_UPDATE_TYPE_HPP
-#define DATA_UPDATE_TYPE_HPP
+#pragma once
 
 namespace sdk {
 	enum class data_update_type
@@ -9,5 +8,3 @@ namespace sdk {
 		POST_UPDATE
 	};
 } // namespace sdk
-
-#endif // DATA_UPDATE_TYPE_HPP

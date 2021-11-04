@@ -1,5 +1,4 @@
-#ifndef XXHASH_INL
-#define XXHASH_INL
+#pragma once
 
 constexpr u32 hash::xxhash::gen( std::string_view input, u32 seed ) {
 	u32 v1  = seed + prime1 + prime2;
@@ -81,4 +80,4 @@ constexpr u32 hash::xxhash::detail::read_u32le( cstr input, i32 pos ) {
 	return b0 | ( b1 << 8 ) | ( b2 << 16 ) | ( b3 << 24 );
 }
 
-#endif // XXHASH_INL
+#pragma once

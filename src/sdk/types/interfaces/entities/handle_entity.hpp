@@ -1,5 +1,4 @@
-#ifndef HANDLE_ENTITY_HPP
-#define HANDLE_ENTITY_HPP
+#pragma once
 
 namespace sdk::interfaces {
 	struct handle_entity {
@@ -8,5 +7,3 @@ namespace sdk::interfaces {
 		virtual const handle& get_handle( ) const       = 0;
 	};
 } // namespace sdk::interfaces
-
-#endif // HANDLE_ENTITY_HPP

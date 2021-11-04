@@ -1,5 +1,4 @@
-#ifndef INPUT_HPP
-#define INPUT_HPP
+#pragma once
 
 #include "../../math/types/vector.hpp"
 
@@ -28,10 +27,10 @@ namespace io {
 
 		static inline WNDPROC s_og;
 
-		constexpr static inline u64 MAX_TIME_DELTA = 100;
+		constexpr static inline u64 MAX_RELEASED_TIME = 100;
 
-		std::array< key_info, 255 > m_keys;
-		static inline std::array< std::string, 255 > s_key_names = { };
+		std::array< key_info, 255 > m_keys{ };
+		std::array< std::string, 255 > m_key_names{ };
 
 		struct {
 			math::v2i pos;
@@ -45,9 +44,5 @@ namespace io {
 		void unload( );
 
 		BOOL think( UINT msg, WPARAM w_param, LPARAM l_param );
-
-		static void get_key_names( );
 	};
 } // namespace io
-
-#endif // INPUT_HPP

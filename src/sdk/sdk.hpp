@@ -1,5 +1,4 @@
-#ifndef SDK_HPP
-#define SDK_HPP
+#pragma once
 
 #include "enums/enums.hpp"
 #include "types/types.hpp"
@@ -17,5 +16,3 @@ namespace sdk {
 		return static_cast< f32 >( ticks ) * g_csgo.m_globals->m_interval_per_tick;
 	}
 } // namespace sdk
-
-#endif // SDK_HPP

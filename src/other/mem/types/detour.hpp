@@ -1,5 +1,4 @@
-#ifndef DETOUR_HPP
-#define DETOUR_HPP
+#pragma once
 
 #include "address.hpp"
 
@@ -40,5 +39,3 @@ namespace mem {
 		}
 	};
 } // namespace mem
-
-#endif // DETOUR_HPP

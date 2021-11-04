@@ -1,5 +1,4 @@
-#ifndef ENGINE_HPP
-#define ENGINE_HPP
+#pragma once
 
 namespace sdk::interfaces {
 	struct engine {
@@ -18,5 +17,3 @@ namespace sdk::interfaces {
 		}
 	};
 } // namespace sdk::interfaces
-
-#endif // ENGINE_HPP

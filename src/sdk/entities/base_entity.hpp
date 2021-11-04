@@ -1,5 +1,4 @@
-#ifndef BASE_ENTITY_HPP
-#define BASE_ENTITY_HPP
+#pragma once
 
 #include "../types/types.hpp"
 
@@ -80,5 +79,3 @@ namespace sdk {
 		}
 	};
 } // namespace sdk
-
-#endif // BASE_ENTITY_HPP

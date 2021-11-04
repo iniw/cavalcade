@@ -1,5 +1,4 @@
-#ifndef CSGO_HPP
-#define CSGO_HPP
+#pragma once
 
 #include "../../other/mem/mem.hpp"
 #include "../types/interfaces/interfaces.hpp"
@@ -34,5 +33,3 @@ namespace sdk {
 inline sdk::csgo g_csgo;
 
 #include "csgo.inl"
-
-#endif // CSGO_HPP

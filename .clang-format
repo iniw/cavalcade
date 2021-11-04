@@ -34,7 +34,7 @@ IndentAccessModifiers: false
 IndentCaseLabels: false
 IndentGotoLabels: true
 IndentPPDirectives: AfterHash
-IndentRequires: true
+IndentRequires: false
 IndentWidth: 4
 KeepEmptyLinesAtTheStartOfBlocks: false
 Language: Cpp

@@ -1,5 +1,4 @@
-#ifndef STACK_HPP
-#define STACK_HPP
+#pragma once
 
 namespace mem {
 	struct stack {
@@ -36,5 +35,3 @@ namespace mem {
 		}
 	};
 } // namespace mem
-
-#endif // STACK_HPP

@@ -1,5 +1,4 @@
-#ifndef PROP_TYPE_HPP
-#define PROP_TYPE_HPP
+#pragma once
 
 namespace sdk {
 	enum class prop_type : i32
@@ -15,5 +14,3 @@ namespace sdk {
 		SENDPROPTYPEMAX
 	};
 } // namespace sdk
-
-#endif // PROP_TYPE_HPP

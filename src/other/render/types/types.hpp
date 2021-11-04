@@ -1,5 +1,4 @@
-#ifndef RENDER_TYPES_HPP
-#define RENDER_TYPES_HPP
+#pragma once
 
 #include <d3d9.h>
 #include <d3dx9.h>
@@ -14,5 +13,3 @@ namespace render {
 	using size  = math::v2i;
 	using rect  = math::v4i;
 } // namespace render
-
-#endif // RENDER_TYPES_HPP

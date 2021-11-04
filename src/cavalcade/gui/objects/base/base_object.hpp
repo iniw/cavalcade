@@ -1,5 +1,4 @@
-#ifndef BASE_OBJECT_HPP
-#define BASE_OBJECT_HPP
+#pragma once
 
 namespace gui::objects {
 	struct base_object {
@@ -10,16 +9,16 @@ namespace gui::objects {
 		type m_type;
 
 		// the total amount of space we take up
-		render::rect m_static_rect;
+		render::rect m_static_area;
 
 		// the space dedicated to interaction or rendering
-		render::rect m_dynamic_rect;
+		render::rect m_dynamic_area;
 
 		// the last tickcount we were interacted with
 		u64 m_time;
 
 		// our flags, refer to the declaration of flags on base.hpp
-		std::bitset< flags::MAX > m_flags;
+		flags_set m_flags;
 
 		// our label, used externally by the render() routine
 		std::string m_label;
@@ -62,5 +61,3 @@ namespace gui::objects {
 		void identify( );
 	};
 } // namespace gui::objects
-
-#endif // BASE_OBJECT_HPP

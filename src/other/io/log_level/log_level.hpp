@@ -1,5 +1,4 @@
-#ifndef LOG_LEVEL_HPP
-#define LOG_LEVEL_HPP
+#pragma once
 
 #include "../../utils/cx/cx.hpp"
 
@@ -57,5 +56,3 @@ namespace io {
 
 	inline detail::level_handler level_handler;
 } // namespace io
-
-#endif // LOG_LEVEL_HPP

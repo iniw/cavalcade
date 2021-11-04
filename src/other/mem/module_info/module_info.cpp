@@ -66,7 +66,7 @@ void mem::module_info::add_address( u32 name_hash, address address ) {
 
 	MOCK ENFORCE( address, "bad address, name: {}", name_hash );
 
-	MOCKING_CATCH( return; );
+	MOCKING_CATCH( return );
 
 	m_addresses[ name_hash ] = address;
 }

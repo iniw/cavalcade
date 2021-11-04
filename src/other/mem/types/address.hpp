@@ -1,5 +1,4 @@
-#ifndef ADDRESS_HPP
-#define ADDRESS_HPP
+#pragma once
 
 namespace mem {
 	struct address {
@@ -87,5 +86,3 @@ namespace mem {
 		}
 	};
 } // namespace mem
-
-#endif // ADDRESS_HPP

@@ -1,5 +1,4 @@
-#ifndef CLIENT_STATE_HPP
-#define CLIENT_STATE_HPP
+#pragma once
 
 namespace sdk {
 	struct client_state {
@@ -42,5 +41,3 @@ namespace sdk {
 		unk m_events;
 	};
 } // namespace sdk
-
-#endif // CLIENT_STATE_HPP

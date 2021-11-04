@@ -1,5 +1,4 @@
-#ifndef SECTION_HPP
-#define SECTION_HPP
+#pragma once
 
 namespace mem {
 	struct section {
@@ -15,5 +14,3 @@ namespace mem {
 		}
 	};
 } // namespace mem
-
-#endif // SECTION_HPP

@@ -1,5 +1,8 @@
 #include "window.hpp"
 
+// screen size
+#include "../../../../sdk/csgo/csgo.hpp"
+
 gui::objects::window::window( std::string_view name, std::string_view label, const render::size& size ) {
 	// basic identification
 	m_name = name;
@@ -11,27 +14,26 @@ gui::objects::window::window( std::string_view name, std::string_view label, con
 
 	m_label = label;
 
-	// TODO(wini): center it to the middle of the screen
-	m_static_rect = render::rect( 100, 100, size[ X ], size[ Y ] );
+	render::point center = g_csgo.m_engine->get_screen_size( ) / 2;
+	center -= size / 2;
 
-	// TODO(wini): this "5" is the harcoded margin
-	// refer to the comment about a styling system
-	m_dynamic_rect = m_static_rect.shrink( 5 );
+	m_static_area = render::rect( center[ X ], center[ Y ], size[ X ], size[ Y ] );
 
-	// position our cursor right below the label
-	m_cursor = m_dynamic_rect.pos( );
+	m_dynamic_area = m_static_area.shrink( general::padding::margin );
+
+	m_cursor = m_dynamic_area.pos( );
 	m_cursor[ Y ] += g_render.text_size< render::font::MENU >( m_label )[ Y ];
+	m_cursor[ X ] += general::padding::margin;
 
-	m_label_pos = render::point( m_dynamic_rect[ X ] + m_dynamic_rect[ WIDTH ] / 2, m_dynamic_rect[ Y ] );
+	m_label_pos = render::point( m_dynamic_area[ X ] + m_dynamic_area[ WIDTH ] / 2, m_dynamic_area[ Y ] );
 }
 
-// TODO(wini): a nice pallete/styling system that gives us the proper color based
-// on our current flags, e.g: darker when DISABLED, brigther when ACTIVE
 void gui::objects::window::render( ) {
-	g_render.rectangle_filled( m_static_rect, render::color::black( ) ).outline( render::color::gray( ) );
+	auto outline_color = m_flags.test( flags::HOVERED ) ? general::pallete::highlight : general::pallete::secondary;
 
-	g_render.rectangle_filled( m_dynamic_rect, render::color::black( ) )
-		.outline( m_flags.test( flags::HOVERED ) ? render::color::gray( ) : render::color::white( ) );
+	g_render.rectangle_filled( m_static_area, general::pallete::primary ).outline( outline_color );
+
+	g_render.rectangle_filled( m_dynamic_area, general::pallete::primary ).outline( general::pallete::secondary );
 
 	g_render.text< render::font::MENU >( m_label_pos, m_label, render::color::white( ), render::align::X_CENTER );
 
@@ -52,7 +54,7 @@ bool gui::objects::window::think( ) {
 	// reset all flags
 	m_flags.reset( );
 
-	m_flags.set( flags::HOVERED, g_io.mouse_pos( ).in_rect( m_static_rect ) );
+	m_flags.set( flags::HOVERED, g_io.mouse_pos( ).in_rect( m_static_area ) );
 
 	return think_children( );
 }

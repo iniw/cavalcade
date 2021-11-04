@@ -1,5 +1,4 @@
-#ifndef CX_HPP
-#define CX_HPP
+#pragma once
 
 #include "types/data.hpp"
 #include "types/random_generator.hpp"
@@ -15,5 +14,3 @@ namespace utils::cx {
 } // namespace utils::cx
 
 #include "cx.inl"
-
-#endif // CX_HPP

@@ -1,5 +1,4 @@
-#ifndef STR_HPP
-#define STR_HPP
+#pragma once
 
 namespace utils::str {
 	std::string wide_to_multi_byte( std::wstring_view str );
@@ -14,5 +13,3 @@ namespace utils::str {
 } // namespace utils::str
 
 #include "str.inl"
-
-#endif // STR_HPP

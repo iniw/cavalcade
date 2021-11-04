@@ -1,5 +1,4 @@
-#ifndef FONT_HPP
-#define FONT_HPP
+#pragma once
 
 #include "../shape.hpp"
 
@@ -23,5 +22,3 @@ namespace render::geometry {
 		size calc_size( std::string_view text );
 	};
 } // namespace render::geometry
-
-#endif // FONT_HPP

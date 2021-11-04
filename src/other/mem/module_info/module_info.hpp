@@ -1,5 +1,4 @@
-#ifndef MODULE_INFO_HPP
-#define MODULE_INFO_HPP
+#pragma once
 
 #include "../types/detour.hpp"
 #include "../types/section.hpp"
@@ -63,5 +62,3 @@ namespace mem {
 } // namespace mem
 
 #include "module_info.inl"
-
-#endif // MODULE_INFO_HPP

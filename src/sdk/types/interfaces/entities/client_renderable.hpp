@@ -1,5 +1,4 @@
-#ifndef CLIENT_RENDERABLE_HPP
-#define CLIENT_RENDERABLE_HPP
+#pragma once
 
 namespace sdk::interfaces {
 	struct client_unknown;
@@ -53,5 +52,3 @@ namespace sdk::interfaces {
 		virtual void* get_client_model_renderable( )                                                                           = 0;
 	};
 } // namespace sdk::interfaces
-
-#endif // CLIENT_RENDERABLE_HPP

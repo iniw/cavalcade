@@ -1,5 +1,4 @@
-#ifndef CLIENT_NETWORKABLE_HPP
-#define CLIENT_NETWORKABLE_HPP
+#pragma once
 
 namespace sdk::interfaces {
 	struct client_unknown;
@@ -21,5 +20,3 @@ namespace sdk::interfaces {
 		virtual void set_destroyed_on_recreate_entities( )               = 0;
 	};
 } // namespace sdk::interfaces
-
-#endif // CLIENT_NETWORKABLE_HPP

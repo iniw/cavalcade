@@ -1,5 +1,4 @@
-#ifndef CTX_HPP
-#define CTX_HPP
+#pragma once
 
 #include "../../other/other.hpp"
 #include "../../sdk/sdk.hpp"
@@ -50,5 +49,3 @@ namespace cavalcade {
 } // namespace cavalcade
 
 inline cavalcade::ctx g_ctx;
-
-#endif // CTX_HPP

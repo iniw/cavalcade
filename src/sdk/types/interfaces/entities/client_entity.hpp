@@ -1,5 +1,4 @@
-#ifndef CLIENT_ENTITY_HPP
-#define CLIENT_ENTITY_HPP
+#pragma once
 
 #include "client_collideable.hpp"
 #include "client_networkable.hpp"
@@ -21,5 +20,3 @@ namespace sdk::interfaces {
 		VFUNC( data_map*, get_pred_data_map, 17, ( ) );
 	};
 } // namespace sdk::interfaces
-
-#endif // CLIENT_ENTITY_HPP

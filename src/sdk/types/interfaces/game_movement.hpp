@@ -1,5 +1,4 @@
-#ifndef GAME_MOVEMENT_HPP
-#define GAME_MOVEMENT_HPP
+#pragma once
 
 namespace sdk::interfaces {
 	struct game_movement {
@@ -13,5 +12,3 @@ namespace sdk::interfaces {
 	};
 
 } // namespace sdk::interfaces
-
-#endif // GAME_MOVEMENT_HPP

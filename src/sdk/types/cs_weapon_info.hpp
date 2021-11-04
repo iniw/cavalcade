@@ -1,5 +1,4 @@
-#ifndef CS_WEAPON_INFO_HPP
-#define CS_WEAPON_INFO_HPP
+#pragma once
 
 namespace sdk {
 	struct cs_weapon_info {
@@ -24,5 +23,3 @@ namespace sdk {
 		f32 m_range_modifier;
 	};
 } // namespace sdk
-
-#endif // CS_WEAPON_INFO_HPP

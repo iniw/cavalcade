@@ -1,5 +1,4 @@
-#ifndef BASE_ATTRIBUTABLE_ITEM_HPP
-#define BASE_ATTRIBUTABLE_ITEM_HPP
+#pragma once
 
 #include "base_entity.hpp"
 
@@ -24,5 +23,3 @@ namespace sdk {
 		PNETVAR( char, get_custom_name, "DT_BaseAttributableItem->m_szCustomName" );
 	};
 } // namespace sdk
-
-#endif // BASE_ATTRIBUTABLE_ITEM_HPP

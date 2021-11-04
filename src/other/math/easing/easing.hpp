@@ -1,5 +1,4 @@
-#ifndef EASING_HPP
-#define EASING_HPP
+#pragma once
 
 namespace math::easing {
 	template< typename T = f32 >
@@ -19,5 +18,3 @@ namespace math::easing {
 		return 1.f + x * t2 * t2;
 	}
 } // namespace math::easing
-
-#endif // EASING_HPP

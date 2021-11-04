@@ -1,5 +1,4 @@
-#ifndef FILES_HPP
-#define FILES_HPP
+#pragma once
 
 #include "../log_level/log_level.hpp"
 
@@ -37,5 +36,3 @@ namespace io {
 } // namespace io
 
 #include "files.inl"
-
-#endif // FILES_HPP

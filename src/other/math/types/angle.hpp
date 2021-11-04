@@ -1,5 +1,4 @@
-#ifndef ANGLE_HPP
-#define ANGLE_HPP
+#pragma once
 
 namespace math {
 	struct ang {
@@ -142,5 +141,3 @@ namespace math {
 		}
 	};
 } // namespace math
-
-#endif // ANGLE_HPP

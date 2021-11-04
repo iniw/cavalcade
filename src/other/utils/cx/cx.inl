@@ -1,5 +1,4 @@
-#ifndef CX_INL
-#define CX_INL
+#pragma once
 
 constexpr inline u32 utils::cx::rng( u32 count ) {
 	random_generator gen;
@@ -38,4 +37,4 @@ constexpr inline auto utils::cx::type_name( ) {
 	return ret;
 }
 
-#endif // CX_INL
+#pragma once

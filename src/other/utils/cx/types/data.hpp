@@ -1,5 +1,4 @@
-#ifndef DATA_HPP
-#define DATA_HPP
+#pragma once
 
 namespace utils::cx {
 	template< auto V >
@@ -9,5 +8,3 @@ namespace utils::cx {
 		constexpr inline static T value = V;
 	};
 } // namespace utils::cx
-
-#endif // DATA_HPP

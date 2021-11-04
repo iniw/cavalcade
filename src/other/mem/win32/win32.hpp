@@ -1,5 +1,4 @@
-#ifndef WIN32_HPP
-#define WIN32_HPP
+#pragma once
 
 // these are just helper types
 namespace mem::win32 {
@@ -89,5 +88,3 @@ namespace mem::win32 {
 		PEB_LDR_DATA* Ldr;
 	};
 } // namespace mem::win32
-
-#endif // WIN32_HPP

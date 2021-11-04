@@ -1,5 +1,4 @@
-#ifndef BASE_PARENT_HPP
-#define BASE_PARENT_HPP
+#pragma once
 
 #include "base_object.hpp"
 
@@ -56,5 +55,3 @@ namespace gui::objects {
 } // namespace gui::objects
 
 #include "base_parent.inl"
-
-#endif // BASE_PARENT_HPP

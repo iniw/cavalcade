@@ -1,5 +1,4 @@
-#ifndef FIELD_TYPE_HPP
-#define FIELD_TYPE_HPP
+#pragma once
 
 namespace sdk {
 	enum class field_type
@@ -38,5 +37,3 @@ namespace sdk {
 		TYPECOUNT
 	};
 } // namespace sdk
-
-#endif // FIELD_TYPE_HPP

@@ -1,5 +1,4 @@
-#ifndef CONSOLE_HPP
-#define CONSOLE_HPP
+#pragma once
 
 #include "../log_level/log_level.hpp"
 
@@ -15,5 +14,3 @@ namespace io {
 } // namespace io
 
 #include "console.inl"
-
-#endif // CONSOLE_HPP

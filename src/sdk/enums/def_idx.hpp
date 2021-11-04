@@ -1,5 +1,4 @@
-#ifndef DEF_IDX_HPP
-#define DEF_IDX_HPP
+#pragma once
 
 namespace sdk {
 	enum class def_idx : i16
@@ -141,5 +140,3 @@ namespace sdk {
 		AGENT_B_SQUADRON_OFFICER = 5601
 	};
 } // namespace sdk
-
-#endif // DEF_IDX_HPP

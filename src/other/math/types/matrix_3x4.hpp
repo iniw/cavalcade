@@ -1,5 +1,4 @@
-#ifndef MATRIX_3X4_HPP
-#define MATRIX_3X4_HPP
+#pragma once
 
 namespace math {
 	struct matrix_3x4 {
@@ -53,5 +52,3 @@ namespace math {
 		}
 	};
 } // namespace math
-
-#endif // MATRIX_3X4_HPP

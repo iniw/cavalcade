@@ -1,5 +1,4 @@
-#ifndef HANDLE_HPP
-#define HANDLE_HPP
+#pragma once
 
 namespace sdk {
 	struct handle {
@@ -38,5 +37,3 @@ namespace sdk {
 		u32 m_idx;
 	};
 } // namespace sdk
-
-#endif // HANDLE_HPP

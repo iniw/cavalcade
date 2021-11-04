@@ -1,5 +1,4 @@
-#ifndef TYPES_HPP
-#define TYPES_HPP
+#pragma once
 
 #include "../../other/other.hpp"
 
@@ -22,5 +21,3 @@
 #include "client_mode_shared.hpp"
 
 #include "interfaces/interfaces.hpp"
-
-#endif // TYPES_HPP

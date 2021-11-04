@@ -1,5 +1,4 @@
-#ifndef WEAPON_TYPE_HPP
-#define WEAPON_TYPE_HPP
+#pragma once
 
 namespace sdk {
 	enum class weapon_type
@@ -22,5 +21,3 @@ namespace sdk {
 		MELEE         = 16
 	};
 } // namespace sdk
-
-#endif // WEAPON_TYPE_HPP

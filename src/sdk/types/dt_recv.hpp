@@ -1,5 +1,4 @@
-#ifndef DT_RECV_HPP
-#define DT_RECV_HPP
+#pragma once
 
 #include "dt_common.hpp"
 
@@ -54,5 +53,3 @@ namespace sdk {
 		bool m_in_main_list;
 	};
 } // namespace sdk
-
-#endif // DT_RECV_HPP

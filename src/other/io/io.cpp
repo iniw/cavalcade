@@ -34,6 +34,10 @@ f32 io::impl::mouse_scroll( ) {
 	return m_input.m_mouse.scroll_amt;
 }
 
+std::string_view io::impl::key_name( u8 key_id ) {
+	return m_input.m_key_names[ key_id ];
+}
+
 BOOL io::impl::think( UINT msg, WPARAM w_param, LPARAM l_param ) {
 	BOOL ret = m_input.think( msg, w_param, l_param );
 

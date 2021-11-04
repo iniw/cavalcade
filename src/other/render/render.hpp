@@ -1,5 +1,4 @@
-#ifndef RENDER_HPP
-#define RENDER_HPP
+#pragma once
 
 #include "types/types.hpp"
 #include "geometry/geometry.hpp"
@@ -12,6 +11,7 @@ namespace render {
 	enum class align
 	{
 		NONE = 0,
+		NORMAL,
 		LEFT,
 		RIGHT,
 		X_CENTER,
@@ -71,7 +71,7 @@ namespace render {
 
 		// helper for drawing any geometry
 		// this can't be put in render.inl for some reason
-		template< geometry::shape T, typename... VA >
+		template< geometry::Shape T, typename... VA >
 		T draw_shape( VA&&... args ) {
 			T shape( std::forward< VA >( args )... );
 
@@ -95,16 +95,16 @@ namespace render {
 
 		void end( );
 
-		template< align alignment = align::NONE >
+		template< align alignment = align::NORMAL >
 		geometry::rect rectangle( const point& pos, const size& size, color col, f32 thickness = 1.f );
 
-		template< align alignment = align::NONE >
+		template< align alignment = align::NORMAL >
 		geometry::rect rectangle( const rect& rect, color col, f32 thickness = 1.f );
 
-		template< align alignment = align::NONE >
+		template< align alignment = align::NORMAL >
 		geometry::rect_filled rectangle_filled( const point& pos, const size& size, color col );
 
-		template< align alignment = align::NONE >
+		template< align alignment = align::NORMAL >
 		geometry::rect_filled rectangle_filled( const rect& rect, color col );
 
 		template< font font_choice >
@@ -124,5 +124,3 @@ namespace render {
 inline render::impl g_render;
 
 #include "render.inl"
-
-#endif // RENDER_HPP

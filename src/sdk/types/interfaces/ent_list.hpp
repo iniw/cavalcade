@@ -1,5 +1,4 @@
-#ifndef ENT_LIST_HPP
-#define ENT_LIST_HPP
+#pragma once
 
 namespace sdk::interfaces {
 	struct ent_list {
@@ -28,5 +27,3 @@ namespace sdk::interfaces {
 		}
 	};
 } // namespace sdk::interfaces
-
-#endif // ENT_LIST_HPP

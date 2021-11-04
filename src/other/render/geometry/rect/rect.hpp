@@ -1,5 +1,4 @@
-#ifndef RECT_HPP
-#define RECT_HPP
+#pragma once
 
 #include "../shape.hpp"
 
@@ -25,5 +24,3 @@ namespace render::geometry {
 		virtual void outline( color col = color::black( ), bool innerline = false );
 	};
 } // namespace render::geometry
-
-#endif // RECT_HPP

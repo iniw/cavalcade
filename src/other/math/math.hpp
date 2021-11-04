@@ -1,5 +1,4 @@
-#ifndef MATH_HPP
-#define MATH_HPP
+#pragma once
 
 #include "easing/easing.hpp"
 
@@ -12,5 +11,3 @@ namespace math {
 } // namespace math
 
 #include "math.inl"
-
-#endif // MATH_HPP

@@ -1,5 +1,4 @@
-#ifndef CLIENT_CLASS_HPP
-#define CLIENT_CLASS_HPP
+#pragma once
 
 #include "dt_recv.hpp"
 
@@ -16,5 +15,3 @@ namespace sdk {
 		class_id m_class_id;
 	};
 } // namespace sdk
-
-#endif // CLIENT_CLASS_HPP

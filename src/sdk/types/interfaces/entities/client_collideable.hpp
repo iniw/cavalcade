@@ -1,5 +1,4 @@
-#ifndef CLIENT_COLLIDEABLE_HPP
-#define CLIENT_COLLIDEABLE_HPP
+#pragma once
 
 namespace sdk::interfaces {
 	struct client_unknown;
@@ -27,5 +26,3 @@ namespace sdk::interfaces {
 		virtual unk get_v_physics_object( ) const                                                     = 0;
 	};
 } // namespace sdk::interfaces
-
-#endif // CLIENT_COLLIDEABLE_HPP

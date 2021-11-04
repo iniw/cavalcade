@@ -1,5 +1,4 @@
-#ifndef BASE_ANIMATING_HPP
-#define BASE_ANIMATING_HPP
+#pragma once
 
 #include "base_player.hpp"
 
@@ -19,5 +18,3 @@ namespace sdk {
 		NETVAR_OFFSET( bool, are_jiggle_bones_enabled, "DT_BaseAnimating->m_hLightingOrigin", -0x18 );
 	};
 } // namespace sdk
-
-#endif // BASE_ANIMATING_HPP

@@ -1,5 +1,4 @@
-#ifndef CLASS_ID_HPP
-#define CLASS_ID_HPP
+#pragma once
 
 namespace sdk {
 	enum class class_id : i16
@@ -290,5 +289,3 @@ namespace sdk {
 		SPORE_TRAIL
 	};
 } // namespace sdk
-
-#endif // CLASS_ID_HPP

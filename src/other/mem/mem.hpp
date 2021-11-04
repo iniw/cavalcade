@@ -1,5 +1,4 @@
-#ifndef MEM_HPP
-#define MEM_HPP
+#pragma once
 
 #include "module_info/module_info.hpp"
 #include "types/address.hpp"
@@ -45,5 +44,3 @@ namespace mem {
 inline mem::impl g_mem;
 
 #include "mem.inl"
-
-#endif // MEM_HPP

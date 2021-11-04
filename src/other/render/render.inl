@@ -1,5 +1,4 @@
-#ifndef RENDER_INL
-#define RENDER_INL
+#pragma once
 
 template< render::align alignment >
 render::geometry::rect render::impl::rectangle( const point& pos, const size& size, color col, f32 thickness ) {
@@ -45,4 +44,4 @@ render::size render::impl::text_size( std::string_view text ) {
 	return font.calc_size( text );
 }
 
-#endif // RENDER_INL
+#pragma once

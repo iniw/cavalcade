@@ -1,5 +1,4 @@
-#ifndef I_PREDICTION_HPP
-#define I_PREDICTION_HPP
+#pragma once
 
 #include "../../entities/entities.hpp"
 
@@ -61,5 +60,3 @@ namespace sdk::interfaces {
 		}
 	};
 } // namespace sdk::interfaces
-
-#endif // I_PREDICTION_HPP

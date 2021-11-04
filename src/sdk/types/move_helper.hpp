@@ -1,5 +1,4 @@
-#ifndef MOVE_HELPER_HPP
-#define MOVE_HELPER_HPP
+#pragma once
 
 namespace sdk {
 	struct base_entity;
@@ -10,5 +9,3 @@ namespace sdk {
 		VFUNC( void, process_impacts, 4, ( ) );
 	};
 } // namespace sdk
-
-#endif // MOVE_HELPER_HPP

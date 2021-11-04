@@ -1,5 +1,4 @@
-#ifndef FRAME_STAGE_HPP
-#define FRAME_STAGE_HPP
+#pragma once
 
 namespace sdk {
 	enum class frame_stage
@@ -14,5 +13,3 @@ namespace sdk {
 		RENDER_END
 	};
 } // namespace sdk
-
-#endif // FRAME_STAGE_HPP

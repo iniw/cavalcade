@@ -1,5 +1,4 @@
-#ifndef MDL_CACHE_HPP
-#define MDL_CACHE_HPP
+#pragma once
 
 namespace sdk::interfaces {
 	struct mdl_cache {
@@ -9,5 +8,3 @@ namespace sdk::interfaces {
 	};
 
 } // namespace sdk::interfaces
-
-#endif // MDL_CACHE_HPP

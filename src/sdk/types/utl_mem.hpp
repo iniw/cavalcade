@@ -1,5 +1,4 @@
-#ifndef UTL_MEM_HPP
-#define UTL_MEM_HPP
+#pragma once
 
 namespace sdk {
 	template< typename T, typename N = i32 >
@@ -26,5 +25,3 @@ namespace sdk {
 		}
 	};
 } // namespace sdk
-
-#endif // UTL_MEM_HPP

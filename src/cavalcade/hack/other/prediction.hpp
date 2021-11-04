@@ -1,5 +1,4 @@
-#ifndef PREDICTION_HPP
-#define PREDICTION_HPP
+#pragma once
 
 #include "../../ctx/ctx.hpp"
 
@@ -24,5 +23,3 @@ namespace hack::other {
 		void update( );
 	};
 } // namespace hack::other
-
-#endif // PREDICTION_HPP

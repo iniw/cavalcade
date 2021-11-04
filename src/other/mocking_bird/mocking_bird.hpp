@@ -1,5 +1,4 @@
-#ifndef MOCKING_BIRD_HPP
-#define MOCKING_BIRD_HPP
+#pragma once
 
 // False state mocking utility with pointer overloads
 namespace mocking_bird {
@@ -69,7 +68,7 @@ namespace mocking_bird {
 } // namespace mocking_bird
 
 #define MOCK mocking_bird::raiser{ std::source_location::current( ) },
-// NOTE(para): @iniw your symbol name reusage is very unsafe. example: try MOCKING_CATCH on io struct without global preface
+
 #define MOCKING_TRY try {
 #define MOCKING_CATCH( ... )                                                                                                                         \
 	}                                                                                                                                                \
@@ -78,5 +77,3 @@ namespace mocking_bird {
 		                                      err.what( ).function_name( ) );                                                                        \
 		__VA_ARGS__;                                                                                                                                 \
 	}
-
-#endif /* MOCKING_BIRD_HPP */

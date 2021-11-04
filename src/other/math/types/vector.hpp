@@ -1,5 +1,4 @@
-#ifndef VECTOR_HPP
-#define VECTOR_HPP
+#pragma once
 
 // just to make accessing vector elements less annoying
 enum
@@ -18,11 +17,11 @@ enum
 
 namespace math {
 	template< typename T >
-	concept number = std::is_arithmetic_v< T >;
+	concept Number = std::is_arithmetic_v< T >;
 
 	// credits to: https://www.unknowncheats.me/forum/c-and-c/157292-variadic-vector-class.html
 
-	template< number T, u32 N >
+	template< Number T, u32 N >
 	struct vector {
 	private:
 
@@ -477,7 +476,7 @@ namespace math {
 	using v4s = vector< i8, 4 >;
 } // namespace math
 
-template< math::number T, u32 N >
+template< math::Number T, u32 N >
 struct fmt::formatter< math::vector< T, N > > : fmt::formatter< std::string > {
 	auto format( const math::vector< T, N >& p, format_context& ctx ) {
 		std::string buf = "[ ";
@@ -496,5 +495,3 @@ struct fmt::formatter< math::vector< T, N > > : fmt::formatter< std::string > {
 		return formatter< std::string >::format( buf, ctx );
 	}
 };
-
-#endif // VECTOR_HPP

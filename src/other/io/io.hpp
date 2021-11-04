@@ -1,5 +1,4 @@
-#ifndef IO_HPP
-#define IO_HPP
+#pragma once
 
 #include "console/console.hpp"
 #include "files/files.hpp"
@@ -33,6 +32,8 @@ namespace io {
 
 		f32 mouse_scroll( );
 
+		std::string_view key_name( u8 key_id );
+
 		template< auto state = key_state::DOWN >
 		bool key_state( u8 key_id );
 
@@ -47,5 +48,3 @@ namespace io {
 inline io::impl g_io;
 
 #include "io.inl"
-
-#endif /* IO_HPP */

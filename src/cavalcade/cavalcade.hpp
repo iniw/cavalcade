@@ -1,5 +1,4 @@
-#ifndef CAVALCADE_HPP
-#define CAVALCADE_HPP
+#pragma once
 
 namespace cavalcade {
 	inline HMODULE handle;
@@ -10,5 +9,3 @@ namespace cavalcade {
 
 	DWORD WINAPI unload( BOOL exit_type );
 } // namespace cavalcade
-
-#endif // CAVALCADE_HPP

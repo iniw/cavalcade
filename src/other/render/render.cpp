@@ -13,7 +13,7 @@ bool render::impl::init( ) {
 	MOCKING_TRY;
 
 	MOCK m_imgui.init( m_d3d9.m_device );
-	MOCK FONT_GET( font::MENU ).init( "C:\\Windows\\Fonts\\segoeui.ttf", 14.f );
+	MOCK FONT_GET( font::MENU ).init( XOR( "C:\\Windows\\Fonts\\segoeui.ttf" ), 16.f );
 
 	MOCKING_CATCH( return false );
 
@@ -63,6 +63,8 @@ render::point render::impl::handle_alignment( align alignment, const point& pos,
 
 	switch ( alignment ) {
 	case align::NONE:
+		return out;
+	case align::NORMAL:
 		return out += size;
 	case align::LEFT:
 		out[ X ] -= size[ X ];

@@ -1,5 +1,4 @@
-#ifndef GUI_HPP
-#define GUI_HPP
+#pragma once
 
 #include "objects/objects.hpp"
 
@@ -22,5 +21,3 @@ namespace gui {
 } // namespace gui
 
 inline gui::impl g_gui;
-
-#endif // GUI_HPP

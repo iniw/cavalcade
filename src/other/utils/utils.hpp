@@ -1,5 +1,4 @@
-#ifndef UTILS_HPP
-#define UTILS_HPP
+#pragma once
 
 #include "cx/cx.hpp"
 #include "str/str.hpp"
@@ -19,5 +18,3 @@ namespace utils {
 #define H_ENFORCE( expression, msg, ... ) utils::enforce< true >( expression, XOR( #expression ), XOR( msg ), __VA_ARGS__ )
 
 #include "utils.inl"
-
-#endif // UTILS_HPP

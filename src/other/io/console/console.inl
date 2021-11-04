@@ -1,5 +1,4 @@
-#ifndef CONSOLE_INL
-#define CONSOLE_INL
+#pragma once
 
 template< io::log_level level >
 void io::console::print( std::string_view str ) {
@@ -15,4 +14,4 @@ void io::console::print( std::string_view str ) {
 #endif
 }
 
-#endif // CONSOLE_INL
+#pragma once

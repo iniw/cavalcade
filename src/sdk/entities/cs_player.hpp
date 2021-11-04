@@ -1,5 +1,4 @@
-#ifndef CS_PLAYER_HPP
-#define CS_PLAYER_HPP
+#pragma once
 
 #include "base_animating.hpp"
 
@@ -18,5 +17,3 @@ namespace sdk {
 		void post_think( );
 	};
 } // namespace sdk
-
-#endif // CS_PLAYER_HPP

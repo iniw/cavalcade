@@ -1,5 +1,4 @@
-#ifndef CVAR_HPP
-#define CVAR_HPP
+#pragma once
 
 #include "utl_vector.hpp"
 
@@ -40,5 +39,3 @@ namespace sdk {
 		utl_vector< change_callback_t > m_change_callbacks;
 	};
 } // namespace sdk
-
-#endif // CVAR_HPP

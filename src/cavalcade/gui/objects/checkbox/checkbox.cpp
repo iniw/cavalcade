@@ -1,4 +1,5 @@
 #include "checkbox.hpp"
+#include "styling.hpp"
 
 gui::objects::checkbox::checkbox( std::string_view name, std::string_view label ) {
 	// basic identification
@@ -9,37 +10,47 @@ gui::objects::checkbox::checkbox( std::string_view name, std::string_view label 
 }
 
 void gui::objects::checkbox::init( ) {
-	m_static_rect.pos( m_parent->get_cursor( ) );
-	// HARDCODED STYLING!! AAAAAAAAAAAAAAAAAAAAAAAAAA !!
-	m_static_rect.size( { 20, 20 } );
+	auto cursor       = m_parent->get_cursor( );
+	auto label_offset = personal::padding::label + g_render.text_size< render::font::MENU >( m_label )[ X ];
 
-	m_dynamic_rect = m_static_rect.shrink( 10 );
+	m_static_area.pos( cursor );
+	m_static_area.size( personal::sizing::main );
+	m_static_area[ WIDTH ] += label_offset;
 
-	m_parent->push_cursor( m_static_rect[ HEIGHT ] );
+	m_dynamic_area.pos( cursor );
+	m_dynamic_area.size( personal::sizing::main );
+	m_dynamic_area = m_dynamic_area.shrink( 2 );
+
+	m_label_pos = cursor;
+	m_label_pos[ X ] += personal::sizing::main[ X ] + personal::padding::label;
+
+	m_parent->push_cursor( m_static_area[ HEIGHT ] );
 }
 
 void gui::objects::checkbox::render( ) {
-	g_render.rectangle_filled( m_static_rect, render::color::white( ) ).outline( render::color::gray( ) );
+	g_render.rectangle_filled( m_static_area, general::pallete::primary )
+		.outline( m_flags.test( flags::HOVERED ) ? general::pallete::highlight : general::pallete::secondary );
 
-	g_render.rectangle_filled( m_dynamic_rect, m_var ? render::color::red( ) : render::color::gray( ) );
+	g_render.rectangle_filled( m_dynamic_area, m_var ? general::pallete::highlight : general::pallete::primary )
+		.outline( general::pallete::secondary );
+
+	g_render.text< render::font::MENU >( m_label_pos, m_label, render::color::white( ) );
 }
 
 bool gui::objects::checkbox::think( ) {
 	if ( m_flags.test( flags::DISABLED ) )
 		return false;
 
-	// reset all flags
 	m_flags.reset( );
 
-	m_flags.set( flags::HOVERED, g_io.mouse_pos( ).in_rect( m_static_rect ) );
+	m_flags.set( flags::HOVERED, g_io.mouse_pos( ).in_rect( m_static_area ) );
 
-	if ( m_flags.test( flags::HOVERED ) )
-		m_flags.set( flags::ACTIVE, g_io.key_state< io::key_state::RELEASED >( VK_LBUTTON ) );
+	m_flags.set( flags::ACTIVE, m_flags.test( flags::HOVERED ) && g_io.key_state< io::key_state::RELEASED >( VK_LBUTTON ) );
 
-	if ( m_flags.test( flags::ACTIVE ) ) {
+	bool active = m_flags.test( flags::ACTIVE );
+
+	if ( active )
 		m_var = !m_var;
-		return true;
-	}
 
-	return false;
+	return active;
 }

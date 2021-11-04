@@ -1,5 +1,4 @@
-#ifndef UTILS_INL
-#define UTILS_INL
+#pragma once
 
 template< bool abort, typename... VA >
 bool utils::enforce( bool expression, std::string_view id, std::string_view msg, VA&&... fmt ) {
@@ -23,4 +22,4 @@ bool utils::enforce( bool expression, std::string_view id, std::string_view msg,
 	return expression;
 }
 
-#endif // UTILS_INL
+#pragma once

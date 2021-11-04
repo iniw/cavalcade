@@ -1,5 +1,4 @@
-#ifndef ENUMS_HPP
-#define ENUMS_HPP
+#pragma once
 
 #include "prop_type.hpp"
 #include "class_id.hpp"
@@ -10,5 +9,3 @@
 #include "frame_stage.hpp"
 #include "weapon_type.hpp"
 #include "flags.hpp"
-
-#endif // ENUMS_HPP

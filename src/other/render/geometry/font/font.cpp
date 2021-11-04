@@ -1,14 +1,18 @@
 #include "../../types/types.hpp"
 
 #include "imgui.h"
+#include "misc/freetype/imgui_freetype.h"
 
 #include "font.hpp"
 
 bool render::geometry::font::init( std::string_view path, f32 size ) {
 	ImGuiIO* io = &ImGui::GetIO( );
 
+	ImFontConfig cfg = ImFontConfig( );
+	cfg.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags_LightHinting;
+
 	m_size = size;
-	m_font = io->Fonts->AddFontFromFileTTF( path.data( ), m_size );
+	m_font = io->Fonts->AddFontFromFileTTF( path.data( ), m_size, &cfg );
 
 	return m_font;
 }

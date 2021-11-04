@@ -1,5 +1,4 @@
-#ifndef HOOKS_HPP
-#define HOOKS_HPP
+#pragma once
 
 #include "../ctx/ctx.hpp"
 #include "../hack/hack.hpp"
@@ -72,5 +71,3 @@ namespace cavalcade {
 } // namespace cavalcade
 
 inline cavalcade::hooks g_hooks;
-
-#endif // HOOKS_HPP

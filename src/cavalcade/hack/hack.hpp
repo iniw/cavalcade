@@ -1,5 +1,4 @@
-#ifndef HACK_HPP
-#define HACK_HPP
+#pragma once
 
 #include "other/prediction.hpp"
 
@@ -10,5 +9,3 @@ namespace hack {
 } // namespace hack
 
 inline hack::impl g_hack;
-
-#endif // HACK_HPP

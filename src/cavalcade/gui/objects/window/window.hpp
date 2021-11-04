@@ -1,5 +1,4 @@
-#ifndef WINDOW_HPP
-#define WINDOW_HPP
+#pragma once
 
 #include "../base/base.hpp"
 
@@ -24,5 +23,3 @@ namespace gui::objects {
 	};
 
 } // namespace gui::objects
-
-#endif // WINDOW_HPP

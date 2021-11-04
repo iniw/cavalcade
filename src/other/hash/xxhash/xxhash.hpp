@@ -1,5 +1,4 @@
-#ifndef XXHASH_HPP
-#define XXHASH_HPP
+#pragma once
 
 namespace hash {
 	struct xxhash {
@@ -29,5 +28,3 @@ namespace hash {
 } // namespace hash
 
 #include "xxhash.inl"
-
-#endif // XXHASH_HPP

@@ -1,5 +1,4 @@
-#ifndef BASE_COMBAT_CHARACTER_HPP
-#define BASE_COMBAT_CHARACTER_HPP
+#pragma once
 
 #include "base_entity.hpp"
 
@@ -10,5 +9,3 @@ namespace sdk {
 		NETVAR( f32, get_next_attack, "DT_BaseCombatCharacter->m_flNextAttack" );
 	};
 } // namespace sdk
-
-#endif // BASE_COMBAT_CHARACTER_HPP

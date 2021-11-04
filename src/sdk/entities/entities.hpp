@@ -1,5 +1,4 @@
-#ifndef ENTITIES_HPP
-#define ENTITIES_HPP
+#pragma once
 
 #include "../netvars/netvars.hpp"
 
@@ -10,5 +9,3 @@
 #include "cs_player.hpp"
 #include "base_attributable_item.hpp"
 #include "weapon_cs_base.hpp"
-
-#endif // ENTITIES_HPP

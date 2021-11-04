@@ -1,5 +1,4 @@
-#ifndef SHAPE_HPP
-#define SHAPE_HPP
+#pragma once
 
 struct ImDrawList;
 
@@ -33,7 +32,5 @@ namespace render::geometry {
 	};
 
 	template< typename T >
-	concept shape = std::is_base_of_v< base_shape, T > && !std::is_same_v< T, base_shape >;
+	concept Shape = std::is_base_of_v< base_shape, T > && !std::is_same_v< T, base_shape >;
 } // namespace render::geometry
-
-#endif // SHAPE_HPP

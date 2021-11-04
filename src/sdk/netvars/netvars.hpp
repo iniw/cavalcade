@@ -1,5 +1,4 @@
-#ifndef NETVARS_HPP
-#define NETVARS_HPP
+#pragma once
 
 namespace sdk {
 
@@ -30,5 +29,3 @@ namespace sdk {
 } // namespace sdk
 
 inline sdk::netvars g_netvars;
-
-#endif // NETVARS_HPP

@@ -1,5 +1,4 @@
-#ifndef RECT_FILLED_HPP
-#define RECT_FILLED_HPP
+#pragma once
 
 #include "rect.hpp"
 
@@ -17,5 +16,3 @@ namespace render::geometry {
 		void draw( ) override;
 	};
 } // namespace render::geometry
-
-#endif // RECT_FILLED_HPP

@@ -1,5 +1,4 @@
-#ifndef MOVE_TYPE_HPP
-#define MOVE_TYPE_HPP
+#pragma once
 
 namespace sdk {
 	enum class move_type
@@ -20,5 +19,3 @@ namespace sdk {
 		MAX_BITS = 4
 	};
 } // namespace sdk
-
-#endif // MOVE_TYPE_HPP

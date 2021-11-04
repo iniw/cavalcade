@@ -31,7 +31,8 @@
 		                  std::make_index_sequence< ::jm::detail::_buffer_size< sizeof( str ) >( ) >{ } )                                            \
 			.crypt_get( )
 #else
-#	define XOR( str ) str
+#	define XOR( str )    str
+#	define XORSTR( str ) str
 #endif
 
 #ifdef _MSC_VER

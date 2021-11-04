@@ -1,5 +1,4 @@
-#ifndef CLIENT_MODE_SHARED_HPP
-#define CLIENT_MODE_SHARED_HPP
+#pragma once
 
 namespace sdk {
 	struct client_mode_shared {
@@ -8,5 +7,3 @@ namespace sdk {
 	};
 
 } // namespace sdk
-
-#endif // CLIENT_MODE_SHARED_HPP

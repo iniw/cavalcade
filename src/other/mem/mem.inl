@@ -1,5 +1,4 @@
-#ifndef MEM_INL
-#define MEM_INL
+#pragma once
 
 template< typename T >
 inline T mem::get_v_func( address thisptr, u32 idx ) {
@@ -12,4 +11,4 @@ inline T mem::call_v_func( address thisptr, VA... args ) {
 	return thisptr.to< FN* >( )[ I ]( thisptr, args... );
 }
 
-#endif // MEM_INL
+#pragma once

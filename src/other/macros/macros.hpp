@@ -1,5 +1,4 @@
-#ifndef MACROS_HPP
-#define MACROS_HPP
+#pragma once
 
 // used to convert an enum class value to size_t
 // to access arrays and stuff
@@ -68,5 +67,3 @@ public:
 #define MATCHMAKING_DLL         HASH_CT( "matchmaking.dll" )
 #define SERVER_DLL              HASH_CT( "server.dll" )
 #define SERVERBROWSER_DLL       HASH_CT( "serverbrowser.dll" )
-
-#endif // MACROS_HPP

@@ -1,5 +1,4 @@
-#ifndef HANDLE_INL
-#define HANDLE_INL
+#pragma once
 
 #include "../csgo/csgo.hpp"
 
@@ -8,4 +7,4 @@ T sdk::handle::get( ) const {
 	return g_csgo.m_ent_list->get_handle< T >( *this );
 }
 
-#endif // HANDLE_INL
+#pragma once

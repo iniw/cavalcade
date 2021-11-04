@@ -1,5 +1,4 @@
-#ifndef BUFFER_HPP
-#define BUFFER_HPP
+#pragma once
 
 namespace mem {
 	template< typename T >
@@ -183,5 +182,3 @@ namespace mem {
 		}
 	};
 } // namespace mem
-
-#endif // BUFFER_HPP

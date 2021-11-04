@@ -1,5 +1,4 @@
-#ifndef CLIENT_ALPHA_PROPERTY_HPP
-#define CLIENT_ALPHA_PROPERTY_HPP
+#pragma once
 
 namespace sdk::interfaces {
 	struct client_unknown;
@@ -15,5 +14,3 @@ namespace sdk::interfaces {
 		virtual void set_distance_fade_mode( i32 fade_mode )                                             = 0;
 	};
 } // namespace sdk::interfaces
-
-#endif // CLIENT_ALPHA_PROPERTY_HPP

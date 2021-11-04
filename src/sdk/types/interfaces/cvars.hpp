@@ -1,5 +1,4 @@
-#ifndef CVARS_HPP
-#define CVARS_HPP
+#pragma once
 
 namespace sdk::interfaces {
 	struct cvars {
@@ -9,5 +8,3 @@ namespace sdk::interfaces {
 		VFUNC( cvar*, find_var, idx::FIND_VAR, ( std::string_view name ), name.data( ) );
 	};
 } // namespace sdk::interfaces
-
-#endif // CVARS_HPP

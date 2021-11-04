@@ -1,5 +1,4 @@
-#ifndef MD5_HPP
-#define MD5_HPP
+#pragma once
 
 namespace hash {
 	enum
@@ -26,5 +25,3 @@ namespace hash {
 		static void transform( u32 buf[ 4 ], u32 const in[ 16 ] );
 	};
 } // namespace hash
-
-#endif // MD5_HPP

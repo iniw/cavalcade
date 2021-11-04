@@ -1,5 +1,4 @@
-#ifndef CLIENT_THINKABLE_HPP
-#define CLIENT_THINKABLE_HPP
+#pragma once
 
 namespace sdk::interfaces {
 	struct client_unknown;
@@ -12,5 +11,3 @@ namespace sdk::interfaces {
 		virtual void release( )                       = 0;
 	};
 } // namespace sdk::interfaces
-
-#endif // CLIENT_THINKABLE_HPP

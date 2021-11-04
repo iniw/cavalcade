@@ -1,5 +1,4 @@
-#ifndef RANDOM_GENERATOR_HPP
-#define RANDOM_GENERATOR_HPP
+#pragma once
 
 namespace utils::cx {
 	struct random_generator {
@@ -21,5 +20,3 @@ namespace utils::cx {
 } // namespace utils::cx
 
 #include "random_generator.inl"
-
-#endif // RANDOM_GENERATOR_HPP

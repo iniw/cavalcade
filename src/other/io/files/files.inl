@@ -1,5 +1,4 @@
-#ifndef FILES_INL
-#define FILES_INL
+#pragma once
 
 template< io::log_level level >
 void io::files::log( std::string_view str ) {
@@ -16,4 +15,4 @@ void io::files::log( std::string_view str ) {
 #endif
 }
 
-#endif // FILES_INL
+#pragma once

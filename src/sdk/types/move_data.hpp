@@ -1,5 +1,4 @@
-#ifndef MOVE_DATA_HPP
-#define MOVE_DATA_HPP
+#pragma once
 
 namespace sdk {
 	struct move_data {
@@ -33,5 +32,3 @@ namespace sdk {
 		math::v3f m_abs_origin;
 	};
 } // namespace sdk
-
-#endif // MOVE_DATA_HPP

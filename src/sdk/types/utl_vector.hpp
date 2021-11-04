@@ -1,5 +1,4 @@
-#ifndef UTL_VECTOR_HPP
-#define UTL_VECTOR_HPP
+#pragma once
 
 #include "utl_mem.hpp"
 
@@ -51,5 +50,3 @@ namespace sdk {
 		}
 	};
 } // namespace sdk
-
-#endif // UTL_VECTOR_HPP

@@ -24,6 +24,5 @@ const render::point& gui::objects::base_parent::get_cursor( ) {
 }
 
 void gui::objects::base_parent::push_cursor( i32 offset ) {
-	// HARDCODED STYLING!! AAAAAAAAAAAAAAAAAAAAA
-	m_cursor[ Y ] += offset + 2;
+	m_cursor[ Y ] += offset + general::padding::obj_margin;
 }

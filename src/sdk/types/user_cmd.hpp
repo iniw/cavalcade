@@ -1,5 +1,4 @@
-#ifndef USER_CMD_HPP
-#define USER_CMD_HPP
+#pragma once
 
 namespace sdk {
 	struct user_cmd {
@@ -21,5 +20,3 @@ namespace sdk {
 		bool m_has_been_predicted;
 	};
 } // namespace sdk
-
-#endif // USER_CMD_HPP

@@ -1,5 +1,4 @@
-#ifndef PRIMITIVES_HPP
-#define PRIMITIVES_HPP
+#pragma once
 
 using i8  = std::int8_t;
 using i16 = std::int16_t;
@@ -27,5 +26,3 @@ using unk = void*;
 // are these healthy?
 namespace fs  = std::filesystem;
 namespace chr = std::chrono;
-
-#endif // PRIMITIVES_HPP

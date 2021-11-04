@@ -1,22 +1,25 @@
-#ifndef COLOR_HPP
-#define COLOR_HPP
+#pragma once
 
 namespace render {
 	struct color {
-		u8 r, g, b, a;
+		u8 m_r, m_g, m_b, m_a;
 
-		constexpr color( u8 r = 255, u8 g = 255, u8 b = 255, u8 a = 255 ) : r{ r }, g{ g }, b{ b }, a{ a } { };
+		constexpr color( ) = default;
+
+		constexpr color( u8 r, u8 g, u8 b, u8 a = 255 ) : m_r{ r }, m_g{ g }, m_b{ b }, m_a{ a } { };
+
+		constexpr color( u32 hex ) : m_r( ( hex >> 24 ) & 0xFF ), m_g( ( hex >> 16 ) & 0xFF ), m_b( ( hex >> 8 ) & 0xFF ), m_a( hex & 0xFF ){ };
 
 		constexpr u32 to_u32( ) const {
-			return ( ( r & 0xff ) << 24 ) + ( ( g & 0xff ) << 16 ) + ( ( b & 0xff ) << 8 ) + ( a & 0xff );
+			return ( ( m_r & 0xff ) << 24 ) + ( ( m_g & 0xff ) << 16 ) + ( ( m_b & 0xff ) << 8 ) + ( m_a & 0xff );
 		}
 
 		constexpr u32 to_imgui( ) const {
-			return ( ( a & 0xff ) << 24 ) + ( ( b & 0xff ) << 16 ) + ( ( g & 0xff ) << 8 ) + ( r & 0xff );
+			return ( ( m_a & 0xff ) << 24 ) + ( ( m_b & 0xff ) << 16 ) + ( ( m_g & 0xff ) << 8 ) + ( m_r & 0xff );
 		}
 
 		constexpr color mod_alpha( u8 new_alpha ) {
-			return color( r, g, b, new_alpha );
+			return color( m_r, m_g, m_b, new_alpha );
 		}
 
 		constexpr static color white( u8 alpha = 255 ) {
@@ -36,5 +39,3 @@ namespace render {
 		}
 	};
 } // namespace render
-
-#endif // COLOR_HPP

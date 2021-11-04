@@ -1,5 +1,4 @@
-#ifndef STRING_HPP
-#define STRING_HPP
+#pragma once
 
 namespace utils::cx {
 	template< u32 N = 0 >
@@ -32,5 +31,3 @@ namespace utils::cx {
 		}
 	};
 } // namespace utils::cx
-
-#endif // STRING_HPP

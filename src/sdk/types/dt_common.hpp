@@ -1,5 +1,4 @@
-#ifndef DT_COMMON_HPP
-#define DT_COMMON_HPP
+#pragma once
 
 namespace sdk {
 	struct d_variant {
@@ -15,5 +14,3 @@ namespace sdk {
 		prop_type m_type;
 	};
 } // namespace sdk
-
-#endif // DT_COMMON_HPP

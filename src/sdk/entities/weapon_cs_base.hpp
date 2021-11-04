@@ -1,5 +1,4 @@
-#ifndef WEAPON_CS_BASE_HPP
-#define WEAPON_CS_BASE_HPP
+#pragma once
 
 #include "base_attributable_item.hpp"
 
@@ -28,5 +27,3 @@ namespace sdk {
 		NETVAR( f32, get_next_primary_attack, "DT_BaseCombatWeapon->m_flNextPrimaryAttack" );
 	};
 } // namespace sdk
-
-#endif // WEAPON_CS_BASE_HPP

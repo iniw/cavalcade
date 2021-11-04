@@ -1,5 +1,4 @@
-#ifndef STR_INL
-#define STR_INL
+#pragma once
 
 template< typename T >
 inline T utils::str::to_lower( T&& str ) {
@@ -13,4 +12,4 @@ inline T utils::str::to_upper( T&& str ) {
 	return str;
 }
 
-#endif // STR_INL
+#pragma once

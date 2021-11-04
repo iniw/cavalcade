@@ -1,5 +1,4 @@
-#ifndef MODULE_INFO_INL
-#define MODULE_INFO_INL
+#pragma once
 
 template< u32 size >
 mem::address mem::module_info::find_pattern( const std::array< i32, size >& pattern, u32 section_hash ) {
@@ -25,7 +24,7 @@ void mem::module_info::add_pattern( u32 name_hash, const std::array< i32, size >
 
 	MOCK ENFORCE( address, "bad relative address, pattern: {} | name: {}", pattern, name_hash );
 
-	MOCKING_CATCH( return; );
+	MOCKING_CATCH( return );
 
 	m_addresses[ name_hash ] = address;
 }
@@ -63,7 +62,7 @@ T mem::module_info::get_og( u32 name_hash ) {
 
 	MOCK ENFORCE( m_addresses.contains( name_hash ), "invalid og, name: {}", name_hash );
 
-	MOCKING_CATCH( return { } );
+	MOCKING_CATCH( return T( ) );
 
 	return ( T )m_addresses.at( name_hash ).m_og;
 }
@@ -74,9 +73,9 @@ T mem::module_info::get_address( u32 name_hash ) {
 
 	MOCK ENFORCE( m_addresses.contains( name_hash ), "invalid address, name: {}", name_hash );
 
-	MOCKING_CATCH( return { } );
+	MOCKING_CATCH( return T( ) );
 
 	return m_addresses.at( name_hash ).as< T >( );
 }
 
-#endif // MODULE_INFO_INL
+#pragma once

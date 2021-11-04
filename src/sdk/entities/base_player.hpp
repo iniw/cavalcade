@@ -1,5 +1,4 @@
-#ifndef BASE_PLAYER_HPP
-#define BASE_PLAYER_HPP
+#pragma once
 
 #include "base_combat_character.hpp"
 
@@ -75,5 +74,3 @@ namespace sdk {
 		}
 	};
 } // namespace sdk
-
-#endif // BASE_PLAYER_HPP

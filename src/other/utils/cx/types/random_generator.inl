@@ -1,5 +1,4 @@
-#ifndef RANDOM_GENERATOR_INL
-#define RANDOM_GENERATOR_INL
+#pragma once
 
 constexpr u64 utils::cx::random_generator::gen_seed( ) {
 	u64 shifted = 0;
@@ -23,4 +22,4 @@ constexpr u32 utils::cx::random_generator::next( ) {
 	return ( xorshifted >> rot ) | ( xorshifted << ( ( -rot ) & 31 ) );
 }
 
-#endif // RANDOM_GENERATOR_INL
+#pragma once

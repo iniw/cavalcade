@@ -1,5 +1,4 @@
-#ifndef CSGO_INL
-#define CSGO_INL
+#pragma once
 
 template< typename T >
 T sdk::csgo::find_interface( mem::module_info& the_module, u32 name_hash, bool remove_numbers ) {
@@ -35,4 +34,4 @@ T sdk::csgo::find_interface( mem::module_info& the_module, u32 name_hash, bool r
 	return nullptr;
 }
 
-#endif // CSGO_INL
+#pragma once

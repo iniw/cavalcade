@@ -10,11 +10,22 @@ bool gui::impl::init( ) {
 }
 
 void gui::impl::render( ) {
+	// NOTE(wini): this may look weird, because it is, but it has a purpose:
+	// imgui creates the font atlas on-demand, at the beginning of each frame (if it has to),
+	// because of that, we need to make sure that it HAS a font atlas before initializing
+	// and the easiest way to have that guarantee is to run it after calling g_render.begin()
+	// on end_scene.
+	if ( m_windows.empty( ) )
+		init( );
+
 	for ( auto& window : m_windows )
 		window->render( );
 }
 
 void gui::impl::think( ) {
+	if ( m_windows.empty( ) )
+		return;
+
 	for ( auto& window : m_windows )
 		window->think( );
 }

@@ -1,5 +1,4 @@
-#ifndef CLIENT_UNKNOWN_HPP
-#define CLIENT_UNKNOWN_HPP
+#pragma once
 
 #include "handle_entity.hpp"
 
@@ -22,5 +21,3 @@ namespace sdk::interfaces {
 		virtual client_alpha_property* get_client_alpha_property( ) = 0;
 	};
 } // namespace sdk::interfaces
-
-#endif // CLIENT_UNKNOWN_HPP

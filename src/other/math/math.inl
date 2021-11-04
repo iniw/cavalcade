@@ -1,4 +1,3 @@
-#ifndef MATH_INL
-#define MATH_INL
+#pragma once
 
-#endif // MATH_INL
+#pragma once

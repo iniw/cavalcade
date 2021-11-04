@@ -1,5 +1,4 @@
-#ifndef DATA_MAP_HPP
-#define DATA_MAP_HPP
+#pragma once
 
 namespace sdk {
 	struct data_map;
@@ -32,5 +31,3 @@ namespace sdk {
 		i32 m_packed_size;
 	};
 } // namespace sdk
-
-#endif // DATA_MAP_HPP

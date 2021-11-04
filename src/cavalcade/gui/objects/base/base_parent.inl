@@ -1,5 +1,4 @@
-#ifndef BASE_PARENT_INL
-#define BASE_PARENT_INL
+#pragma once
 
 template< typename T, typename... VA >
 std::shared_ptr< T > gui::objects::base_parent::add( VA&&... args ) {
@@ -19,4 +18,4 @@ std::shared_ptr< T > gui::objects::base_parent::add( VA&&... args ) {
 	return std::dynamic_pointer_cast< T >( m_children.emplace_back( child ) );
 }
 
-#endif // BASE_PARENT_INL
+#pragma once

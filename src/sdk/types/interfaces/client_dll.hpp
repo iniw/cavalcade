@@ -1,5 +1,4 @@
-#ifndef CLIENT_DLL_HPP
-#define CLIENT_DLL_HPP
+#pragma once
 
 #include "../client_class.hpp"
 
@@ -16,5 +15,3 @@ namespace sdk::interfaces {
 		VFUNC( std_recv_proxies*, get_std_recv_proxies, idx::GET_STD_RECV_PROXIES, ( ) );
 	};
 } // namespace sdk::interfaces
-
-#endif // CLIENT_DLL_HPP

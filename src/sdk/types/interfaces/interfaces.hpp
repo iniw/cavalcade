@@ -1,5 +1,4 @@
-#ifndef INTERFACES_HPP
-#define INTERFACES_HPP
+#pragma once
 
 #include "../types.hpp"
 
@@ -28,5 +27,3 @@ namespace sdk::interfaces {
 		registry* m_next;
 	};
 } // namespace sdk::interfaces
-
-#endif // INTERFACES_HPP
