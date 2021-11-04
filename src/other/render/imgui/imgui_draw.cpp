@@ -3556,6 +3556,7 @@ void ImFont::RenderText( ImDrawList* draw_list, float size, ImVec2 pos, ImU32 co
 	pos.y   = IM_FLOOR( pos.y );
 	float x = pos.x;
 	float y = pos.y;
+	y -= size * 0.3125F;
 	if ( y > clip_rect.w )
 		return;
 
