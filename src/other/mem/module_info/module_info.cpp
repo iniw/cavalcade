@@ -39,23 +39,59 @@ i32 mem::module_info::rva_to_offset( u32 rva, PIMAGE_NT_HEADERS nt_headers, bool
 	return static_cast< i32 >( rva - sec->VirtualAddress + sec->PointerToRawData );
 }
 
+static auto generate_bad_char_table( const i32* bytes, u32 last_idx ) {
+	std::array< u32, 256 > table = { };
+
+	MOCKING_TRY;
+
+	MOCK bytes;
+	MOCK last_idx;
+
+	MOCKING_CATCH( return table );
+
+	// purely functional (no side effect)
+	constexpr auto rfind = []( const i32* bytes, u32 last_idx ) -> u32 {
+		u32 indice = last_idx;
+
+		for ( auto entry = bytes + indice; entry && *entry != -1 && indice > 0; --entry ) {
+			--indice;
+		}
+
+		return indice;
+	};
+
+	const auto last_wildcard = rfind( bytes, last_idx );
+
+	const auto default_shift = std::max( u32{ 1 }, last_idx - last_wildcard );
+	table.fill( default_shift );
+
+	for ( auto i = last_wildcard; i < last_idx; ++i ) {
+		table[ bytes[ i ] == -1 ? '\?' : bytes[ i ] ] = last_idx - i;
+	}
+
+	return table;
+}
+
 mem::address mem::module_info::search_byte_array( const i32* bytes, u32 size, const section& section ) {
 	address result;
 
-	for ( u32 i = section.m_start; i < section.m_start + ( section.m_size - size ); i++ ) {
-		bool found = true;
+	const auto last_idx       = size - 1;
+	const auto bad_char_table = generate_bad_char_table( bytes, last_idx );
+	auto start                = m_bitmap + section.m_start;
+	const auto end            = start + section.m_size - size;
 
-		for ( u32 j = 0; j < size; j++ ) {
-			found = m_bitmap[ i + j ] == bytes[ j ] || bytes[ j ] == -1;
-			if ( !found )
-				break;
+	while ( start <= end ) {
+		i32 it = last_idx;
+		while ( it >= 0 && ( bytes[ it ] == -1 || bytes[ it ] == start[ it ] ) ) {
+			--it;
 		}
 
-		if ( !found )
-			continue;
+		if ( it < 0 ) {
+			result = start;
+			break;
+		}
 
-		result = &m_bitmap[ i ];
-		break;
+		start += bad_char_table[ start[ size - 1 ] ];
 	}
 
 	return result;
