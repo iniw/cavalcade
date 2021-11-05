@@ -8,6 +8,7 @@ gui::objects::tab::tab( std::string_view name, std::string_view label ) {
 	m_type  = type::TAB;
 }
 
+// TODO(wini): figure out a way for tabs to work with dynamically sized groupboxes
 void gui::objects::tab::init( ) {
 	auto& info = s_info[ m_parent ];
 
@@ -15,12 +16,13 @@ void gui::objects::tab::init( ) {
 	info.m_list.emplace_back( get< tab >( ) );
 
 	// our areas will mimic those of our parent's
-	m_static_area  = m_parent->m_static_area;
-	m_dynamic_area = m_parent->m_dynamic_area;
+	m_static_area  = m_parent->m_dynamic_area;
+	m_dynamic_area = m_static_area; // this is temporary
 
 	// the height is the same for all tabs
 	m_button_area[ HEIGHT ] = personal::sizing::button_height;
 
+	// the width available for all tabs to share
 	i32 available_width = m_dynamic_area[ WIDTH ];
 
 	// update the button area for all tabs in this parent
@@ -39,11 +41,12 @@ void gui::objects::tab::init( ) {
 			render::point( ( button_area[ X ] + button_area[ WIDTH ] / 2 ) - label_size[ X ] / 2, button_area[ Y ] + label_size[ Y ] / 2 );
 	}
 
-	// only push the cursor if we are the first tab
-	if ( info.m_list.size( ) == 1 )
-		m_parent->push_cursor( personal::sizing::button_height );
+	// fix our dynamic area (after updating everyone)
+	// TODO(wini): make a function that wraps this operation of adding to an axis and subtracting from the size's equivalent
+	m_dynamic_area[ Y ] += personal::sizing::button_height + general::padding::obj_margin;
+	m_dynamic_area[ HEIGHT ] -= personal::sizing::button_height + general::padding::obj_margin;
 
-	m_cursor = m_parent->get_cursor( );
+	m_cursor = m_dynamic_area.pos( );
 }
 
 void gui::objects::tab::render( ) {

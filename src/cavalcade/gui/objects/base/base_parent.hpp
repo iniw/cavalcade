@@ -35,6 +35,9 @@ namespace gui::objects {
 		// offsets m_cursor[ Y ] by the offset + the style's object padding
 		void push_cursor( i32 offset );
 
+		// sets m_cursor directly
+		void set_cursor( const render::point& val );
+
 	protected:
 
 		// NOTE(wini): this a bit of hack/workaround about the fact that you can't virtualize templated functions

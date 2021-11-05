@@ -28,6 +28,8 @@ void gui::objects::groupbox::init( ) {
 
 	m_label_pos =
 		render::point( ( m_static_area[ X ] + m_static_area[ WIDTH ] / 2 ) - label_size[ X ] / 2, m_static_area[ Y ] + label_size[ Y ] / 2 );
+
+	m_parent->push_cursor( m_static_area[ HEIGHT ] );
 }
 
 void gui::objects::groupbox::render( ) {
@@ -54,8 +56,13 @@ bool gui::objects::groupbox::think( ) {
 
 void gui::objects::groupbox::on_add_child( base_ptr child ) {
 	if ( m_height == -1 ) {
-		// add the delta of the cursor pos and our dynamic area
-		m_static_area[ HEIGHT ] += m_cursor[ Y ] - ( m_dynamic_area[ Y ] + m_dynamic_area[ HEIGHT ] );
-		m_dynamic_area[ HEIGHT ] += m_cursor[ Y ] - ( m_dynamic_area[ Y ] + m_dynamic_area[ HEIGHT ] );
+		auto delta = m_cursor[ Y ] - ( m_dynamic_area[ Y ] + m_dynamic_area[ HEIGHT ] );
+		if ( delta ) {
+			m_static_area[ HEIGHT ] += delta;
+			m_dynamic_area[ HEIGHT ] += delta;
+			// if the cursor position of our parent is inside of our area after updating
+			if ( m_parent->get_cursor( ).in_rect( m_static_area ) )
+				m_parent->push_cursor( delta ); // update it with the new space
+		}
 	}
 }

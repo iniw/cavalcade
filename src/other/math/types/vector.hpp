@@ -414,10 +414,11 @@ namespace math {
 			return vec;
 		}
 
-		constexpr bool in_rect( const vector< T, 4 >& rect ) {
+		constexpr bool in_rect( const vector< T, 4 >& rect ) const {
 			static_assert( N == 2, "in_rect requires a 2 dimensional vector" );
 
-			return m_data[ X ] > rect[ X ] && m_data[ Y ] > rect[ Y ] && m_data[ X ] < rect[ X ] + rect[ X2 ] && m_data[ Y ] < rect[ Y ] + rect[ Y2 ];
+			return m_data[ X ] >= rect[ X ] && m_data[ Y ] >= rect[ Y ] && m_data[ X ] <= rect[ X ] + rect[ X2 ] &&
+			       m_data[ Y ] <= rect[ Y ] + rect[ Y2 ];
 		}
 
 		constexpr vector< T, 2 > pos( ) const {
