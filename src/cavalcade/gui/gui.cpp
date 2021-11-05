@@ -3,19 +3,29 @@
 
 bool gui::impl::init( ) {
 	auto window = objects::window::make( "main", "cavalde_gui", { 300, 300 } );
-	{
-		auto column = window->add< objects::column >( );
-		{
-			column->add< objects::checkbox >( "check2", "test2" );
-			column->add< objects::checkbox >( "check3", "test3" );
 
-			auto group = column->add< objects::groupbox >( "group1", "label", -1 );
+	auto column = window->add< objects::column >( );
+	{
+		auto gb = column->add< objects::groupbox >( "group", "test", 100 );
+		{
+			auto tab1 = gb->add< objects::tab >( "tab1", "test1" );
 			{
-				group->add< objects::checkbox >( "check4", "test4" );
-				group->add< objects::checkbox >( "check5", "test5" );
+				tab1->add< objects::checkbox >( "check1", "check1" );
+				tab1->add< objects::checkbox >( "check2", "check2" );
+			}
+
+			auto tab2 = gb->add< objects::tab >( "tab2", "test2" );
+			{
+				tab2->add< objects::checkbox >( "check3", "check3" );
+				tab2->add< objects::checkbox >( "check4", "check4" );
 			}
 		}
-		window->add< objects::checkbox >( "check", "test" );
+	}
+
+	auto gb = window->add< objects::groupbox >( "group2", "test", -1 );
+	{
+		gb->add< objects::checkbox >( "check4", "check4" );
+		gb->add< objects::checkbox >( "check5", "check5" );
 	}
 
 	g_io.log( "initialized gui, objects: {}", objects::base_object::s_object_count );
