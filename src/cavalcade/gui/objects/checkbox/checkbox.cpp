@@ -27,9 +27,6 @@ void gui::objects::checkbox::init( ) {
 }
 
 void gui::objects::checkbox::render( ) {
-	g_render.rectangle_filled( m_static_area, general::pallete::primary )
-		.outline( m_flags.test( flags::HOVERED ) ? general::pallete::highlight : general::pallete::secondary );
-
 	g_render.rectangle_filled( m_dynamic_area, m_var ? general::pallete::highlight : general::pallete::primary )
 		.outline( general::pallete::secondary );
 

@@ -4,6 +4,8 @@
 
 namespace gui::objects {
 	struct groupbox : public base_parent {
+		using ptr = std::shared_ptr< groupbox >;
+
 	protected:
 
 		i32 m_height;

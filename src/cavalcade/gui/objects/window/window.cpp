@@ -21,12 +21,13 @@ gui::objects::window::window( std::string_view name, std::string_view label, con
 
 	m_dynamic_area = m_static_area.shrink( general::padding::margin );
 	// account for our label
-	m_dynamic_area[ Y ] += label_size[ Y ];
+	m_dynamic_area[ Y ] += label_size[ Y ] + label_size[ Y ] / 2;
 	m_dynamic_area[ HEIGHT ] -= label_size[ Y ];
 
 	m_cursor = m_dynamic_area.pos( );
 
-	m_label_pos = render::point( ( m_static_area[ X ] + m_static_area[ WIDTH ] / 2 ) - label_size[ X ] / 2, m_static_area[ Y ] );
+	m_label_pos =
+		render::point( ( m_static_area[ X ] + m_static_area[ WIDTH ] / 2 ) - label_size[ X ] / 2, m_static_area[ Y ] + label_size[ Y ] / 2 );
 }
 
 void gui::objects::window::render( ) {

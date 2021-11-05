@@ -19,6 +19,7 @@ namespace gui::objects {
 		NONE = 0,
 		CHECKBOX,
 		GROUPBOX,
+		TAB,
 		WINDOW
 	};
 

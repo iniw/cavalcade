@@ -1,12 +1,12 @@
 #include "base.hpp"
 
-gui::objects::parent_ptr gui::objects::base_parent::get( ) {
-	return shared_from_this( );
+void gui::objects::base_parent::on_add_child( base_ptr child ) {
+	return;
 }
 
-void gui::objects::base_parent::on_add_child( base_ptr child ) { }
-
 bool gui::objects::base_parent::think_children( ) {
+	std::ranges::sort( m_children, [ & ]( base_ptr a, base_ptr b ) { return a->m_time > b->m_time; } );
+
 	for ( auto& child : m_children )
 		if ( child->think( ) )
 			return child->m_time = m_time = GetTickCount64( );
@@ -15,6 +15,8 @@ bool gui::objects::base_parent::think_children( ) {
 }
 
 void gui::objects::base_parent::render_children( ) {
+	std::ranges::sort( m_children, [ & ]( base_ptr a, base_ptr b ) { return a->m_time < b->m_time; } );
+
 	for ( auto& child : m_children )
 		child->render( );
 }
