@@ -7,6 +7,11 @@ namespace gui::objects {
 	template< class T >
 	struct base_traits {
 		using ptr = std::shared_ptr< T >;
+		struct type {
+			// NOTE(para): just use an indexed sequence to form a character array with the precalculated fixed size to get around ct string
+			// shittery...
+			constexpr static auto name = utils::cx::type_name< T >( );
+		};
 	};
 
 	struct base_object;
@@ -17,16 +22,6 @@ namespace gui::objects {
 
 	template< typename T >
 	concept Object = std::is_base_of_v< base_object, T > && !std::is_same_v< T, base_object >;
-
-	// NOTE(wini): not sure how useful this is...
-	enum class type
-	{
-		NONE = 0,
-		CHECKBOX,
-		GROUPBOX,
-		TAB,
-		WINDOW
-	};
 
 	// list of flags that every object has
 	// implemented by base_object::m_flags

@@ -4,7 +4,6 @@ gui::objects::groupbox::groupbox( std::string_view name, std::string_view label,
 	// basic identification
 	m_name  = name;
 	m_label = label;
-	m_type  = type::GROUPBOX;
 
 	m_height = height;
 }

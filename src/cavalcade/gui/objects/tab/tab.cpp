@@ -5,7 +5,6 @@ gui::objects::tab::tab( std::string_view name, std::string_view label ) {
 	// basic identification
 	m_name  = name;
 	m_label = label;
-	m_type  = type::TAB;
 }
 
 // TODO(wini): figure out a way for tabs to work with dynamically sized groupboxes

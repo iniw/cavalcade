@@ -5,9 +5,6 @@ namespace gui::objects {
 		// our parent, if it exists
 		parent_ptr m_parent;
 
-		// our type
-		type m_type;
-
 		// the total amount of space we take up
 		render::rect m_static_area;
 

@@ -7,7 +7,6 @@ gui::objects::window::window( std::string_view name, std::string_view label, con
 	// basic identification
 	m_name  = name;
 	m_label = label;
-	m_type  = type::WINDOW;
 
 	// NOTE(wini): a bit of a hack but required since
 	// this is the only object that gets created manually

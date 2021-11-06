@@ -190,4 +190,4 @@ namespace stb {
 
 #define STB( str ) stb::compiletime_string_to_byte_array_data::getter< str >::value
 
-#endif // STB_HPP
+#endif /* STB_HPP */
