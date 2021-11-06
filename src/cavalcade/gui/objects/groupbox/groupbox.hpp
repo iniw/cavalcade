@@ -3,9 +3,7 @@
 #include "../base/base.hpp"
 
 namespace gui::objects {
-	struct groupbox : public base_parent {
-		using ptr = std::shared_ptr< groupbox >;
-
+	struct groupbox : public base_parent, public base_traits< groupbox > {
 	protected:
 
 		i32 m_height;

@@ -4,7 +4,7 @@
 
 namespace gui::objects {
 	// an almost proxy-like object that serves only as a positioning tool
-	struct column : public base_parent {
+	struct column : public base_parent, public base_traits< column > {
 		column( ) = default;
 
 		// don't allow construction with any arguments

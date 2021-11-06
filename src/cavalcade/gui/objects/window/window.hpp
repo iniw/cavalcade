@@ -3,9 +3,7 @@
 #include "../base/base.hpp"
 
 namespace gui::objects {
-	struct window : public base_parent {
-		using ptr = std::shared_ptr< window >;
-
+	struct window : public base_parent, public base_traits< window > {
 		window( std::string_view name, std::string_view label, const render::size& size );
 
 		// NOTE(wini): this is the only object that doesn't use a init function

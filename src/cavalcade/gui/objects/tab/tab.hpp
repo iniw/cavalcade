@@ -3,9 +3,7 @@
 #include "../base/base.hpp"
 
 namespace gui::objects {
-	struct tab : public base_parent {
-		using ptr = std::shared_ptr< tab >;
-
+	struct tab : public base_parent, public base_traits< tab > {
 	protected:
 
 		// the area of our clickable button

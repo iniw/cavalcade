@@ -4,6 +4,11 @@
 #include "../../../other/other.hpp"
 
 namespace gui::objects {
+	template< class T >
+	struct base_traits {
+		using ptr = std::shared_ptr< T >;
+	};
+
 	struct base_object;
 	using base_ptr = std::shared_ptr< base_object >;
 

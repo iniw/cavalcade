@@ -3,9 +3,7 @@
 #include "../base/base.hpp"
 
 namespace gui::objects {
-	struct checkbox : public base_child< bool > {
-		using ptr = std::shared_ptr< checkbox >;
-
+	struct checkbox : public base_child< bool >, public base_traits< checkbox > {
 		checkbox( std::string_view name, std::string_view label );
 
 		void init( ) override;
