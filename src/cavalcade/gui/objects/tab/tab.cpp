@@ -12,7 +12,7 @@ void gui::objects::tab::init( ) {
 	auto& info = s_info[ m_parent ];
 
 	// add us to the list
-	info.m_list.emplace_back( get< tab >( ) );
+	info.m_list.emplace_back( m_id );
 
 	// our areas will mimic those of our parent's
 	m_static_area  = m_parent->m_dynamic_area;
@@ -56,31 +56,23 @@ void gui::objects::tab::render( ) {
 
 	g_render.text< render::font::MENU >( m_label_pos, m_label, render::color::white( ) );
 
-	if ( is_active( ) )
-		return render_children( );
+	if ( active )
+		return m_children.render( );
 }
 
 bool gui::objects::tab::think( ) {
-	if ( m_flags.test( flags::DISABLED ) )
-		return false;
-
-	// reset all flags
-	m_flags.reset( );
-
+	// override our HOVERED flag
 	m_flags.set( flags::HOVERED, g_io.mouse_pos( ).in_rect( m_button_area ) );
 
-	m_flags.set( flags::ACTIVE, m_flags.test( flags::HOVERED ) && g_io.key_state< io::key_state::RELEASED >( VK_LBUTTON ) );
+	bool active = m_flags.test( flags::HOVERED ) && g_io.key_state< io::key_state::RELEASED >( VK_LBUTTON );
 
-	bool ret = false;
-
-	if ( m_flags.test( flags::ACTIVE ) ) {
+	// no need to set ourselves as the active tab if we are already the active tab
+	if ( active && !is_active( ) )
 		set_active( );
-		ret = true;
-	}
 
 	if ( is_active( ) )
-		if ( think_children( ) )
-			ret = true;
+		if ( m_children.think( ) )
+			active = true;
 
-	return ret;
+	return active;
 }

@@ -26,8 +26,10 @@ bool gui::impl::init( ) {
 
 				auto tab2 = gb->add< objects::tab >( "tab2", "test2" );
 				{
-					tab2->add< objects::checkbox >( "check3", "check3" );
-					tab2->add< objects::checkbox >( "check4", "check4" );
+					auto tab3 = tab2->add< objects::tab >( "o", "kjkj" );
+					auto tab4 = tab2->add< objects::tab >( "o", "kjkj" );
+					tab3->add< objects::checkbox >( "check3", "check3" );
+					tab4->add< objects::checkbox >( "check4", "check4" );
 				}
 			}
 		}

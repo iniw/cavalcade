@@ -38,19 +38,11 @@ void gui::objects::groupbox::render( ) {
 
 	g_render.text< render::font::MENU >( m_label_pos, m_label, render::color::white( ) );
 
-	return render_children( );
+	return m_children.render( );
 }
 
 bool gui::objects::groupbox::think( ) {
-	if ( m_flags.test( flags::DISABLED ) )
-		return false;
-
-	// reset all flags
-	m_flags.reset( );
-
-	m_flags.set( flags::HOVERED, g_io.mouse_pos( ).in_rect( m_static_area ) );
-
-	return think_children( );
+	return m_children.think( );
 }
 
 void gui::objects::groupbox::on_add_child( base_ptr child ) {

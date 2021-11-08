@@ -13,8 +13,8 @@ namespace gui::objects {
 		struct info {
 			// the list of all tabs
 			std::vector< ptr > m_list;
-			// the currently active tab
-			ptr m_active;
+			// the id of the currently active tab
+			u64 m_active;
 		};
 
 		// accessor for our helper struct
@@ -22,7 +22,7 @@ namespace gui::objects {
 
 		// return true if we are the active tab
 		bool is_active( ) {
-			return s_info[ m_parent ].m_active == get( );
+			return s_info[ m_parent ].m_active == m_id;
 		}
 
 	public:
@@ -37,7 +37,7 @@ namespace gui::objects {
 
 		// sets us as the active tab
 		void set_active( ) {
-			s_info[ m_parent ].m_active = get< tab >( );
+			s_info[ m_parent ].m_active = m_id;
 		}
 	};
 } // namespace gui::objects

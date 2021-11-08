@@ -36,18 +36,19 @@ void gui::objects::window::render( ) {
 
 	g_render.text< render::font::MENU >( m_label_pos, m_label, render::color::white( ) );
 
-	return render_children( );
+	return m_children.render( );
 }
+
 
 // TODO(wini): moving and resizing
 bool gui::objects::window::think( ) {
+	// we have to handle our flags manually since we are fatherless :(
 	if ( m_flags.test( flags::DISABLED ) )
 		return false;
 
-	// reset all flags
 	m_flags.reset( );
 
 	m_flags.set( flags::HOVERED, g_io.mouse_pos( ).in_rect( m_static_area ) );
 
-	return think_children( );
+	return m_children.think( );
 }

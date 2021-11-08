@@ -1,21 +1,14 @@
 #pragma once
 
-#include "base_object.hpp"
-
 namespace gui::objects {
-	struct scrollbar;
-
 	struct base_parent : public base_object, std::enable_shared_from_this< base_parent > {
 	protected:
 
 		// the position used to place new children
 		render::point m_cursor;
 
-		// a list of our children
-		std::vector< base_ptr > m_children;
-
-		// our current scrollbar object, if it exists
-		std::shared_ptr< scrollbar > m_scrollbar;
+		// our children manager
+		managers::children m_children;
 
 	public:
 
@@ -45,16 +38,6 @@ namespace gui::objects {
 		// initialize their scrollbar as soon as a child's area gets past it's own, BUT, that might not apply to
 		// every object, e.g: tabs. so until i figure out something smarter this is going to stay here
 		virtual void on_add_child( base_ptr child );
-
-		// just some wrappers for easier maintainability
-		// TOOD(wini): focus system by sorting the children
-
-		// renders all of our children, if we have any
-		void render_children( );
-
-		// calls think() for all of our children, if we have any
-		// returns true as soon as one of them returns true
-		bool think_children( );
 	};
 } // namespace gui::objects
 

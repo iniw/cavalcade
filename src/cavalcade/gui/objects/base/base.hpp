@@ -46,6 +46,8 @@ namespace gui::objects {
 
 } // namespace gui::objects
 
+#include "../../managers/managers.hpp"
+
 #include "base_object.hpp"
 #include "base_child.hpp"
 #include "base_parent.hpp"

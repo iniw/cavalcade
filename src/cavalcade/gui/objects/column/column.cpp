@@ -17,11 +17,11 @@ void gui::objects::column::init( ) {
 
 // we don't care about rendering/thinking, that is handled by our parent
 void gui::objects::column::render( ) {
-	return render_children( );
+	return m_children.render( );
 }
 
 bool gui::objects::column::think( ) {
-	return think_children( );
+	return m_children.think( );
 }
 
 void gui::objects::column::identify( parent_ptr parent ) {
