@@ -12,5 +12,7 @@ namespace gui::managers {
 		void render( );
 
 		bool think( );
+
+		objects::base_ptr& add( const objects::base_ptr& child );
 	};
 } // namespace gui::managers

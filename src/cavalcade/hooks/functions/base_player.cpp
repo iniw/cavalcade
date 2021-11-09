@@ -16,9 +16,9 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 	if ( og( ecx, input_sample_time, cmd ) )
 		ecx->set_local_view_angles( cmd->m_view_angles );
 
-	g_hack.m_prediction.update( );
+    g_hack.m_prediction.update( );
 
-	g_hack.m_prediction.start( );
+    g_hack.m_prediction.start( );
 
 	g_hack.m_prediction.end( );
 

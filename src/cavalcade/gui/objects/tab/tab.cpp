@@ -9,10 +9,10 @@ gui::objects::tab::tab( std::string_view name, std::string_view label ) {
 
 // TODO(wini): figure out a way for tabs to work with dynamically sized groupboxes
 void gui::objects::tab::init( ) {
-	auto& info = s_info[ m_parent ];
+	auto& info = s_info[ m_parent->m_id ];
 
 	// add us to the list
-	info.m_list.emplace_back( m_id );
+	info.m_list.emplace_back( get< tab >( ) );
 
 	// our areas will mimic those of our parent's
 	m_static_area  = m_parent->m_dynamic_area;

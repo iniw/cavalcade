@@ -3,7 +3,6 @@ set(SOURCES
     # --- cavalcade ---
     # gui - managers
     src/cavalcade/gui/managers/children/children.cpp
-    src/cavalcade/gui/managers/events/events.cpp
     # gui - objects
     src/cavalcade/gui/objects/base/base_parent.cpp
     src/cavalcade/gui/objects/base/base_object.cpp
