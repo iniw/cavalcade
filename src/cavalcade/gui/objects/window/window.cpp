@@ -30,6 +30,9 @@ gui::objects::window::window( std::string_view name, std::string_view label, con
 }
 
 void gui::objects::window::render( ) {
+	if ( m_flags.test( flags::DISABLED ) )
+		return;
+
 	auto outline_color = m_flags.test( flags::HOVERED ) ? general::pallete::highlight : general::pallete::secondary;
 
 	g_render.rectangle_filled( m_static_area, general::pallete::primary ).outline( outline_color );
@@ -39,9 +42,11 @@ void gui::objects::window::render( ) {
 	return m_children.render( );
 }
 
-
 // TODO(wini): moving and resizing
 bool gui::objects::window::think( ) {
+	if ( g_io.key_state< io::key_state::RELEASED >( VK_INSERT ) )
+		m_flags.flip( flags::DISABLED );
+
 	// we have to handle our flags manually since we are fatherless :(
 	if ( m_flags.test( flags::DISABLED ) )
 		return false;
@@ -50,5 +55,7 @@ bool gui::objects::window::think( ) {
 
 	m_flags.set( flags::HOVERED, g_io.mouse_pos( ).in_rect( m_static_area ) );
 
-	return m_children.think( );
+	m_flags.set( flags::ACTIVE, m_children.think( ) );
+
+	return m_flags.test( flags::ACTIVE );
 }

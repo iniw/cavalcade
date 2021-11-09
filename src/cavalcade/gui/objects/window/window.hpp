@@ -15,6 +15,8 @@ namespace gui::objects {
 
 		bool think( ) override;
 
+		void toggle( );
+
 		static ptr make( std::string_view name, std::string_view label, const render::size& size ) {
 			return std::make_shared< window >( name, label, size );
 		}
