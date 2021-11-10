@@ -5,8 +5,10 @@ namespace gui::objects {
 	struct base_child : public base_object {
 	protected:
 
+		using var_type = T;
+
 		// our variable, controlled by the cfg system
-		T* m_var;
+		var_type* m_var;
 
 	public:
 

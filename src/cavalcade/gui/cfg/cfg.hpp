@@ -1,6 +1,10 @@
 #pragma once
 
 namespace gui {
+	// wonder if there's a better way to do this
+	template< typename T >
+	concept ConfigEntry = std::is_same_v< T, bool > || std::is_same_v< T, f32 > || std::is_same_v< T, i32 >;
+
 	struct cfg {
 	private:
 
@@ -10,16 +14,21 @@ namespace gui {
 
 	public:
 
-		// TODO(wini): constraint T to types held by "types"
-		template< typename T >
+		template< ConfigEntry T >
 		static T* add_entry( u32 hash ) {
 			s_entries.insert( { hash, T( ) } );
 			return &get< T >( hash );
 		}
 
-		template< typename T >
+		template< ConfigEntry T >
 		static T& get( u32 hash ) {
-			return std::get< T >( s_entries.at( hash ) );
+			ENFORCE( s_entries.contains( hash ), "bad hash given to cfg::get, hash: {}", hash );
+
+			auto& entry = s_entries.at( hash );
+
+			ENFORCE( std::holds_alternative< T >( entry ), "bad type given to cfg::get, hash: {}", hash );
+
+			return std::get< T >( entry );
 		}
 	};
 } // namespace gui

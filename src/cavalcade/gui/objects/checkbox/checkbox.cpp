@@ -8,7 +8,7 @@ gui::objects::checkbox::checkbox( std::string_view name, std::string_view label 
 }
 
 void gui::objects::checkbox::init( ) {
-	m_var = cfg::add_entry< bool >( m_id >> 32 );
+	m_var = cfg::add_entry< var_type >( m_id >> 32 );
 
 	auto& cursor      = m_parent->get_cursor( );
 	auto label_offset = personal::padding::label + g_render.text_size< render::font::MENU >( m_label )[ X ];
