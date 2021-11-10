@@ -66,6 +66,10 @@ bool gui::objects::window::think( ) {
 
 	m_flags.set( flags::ACTIVE, m_children.think( ) );
 
+	// return if we have activity before handling dragging
+	if ( m_flags.test( flags::ACTIVE ) )
+		return true;
+
 	if ( m_dragging || mouse_pos.in_rect( m_drag_area ) && g_io.key_state( VK_LBUTTON ) )
 		m_dragging = g_io.key_state( VK_LBUTTON );
 
@@ -75,6 +79,8 @@ bool gui::objects::window::think( ) {
 			reposition( delta );
 	}
 
+	m_previous_mouse_pos = mouse_pos;
+
 	/* TODO(wini): come back to this later
 	if ( mouse_pos.in_rect( m_resize_area ) ) {
 	    auto delta = mouse_pos - m_previous_mouse_pos;
@@ -82,7 +88,6 @@ bool gui::objects::window::think( ) {
 	        resize( delta );
 	}
 	*/
-	m_previous_mouse_pos = mouse_pos;
 
 	// it doesn't matter what we return here
 	return true;
