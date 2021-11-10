@@ -16,3 +16,10 @@ void gui::objects::base_object::identify( parent_ptr parent ) {
 	m_id <<= 32;
 	m_id |= m_abs_idx;
 }
+
+void gui::objects::base_object::reposition( const render::point& pos ) {
+	// holy cancer syntax!
+	m_static_area.pos( m_static_area.pos( ) + pos );
+	m_dynamic_area.pos( m_dynamic_area.pos( ) + pos );
+	m_label_pos += pos;
+}

@@ -12,7 +12,7 @@ namespace gui {
 
 	public:
 
-		bool init( );
+		void init( );
 
 		void render( );
 

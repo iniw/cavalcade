@@ -1,7 +1,7 @@
 #include "gui.hpp"
 #include "objects/objects.hpp"
 
-bool gui::impl::init( ) {
+void gui::impl::init( ) {
 	auto window = objects::window::make( "main", "cavalde_gui", { 300, 300 } );
 
 	auto column = window->add< objects::column >( );
@@ -42,11 +42,9 @@ bool gui::impl::init( ) {
 		gb->add< objects::checkbox >( "check5", "check5" );
 	}
 
-	g_io.log( "initialized gui, objects: {}", objects::base_object::s_object_count );
-
 	m_windows.emplace_back( window );
 
-	return !m_windows.empty( );
+	g_io.log( "initialized gui, objects: {}", objects::base_object::s_object_count );
 }
 
 void gui::impl::render( ) {

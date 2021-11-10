@@ -56,5 +56,8 @@ namespace gui::objects {
 
 		// identifies and validates us as a valid object
 		virtual void identify( parent_ptr parent );
+
+		// repositions ourselves, adds "delta" to our areas
+		virtual void reposition( const render::point& delta );
 	};
 } // namespace gui::objects

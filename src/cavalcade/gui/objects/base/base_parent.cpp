@@ -1,5 +1,12 @@
 #include "base.hpp"
 
+void gui::objects::base_parent::reposition( const render::point& delta ) {
+	base_object::reposition( delta );
+
+	// also reposition our children
+	m_children.reposition( delta );
+}
+
 void gui::objects::base_parent::on_add_child( base_ptr child ) {
 	return;
 }

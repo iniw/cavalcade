@@ -35,6 +35,8 @@ namespace gui::objects {
 
 		bool think( ) override;
 
+		void reposition( const render::point& delta );
+
 		// sets us as the active tab
 		void set_active( ) {
 			s_info[ m_parent->m_id ].m_active = m_id;

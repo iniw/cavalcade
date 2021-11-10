@@ -37,6 +37,11 @@ bool gui::managers::children::think( ) {
 	return active;
 }
 
+void gui::managers::children::reposition( const render::point& pos ) {
+	for ( auto& child : m_list )
+		child->reposition( pos );
+}
+
 gui::objects::base_ptr& gui::managers::children::add( const objects::base_ptr& child ) {
 	return m_list.emplace_back( child );
 }

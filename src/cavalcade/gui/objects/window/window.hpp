@@ -4,6 +4,13 @@
 
 namespace gui::objects {
 	struct window : public base_parent, public base_traits< window > {
+	protected:
+
+		render::rect m_drag_area;
+		render::point m_previous_mouse_pos;
+
+	public:
+
 		window( std::string_view name, std::string_view label, const render::size& size );
 
 		// NOTE(wini): this is the only object that doesn't use a init function
@@ -16,6 +23,8 @@ namespace gui::objects {
 		bool think( ) override;
 
 		void toggle( );
+
+		void reposition( const render::point& delta ) override;
 
 		static ptr make( std::string_view name, std::string_view label, const render::size& size ) {
 			return std::make_shared< window >( name, label, size );

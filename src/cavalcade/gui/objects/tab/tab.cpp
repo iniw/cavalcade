@@ -76,3 +76,8 @@ bool gui::objects::tab::think( ) {
 
 	return active;
 }
+
+void gui::objects::tab::reposition( const render::point& delta ) {
+	m_button_area.pos( m_button_area.pos( ) + delta );
+	base_parent::reposition( delta );
+}

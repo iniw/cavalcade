@@ -31,6 +31,8 @@ namespace gui::objects {
 		// sets m_cursor directly
 		void set_cursor( const render::point& val );
 
+		virtual void reposition( const render::point& delta ) override;
+
 	protected:
 
 		// NOTE(wini): this a bit of hack/workaround about the fact that you can't virtualize templated functions
