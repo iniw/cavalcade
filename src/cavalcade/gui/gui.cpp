@@ -11,35 +11,19 @@ void gui::impl::init( ) {
 			// the size of this groupbox has to be specified. look at the TODO on tab.cpp
 			auto gb = col_tab->add< objects::groupbox >( "group", "test", 100 );
 			{
-				auto tab1 = gb->add< objects::tab >( "tab1", "test1" );
-				{
-					tab1->add< objects::checkbox >( "check2", "check2" );
-
-					auto gbec = tab1->add< objects::groupbox >( "asd", "f2g" );
-					gbec->add< objects::checkbox >( "check2", "check2" );
-
-					auto col = tab1->add< objects::column >( );
-					col->add< objects::checkbox >( "check1", "a" );
-
-					tab1->add< objects::checkbox >( "check2", "juju" );
-				}
-
-				auto tab2 = gb->add< objects::tab >( "tab2", "test2" );
-				{
-					auto tab3 = tab2->add< objects::tab >( "o", "kjkj" );
-					auto tab4 = tab2->add< objects::tab >( "o", "kjkj" );
-					tab3->add< objects::checkbox >( "check3", "check3" );
-					tab4->add< objects::checkbox >( "check4", "check4" );
-				}
+				gb->add< objects::slider< f32 > >( "sl", "labl2", 0.f, 100.f );
+				gb->add< objects::slider< f32 > >( "sl", "labl2", 0.f, 100.f, 5 );
 			}
 		}
-		auto col_tab2 = column->add< objects::tab >( "asdasd", "ooga" );
 	}
 
 	auto gb = window->add< objects::groupbox >( "group2", "test", -1 );
 	{
 		gb->add< objects::checkbox >( "check4", "check4" );
 		gb->add< objects::checkbox >( "check5", "check5" );
+		gb->add< objects::slider< i32 > >( "sl", "labl", 0, 100 );
+		gb->add< objects::slider< f32 > >( "sl", "labl2", 0.f, 100.f );
+		gb->add< objects::slider< f32 > >( "sl", "labl2", 0.f, 100.f, 5 );
 	}
 
 	m_windows.emplace_back( window );

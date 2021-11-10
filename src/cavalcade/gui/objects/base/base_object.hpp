@@ -26,6 +26,10 @@ namespace gui::objects {
 		// our name, used internally by the identifier and config system
 		std::string m_name;
 
+		// our index
+		// the amount of existing children in our parent - 1 (at the time of creation)
+		u32 m_idx;
+
 		// our absolute index
 		// the total amount of existing objects + 1 (at the time of creation)
 		u32 m_abs_idx;
@@ -40,7 +44,7 @@ namespace gui::objects {
 
 	public:
 
-		base_object( ) : m_time{ 0 }, m_id{ 0 }, m_abs_idx{ 0 } { }
+		base_object( ) : m_time{ 0 }, m_id{ 0 }, m_idx{ 0 }, m_abs_idx{ 0 } { }
 
 		virtual ~base_object( ) = default;
 
@@ -55,9 +59,12 @@ namespace gui::objects {
 		virtual bool think( ) = 0;
 
 		// identifies and validates us as a valid object
-		virtual void identify( parent_ptr parent );
+		virtual void identify( const parent_ptr& parent );
 
-		// repositions ourselves, adds "delta" to our areas
+		// repositions ourselves, adds "delta" to our positions
 		virtual void reposition( const render::point& delta );
+
+		// resizes ourselves, adds "delta" to our sizes
+		virtual void resize( const render::point& delta );
 	};
 } // namespace gui::objects

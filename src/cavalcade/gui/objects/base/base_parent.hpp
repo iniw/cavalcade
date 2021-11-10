@@ -7,11 +7,12 @@ namespace gui::objects {
 		// the position used to place new children
 		render::point m_cursor;
 
-		// our children manager
-		managers::children m_children;
 
 	public:
 
+		// our children manager
+		managers::children m_children;
+		
 		virtual ~base_parent( ) = default;
 
 		// returns a shared_ptr instance of ourselves
@@ -32,6 +33,8 @@ namespace gui::objects {
 		void set_cursor( const render::point& val );
 
 		virtual void reposition( const render::point& delta ) override;
+
+		virtual void resize( const render::point& delta ) override;
 
 	protected:
 

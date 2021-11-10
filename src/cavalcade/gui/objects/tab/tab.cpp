@@ -30,14 +30,14 @@ void gui::objects::tab::init( ) {
 		auto& button_area = tab->m_button_area;
 
 		button_area.pos( m_dynamic_area.pos( ) );
-
 		button_area[ WIDTH ] = available_width / info.m_list.size( );
 		button_area[ X ] += button_area[ WIDTH ] * i;
 
 		// also update the label position
 		auto label_size = g_render.text_size< render::font::MENU >( tab->m_label );
-		tab->m_label_pos =
-			render::point( ( button_area[ X ] + button_area[ WIDTH ] / 2 ) - label_size[ X ] / 2, button_area[ Y ] + label_size[ Y ] / 2 );
+
+		tab->m_label_pos[ X ] = ( button_area[ X ] + button_area[ WIDTH ] / 2 ) - label_size[ X ] / 2;
+		tab->m_label_pos[ Y ] = button_area[ Y ] + label_size[ Y ] / 2;
 	}
 
 	// fix our dynamic area (after updating everyone)
@@ -54,7 +54,7 @@ void gui::objects::tab::render( ) {
 
 	g_render.rectangle( m_button_area, general::pallete::primary ).outline( outline_col );
 
-	g_render.text< render::font::MENU >( m_label_pos, m_label, render::color::white( ) );
+	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
 
 	if ( active )
 		return m_children.render( );
@@ -66,8 +66,7 @@ bool gui::objects::tab::think( ) {
 
 	bool active = m_flags.test( flags::HOVERED ) && g_io.key_state< io::key_state::RELEASED >( VK_LBUTTON );
 
-	// no need to set ourselves as the active tab if we are already the active tab
-	if ( active && !is_active( ) )
+	if ( active )
 		set_active( );
 
 	if ( is_active( ) )
@@ -80,4 +79,9 @@ bool gui::objects::tab::think( ) {
 void gui::objects::tab::reposition( const render::point& delta ) {
 	m_button_area.pos( m_button_area.pos( ) + delta );
 	base_parent::reposition( delta );
+}
+
+void gui::objects::tab::resize( const render::point& delta ) {
+	m_button_area[ WIDTH ] += delta[ X ];
+	base_parent::resize( delta );
 }

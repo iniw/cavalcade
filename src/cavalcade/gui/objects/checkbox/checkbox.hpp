@@ -11,5 +11,8 @@ namespace gui::objects {
 		void render( ) override;
 
 		bool think( ) override;
+
+		// we don't want to resize, our sizes don't depend on our parent's
+		void resize( const render::point& delta ) override { }
 	};
 } // namespace gui::objects

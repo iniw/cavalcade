@@ -9,11 +9,23 @@ namespace gui::managers {
 
 	public:
 
+		objects::base_ptr& operator[]( u32 idx ) {
+			return m_list[ idx ];
+		}
+
+		const objects::base_ptr& operator[]( u32 idx ) const {
+			return m_list[ idx ];
+		}
+
+		u32 size( );
+
 		void render( );
 
 		bool think( );
 
-		void reposition( const render::point& pos );
+		void reposition( const render::point& delta );
+
+		void resize( const render::point& delta );
 
 		objects::base_ptr& add( const objects::base_ptr& child );
 	};

@@ -7,6 +7,7 @@ namespace gui::general {
 		constexpr inline render::color primary{ 0x1A1A1AFF };
 		constexpr inline render::color secondary{ 0x666666FF };
 		constexpr inline render::color highlight{ 0x6AF2F0FF };
+		constexpr inline render::color text{ 0xFFFFFFFF };
 	}; // namespace pallete
 
 	namespace padding {

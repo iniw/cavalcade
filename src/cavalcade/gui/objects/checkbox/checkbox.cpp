@@ -29,7 +29,7 @@ void gui::objects::checkbox::render( ) {
 
 	g_render.rectangle_filled( m_dynamic_area, color ).outline( general::pallete::secondary );
 
-	g_render.text< render::font::MENU >( m_label_pos, m_label, render::color::white( ) );
+	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
 }
 
 bool gui::objects::checkbox::think( ) {

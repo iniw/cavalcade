@@ -1,5 +1,9 @@
 #include "../../objects/base/base.hpp"
 
+u32 gui::managers::children::size( ) {
+	return m_list.size( );
+}
+
 void gui::managers::children::render( ) {
 	// iterate our children in reverse, guarantees that the most recently interacted-with object renders last
 	for ( auto& child : m_list | std::views::reverse )
@@ -37,9 +41,14 @@ bool gui::managers::children::think( ) {
 	return active;
 }
 
-void gui::managers::children::reposition( const render::point& pos ) {
+void gui::managers::children::reposition( const render::point& delta ) {
 	for ( auto& child : m_list )
-		child->reposition( pos );
+		child->reposition( delta );
+}
+
+void gui::managers::children::resize( const render::point& delta ) {
+	for ( auto& child : m_list )
+		child->resize( delta );
 }
 
 gui::objects::base_ptr& gui::managers::children::add( const objects::base_ptr& child ) {

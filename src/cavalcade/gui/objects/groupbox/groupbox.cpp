@@ -36,7 +36,7 @@ void gui::objects::groupbox::render( ) {
 
 	g_render.rectangle_filled( m_static_area, general::pallete::primary ).outline( outline_color );
 
-	g_render.text< render::font::MENU >( m_label_pos, m_label, render::color::white( ) );
+	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
 
 	return m_children.render( );
 }

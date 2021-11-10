@@ -24,7 +24,7 @@ bool gui::objects::column::think( ) {
 	return m_children.think( );
 }
 
-void gui::objects::column::identify( parent_ptr parent ) {
+void gui::objects::column::identify( const parent_ptr& parent ) {
 	m_abs_idx = s_object_count++;
 	m_parent  = parent;
 
