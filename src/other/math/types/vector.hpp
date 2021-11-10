@@ -15,6 +15,43 @@ enum
 	HEIGHT = 3
 };
 
+#define VEC_OP( op )                                                                                                                                 \
+	constexpr vector operator op( const T& other ) const {                                                                                           \
+		vec_t buf;                                                                                                                                   \
+		for ( u32 i = 0; i < N; i++ )                                                                                                                \
+			buf[ i ] = m_data[ i ] op other;                                                                                                         \
+		return buf;                                                                                                                                  \
+	}                                                                                                                                                \
+	constexpr vector operator op( const arr_t& other ) const {                                                                                       \
+		vec_t buf;                                                                                                                                   \
+		for ( u32 i = 0; i < N; i++ )                                                                                                                \
+			buf[ i ] = m_data[ i ] op other[ i ];                                                                                                    \
+		return buf;                                                                                                                                  \
+	}                                                                                                                                                \
+	constexpr vector operator op( const vec_t& other ) const {                                                                                       \
+		vec_t buf;                                                                                                                                   \
+		for ( u32 i = 0; i < N; i++ )                                                                                                                \
+			buf[ i ] = m_data[ i ] op other[ i ];                                                                                                    \
+		return buf;                                                                                                                                  \
+	}
+
+#define VEC_SELF_OP( op )                                                                                                                            \
+	constexpr vector operator op( const T& other ) {                                                                                                 \
+		for ( u32 i = 0; i < N; i++ )                                                                                                                \
+			m_data[ i ] op other;                                                                                                                    \
+		return *this;                                                                                                                                \
+	}                                                                                                                                                \
+	constexpr vector operator op( const arr_t& other ) {                                                                                             \
+		for ( u32 i = 0; i < N; i++ )                                                                                                                \
+			m_data[ i ] op other[ i ];                                                                                                               \
+		return *this;                                                                                                                                \
+	}                                                                                                                                                \
+	constexpr vector operator op( const vec_t& other ) {                                                                                             \
+		for ( u32 i = 0; i < N; i++ )                                                                                                                \
+			m_data[ i ] op other[ i ];                                                                                                               \
+		return *this;                                                                                                                                \
+	}
+
 namespace math {
 	template< typename T >
 	concept Number = std::is_arithmetic_v< T >;
@@ -59,8 +96,6 @@ namespace math {
 			static_assert( sizeof...( VA ) == N, "invalid number of arguments" );
 		}
 
-		constexpr auto operator<=>( const vec_t& ) const = default;
-
 		constexpr T& operator[]( u32 idx ) {
 			return m_data[ idx ];
 		}
@@ -77,219 +112,35 @@ namespace math {
 			return m_data.at( idx );
 		}
 
-		constexpr vector& operator=( const vec_t& other ) {
+		constexpr bool operator==( const vec_t& other ) {
 			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] = other[ i ];
+				if ( m_data[ i ] != other[ i ] )
+					return false;
 
-			return *this;
+			return true;
 		}
 
-		constexpr vector& operator=( const arr_t& other ) {
+		constexpr bool operator!=( const vec_t& other ) {
 			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] = other[ i ];
+				if ( m_data[ i ] == other[ i ] )
+					return false;
 
-			return *this;
+			return true;
 		}
 
-		constexpr vector& operator=( const T& other ) {
-			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] = other;
+		VEC_SELF_OP( = )
 
-			return *this;
-		}
+		VEC_OP( +);
+		VEC_SELF_OP( += )
 
-		constexpr vector operator+( const vec_t& other ) const {
-			vec_t buf;
+		VEC_OP( -);
+		VEC_SELF_OP( -= )
 
-			for ( u32 i = 0; i < N; i++ )
-				buf[ i ] = m_data[ i ] + other[ i ];
+		VEC_OP( * );
+		VEC_SELF_OP( *= )
 
-			return buf;
-		}
-
-		constexpr vector operator+( const arr_t& other ) const {
-			vec_t buf;
-
-			for ( u32 i = 0; i < N; i++ )
-				buf[ i ] = m_data[ i ] + other[ i ];
-
-			return buf;
-		}
-
-		constexpr vector operator+( const T& other ) const {
-			vec_t buf;
-
-			for ( u32 i = 0; i < N; i++ )
-				buf[ i ] = m_data[ i ] + other;
-
-			return buf;
-		}
-
-		constexpr vector& operator+=( const vec_t& other ) {
-			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] += other[ i ];
-
-			return *this;
-		}
-
-		constexpr vector& operator+=( const arr_t& other ) {
-			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] += other[ i ];
-
-			return *this;
-		}
-
-		constexpr vector& operator+=( const T& other ) {
-			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] += other;
-
-			return *this;
-		}
-
-		constexpr vector operator-( const vec_t& other ) const {
-			vec_t buf;
-
-			for ( u32 i = 0; i < N; i++ )
-				buf[ i ] = m_data[ i ] - other[ i ];
-
-			return buf;
-		}
-
-		constexpr vector operator-( const arr_t& other ) const {
-			vec_t buf;
-
-			for ( u32 i = 0; i < N; i++ )
-				buf[ i ] = m_data[ i ] - other[ i ];
-
-			return buf;
-		}
-
-		constexpr vector operator-( const T& other ) const {
-			vec_t buf;
-
-			for ( u32 i = 0; i < N; i++ )
-				buf[ i ] = m_data[ i ] - other;
-
-			return buf;
-		}
-
-		constexpr vector& operator-=( const vec_t& other ) {
-			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] -= other[ i ];
-
-			return *this;
-		}
-
-		constexpr vector& operator-=( const arr_t& other ) {
-			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] -= other[ i ];
-
-			return *this;
-		}
-
-		constexpr vector& operator-=( const T& other ) {
-			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] -= other;
-
-			return *this;
-		}
-
-		constexpr vector operator*( const vec_t& other ) const {
-			vec_t buf;
-
-			for ( u32 i = 0; i < N; i++ )
-				buf[ i ] = m_data[ i ] * other[ i ];
-
-			return buf;
-		}
-
-		constexpr vector operator*( const arr_t& other ) const {
-			vec_t buf;
-
-			for ( u32 i = 0; i < N; i++ )
-				buf[ i ] = m_data[ i ] * other[ i ];
-
-			return buf;
-		}
-
-		constexpr vector operator*( const T& other ) const {
-			vec_t buf;
-
-			for ( u32 i = 0; i < N; i++ )
-				buf[ i ] = m_data[ i ] * other;
-
-			return buf;
-		}
-
-		constexpr vector& operator*=( const vec_t& other ) {
-			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] *= other[ i ];
-			;
-
-			return *this;
-		}
-
-		constexpr vector& operator*=( const arr_t& other ) {
-			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] *= other[ i ];
-
-			return *this;
-		}
-
-		constexpr vector& operator*=( const T& other ) {
-			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] *= other;
-
-			return *this;
-		}
-
-		constexpr vector operator/( const vec_t& other ) const {
-			vec_t buf;
-
-			for ( u32 i = 0; i < N; i++ )
-				buf[ i ] = m_data[ i ] / other[ i ];
-
-			return buf;
-		}
-
-		constexpr vector operator/( const arr_t& other ) const {
-			vec_t buf;
-
-			for ( u32 i = 0; i < N; i++ )
-				buf[ i ] = m_data[ i ] / other[ i ];
-
-			return buf;
-		}
-
-		constexpr vector operator/( const T& other ) const {
-			vec_t buf;
-
-			for ( u32 i = 0; i < N; i++ )
-				buf[ i ] = m_data[ i ] / other;
-
-			return buf;
-		}
-
-		constexpr vector& operator/=( const vec_t& other ) {
-			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] /= other[ i ];
-
-			return *this;
-		}
-
-		constexpr vector& operator/=( const arr_t& other ) {
-			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] /= other[ i ];
-
-			return *this;
-		}
-
-		constexpr vector& operator/=( const T& other ) {
-			for ( u32 i = 0; i < N; i++ )
-				m_data[ i ] /= other;
-
-			return *this;
-		}
+		VEC_OP( / );
+		VEC_SELF_OP( /= )
 
 		constexpr const arr_t& data( ) const {
 			return m_data;
@@ -476,6 +327,10 @@ namespace math {
 	using v3s = vector< i8, 3 >;
 	using v4s = vector< i8, 4 >;
 } // namespace math
+
+#undef VEC_OP
+#undef VEC_SELF_OP
+#undef VEC_CMP_OP
 
 template< math::Number T, u32 N >
 struct fmt::formatter< math::vector< T, N > > : fmt::formatter< std::string > {

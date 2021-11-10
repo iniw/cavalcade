@@ -6,9 +6,12 @@ namespace gui::objects {
 	struct window : public base_parent, public base_traits< window > {
 	protected:
 
+		render::size m_size;
+		bool m_dragging;
+
 		render::rect m_drag_area;
 		render::rect m_resize_area;
-		
+
 		render::point m_previous_mouse_pos;
 
 	public:
@@ -30,7 +33,7 @@ namespace gui::objects {
 
 		void resize( const render::point& delta ) override;
 
-			static ptr make( std::string_view name, std::string_view label, const render::size& size ) {
+		static ptr make( std::string_view name, std::string_view label, const render::size& size ) {
 			return std::make_shared< window >( name, label, size );
 		}
 	};

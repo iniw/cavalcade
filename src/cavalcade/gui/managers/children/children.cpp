@@ -4,10 +4,13 @@ u32 gui::managers::children::size( ) {
 	return m_list.size( );
 }
 
-void gui::managers::children::render( ) {
+void gui::managers::children::render( const render::rect& area ) {
+	g_render.push_clip_rect( area );
 	// iterate our children in reverse, guarantees that the most recently interacted-with object renders last
 	for ( auto& child : m_list | std::views::reverse )
 		child->render( );
+
+	g_render.pop_clip_rect( );
 }
 
 bool gui::managers::children::think( ) {

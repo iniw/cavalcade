@@ -4,7 +4,7 @@ void gui::objects::base_object::identify( const parent_ptr& parent ) {
 	m_abs_idx = s_object_count++;
 
 	if ( parent && parent->m_children.size( ) )
-		m_idx = parent->m_children.size( );
+		m_idx = parent->m_children.size( ); // we set it to size here because we haven't added to the list yet
 
 	// set our parent
 	m_parent = parent;

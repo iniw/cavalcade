@@ -28,11 +28,11 @@ constexpr inline auto utils::cx::type_name( ) {
 
 	constexpr u32 len = end - start + 1;
 
-	std::array< char, len + 1 > ret = { };
+	string< len + 1 > ret{ };
 	for ( u32 i = 0; i < len; i++ )
-		ret[ i ] = fsig[ start + i ];
+		ret.m_data[ i ] = fsig[ start + i ];
 
-	ret[ len ] = '\0';
+	ret.m_data[ len ] = '\0';
 
 	return ret;
 }

@@ -57,7 +57,9 @@ void gui::objects::tab::render( ) {
 	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
 
 	if ( active )
-		return m_children.render( );
+		// NOTE(wini): the expand is a bit of a hack because our dynamic and static area are the same
+		// so we need to accout for that
+		return m_children.render( m_static_area.expand( 1 ) );
 }
 
 bool gui::objects::tab::think( ) {
@@ -82,6 +84,8 @@ void gui::objects::tab::reposition( const render::point& delta ) {
 }
 
 void gui::objects::tab::resize( const render::point& delta ) {
-	m_button_area[ WIDTH ] += delta[ X ];
 	base_parent::resize( delta );
+
+	// add the new width to the button area too
+	m_button_area[ WIDTH ] += delta[ X ];
 }

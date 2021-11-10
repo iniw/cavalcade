@@ -26,11 +26,11 @@ std::filesystem::path& io::impl::directory( dirs id ) {
 	return m_files.m_directories.at( id );
 }
 
-math::v2i io::impl::mouse_pos( ) {
+const math::v2i& io::impl::mouse_pos( ) {
 	return m_input.m_mouse.pos;
 }
 
-f32 io::impl::mouse_scroll( ) {
+i32 io::impl::mouse_scroll( ) {
 	return m_input.m_mouse.scroll_amt;
 }
 

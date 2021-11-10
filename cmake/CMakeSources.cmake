@@ -1,7 +1,7 @@
 set(SOURCES
 
     # --- cavalcade ---
-    # gui - managers
+    # gui - other
     src/cavalcade/gui/managers/children/children.cpp
     # gui - objects
     src/cavalcade/gui/objects/base/base_parent.cpp

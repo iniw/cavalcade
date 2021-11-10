@@ -7,6 +7,8 @@ HRESULT D3DAPI cavalcade::hooks::d3d9_device::end_scene( IDirect3DDevice9* devic
 
 	g_gui.render( );
 
+	static auto& test = gui::cfg::get< bool >( HASH_CT( "main:group1:check1" ) );
+
 	g_render.end( );
 
 	return og( device );

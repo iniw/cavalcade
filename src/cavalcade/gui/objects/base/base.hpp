@@ -10,7 +10,8 @@ namespace gui::objects {
 		struct type {
 			// NOTE(para): just use an indexed sequence to form a character array with the precalculated fixed size to get around ct string
 			// shittery...
-			constexpr static auto name = utils::cx::type_name< T >( );
+			// NOTE(wini): or maybe not
+			constexpr static utils::cx::string name{ utils::cx::type_name< T >( ) };
 		};
 	};
 
@@ -47,6 +48,7 @@ namespace gui::objects {
 } // namespace gui::objects
 
 #include "../../managers/managers.hpp"
+#include "../../cfg/cfg.hpp"
 
 #include "base_object.hpp"
 #include "base_child.hpp"

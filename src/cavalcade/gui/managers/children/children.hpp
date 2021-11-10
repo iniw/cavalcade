@@ -17,9 +17,17 @@ namespace gui::managers {
 			return m_list[ idx ];
 		}
 
+		const auto begin( ) const {
+			return m_list.begin( );
+		}
+
+		const auto end( ) const {
+			return m_list.end( );
+		}
+
 		u32 size( );
 
-		void render( );
+		void render( const render::rect& area );
 
 		bool think( );
 

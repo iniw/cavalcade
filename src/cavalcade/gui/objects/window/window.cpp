@@ -5,13 +5,16 @@ gui::objects::window::window( std::string_view name, std::string_view label, con
 	m_name  = name;
 	m_label = label;
 
+	m_size     = size;
+	m_dragging = false;
+
 	// NOTE(wini): a bit of a hack but required since
 	// this is the only object that gets created manually
 	identify( nullptr );
 
 	// center ourselves
-	auto center   = ( g_render.get_screen_size( ) - size ) / 2;
-	m_static_area = render::rect( center[ X ], center[ Y ], size[ X ], size[ Y ] );
+	auto center   = ( g_render.get_screen_size( ) - m_size ) / 2;
+	m_static_area = render::rect( center[ X ], center[ Y ], m_size[ X ], m_size[ Y ] );
 
 	render::size label_size = g_render.text_size< render::font::MENU >( m_label );
 
@@ -41,11 +44,9 @@ void gui::objects::window::render( ) {
 
 	g_render.rectangle_filled( m_static_area, general::pallete::primary ).outline( outline_color );
 
-	g_render.rectangle( m_resize_area, general::pallete::highlight );
-
 	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
 
-	return m_children.render( );
+	return m_children.render( m_static_area );
 }
 
 // TODO(wini): resizing
@@ -68,20 +69,22 @@ bool gui::objects::window::think( ) {
 	// TODO(wini): handle the drag area in a better way
 	// right now it's very very easy to get out of the drag area
 	// so i'll handle it in the same way sliders are handled
-	if ( g_io.key_state( VK_LBUTTON ) ) {
-		if ( mouse_pos.in_rect( m_drag_area ) ) {
-			auto delta = mouse_pos - m_previous_mouse_pos;
-			if ( !delta.empty( ) )
-				reposition( delta );
-		}
+	if ( m_dragging || mouse_pos.in_rect( m_drag_area ) && g_io.key_state( VK_LBUTTON ) )
+		m_dragging = true;
 
-		if ( mouse_pos.in_rect( m_resize_area ) ) {
-			auto delta = mouse_pos - m_previous_mouse_pos;
-			if ( !delta.empty( ) )
-				resize( delta );
-		}
+	if ( m_dragging ) {
+		auto delta = mouse_pos - m_previous_mouse_pos;
+		if ( !delta.empty( ) )
+			reposition( delta );
 	}
 
+	/* TODO(wini): come back to this later
+	if ( mouse_pos.in_rect( m_resize_area ) ) {
+	    auto delta = mouse_pos - m_previous_mouse_pos;
+	    if ( !delta.empty( ) )
+	        resize( delta );
+	}
+	*/
 	m_previous_mouse_pos = mouse_pos;
 
 	// it doesn't matter what we return here
@@ -95,7 +98,15 @@ void gui::objects::window::reposition( const render::point& delta ) {
 }
 
 void gui::objects::window::resize( const render::point& delta ) {
-	m_drag_area[ WIDTH ] += delta[ X ];
-	m_resize_area.pos( m_resize_area.pos( ) + delta );
+	auto size = m_static_area.size( );
+	if ( ( size[ X ] + delta[ X ] ) <= m_size[ X ] || ( size[ Y ] + delta[ Y ] ) <= m_size[ Y ] )
+		return;
+
 	base_parent::resize( delta );
+
+	// add the new width to the drag area too
+	m_drag_area[ WIDTH ] += delta[ X ];
+
+	// add to the position of the resize area, we don't wanna modify it's size
+	m_resize_area.pos( m_resize_area.pos( ) + delta );
 }

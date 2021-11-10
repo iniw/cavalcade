@@ -25,6 +25,7 @@ set(PCH
     <optional>
     <variant>
     <ranges>
+    <any>
     # string
     <string>
     <string_view>

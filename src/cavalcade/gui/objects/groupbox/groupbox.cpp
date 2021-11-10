@@ -38,7 +38,7 @@ void gui::objects::groupbox::render( ) {
 
 	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
 
-	return m_children.render( );
+	return m_children.render( m_static_area );
 }
 
 bool gui::objects::groupbox::think( ) {

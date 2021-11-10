@@ -4,26 +4,13 @@
 void gui::impl::init( ) {
 	auto window = objects::window::make( "main", "cavalde_gui", { 300, 300 } );
 
-	auto column = window->add< objects::column >( );
+	auto gb = window->add< objects::groupbox >( "group1", "test", -1 );
+	auto c1 = gb->add< objects::checkbox >( "check1", "check 1" );
 	{
-		auto col_tab = column->add< objects::tab >( "asd", "asdasd" );
-		{
-			// the size of this groupbox has to be specified. look at the TODO on tab.cpp
-			auto gb = col_tab->add< objects::groupbox >( "group", "test", 100 );
-			{
-				gb->add< objects::slider< f32 > >( "sl", "labl2", 0.f, 100.f );
-				gb->add< objects::slider< f32 > >( "sl", "labl2", 0.f, 100.f, 5 );
-			}
-		}
-	}
-
-	auto gb = window->add< objects::groupbox >( "group2", "test", -1 );
-	{
-		gb->add< objects::checkbox >( "check4", "check4" );
-		gb->add< objects::checkbox >( "check5", "check5" );
-		gb->add< objects::slider< i32 > >( "sl", "labl", 0, 100 );
-		gb->add< objects::slider< f32 > >( "sl", "labl2", 0.f, 100.f );
-		gb->add< objects::slider< f32 > >( "sl", "labl2", 0.f, 100.f, 5 );
+		gb->add< objects::checkbox >( "check2", "check 2" );
+		gb->add< objects::slider< i32 > >( "slider2", "slider 2", 0, 100 );
+		gb->add< objects::slider< f32 > >( "slider3", "slider 3", 0.f, 100.f );
+		gb->add< objects::slider< f32 > >( "slider4", "slider 4", 0.f, 100.f, 5 );
 	}
 
 	m_windows.emplace_back( window );

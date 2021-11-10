@@ -115,6 +115,10 @@ namespace render {
 		template< font font_choice >
 		size text_size( std::string_view text );
 
+		void push_clip_rect( const rect& rect );
+
+		void pop_clip_rect( );
+
 		void pre_reset( );
 
 		void post_reset( );

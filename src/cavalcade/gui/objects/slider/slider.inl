@@ -2,8 +2,8 @@
 
 #include "styling.hpp"
 
-// NOTE(wini): i'm obligated to write this-> on this file because of template bullshitery.
-// fuck c++.
+// NOTE(wini): i'm obligated to write this-> on this file because of template bullshitery
+// https://stackoverflow.com/questions/6592512/templates-parent-class-member-variables-not-visible-in-inherited-class
 
 template< math::Number T >
 gui::objects::slider< T >::slider( std::string_view name, std::string_view label, T min, T max, i32 precision ) {
@@ -21,6 +21,8 @@ gui::objects::slider< T >::slider( std::string_view name, std::string_view label
 
 template< math::Number T >
 void gui::objects::slider< T >::init( ) {
+	cfg::add_entry( this->m_id >> 32, &this->m_var );
+
 	auto& cursor = this->m_parent->get_cursor( );
 
 	auto label_size = g_render.text_size< render::font::MENU >( this->m_label );
@@ -93,7 +95,11 @@ void gui::objects::slider< T >::reposition( const render::point& delta ) {
 template< math::Number T >
 void gui::objects::slider< T >::resize( const render::point& delta ) {
 	base_object::resize( delta );
+
+	// compensate for the added height
 	this->m_dynamic_area[ HEIGHT ] -= delta[ Y ];
 	this->m_static_area[ HEIGHT ] -= delta[ Y ];
+
+	// add the new width to the text pos too
 	this->m_var_text_pos[ X ] += delta[ X ];
 }

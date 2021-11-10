@@ -53,6 +53,14 @@ const math::v2i& render::impl::get_screen_size( ) const {
 	return m_screen_size;
 }
 
+void render::impl::push_clip_rect( const rect& rect ) {
+	geometry::base_shape::s_draw_list->PushClipRect( rect.pos( ), rect.pos( ) + rect.size( ) );
+}
+
+void render::impl::pop_clip_rect( ) {
+	geometry::base_shape::s_draw_list->PopClipRect( );
+}
+
 void render::impl::pre_reset( ) {
 	ImGui_ImplDX9_InvalidateDeviceObjects( );
 }
