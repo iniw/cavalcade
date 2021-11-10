@@ -15,7 +15,7 @@ void gui::impl::init( ) {
 
 	m_windows.emplace_back( window );
 
-	g_io.log( "initialized gui, objects: {}", objects::base_object::s_object_count );
+	g_io.log( XOR( "initialized gui, objects: {}" ), objects::base_object::s_object_count );
 }
 
 void gui::impl::render( ) {

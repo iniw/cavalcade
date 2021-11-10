@@ -65,13 +65,13 @@ void gui::objects::slider< T >::render( ) {
 
 template< math::Number T >
 bool gui::objects::slider< T >::think( ) {
-	if ( m_dragging || this->m_flags.test( flags::HOVERED ) && g_io.key_state( VK_LBUTTON ) )
+	auto mouse_pos = g_io.mouse_pos( );
+
+	if ( m_dragging || mouse_pos.in_rect( this->m_dynamic_area ) && g_io.key_state( VK_LBUTTON ) )
 		m_dragging = g_io.key_state( VK_LBUTTON );
 
 	if ( !m_dragging )
 		return false;
-
-	auto mouse_pos = g_io.mouse_pos( );
 
 	T delta = mouse_pos[ X ] - this->m_dynamic_area[ X ];
 	T value = delta * m_max / static_cast< T >( this->m_dynamic_area[ WIDTH ] );

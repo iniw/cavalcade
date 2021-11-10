@@ -66,11 +66,8 @@ bool gui::objects::window::think( ) {
 
 	m_flags.set( flags::ACTIVE, m_children.think( ) );
 
-	// TODO(wini): handle the drag area in a better way
-	// right now it's very very easy to get out of the drag area
-	// so i'll handle it in the same way sliders are handled
 	if ( m_dragging || mouse_pos.in_rect( m_drag_area ) && g_io.key_state( VK_LBUTTON ) )
-		m_dragging = true;
+		m_dragging = g_io.key_state( VK_LBUTTON );
 
 	if ( m_dragging ) {
 		auto delta = mouse_pos - m_previous_mouse_pos;
