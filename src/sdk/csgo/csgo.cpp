@@ -1,7 +1,7 @@
 #include "csgo.hpp"
 
 bool sdk::csgo::init( ) {
-	{ // interfaces
+{ // interfaces
 		m_client = find_interface< interfaces::client* >( g_mem[ CLIENT_DLL ], HASH_CT( "VClient" ) );
 		if ( !m_client )
 			return false;
