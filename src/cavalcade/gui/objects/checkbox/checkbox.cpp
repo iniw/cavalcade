@@ -8,7 +8,7 @@ gui::objects::checkbox::checkbox( std::string_view name, std::string_view label 
 }
 
 void gui::objects::checkbox::init( ) {
-	cfg::add_entry( m_id >> 32, &m_var );
+	m_var = cfg::add_entry< bool >( m_id >> 32 );
 
 	auto& cursor      = m_parent->get_cursor( );
 	auto label_offset = personal::padding::label + g_render.text_size< render::font::MENU >( m_label )[ X ];
@@ -27,7 +27,7 @@ void gui::objects::checkbox::init( ) {
 }
 
 void gui::objects::checkbox::render( ) {
-	auto color = m_var ? general::pallete::highlight : general::pallete::primary;
+	auto color = *m_var ? general::pallete::highlight : general::pallete::primary;
 
 	g_render.rectangle_filled( m_dynamic_area, color ).outline( general::pallete::secondary );
 
@@ -38,7 +38,7 @@ bool gui::objects::checkbox::think( ) {
 	bool active = m_flags.test( flags::HOVERED ) && g_io.key_state< io::key_state::RELEASED >( VK_LBUTTON );
 
 	if ( active )
-		m_var = !m_var;
+		*m_var = !*m_var;
 
 	return active;
 }

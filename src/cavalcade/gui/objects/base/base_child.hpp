@@ -5,13 +5,12 @@ namespace gui::objects {
 	struct base_child : public base_object {
 	protected:
 
-		// our variable
-		T m_var;
+		// our variable, controlled by the cfg system
+		T* m_var;
 
 	public:
 
-		// zero-initialize our variable
-		base_child( ) : m_var{ } { }
+		base_child( ) = default;
 
 		virtual ~base_child( ) = default;
 	};

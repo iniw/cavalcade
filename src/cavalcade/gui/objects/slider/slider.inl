@@ -21,7 +21,7 @@ gui::objects::slider< T >::slider( std::string_view name, std::string_view label
 
 template< math::Number T >
 void gui::objects::slider< T >::init( ) {
-	cfg::add_entry( this->m_id >> 32, &this->m_var );
+	this->m_var = cfg::add_entry< T >( this->m_id >> 32 );
 
 	auto& cursor = this->m_parent->get_cursor( );
 
@@ -41,9 +41,9 @@ void gui::objects::slider< T >::init( ) {
 	this->m_label_pos = cursor;
 
 	if constexpr ( std::is_floating_point_v< T > )
-		this->m_var_text = io::format( "{:.{}f}", this->m_var, this->m_precision );
+		this->m_var_text = io::format( "{:.{}f}", *this->m_var, this->m_precision );
 	else
-		this->m_var_text = fmt::to_string( this->m_var );
+		this->m_var_text = fmt::to_string( *this->m_var );
 
 	this->m_var_text_pos = render::point( this->m_label_pos[ X ] + this->m_dynamic_area[ WIDTH ], this->m_label_pos[ Y ] );
 
@@ -54,7 +54,7 @@ template< math::Number T >
 void gui::objects::slider< T >::render( ) {
 	g_render.rectangle( this->m_dynamic_area, general::pallete::primary ).outline( general::pallete::secondary );
 
-	f32 value_width = this->m_var / static_cast< f32 >( m_max ) * this->m_dynamic_area[ WIDTH ];
+	f32 value_width = *this->m_var / static_cast< f32 >( m_max ) * this->m_dynamic_area[ WIDTH ];
 
 	g_render.rectangle_filled( this->m_dynamic_area.pos( ), { value_width, this->m_dynamic_area[ HEIGHT ] }, general::pallete::highlight );
 
@@ -76,12 +76,12 @@ bool gui::objects::slider< T >::think( ) {
 	T delta = mouse_pos[ X ] - this->m_dynamic_area[ X ];
 	T value = delta * m_max / static_cast< T >( this->m_dynamic_area[ WIDTH ] );
 
-	this->m_var = std::clamp( value, m_min, m_max );
+	*this->m_var = std::clamp( value, m_min, m_max );
 
 	if constexpr ( std::is_floating_point_v< T > )
-		this->m_var_text = io::format( "{:.{}f}", this->m_var, this->m_precision );
+		this->m_var_text = io::format( "{:.{}f}", *this->m_var, this->m_precision );
 	else
-		this->m_var_text = fmt::to_string( this->m_var );
+		this->m_var_text = fmt::to_string( *this->m_var );
 
 	return true;
 }

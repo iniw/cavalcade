@@ -4,17 +4,22 @@ namespace gui {
 	struct cfg {
 	private:
 
-		static inline std::unordered_map< u32, void* > s_entries{ };
+		using types = std::variant< bool, f32, i32 >;
+
+		static inline std::unordered_map< u32, types > s_entries{ };
 
 	public:
 
-		static void add_entry( u32 hash, void* ptr ) {
-			s_entries[ hash ] = ptr;
+		// TODO(wini): constraint T to types held by "types"
+		template< typename T >
+		static T* add_entry( u32 hash ) {
+			s_entries.insert( { hash, T( ) } );
+			return &get< T >( hash );
 		}
 
 		template< typename T >
 		static T& get( u32 hash ) {
-			return *static_cast< T* >( s_entries.at( hash ) );
+			return std::get< T >( s_entries.at( hash ) );
 		}
 	};
 } // namespace gui
