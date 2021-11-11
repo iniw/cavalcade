@@ -23,6 +23,12 @@ bool gui::managers::children::think( const objects::parent_ptr& parent ) {
 	bool active = false;
 
 	for ( auto& child : m_list ) {
+		// we need to check for out of bounds elements when we have a scrollbar
+		if ( parent->m_scrollbar && child != parent->m_scrollbar )
+			if ( ( child->m_dynamic_area[ Y ] + child->m_dynamic_area[ HEIGHT ] ) < parent->m_dynamic_area[ Y ] ||
+			     child->m_dynamic_area[ Y ] > ( parent->m_dynamic_area[ Y ] + parent->m_dynamic_area[ HEIGHT ] ) )
+				continue;
+
 		// NOTE(wini): might be of interest to make a virtual to handle flags
 		// since not all objects behave the same, e.g: tab's HOVERED doesn't use static_area
 

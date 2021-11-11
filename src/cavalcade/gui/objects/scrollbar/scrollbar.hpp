@@ -10,7 +10,11 @@ namespace gui::objects {
 
 		bool m_dragging;
 
-		render::point m_previous_mouse_pos;
+		i32 m_previous_mouse_pos_y;
+
+		f32 m_ratio;
+
+		math::v2i m_max_bounds;
 
 	public:
 
@@ -23,6 +27,8 @@ namespace gui::objects {
 		void render( ) override;
 
 		bool think( ) override;
+
+		void scroll( i32 delta );
 
 		void update_height( );
 	};
