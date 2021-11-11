@@ -3,7 +3,7 @@
 namespace gui::objects {
 	struct base_object {
 		// our parent, if it exists
-		parent_ptr m_parent;
+		parent_raw_ptr m_parent;
 
 		// the total amount of space we take up
 		render::rect m_static_area;
@@ -52,14 +52,14 @@ namespace gui::objects {
 		virtual void init( ) = 0;
 
 		// our rendering routine, required by every object
-		virtual void render( ) = 0;
+		virtual void render( ) const = 0;
 
 		// our input-interpretation routine, required by every object
 		// returns true if there was a successfull interaction
 		virtual bool think( ) = 0;
 
 		// identifies and validates us as a valid object
-		virtual void identify( const parent_ptr& parent );
+		virtual void identify( const parent_raw_ptr parent );
 
 		// repositions ourselves, adds "delta" to our positions
 		virtual void reposition( const render::point& delta );

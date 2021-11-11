@@ -30,18 +30,18 @@ void gui::objects::groupbox::init( ) {
 	m_parent->push_cursor( m_static_area[ HEIGHT ] );
 }
 
-void gui::objects::groupbox::render( ) {
+void gui::objects::groupbox::render( ) const {
 	auto outline_color = m_flags.test( flags::HOVERED ) ? general::pallete::highlight : general::pallete::secondary;
 
 	g_render.rectangle_filled( m_static_area, general::pallete::primary ).outline( outline_color );
 
 	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
 
-	m_children.render( m_dynamic_area.expand( 1 ), get( ) );
+	m_children.render( m_dynamic_area.expand( 1 ), m_parent );
 }
 
 bool gui::objects::groupbox::think( ) {
-	return m_children.think( get( ) );
+	return m_children.think( m_parent );
 }
 
 void gui::objects::groupbox::on_add_child( const base_ptr& child ) {

@@ -251,7 +251,7 @@ namespace math {
 			return vec;
 		}
 
-		constexpr vec_t expand( const T& amt ) {
+		constexpr vec_t expand( const T& amt ) const {
 			static_assert( N == 4, "expand requires a 4 dimensional vector" );
 
 			vec_t vec = *this;

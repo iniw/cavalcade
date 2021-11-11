@@ -48,7 +48,7 @@ void gui::impl::render( ) {
 	if ( m_windows.empty( ) )
 		init( );
 
-	for ( auto& window : m_windows )
+	for ( const auto& window : m_windows )
 		window->render( );
 }
 

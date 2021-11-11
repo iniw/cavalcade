@@ -26,7 +26,7 @@ void gui::objects::checkbox::init( ) {
 	m_parent->push_cursor( m_static_area[ HEIGHT ] );
 }
 
-void gui::objects::checkbox::render( ) {
+void gui::objects::checkbox::render( ) const {
 	auto color = *m_var ? general::pallete::highlight : general::pallete::primary;
 
 	g_render.rectangle_filled( m_dynamic_area, color ).outline( general::pallete::secondary );

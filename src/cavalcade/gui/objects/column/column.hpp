@@ -12,10 +12,10 @@ namespace gui::objects {
 
 		void init( ) override;
 
-		void render( ) override;
+		void render( ) const override;
 
 		bool think( ) override;
 
-		void identify( const parent_ptr& parent ) override;
+		void identify( const parent_raw_ptr parent ) override;
 	};
 } // namespace gui::objects

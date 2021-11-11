@@ -23,7 +23,7 @@ namespace gui::objects {
 			ENFORCE( true, "windows can't be children: parent->m_id = 0x{:X}", m_parent->m_id );
 		}
 
-		void render( ) override;
+		void render( ) const override;
 
 		bool think( ) override;
 

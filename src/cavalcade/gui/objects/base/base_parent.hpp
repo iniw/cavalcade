@@ -21,10 +21,6 @@ namespace gui::objects {
 
 		virtual ~base_parent( ) = default;
 
-		// returns a shared_ptr instance of ourselves
-		template< typename T = base_parent >
-		std::shared_ptr< T > get( );
-
 		// the function used to add new children
 		template< typename T, typename... VA >
 		std::shared_ptr< T > add( VA&&... args );

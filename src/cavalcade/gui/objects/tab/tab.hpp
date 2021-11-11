@@ -21,7 +21,7 @@ namespace gui::objects {
 		static inline std::unordered_map< u64, info > s_info{ };
 
 		// return true if we are the active tab
-		bool is_active( ) {
+		bool is_active( ) const {
 			return s_info[ m_parent->m_id ].m_active == m_id;
 		}
 
@@ -31,7 +31,7 @@ namespace gui::objects {
 
 		void init( ) override;
 
-		void render( ) override;
+		void render( ) const override;
 
 		bool think( ) override;
 
@@ -39,8 +39,8 @@ namespace gui::objects {
 
 		void resize( const render::point& delta ) override;
 
-			// sets us as the active tab
-			void set_active( ) {
+		// sets us as the active tab
+		void set_active( ) {
 			s_info[ m_parent->m_id ].m_active = m_id;
 		}
 	};

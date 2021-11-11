@@ -1,6 +1,6 @@
 #include "scrollbar.hpp"
 
-void gui::objects::scrollbar::identify( const parent_ptr& parent ) {
+void gui::objects::scrollbar::identify( const parent_raw_ptr parent ) {
 	m_parent = parent;
 }
 
@@ -12,7 +12,7 @@ void gui::objects::scrollbar::init( ) {
 	update_height( );
 }
 
-void gui::objects::scrollbar::render( ) {
+void gui::objects::scrollbar::render( ) const {
 	auto color = m_flags.test( flags::HOVERED ) || m_dragging ? general::pallete::highlight : general::pallete::secondary;
 	g_render.rectangle_filled( m_static_area, color );
 }
