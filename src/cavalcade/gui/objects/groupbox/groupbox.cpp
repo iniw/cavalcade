@@ -20,7 +20,7 @@ void gui::objects::groupbox::init( ) {
 	m_dynamic_area = m_static_area.shrink( general::padding::margin );
 	// account for our label
 	m_dynamic_area[ Y ] += label_size[ Y ] + label_size[ Y ] / 2;
-	m_dynamic_area[ HEIGHT ] -= label_size[ Y ];
+	m_dynamic_area[ HEIGHT ] -= label_size[ Y ] + label_size[ Y ] / 2;
 
 	m_cursor = m_dynamic_area.pos( );
 
@@ -35,11 +35,9 @@ void gui::objects::groupbox::render( ) {
 
 	g_render.rectangle_filled( m_static_area, general::pallete::primary ).outline( outline_color );
 
-	// to better debug scrollbar stuff set this to
-	// m_children.render( m_parent->m_dynamic_area, get( ) );
-	m_children.render( m_dynamic_area.expand( 1 ), get( ) );
-
 	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
+
+	m_children.render( m_dynamic_area.expand( 1 ), get( ) );
 }
 
 bool gui::objects::groupbox::think( ) {

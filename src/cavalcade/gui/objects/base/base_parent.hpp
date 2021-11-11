@@ -3,9 +3,7 @@
 #include "../scrollbar/scrollbar.hpp"
 
 namespace gui::objects {
-	// evil forward-decl... close ur eyes..
 	struct scrollbar;
-
 	struct base_parent : public base_object, std::enable_shared_from_this< base_parent > {
 	protected:
 

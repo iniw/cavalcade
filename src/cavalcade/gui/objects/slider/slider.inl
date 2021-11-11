@@ -65,9 +65,9 @@ void gui::objects::slider< T >::render( ) {
 
 template< math::Number T >
 bool gui::objects::slider< T >::think( ) {
-	auto mouse_pos = g_io.mouse_pos( );
+	auto& mouse_pos = g_io.mouse_pos( );
 
-	if ( m_dragging || mouse_pos.in_rect( this->m_dynamic_area ) && g_io.key_state( VK_LBUTTON ) )
+	if ( m_dragging || mouse_pos.in_rect( this->m_dynamic_area ) )
 		m_dragging = g_io.key_state( VK_LBUTTON );
 
 	if ( !m_dragging )

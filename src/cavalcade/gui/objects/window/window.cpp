@@ -46,7 +46,7 @@ void gui::objects::window::render( ) {
 
 	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
 
-	return m_children.render( m_static_area, get( ) );
+	return m_children.render( m_dynamic_area.expand( 1 ), get( ) );
 }
 
 // TODO(wini): resizing
@@ -58,7 +58,7 @@ bool gui::objects::window::think( ) {
 	if ( m_flags.test( flags::DISABLED ) )
 		return false;
 
-	auto mouse_pos = g_io.mouse_pos( );
+	auto& mouse_pos = g_io.mouse_pos( );
 
 	m_flags.reset( );
 
@@ -70,7 +70,7 @@ bool gui::objects::window::think( ) {
 	if ( m_flags.test( flags::ACTIVE ) )
 		return true;
 
-	if ( m_dragging || mouse_pos.in_rect( m_drag_area ) && g_io.key_state( VK_LBUTTON ) )
+	if ( m_dragging || mouse_pos.in_rect( m_drag_area ) )
 		m_dragging = g_io.key_state( VK_LBUTTON );
 
 	if ( m_dragging ) {
