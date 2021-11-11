@@ -12,6 +12,29 @@ void gui::impl::init( ) {
 		gb->add< objects::slider< f32 > >( "slider3", "slider 3", 0.f, 100.f );
 		gb->add< objects::slider< f32 > >( "slider4", "slider 4", 0.f, 100.f, 5 );
 		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
 	}
 
 	auto gb2 = window->add< objects::groupbox >( "group2", "test2 2", 60 );

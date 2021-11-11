@@ -9,12 +9,12 @@ void gui::managers::children::render( const render::rect& area, const objects::p
 	g_render.push_clip_rect( area );
 
 	// iterate our children in reverse, guarantees that the most recently interacted-with object renders last
-	for ( auto& child : m_list | std::views::reverse )
-		child->render( );
+	for ( auto it = m_list.rbegin( ); it != m_list.rend( ); ++it )
+		( *it )->render( );
 
 	g_render.pop_clip_rect( );
 
-		// the scrollbar should always be the last one to render, it has the highest priority in the list
+	// the scrollbar should always be the last one to render, it has the highest priority in the list
 	if ( parent->m_scrollbar )
 		parent->m_scrollbar->render( );
 }
