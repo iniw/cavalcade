@@ -20,7 +20,7 @@ namespace gui::objects {
 
 		scrollbar( ) = default;
 
-		void identify( const parent_raw_ptr parent ) override;
+		void identify( base_parent* parent ) override;
 
 		void init( ) override;
 

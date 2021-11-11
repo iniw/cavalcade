@@ -16,6 +16,6 @@ namespace gui::objects {
 
 		bool think( ) override;
 
-		void identify( const parent_raw_ptr parent ) override;
+		void identify( base_parent* parent ) override;
 	};
 } // namespace gui::objects

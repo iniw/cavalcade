@@ -1,6 +1,6 @@
 #include "scrollbar.hpp"
 
-void gui::objects::scrollbar::identify( const parent_raw_ptr parent ) {
+void gui::objects::scrollbar::identify( base_parent* parent ) {
 	m_parent = parent;
 }
 

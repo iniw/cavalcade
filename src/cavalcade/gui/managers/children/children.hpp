@@ -27,9 +27,9 @@ namespace gui::managers {
 
 		u32 size( );
 
-		void render( const render::rect& area, const objects::parent_raw_ptr parent ) const;
+		void render( const render::rect& area, const objects::base_parent* parent ) const;
 
-		bool think( const objects::parent_raw_ptr parent );
+		bool think( const objects::base_parent* parent );
 
 		void reposition( const render::point& delta );
 

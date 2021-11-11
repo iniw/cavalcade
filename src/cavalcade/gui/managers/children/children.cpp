@@ -5,7 +5,7 @@ u32 gui::managers::children::size( ) {
 	return m_list.size( );
 }
 
-void gui::managers::children::render( const render::rect& area, const objects::parent_raw_ptr parent ) const {
+void gui::managers::children::render( const render::rect& area, const objects::base_parent* parent ) const {
 	g_render.push_clip_rect( area );
 
 	// iterate our children in reverse, guarantees that the most recently interacted-with object renders last
@@ -15,11 +15,11 @@ void gui::managers::children::render( const render::rect& area, const objects::p
 	g_render.pop_clip_rect( );
 
 	// the scrollbar should always be the last one to render, it has the highest priority in the list
-	if ( parent && parent->m_scrollbar )
+	if ( parent->m_scrollbar )
 		parent->m_scrollbar->render( );
 }
 
-bool gui::managers::children::think( const objects::parent_raw_ptr parent ) {
+bool gui::managers::children::think( const objects::base_parent* parent ) {
 	bool active = false;
 
 	for ( auto& child : m_list ) {

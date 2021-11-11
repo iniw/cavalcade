@@ -46,7 +46,7 @@ void gui::objects::window::render( ) const {
 
 	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
 
-	return m_children.render( m_dynamic_area.expand( 1 ), m_parent );
+	return m_children.render( m_dynamic_area.expand( 1 ), this );
 }
 
 // TODO(wini): resizing
@@ -64,7 +64,7 @@ bool gui::objects::window::think( ) {
 
 	m_flags.set( flags::HOVERED, mouse_pos.in_rect( m_static_area ) );
 
-	m_flags.set( flags::ACTIVE, m_children.think( m_parent ) );
+	m_flags.set( flags::ACTIVE, m_children.think( this ) );
 
 	// return if we have activity, before handling dragging
 	if ( m_flags.test( flags::ACTIVE ) )

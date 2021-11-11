@@ -37,11 +37,11 @@ void gui::objects::groupbox::render( ) const {
 
 	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
 
-	m_children.render( m_dynamic_area.expand( 1 ), m_parent );
+	m_children.render( m_dynamic_area.expand( 1 ), this );
 }
 
 bool gui::objects::groupbox::think( ) {
-	return m_children.think( m_parent );
+	return m_children.think( this );
 }
 
 void gui::objects::groupbox::on_add_child( const base_ptr& child ) {

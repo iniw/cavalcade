@@ -59,7 +59,7 @@ void gui::objects::tab::render( ) const {
 	if ( active )
 		// NOTE(wini): the expand is a bit of a hack because our dynamic and static area are the same
 		// so we need to accout for that
-		return m_children.render( m_static_area.expand( 1 ), m_parent );
+		return m_children.render( m_static_area.expand( 1 ), this );
 }
 
 bool gui::objects::tab::think( ) {
@@ -72,7 +72,7 @@ bool gui::objects::tab::think( ) {
 		set_active( );
 
 	if ( is_active( ) )
-		if ( m_children.think( m_parent ) )
+		if ( m_children.think( this ) )
 			active = true;
 
 	return active;

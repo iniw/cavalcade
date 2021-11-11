@@ -1,6 +1,6 @@
 #include "base.hpp"
 
-void gui::objects::base_object::identify( const parent_raw_ptr parent ) {
+void gui::objects::base_object::identify( base_parent* parent ) {
 	m_abs_idx = s_object_count++;
 
 	if ( parent && parent->m_children.size( ) )
