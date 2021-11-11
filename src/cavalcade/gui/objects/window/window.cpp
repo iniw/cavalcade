@@ -16,6 +16,9 @@ gui::objects::window::window( std::string_view name, std::string_view label, con
 	auto center   = ( g_render.get_screen_size( ) - m_size ) / 2;
 	m_static_area = render::rect( center[ X ], center[ Y ], m_size[ X ], m_size[ Y ] );
 
+	// account for outline
+	m_static_area = m_static_area.shrink( 1 );
+
 	render::size label_size = g_render.text_size< render::font::MENU >( m_label );
 
 	m_dynamic_area = m_static_area.shrink( general::padding::margin );
@@ -46,7 +49,7 @@ void gui::objects::window::render( ) const {
 
 	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
 
-	return m_children.render( m_dynamic_area.expand( 1 ), this );
+	return m_children.render( m_dynamic_area, this );
 }
 
 // TODO(wini): resizing

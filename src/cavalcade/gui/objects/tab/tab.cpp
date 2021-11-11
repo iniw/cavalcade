@@ -12,7 +12,7 @@ void gui::objects::tab::init( ) {
 	auto& info = s_info[ m_parent->m_id ];
 
 	// add us to the list
-	info.m_list.emplace_back( reinterpret_cast< tab* >( m_parent ) );
+	info.m_list.emplace_back( dynamic_cast< tab* >( this ) );
 
 	// our areas will mimic those of our parent's
 	m_static_area  = m_parent->m_dynamic_area;
@@ -44,6 +44,8 @@ void gui::objects::tab::init( ) {
 	// TODO(wini): make a function that wraps this operation of adding to an axis and subtracting from the size's equivalent
 	m_dynamic_area[ Y ] += personal::sizing::button_height + general::padding::obj_margin;
 	m_dynamic_area[ HEIGHT ] -= personal::sizing::button_height + general::padding::obj_margin;
+	m_dynamic_area[ X ] += general::padding::margin;
+	m_dynamic_area[ WIDTH ] -= general::padding::margin * 2;
 
 	m_cursor = m_dynamic_area.pos( );
 }
@@ -52,14 +54,12 @@ void gui::objects::tab::render( ) const {
 	bool active      = is_active( );
 	auto outline_col = active ? general::pallete::highlight : general::pallete::secondary;
 
-	g_render.rectangle( m_button_area, general::pallete::primary ).outline( outline_col );
+	g_render.rectangle( m_button_area.shrink( 1 ), general::pallete::primary ).outline( outline_col );
 
 	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
 
 	if ( active )
-		// NOTE(wini): the expand is a bit of a hack because our dynamic and static area are the same
-		// so we need to accout for that
-		return m_children.render( m_static_area.expand( 1 ), this );
+		m_children.render( m_dynamic_area, this );
 }
 
 bool gui::objects::tab::think( ) {

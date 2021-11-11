@@ -38,6 +38,9 @@ void gui::objects::slider< T >::init( ) {
 	this->m_dynamic_area.pos( { cursor[ X ], cursor[ Y ] + label_size[ Y ] + personal::padding::label } );
 	this->m_dynamic_area.size( { this->m_parent->m_dynamic_area[ WIDTH ], personal::sizing::height } );
 
+	// account for outline
+	this->m_dynamic_area = this->m_dynamic_area.shrink( 1 );
+
 	this->m_label_pos = cursor;
 
 	if constexpr ( std::is_floating_point_v< T > )

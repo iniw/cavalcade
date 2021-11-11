@@ -28,7 +28,8 @@ bool gui::objects::scrollbar::think( ) {
 
 	if ( m_dragging && mouse_delta )
 		scroll( mouse_delta );
-	else if ( mouse_scroll && m_parent->m_flags.test( flags::HOVERED ) )
+	// we can't rely on the HOVERED flag because objects may override it
+	else if ( mouse_scroll && g_io.mouse_pos( ).in_rect( m_parent->m_dynamic_area ) )
 		scroll( mouse_scroll );
 
 	m_previous_mouse_pos_y = mouse_pos[ Y ];
@@ -37,7 +38,7 @@ bool gui::objects::scrollbar::think( ) {
 }
 
 void gui::objects::scrollbar::scroll( i32 delta ) {
-	// update our bounds
+	// calculate the bounds
 	math::v2i our_bounds{ m_static_area[ Y ], m_static_area[ Y ] + m_static_area[ HEIGHT ] };
 	math::v2i parent_bounds{ m_parent->m_dynamic_area[ Y ], m_parent->m_dynamic_area[ Y ] + m_parent->m_dynamic_area[ HEIGHT ] };
 	math::v2i max_bounds = our_bounds - parent_bounds;
@@ -57,6 +58,10 @@ void gui::objects::scrollbar::scroll( i32 delta ) {
 }
 
 void gui::objects::scrollbar::update_height( ) {
+	m_static_area[ Y ]     = m_parent->m_dynamic_area[ Y ];
+	m_static_area[ X ]     = m_parent->m_static_area[ X ] + m_parent->m_static_area[ WIDTH ] - general::padding::margin;
+	m_static_area[ WIDTH ] = general::padding::margin;
+
 	auto cursor_y = m_parent->get_cursor( )[ Y ];
 	// the total height of all elements
 	auto total_height = cursor_y - m_parent->m_dynamic_area[ Y ];

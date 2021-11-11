@@ -2,9 +2,9 @@
 #include "objects/objects.hpp"
 
 void gui::impl::init( ) {
-	auto window = objects::window::make( "main", "cavalde_gui", { 300, 300 } );
+	auto window = objects::window::make( "main", "cavalcade_menu", { 300, 300 } );
 
-	auto gb = window->add< objects::groupbox >( "group1", "test", 50 );
+	auto gb = window->add< objects::groupbox >( "group1", "test", 70 );
 	{
 		gb->add< objects::checkbox >( "check1", "check 1" );
 		gb->add< objects::checkbox >( "check2", "check 2" );
@@ -18,20 +18,17 @@ void gui::impl::init( ) {
 		gb->add< objects::slider< f32 > >( "slider9", "slider 9", 0.f, 100.f, 5 );
 	}
 
-	auto gb2 = window->add< objects::groupbox >( "group2", "test 2", 60 );
+	auto gb3 = window->add< objects::groupbox >( "group2", "test 3", 90 );
 	{
-		gb2->add< objects::checkbox >( "check2", "check 2" );
-		gb2->add< objects::slider< i32 > >( "slider2", "slider 2", 0, 100 );
-		gb2->add< objects::slider< f32 > >( "slider3", "slider 3", 0.f, 100.f );
-		gb2->add< objects::slider< f32 > >( "slider4", "slider 4", 0.f, 100.f, 5 );
-		gb2->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
-	}
-
-	auto gb3 = window->add< objects::groupbox >( "group2", "test 3", 60 );
-	{
-		gb3->add< objects::checkbox >( "check2", "check 2" );
-		gb3->add< objects::slider< i32 > >( "slider2", "slider 2", 0, 100 );
-		gb3->add< objects::slider< f32 > >( "slider3", "slider 3", 0.f, 100.f );
+		auto tab1 = gb3->add< objects::tab >( "tab1", "tab" );
+		{ }
+		auto tab2 = gb3->add< objects::tab >( "tab2", "tab" );
+		{
+			tab2->add< objects::checkbox >( "check3", "check 2" );
+			tab2->add< objects::slider< i32 > >( "slider4", "slider 2", 0, 100 );
+			tab2->add< objects::slider< f32 > >( "slider5", "slider 3", 0.f, 100.f );
+			tab2->add< objects::slider< f32 > >( "slider6", "slider 4", 0.f, 100.f );
+		}
 	}
 
 	m_windows.emplace_back( window );

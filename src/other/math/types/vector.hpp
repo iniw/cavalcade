@@ -237,7 +237,7 @@ namespace math {
 		}
 
 		// NOTE(wini): these aren't animated.
-		constexpr vec_t shrink( const T& amt ) {
+		constexpr vec_t shrink( const T& amt ) const {
 			static_assert( N == 4, "shrink requires a 4 dimensional vector" );
 
 			vec_t vec = *this;
