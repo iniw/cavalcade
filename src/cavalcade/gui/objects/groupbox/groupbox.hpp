@@ -20,6 +20,6 @@ namespace gui::objects {
 
 		bool think( ) override;
 
-		void on_add_child( base_ptr child ) override;
+		void on_add_child( const base_ptr& child ) override;
 	};
 } // namespace gui::objects

@@ -1,7 +1,7 @@
 #pragma once
 
 // just to make accessing vector elements less annoying
-enum
+enum vec_accessors
 {
 	X = 0,
 	Y,

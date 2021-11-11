@@ -9,6 +9,7 @@ set(SOURCES
     src/cavalcade/gui/objects/checkbox/checkbox.cpp
     src/cavalcade/gui/objects/column/column.cpp
     src/cavalcade/gui/objects/groupbox/groupbox.cpp
+    src/cavalcade/gui/objects/scrollbar/scrollbar.cpp
     src/cavalcade/gui/objects/tab/tab.cpp
     src/cavalcade/gui/objects/window/window.cpp
     # gui

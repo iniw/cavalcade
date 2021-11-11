@@ -1,18 +1,26 @@
 #pragma once
 
+#include "../scrollbar/scrollbar.hpp"
+
 namespace gui::objects {
+	// evil forward-decl... close ur eyes..
+	struct scrollbar;
+
 	struct base_parent : public base_object, std::enable_shared_from_this< base_parent > {
 	protected:
 
 		// the position used to place new children
 		render::point m_cursor;
 
-
 	public:
+
+		// NOTE(wini): we could look into hiding this under another base layer
+		// since maybe not all parents will use it but i think its fine like this
+		std::shared_ptr< scrollbar > m_scrollbar;
 
 		// our children manager
 		managers::children m_children;
-		
+
 		virtual ~base_parent( ) = default;
 
 		// returns a shared_ptr instance of ourselves
@@ -42,7 +50,7 @@ namespace gui::objects {
 		// it might be of interest to most objects that inherent from base_parent to automatically
 		// initialize their scrollbar as soon as a child's area gets past it's own, BUT, that might not apply to
 		// every object, e.g: tabs. so until i figure out something smarter this is going to stay here
-		virtual void on_add_child( base_ptr child );
+		virtual void on_add_child( const base_ptr& child );
 	};
 } // namespace gui::objects
 

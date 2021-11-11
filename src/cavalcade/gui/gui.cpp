@@ -4,13 +4,23 @@
 void gui::impl::init( ) {
 	auto window = objects::window::make( "main", "cavalde_gui", { 300, 300 } );
 
-	auto gb = window->add< objects::groupbox >( "group1", "test", -1 );
+	auto gb = window->add< objects::groupbox >( "group1", "test", 50 );
 	auto c1 = gb->add< objects::checkbox >( "check1", "check 1" );
 	{
 		gb->add< objects::checkbox >( "check2", "check 2" );
 		gb->add< objects::slider< i32 > >( "slider2", "slider 2", 0, 100 );
 		gb->add< objects::slider< f32 > >( "slider3", "slider 3", 0.f, 100.f );
 		gb->add< objects::slider< f32 > >( "slider4", "slider 4", 0.f, 100.f, 5 );
+		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
+	}
+
+	auto gb2 = window->add< objects::groupbox >( "group2", "test2 2", 60 );
+	{
+		gb2->add< objects::checkbox >( "check2", "check 2" );
+		gb2->add< objects::slider< i32 > >( "slider2", "slider 2", 0, 100 );
+		gb2->add< objects::slider< f32 > >( "slider3", "slider 3", 0.f, 100.f );
+		gb2->add< objects::slider< f32 > >( "slider4", "slider 4", 0.f, 100.f, 5 );
+		gb2->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
 	}
 
 	m_windows.emplace_back( window );

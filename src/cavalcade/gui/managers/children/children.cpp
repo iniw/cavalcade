@@ -1,19 +1,25 @@
 #include "../../objects/base/base.hpp"
+#include "../../objects/scrollbar/scrollbar.hpp"
 
 u32 gui::managers::children::size( ) {
 	return m_list.size( );
 }
 
-void gui::managers::children::render( const render::rect& area ) {
+void gui::managers::children::render( const render::rect& area, const objects::parent_ptr& parent ) {
 	g_render.push_clip_rect( area );
+
 	// iterate our children in reverse, guarantees that the most recently interacted-with object renders last
 	for ( auto& child : m_list | std::views::reverse )
 		child->render( );
 
 	g_render.pop_clip_rect( );
+
+		// the scrollbar should always be the last one to render, it has the highest priority in the list
+	if ( parent->m_scrollbar )
+		parent->m_scrollbar->render( );
 }
 
-bool gui::managers::children::think( ) {
+bool gui::managers::children::think( const objects::parent_ptr& parent ) {
 	bool active = false;
 
 	for ( auto& child : m_list ) {
