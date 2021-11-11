@@ -12,10 +12,6 @@ namespace gui::objects {
 
 		i32 m_previous_mouse_pos_y;
 
-		f32 m_ratio;
-
-		math::v2i m_max_bounds;
-
 	public:
 
 		scrollbar( ) = default;

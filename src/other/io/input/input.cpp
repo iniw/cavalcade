@@ -92,7 +92,7 @@ BOOL io::input::think( UINT msg, WPARAM w_param, LPARAM l_param ) {
 		m_mouse.pos = math::v2i( GET_X_LPARAM( l_param ), GET_Y_LPARAM( l_param ) );
 		break;
 	case WM_MOUSEWHEEL:
-		m_mouse.scroll_amt = GET_WHEEL_DELTA_WPARAM( w_param ) / ( WHEEL_DELTA / 4 );
+		m_mouse.scroll_amt = -( GET_WHEEL_DELTA_WPARAM( w_param ) / ( WHEEL_DELTA / 4 ) );
 		break;
 	case WM_KILLFOCUS:
 	case WM_SETFOCUS:

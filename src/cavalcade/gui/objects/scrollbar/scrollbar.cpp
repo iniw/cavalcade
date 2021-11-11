@@ -37,8 +37,15 @@ bool gui::objects::scrollbar::think( ) {
 }
 
 void gui::objects::scrollbar::scroll( i32 delta ) {
-	auto bar_delta = std::clamp( delta, -m_max_bounds[ 0 ], -m_max_bounds[ 1 ] );
-	auto mod_delta = static_cast< f32 >( -bar_delta ) * m_ratio;
+	// update our bounds
+	math::v2i our_bounds{ m_static_area[ Y ], m_static_area[ Y ] + m_static_area[ HEIGHT ] };
+	math::v2i parent_bounds{ m_parent->m_dynamic_area[ Y ], m_parent->m_dynamic_area[ Y ] + m_parent->m_dynamic_area[ HEIGHT ] };
+	math::v2i max_bounds = our_bounds - parent_bounds;
+
+	auto ratio = static_cast< f32 >( m_parent->m_dynamic_area[ HEIGHT ] ) / static_cast< f32 >( m_static_area[ HEIGHT ] );
+
+	auto bar_delta = std::clamp( delta, -max_bounds[ 0 ], -max_bounds[ 1 ] );
+	auto mod_delta = static_cast< f32 >( -bar_delta ) * ratio;
 
 	for ( auto& child : m_parent->m_children ) {
 		if ( child.get( ) == this ) {
@@ -57,10 +64,4 @@ void gui::objects::scrollbar::update_height( ) {
 	auto parent_ratio = static_cast< f32 >( m_parent->m_dynamic_area[ HEIGHT ] ) / static_cast< f32 >( total_height );
 	// our height should be the parent's height x that ratio
 	m_static_area[ HEIGHT ] = static_cast< f32 >( m_parent->m_dynamic_area[ HEIGHT ] ) * parent_ratio;
-	// update our ratio
-	m_ratio = static_cast< f32 >( m_parent->m_dynamic_area[ HEIGHT ] ) / static_cast< f32 >( m_static_area[ HEIGHT ] );
-	// update our bounds
-	math::v2i our_bounds{ m_static_area[ Y ], m_static_area[ Y ] + m_static_area[ HEIGHT ] };
-	math::v2i parent_bounds{ m_parent->m_dynamic_area[ Y ], m_parent->m_dynamic_area[ Y ] + m_parent->m_dynamic_area[ HEIGHT ] };
-	m_max_bounds = our_bounds - parent_bounds;
 }
