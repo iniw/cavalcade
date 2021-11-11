@@ -8,7 +8,7 @@ namespace gui::objects {
 
 		void init( ) override;
 
-		void render( ) override;
+		void render( ) const override;
 
 		bool think( ) override;
 

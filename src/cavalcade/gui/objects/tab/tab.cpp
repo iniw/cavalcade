@@ -12,7 +12,7 @@ void gui::objects::tab::init( ) {
 	auto& info = s_info[ m_parent->m_id ];
 
 	// add us to the list
-	info.m_list.emplace_back( get< tab >( ) );
+	info.m_list.emplace_back( reinterpret_cast< tab* >( m_parent ) );
 
 	// our areas will mimic those of our parent's
 	m_static_area  = m_parent->m_dynamic_area;
@@ -48,7 +48,7 @@ void gui::objects::tab::init( ) {
 	m_cursor = m_dynamic_area.pos( );
 }
 
-void gui::objects::tab::render( ) {
+void gui::objects::tab::render( ) const {
 	bool active      = is_active( );
 	auto outline_col = active ? general::pallete::highlight : general::pallete::secondary;
 
@@ -59,7 +59,7 @@ void gui::objects::tab::render( ) {
 	if ( active )
 		// NOTE(wini): the expand is a bit of a hack because our dynamic and static area are the same
 		// so we need to accout for that
-		return m_children.render( m_static_area.expand( 1 ), get( ) );
+		return m_children.render( m_static_area.expand( 1 ), m_parent );
 }
 
 bool gui::objects::tab::think( ) {
@@ -72,7 +72,7 @@ bool gui::objects::tab::think( ) {
 		set_active( );
 
 	if ( is_active( ) )
-		if ( m_children.think( get( ) ) )
+		if ( m_children.think( m_parent ) )
 			active = true;
 
 	return active;

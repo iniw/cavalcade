@@ -51,7 +51,7 @@ void gui::objects::slider< T >::init( ) {
 }
 
 template< math::Number T >
-void gui::objects::slider< T >::render( ) {
+void gui::objects::slider< T >::render( ) const {
 	g_render.rectangle( this->m_dynamic_area, general::pallete::primary ).outline( general::pallete::secondary );
 
 	f32 value_width = *this->m_var / static_cast< f32 >( m_max ) * this->m_dynamic_area[ WIDTH ];

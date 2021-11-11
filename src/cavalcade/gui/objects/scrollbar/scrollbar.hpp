@@ -16,11 +16,11 @@ namespace gui::objects {
 
 		scrollbar( ) = default;
 
-		void identify( const parent_ptr& parent ) override;
+		void identify( const parent_raw_ptr parent ) override;
 
 		void init( ) override;
 
-		void render( ) override;
+		void render( ) const override;
 
 		bool think( ) override;
 

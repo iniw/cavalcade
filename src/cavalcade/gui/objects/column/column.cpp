@@ -16,15 +16,15 @@ void gui::objects::column::init( ) {
 }
 
 // we don't care about rendering/thinking, that is handled by our parent
-void gui::objects::column::render( ) {
-	return m_children.render( m_parent->m_static_area, get( ) );
+void gui::objects::column::render( ) const {
+	return m_children.render( m_parent->m_static_area, m_parent );
 }
 
 bool gui::objects::column::think( ) {
-	return m_children.think( get( ) );
+	return m_children.think( m_parent );
 }
 
-void gui::objects::column::identify( const parent_ptr& parent ) {
+void gui::objects::column::identify( const parent_raw_ptr parent ) {
 	m_abs_idx = s_object_count++;
 	m_parent  = parent;
 

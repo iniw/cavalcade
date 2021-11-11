@@ -22,7 +22,7 @@ void gui::objects::base_parent::on_add_child( const base_ptr& child ) {
 	if ( gone_past ) {
 		if ( !m_scrollbar ) { // create our scrollbar if we don't have one
 			m_scrollbar = std::make_shared< scrollbar >( );
-			m_scrollbar->identify( get( ) );
+			m_scrollbar->identify( this );
 			m_scrollbar->init( );
 			m_children.add( m_scrollbar );
 		} else // update it if we already do

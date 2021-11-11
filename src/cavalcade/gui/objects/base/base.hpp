@@ -19,7 +19,8 @@ namespace gui::objects {
 	using base_ptr = std::shared_ptr< base_object >;
 
 	struct base_parent;
-	using parent_ptr = std::shared_ptr< base_parent >;
+	using parent_raw_ptr = base_parent*;
+	using parent_ptr     = std::shared_ptr< base_parent >;
 
 	template< typename T >
 	concept Object = std::is_base_of_v< base_object, T > && !std::is_same_v< T, base_object >;
