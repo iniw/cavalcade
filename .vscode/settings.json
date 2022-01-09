@@ -80,7 +80,8 @@
         "*.rh": "cpp",
         "bitset": "cpp",
         "source_location": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "any": "cpp"
     },
     "todo-tree.general.tags": [
         "BUG",

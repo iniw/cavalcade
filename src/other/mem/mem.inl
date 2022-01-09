@@ -10,3 +10,9 @@ inline T mem::call_v_func( address thisptr, VA... args ) {
 	using FN = T( __thiscall* )( unk, decltype( args )... );
 	return thisptr.to< FN* >( )[ I ]( thisptr, args... );
 }
+
+template< typename T, u32 I, typename... VA >
+inline T mem::call_v_func_cdecl( address thisptr, VA... args ) {
+	using FN = T( __cdecl* )( unk, decltype( args )... );
+	return thisptr.to< FN* >( )[ I ]( thisptr, args... );
+}

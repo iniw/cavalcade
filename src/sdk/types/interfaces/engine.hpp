@@ -10,6 +10,10 @@ namespace sdk::interfaces {
 
 	public:
 
+		bool is_in_game( ) {
+			return mem::call_v_func< bool, 26 >( this );
+		}
+
 		math::v2i get_screen_size( ) {
 			i32 w, h;
 			get_screen_size( w, h );

@@ -53,6 +53,9 @@ void mem::impl::add_addresses( ) {
 	{ // client.dll
 
 		ADD_ADDRESS( CLIENT_DLL, "CHLClient::FrameStageNotify", get_v_func( g_csgo.m_client, 37 ) );
+		ADD_PATTERN( CLIENT_DLL, "CHLClient::LevelInitPreEntity", "55 8B EC 83 E4 F8 83 EC 30 80 3D" );
+		ADD_PATTERN( CLIENT_DLL, "CHLClient::LevelInitPostEntity", "55 8B EC 83 EC 10 53 56 8B 35 ? ? ? ? 57 FF D6 0F" );
+		ADD_PATTERN( CLIENT_DLL, "PushNotice", "55 8B EC 83 E4 F8 B8 ? ? ? ? E8 ? ? ? ? 53 8B D9 8B 0D ? ? ? ? 56 57 81 F9 ? ? ? ? 75 0C A1" );
 		ADD_ADDRESS( CLIENT_DLL, "CEngineClient::IsHLTV", get_v_func( g_csgo.m_engine, 93 ) );
 
 		{ // C_BaseEntity

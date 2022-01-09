@@ -21,6 +21,7 @@ set(SOURCES
     # hack - other
     src/cavalcade/hack/other/prediction.cpp
     # hooks - functions
+    src/cavalcade/hooks/functions/push_notice.cpp
     src/cavalcade/hooks/functions/base_player.cpp
     src/cavalcade/hooks/functions/chlc_client.cpp
     src/cavalcade/hooks/functions/d3d9_device.cpp

@@ -33,6 +33,17 @@ namespace cavalcade {
 		struct chlc_client {
 			using frame_stage_notify_fn = void( __thiscall* )( unk, sdk::frame_stage );
 			static void __fastcall frame_stage_notify( unk ecx, unk, sdk::frame_stage stage );
+
+			using level_init_pre_entity_fn = void( __stdcall* )( const char* );
+			static void __stdcall level_init_pre_entity( const char* name );
+
+			using level_init_post_entity_fn = void( __cdecl* )( );
+			static void __cdecl level_init_post_entity( );
+		};
+
+		struct push_notice_ {
+			using push_notice_fn = void( __fastcall* )( unk, unk, const char*, int, const char* );
+			static void __fastcall push_notice( unk, unk, const char*, int, const char* );
 		};
 
 		struct leaf_system {

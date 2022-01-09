@@ -39,6 +39,9 @@ namespace mem {
 
 	template< typename T, u32 I, typename... VA >
 	inline T call_v_func( address thisptr, VA... args );
+
+	template< typename T, u32 I, typename... VA >
+	inline T call_v_func_cdecl( address thisptr, VA... args );
 } // namespace mem
 
 inline mem::impl g_mem;

@@ -1,7 +1,11 @@
 #pragma once
 
+#include "../../other/http/http.hpp"
+
 #include "../../other/other.hpp"
 #include "../../sdk/sdk.hpp"
+
+#include <shared_mutex>
 
 namespace cavalcade {
 	enum flags
@@ -14,6 +18,11 @@ namespace cavalcade {
 	};
 
 	struct ctx {
+		ctx( );
+
+		httplib::Client m_translator;
+		std::vector< std::string > m_pending_translations;
+		std::shared_mutex m_translations_mutex;
 		sdk::cs_player* m_local;
 		sdk::user_cmd* m_cmd;
 
