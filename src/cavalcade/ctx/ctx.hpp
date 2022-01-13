@@ -21,6 +21,7 @@ namespace cavalcade {
 		ctx( );
 
 		httplib::Client m_translator;
+		bool m_translator_initialized;
 		std::vector< std::string > m_pending_translations;
 		std::shared_mutex m_translations_mutex;
 		sdk::cs_player* m_local;

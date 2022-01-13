@@ -1,12 +1,7 @@
 #include "ctx.hpp"
 
-// there's limited requests, check here :https://github.com/LibreTranslate/LibreTranslate for alt mirrors
-cavalcade::ctx::ctx( ) : m_translator( "https://translate.mentality.rip" ) {
-	MOCKING_TRY;
-
-	MOCK m_translator.is_valid( );
-
-	MOCKING_CATCH( );
+cavalcade::ctx::ctx( ) : m_translator( "http://localhost:5000" ) {
+	m_translator_initialized = m_translator.is_valid( );
 }
 
 bool cavalcade::ctx::init( ) {
