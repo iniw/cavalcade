@@ -22,9 +22,11 @@ set(SOURCES
     src/cavalcade/hack/other/prediction.cpp
     # hooks - functions
     src/cavalcade/hooks/functions/push_notice.cpp
+    src/cavalcade/hooks/functions/client_cmd.cpp
     src/cavalcade/hooks/functions/base_player.cpp
     src/cavalcade/hooks/functions/chlc_client.cpp
     src/cavalcade/hooks/functions/d3d9_device.cpp
+    src/cavalcade/hooks/functions/on_steam_friend_message.cpp
     # hooks
     src/cavalcade/hooks/hooks.cpp
 

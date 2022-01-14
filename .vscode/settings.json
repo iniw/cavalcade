@@ -81,7 +81,18 @@
         "bitset": "cpp",
         "source_location": "cpp",
         "variant": "cpp",
-        "any": "cpp"
+        "any": "cpp",
+        "regex": "cpp",
+        "condition_variable": "cpp",
+        "csignal": "cpp",
+        "mutex": "cpp",
+        "numeric": "cpp",
+        "random": "cpp",
+        "ranges": "cpp",
+        "set": "cpp",
+        "shared_mutex": "cpp",
+        "span": "cpp",
+        "valarray": "cpp"
     },
     "todo-tree.general.tags": [
         "BUG",

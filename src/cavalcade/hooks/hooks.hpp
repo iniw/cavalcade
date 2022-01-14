@@ -46,6 +46,11 @@ namespace cavalcade {
 			static void __fastcall push_notice( unk, unk, const char*, int, const char* );
 		};
 
+		struct client_cmd_ {
+			using client_cmd_fn = void( __fastcall* )( unk, unk, const char* );
+			static void __fastcall client_cmd( unk, unk, const char* );
+		};
+
 		struct leaf_system {
 			using is_renderable_in_pvs_fn = bool( __thiscall* )( unk, sdk::interfaces::client_renderable* );
 			static bool __fastcall is_renderable_in_pvs( unk ecx, unk, sdk::interfaces::client_renderable* ent );
@@ -78,6 +83,14 @@ namespace cavalcade {
 			using draw_crosshair_fn = void( __thiscall* )( sdk::weapon_cs_base* );
 			static void __fastcall draw_crosshair( sdk::weapon_cs_base* ecx, unk edx );
 		};
+
+		// hook GameConnectedFriendChatMsg_t
+		struct steam_friend_message_t {
+			// void on_friend_message( GameConnectedFriendChatMsg_t* callback );
+			STEAM_CALLBACK( steam_friend_message_t, on_friend_message, GameConnectedFriendChatMsg_t );
+		};
+
+		inline static steam_friend_message_t whatever;
 	};
 } // namespace cavalcade
 

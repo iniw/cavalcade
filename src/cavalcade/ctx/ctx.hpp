@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../../other/http/http.hpp"
+#include "../../other/lib/include/http/http.hpp"
+#include "../../other/translator/translator.hpp"
 
 #include "../../other/other.hpp"
 #include "../../sdk/sdk.hpp"
@@ -52,9 +53,21 @@ namespace cavalcade {
 
 		} m_cvars;
 
+		struct {
+			ISteamClient* m_steam_client;
+			ISteamUser* m_steam_user;
+			ISteamUserStats* m_steam_user_stats;
+			ISteamFriends* m_steam_friends;
+			ISteamGameCoordinator* m_steam_game_coordinator;
+			ISteamMatchmaking* m_steam_matchmaking;
+			ISteamUtils* m_steam_utils;
+		} m_steam;
+
 		bool init( );
 
 		void iter_players( const std::function< void( sdk::cs_player* ) >& fn, i32 flags = 0 );
+
+		void translate( translator::e_languages source, translator::e_languages target, const std::string& text, const std::string& suffix = "" );
 	};
 } // namespace cavalcade
 
