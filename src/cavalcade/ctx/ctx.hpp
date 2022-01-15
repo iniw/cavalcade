@@ -32,6 +32,7 @@ namespace cavalcade {
 			sdk::cvar* cl_updaterate;
 			sdk::cvar* sv_minupdaterate;
 			sdk::cvar* sv_maxupdaterate;
+			sdk::cvar* viewmodel_offset_z;
 
 			sdk::cvar* cl_interp;
 			sdk::cvar* cl_interp_ratio;
