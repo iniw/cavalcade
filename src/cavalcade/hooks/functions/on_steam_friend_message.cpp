@@ -13,11 +13,38 @@ void cavalcade::hooks::steam_friend_message_t::on_friend_message( GameConnectedF
 		g_ctx.m_steam.m_steam_friends->GetFriendMessage( callback->m_steamIDUser, callback->m_iMessageID, msg, 4096, &chat_type );
 
 		if ( chat_type == EChatEntryType::k_EChatEntryTypeChatMsg ) {
+			auto message_interp = std::string_view{ ( const char* )msg };
+
+			std::optional< std::string > image = std::nullopt;
+			// https://steamuserimages-a.akamaihd.net/ugc/1
+			auto find  = message_interp.find( "https://steamuserimages-a.akamaihd.net/ugc/" );
+			size_t end = 0;
+			if ( find != std::string::npos ) {
+				auto end = message_interp.find_first_of( ' ', find );
+				if ( end > message_interp.size( ) ) {
+					end = message_interp.size( );
+				}
+
+				auto make = std::string( message_interp.begin( ) + find, message_interp.begin( ) + end );
+
+				if ( make.ends_with( "/" ) ) {
+					image = make;
+				}
+			}
+
 			g_ctx.m_last_friend_to_message = callback->m_steamIDUser;
 			auto text                      = io::format( "*<font color=\"#00FF00\">{}</font>*: {}", friend_name, ( const char* )msg );
 
 			// hack, we want prefix to translation
 			g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0, "<<<NO_TRANSLATE>>> %s", text.c_str( ) );
+
+			if ( image.has_value( ) ) {
+				g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
+					0, 0, "<<<NO_TRANSLATE>>> [<font color=\"#00FF00\">FRIEND</font>] Image from *<font color=\"#00FF00\">%s</font>*...",
+					friend_name );
+				auto fmt = io::format( "<<<NO_TRANSLATE>>> <img src=\"{}\"></img>", image.value( ) );
+				g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0, fmt.c_str( ) );
+			}
 
 			auto ttext = io::format( "*{}*: {}", friend_name, ( const char* )msg );
 
