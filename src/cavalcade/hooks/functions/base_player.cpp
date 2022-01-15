@@ -17,9 +17,7 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 		ecx->set_local_view_angles( cmd->m_view_angles );
 
 	// masturbation mode
-	g_ctx.m_cvars.viewmodel_offset_z->set_value( sin( g_csgo.m_globals->m_curtime * 2 ) * 2.f );
-
-	g_entity_cacher.for_each( []( auto& p ) { g_io.log( "{}", p.get_name( ) ); } );
+	g_ctx.m_cvars.viewmodel_offset_z->set_value( sin( g_csgo.m_globals->m_curtime * 3 ) * 2.f );
 
 	// g_hack.m_prediction.update( );
 

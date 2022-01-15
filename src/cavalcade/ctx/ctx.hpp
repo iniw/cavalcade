@@ -18,6 +18,7 @@ namespace cavalcade {
 		std::shared_mutex m_translations_mutex;
 		sdk::player m_local;
 		sdk::user_cmd* m_cmd;
+		std::optional< CSteamID > m_last_friend_to_message;
 
 		struct {
 			sdk::cvar* cl_updaterate;

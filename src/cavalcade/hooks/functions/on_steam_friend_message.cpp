@@ -11,13 +11,17 @@ void cavalcade::hooks::steam_friend_message_t::on_friend_message( GameConnectedF
 		auto chat_type   = EChatEntryType::k_EChatEntryTypeInvalid;
 
 		g_ctx.m_steam.m_steam_friends->GetFriendMessage( callback->m_steamIDUser, callback->m_iMessageID, msg, 4096, &chat_type );
+
 		if ( chat_type == EChatEntryType::k_EChatEntryTypeChatMsg ) {
-			auto text = io::format( "*{}*: {}", friend_name, ( const char* )msg );
+			g_ctx.m_last_friend_to_message = callback->m_steamIDUser;
+			auto text                      = io::format( "*<font color=\"#00FF00\">{}</font>*: {}", friend_name, ( const char* )msg );
 
 			// hack, we want prefix to translation
-			g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0, "<<<NO_TRANSLATE>>>%s", text.c_str( ) );
+			g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0, "<<<NO_TRANSLATE>>> %s", text.c_str( ) );
 
-			g_ctx.translate( translator::e_languages::ENGLISH, translator::e_languages::RUSSIAN, text, "[<font color=\"#00FF00\">FRIEND</font>]" );
+			auto ttext = io::format( "*{}*: {}", friend_name, ( const char* )msg );
+
+			g_ctx.translate( translator::e_languages::ENGLISH, translator::e_languages::RUSSIAN, ttext, "[<font color=\"#00FF00\">FRIEND</font>]" );
 		}
 
 		free( msg );

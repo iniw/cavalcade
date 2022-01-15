@@ -4,9 +4,8 @@
 void cavalcade::hooks::client_cmd_::client_cmd( unk ecx, unk edx, const char* cmd ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< client_cmd_fn >( HASH_CT( "CEngineClient::ClientCmd" ) );
 
+	std::string_view text{ cmd };
 	if ( g_ctx.m_translator_initialized ) {
-		std::string_view text{ cmd };
-
 		constexpr const char expected_suffix[] = "say \"/translate";
 
 		// verify command
@@ -62,6 +61,25 @@ void cavalcade::hooks::client_cmd_::client_cmd( unk ecx, unk edx, const char* cm
 
 			return;
 		}
+	}
+
+	constexpr const char expected_suffix[] = "say \"/reply";
+	if ( text.starts_with( expected_suffix ) && text.ends_with( "\"" ) && text.size( ) > sizeof( expected_suffix ) + 1 ) {
+		// We run this logic regardless because we don't want to impair unrelated messages
+		const std::string_view split = std::string_view( text.begin( ) + sizeof( expected_suffix ), text.end( ) );
+
+		if ( g_ctx.m_last_friend_to_message.has_value( ) ) {
+			std::string message = std::string( split.begin( ), split.end( ) - 1 );
+			g_ctx.m_steam.m_steam_friends->ReplyToFriendMessage( g_ctx.m_last_friend_to_message.value( ), message.c_str( ) );
+			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
+				0, 0, "<<<NO_TRANSLATE>>> [<font color=\"#00FF00\">FRIEND</font>] Replied: \"%s\" to <font color=\"#00FF00\">%s</font>",
+				message.c_str( ), g_ctx.m_steam.m_steam_friends->GetFriendPersonaName( g_ctx.m_last_friend_to_message.value( ) ) );
+		} else {
+			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
+				0, 0, "<<<NO_TRANSLATE>>> [<font color=\"#00FF00\">FRIEND</font>] No messages received in this session yet" );
+		}
+
+		return;
 	}
 
 	og( ecx, edx, cmd );
