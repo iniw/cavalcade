@@ -9,15 +9,6 @@
 #include <shared_mutex>
 
 namespace cavalcade {
-	enum flags
-	{
-		LOCAL    = ( 1 << 0 ),
-		DEAD     = ( 1 << 1 ),
-		DORMANT  = ( 1 << 2 ),
-		TEAMMATE = ( 1 << 3 ),
-		IMMUNE   = ( 1 << 4 )
-	};
-
 	struct ctx {
 		ctx( );
 
@@ -25,7 +16,7 @@ namespace cavalcade {
 		bool m_translator_initialized;
 		std::vector< std::string > m_pending_translations;
 		std::shared_mutex m_translations_mutex;
-		sdk::cs_player* m_local;
+		sdk::player m_local;
 		sdk::user_cmd* m_cmd;
 
 		struct {
@@ -65,8 +56,6 @@ namespace cavalcade {
 		} m_steam;
 
 		bool init( );
-
-		void iter_players( const std::function< void( sdk::cs_player* ) >& fn, i32 flags = 0 );
 
 		void translate( translator::e_languages source, translator::e_languages target, const std::string& text, const std::string& suffix = "" );
 	};

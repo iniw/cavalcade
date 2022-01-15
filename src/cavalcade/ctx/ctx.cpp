@@ -52,39 +52,6 @@ bool cavalcade::ctx::init( ) {
 	return true;
 }
 
-void cavalcade::ctx::iter_players( const std::function< void( sdk::cs_player* ) >& fn, i32 flags ) {
-	if ( !m_local )
-		return;
-
-	for ( i32 i = 1; i <= g_csgo.m_globals->m_max_clients; i++ ) {
-		auto player = g_csgo.m_ent_list->get< sdk::cs_player* >( i );
-		if ( !player )
-			continue;
-
-		if ( !( flags & LOCAL ) )
-			if ( player == m_local )
-				continue;
-
-		if ( !( flags & DEAD ) )
-			if ( !player->is_alive( ) )
-				continue;
-
-		if ( !( flags & DORMANT ) )
-			if ( player->is_dormant( ) )
-				continue;
-
-		if ( !( flags & TEAMMATE ) )
-			if ( !player->is_enemy( m_local ) )
-				continue;
-
-		if ( !( flags & IMMUNE ) )
-			if ( player->is_immune( ) )
-				continue;
-
-		fn( player );
-	}
-}
-
 void cavalcade::ctx::translate( translator::e_languages source, translator::e_languages target, const std::string& text, const std::string& suffix ) {
 	std::thread translation_thread(
 		[ this ]( translator::e_languages source, translator::e_languages target, std::string text, std::string suffix ) {

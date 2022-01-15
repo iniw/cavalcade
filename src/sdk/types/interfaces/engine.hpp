@@ -1,5 +1,7 @@
 #pragma once
 
+#include "auxiliary/player_info.hpp"
+
 namespace sdk::interfaces {
 	struct steam_api_context_t {
 		ISteamClient* m_steam_client;
@@ -34,7 +36,21 @@ namespace sdk::interfaces {
 			return mem::call_v_func< void, 5, i32&, i32& >( this, w, h );
 		}
 
+		bool get_player_info( int idx, sdk::auxiliary::player_info_t* info ) {
+			return mem::call_v_func< bool, 8 >( this, idx, info );
+		}
+
 	public:
+
+		int get_local_player_index( ) {
+			return mem::call_v_func< int, 12 >( this );
+		}
+
+		sdk::auxiliary::player_info_t get_player_info( int idx ) {
+			sdk::auxiliary::player_info_t info{ };
+			get_player_info( idx, &info );
+			return info;
+		}
 
 		bool is_in_game( ) {
 			return mem::call_v_func< bool, 26 >( this );

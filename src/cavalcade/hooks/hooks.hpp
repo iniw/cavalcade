@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../ctx/ctx.hpp"
+#include "../entity_cacher/entity_cacher.hpp"
 #include "../hack/hack.hpp"
 #include "../gui/gui.hpp"
 
@@ -82,6 +83,12 @@ namespace cavalcade {
 		struct weapon_cs_base {
 			using draw_crosshair_fn = void( __thiscall* )( sdk::weapon_cs_base* );
 			static void __fastcall draw_crosshair( sdk::weapon_cs_base* ecx, unk edx );
+		};
+
+		struct entity_listener {
+			using fn = void( __fastcall* )( unk, unk, unk, sdk::handle );
+			static void __fastcall on_add_entity( unk, unk, unk, sdk::handle handle );
+			static void __fastcall on_remove_entity( unk, unk, unk, sdk::handle handle );
 		};
 
 		// hook GameConnectedFriendChatMsg_t

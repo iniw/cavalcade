@@ -16,6 +16,7 @@ set(SOURCES
     src/cavalcade/gui/gui.cpp
     # ctx
     src/cavalcade/ctx/ctx.cpp
+    src/cavalcade/entity_cacher/entity_cacher.cpp
     # cavalcade
     src/cavalcade/cavalcade.cpp
     # hack - other
@@ -27,6 +28,7 @@ set(SOURCES
     src/cavalcade/hooks/functions/chlc_client.cpp
     src/cavalcade/hooks/functions/d3d9_device.cpp
     src/cavalcade/hooks/functions/on_steam_friend_message.cpp
+    src/cavalcade/hooks/functions/entity_listener.cpp
     # hooks
     src/cavalcade/hooks/hooks.cpp
 
@@ -64,6 +66,7 @@ set(SOURCES
     src/sdk/csgo/csgo.cpp
     src/sdk/netvars/netvars.cpp
     src/sdk/entities/cs_player.cpp
+    src/sdk/entities/player.cpp
 
     # --- dllmain ---
     src/dllmain.cpp   

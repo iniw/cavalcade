@@ -9,3 +9,4 @@
 #include "cs_player.hpp"
 #include "base_attributable_item.hpp"
 #include "weapon_cs_base.hpp"
+#include "player.hpp"

@@ -8,7 +8,7 @@ void hack::other::prediction::start( ) {
 	m_backup_curtime   = g_csgo.m_globals->m_curtime;
 	m_backup_frametime = g_csgo.m_globals->m_frametime;
 
-	g_csgo.m_globals->m_curtime   = sdk::ticks_to_time( g_ctx.m_local->get_tickbase( ) );
+	g_csgo.m_globals->m_curtime   = sdk::ticks_to_time( g_ctx.m_local.get( ).get_tickbase( ) );
 	g_csgo.m_globals->m_frametime = g_csgo.m_prediction->m_engine_paused ? 0.f : g_csgo.m_globals->m_interval_per_tick;
 
 	m_backup_is_first_time_predicted = g_csgo.m_prediction->m_is_first_time_predicted;
@@ -17,8 +17,8 @@ void hack::other::prediction::start( ) {
 	g_csgo.m_prediction->m_is_first_time_predicted = false;
 	g_csgo.m_prediction->m_in_prediction           = true;
 
-	g_ctx.m_cmd->m_buttons |= g_ctx.m_local->get_button_forced( );
-	g_ctx.m_cmd->m_buttons &= ~g_ctx.m_local->get_button_disabled( );
+	g_ctx.m_cmd->m_buttons |= g_ctx.m_local.get( ).get_button_forced( );
+	g_ctx.m_cmd->m_buttons &= ~g_ctx.m_local.get( ).get_button_disabled( );
 
 	g_csgo.m_game_movement->start_track_prediction_errors( g_ctx.m_local );
 
@@ -27,22 +27,22 @@ void hack::other::prediction::start( ) {
 		if ( weapon ) {
 			auto weapon_info = weapon->get_cs_weapon_info( );
 			if ( weapon_info )
-				g_ctx.m_local->select_item( weapon_info->m_weapon_name, g_ctx.m_cmd->m_weapon_sub_type );
+				g_ctx.m_local.get( ).select_item( weapon_info->m_weapon_name, g_ctx.m_cmd->m_weapon_sub_type );
 		}
 	}
 
 	if ( g_ctx.m_cmd->m_impulse )
-		g_ctx.m_local->get_impulse( ) = g_ctx.m_cmd->m_impulse;
+		g_ctx.m_local.get( ).get_impulse( ) = g_ctx.m_cmd->m_impulse;
 
-	g_ctx.m_local->update_button_state( g_ctx.m_cmd->m_buttons );
+	g_ctx.m_local.get( ).update_button_state( g_ctx.m_cmd->m_buttons );
 
 	g_csgo.m_prediction->check_moving_ground( g_ctx.m_local, g_csgo.m_globals->m_frametime );
 
-	g_ctx.m_local->set_local_view_angles( g_ctx.m_cmd->m_view_angles );
+	g_ctx.m_local.get( ).set_local_view_angles( g_ctx.m_cmd->m_view_angles );
 
 	g_csgo.m_prediction->run_pre_think( g_ctx.m_local );
 
-	g_csgo.m_prediction->run_think( g_ctx.m_local, g_ctx.m_local->get_tickbase( ) );
+	g_csgo.m_prediction->run_think( g_ctx.m_local, g_ctx.m_local.get( ).get_tickbase( ) );
 
 	g_csgo.m_prediction->setup_move( g_ctx.m_local, g_ctx.m_cmd, g_csgo.m_move_helper, &m_move_data );
 

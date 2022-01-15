@@ -14,7 +14,7 @@ namespace sdk::interfaces {
 		virtual void post_data_update( data_update_type update_type )    = 0;
 		virtual void on_data_unchanged_in_pvs( )                         = 0;
 		virtual bool is_dormant( )                                       = 0;
-		virtual i32 get_index( ) const                                   = 0;
+		virtual i32 get_networkable_index( ) const                       = 0;
 		virtual void receive_message( i32 class_id, unk msg )            = 0;
 		virtual unk get_data_table_base_ptr( )                           = 0;
 		virtual void set_destroyed_on_recreate_entities( )               = 0;

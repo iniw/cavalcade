@@ -58,6 +58,8 @@ void mem::impl::add_addresses( ) {
 		ADD_PATTERN( CLIENT_DLL, "PushNotice", "55 8B EC 83 E4 F8 B8 ? ? ? ? E8 ? ? ? ? 53 8B D9 8B 0D ? ? ? ? 56 57 81 F9 ? ? ? ? 75 0C A1" );
 		ADD_ADDRESS( CLIENT_DLL, "CEngineClient::IsHLTV", get_v_func( g_csgo.m_engine, 93 ) );
 		ADD_ADDRESS( CLIENT_DLL, "CEngineClient::ClientCmd", get_v_func( g_csgo.m_engine, 7 ) );
+		ADD_PATTERN( CLIENT_DLL, "CEntityListener::OnAddEntity", "55 8B EC 51 8B 45 0C 53 56 8B F1 57" );
+		ADD_PATTERN( CLIENT_DLL, "CEntityListener::OnRemoveEntity", "55 8B EC 51 8B 45 0C 53 8B D9 56 57 83 F8 FF 75 07" );
 
 		{ // C_BaseEntity
 
