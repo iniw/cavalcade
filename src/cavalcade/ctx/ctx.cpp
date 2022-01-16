@@ -9,6 +9,7 @@ cavalcade::ctx::ctx( ) : m_translator( "http://localhost:5000" ) {
 bool cavalcade::ctx::init( ) {
 	MOCKING_TRY;
 
+	MOCK m_cvars.sv_cheats                       = g_csgo.m_cvars->find_var( XOR( "sv_cheats" ) );
 	MOCK m_cvars.cl_updaterate                   = g_csgo.m_cvars->find_var( XOR( "cl_updaterate" ) );
 	MOCK m_cvars.sv_minupdaterate                = g_csgo.m_cvars->find_var( XOR( "sv_minupdaterate" ) );
 	MOCK m_cvars.sv_maxupdaterate                = g_csgo.m_cvars->find_var( XOR( "sv_maxupdaterate" ) );
@@ -84,4 +85,31 @@ void cavalcade::ctx::translate( translator::e_languages source, translator::e_la
 
 	// run asynchronously
 	translation_thread.detach( );
+}
+
+bool cavalcade::ctx::go_to_checkpoint( ) {
+	auto cheats = m_cvars.sv_cheats->get_int( ) == 1;
+	if ( cheats ) {
+		if ( m_trainer.m_checkpoint.has_value( ) ) {
+			auto checkpoint = m_trainer.m_checkpoint.value( );
+			// NOTE(para): rebuild this?
+			auto fmt = io::format( "setpos {} {} {};setang {} {} {}", checkpoint.first[ 0 ], checkpoint.first[ 1 ], checkpoint.first[ 2 ],
+			                       checkpoint.second.pitch, checkpoint.second.yaw, checkpoint.second.roll );
+
+			// bruh.
+			g_csgo.m_engine->execute_client_cmd( fmt.c_str( ) );
+			return true;
+		} else {
+			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
+				0, 0,
+				"<<<NO_TRANSLATE>>> [<font color=\"#FF0000\">TRAINER</font>] Failed teleporting to checkpoint (<font "
+				"color=\"#FF0000\">No previous checkpoint</font>)..." );
+		}
+	} else {
+		g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0,
+		                                                          "<<<NO_TRANSLATE>>> [<font color=\"#FF0000\">TRAINER</font>] Failed teleporting to "
+		                                                          "checkpoint (<font color=\"#FF0000\">sv_cheats</font> was 0)..." );
+	}
+
+	return false;
 }

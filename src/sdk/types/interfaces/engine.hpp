@@ -62,6 +62,10 @@ namespace sdk::interfaces {
 			return math::v2i( w, h );
 		}
 
+		void execute_client_cmd( const char* cmd ) {
+			return mem::call_v_func< void, 108 >( this, cmd );
+		}
+
 		steam_api_context_t* get_steam_api_context( ) {
 			return mem::call_v_func< steam_api_context_t*, 185 >( this );
 		}

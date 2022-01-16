@@ -21,6 +21,7 @@ namespace cavalcade {
 		std::optional< CSteamID > m_last_friend_to_message;
 
 		struct {
+			sdk::cvar* sv_cheats;
 			sdk::cvar* cl_updaterate;
 			sdk::cvar* sv_minupdaterate;
 			sdk::cvar* sv_maxupdaterate;
@@ -55,6 +56,13 @@ namespace cavalcade {
 			ISteamMatchmaking* m_steam_matchmaking;
 			ISteamUtils* m_steam_utils;
 		} m_steam;
+
+		struct {
+			// todo make this vector and add more options
+			std::optional< std::pair< math::v3f, math::ang > > m_checkpoint;
+		} m_trainer;
+
+		bool go_to_checkpoint( );
 
 		bool init( );
 

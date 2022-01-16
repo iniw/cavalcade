@@ -91,13 +91,13 @@ namespace cavalcade {
 			static void __fastcall on_remove_entity( unk, unk, unk, sdk::handle handle );
 		};
 
-		// hook GameConnectedFriendChatMsg_t
-		struct steam_friend_message_t {
-			// void on_friend_message( GameConnectedFriendChatMsg_t* callback );
-			STEAM_CALLBACK( steam_friend_message_t, on_friend_message, GameConnectedFriendChatMsg_t );
+		struct steam {
+			// hook GameConnectedFriendChatMsg_t
+			STEAM_CALLBACK( steam, on_friend_message, GameConnectedFriendChatMsg_t );
+			// STEAM_CALLBACK( steam, on_join_server, GSClientApprove_t );
 		};
 
-		inline static steam_friend_message_t whatever;
+		inline static steam whatever;
 	};
 } // namespace cavalcade
 

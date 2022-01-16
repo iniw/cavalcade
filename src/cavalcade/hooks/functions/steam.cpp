@@ -1,7 +1,7 @@
 #include "../hooks.hpp"
 #include "../../../other/translator/translator.hpp"
 
-void cavalcade::hooks::steam_friend_message_t::on_friend_message( GameConnectedFriendChatMsg_t* callback ) {
+void cavalcade::hooks::steam::on_friend_message( GameConnectedFriendChatMsg_t* callback ) {
 	if ( !callback )
 		return;
 
@@ -54,3 +54,15 @@ void cavalcade::hooks::steam_friend_message_t::on_friend_message( GameConnectedF
 		free( msg );
 	}
 }
+
+// void cavalcade::hooks::steam::on_join_server( GSClientApprove_t* callback ) {
+// 	if ( !callback )
+// 		return;
+
+// 	// verify if join ID == owner ID
+// 	// "this will be different from m_SteamID if the game is being borrowed via Steam Family Sharing."
+// 	// NOTE(para): this can also be done with engine checks
+// 	g_ctx.m_trainer.m_on_dedicated_server = ( callback->m_SteamID == callback->m_OwnerSteamID );
+
+// 	g_io.log( "here {}", g_ctx.m_trainer.m_on_dedicated_server );
+// }
