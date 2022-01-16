@@ -72,7 +72,7 @@ void cavalcade::hooks::client_cmd_::client_cmd( unk ecx, unk edx, const char* cm
 			std::string message = std::string( split.begin( ), split.end( ) - 1 );
 			g_ctx.m_steam.m_steam_friends->ReplyToFriendMessage( g_ctx.m_last_friend_to_message.value( ), message.c_str( ) );
 			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
-				0, 0, "<<<NO_TRANSLATE>>> [<font color=\"#00FF00\">FRIEND</font>] Replied: \"%s\" to <font color=\"#00FF00\">%s</font>",
+				0, 0, "<<<NO_TRANSLATE>>> [<font color=\"#00FF00\">FRIEND</font>] Replied: \"%s\" to *<font color=\"#00FF00\">%s</font>*",
 				message.c_str( ), g_ctx.m_steam.m_steam_friends->GetFriendPersonaName( g_ctx.m_last_friend_to_message.value( ) ) );
 		} else {
 			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(

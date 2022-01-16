@@ -47,6 +47,12 @@ bool sdk::csgo::init( ) {
 	if ( !m_d3d9_device )
 		return false;
 
+	// fun fact: you can get prediction and fsn from one scan!
+	m_prediction =
+		g_mem[ CLIENT_DLL ].find_pattern( STB( "A1 ? ? ? ? B9 ? ? ? ? FF 50 14 5F C6 05" ) ).add( 0x1 ).get< interfaces::prediction* >( 1 );
+	if ( !m_prediction )
+		return false;
+
 	g_io.log( XOR( "initialized csgo" ) );
 
 	return true;
