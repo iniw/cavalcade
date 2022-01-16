@@ -22,14 +22,15 @@ void hack::other::prediction::start( ) {
 
 	g_csgo.m_game_movement->start_track_prediction_errors( g_ctx.m_local );
 
-	if ( g_ctx.m_cmd->m_weapon_select ) {
-		auto weapon = g_csgo.m_ent_list->get< sdk::weapon_cs_base* >( g_ctx.m_cmd->m_weapon_select );
-		if ( weapon ) {
-			auto weapon_info = weapon->get_cs_weapon_info( );
-			if ( weapon_info )
-				g_ctx.m_local.get( ).select_item( weapon_info->m_weapon_name, g_ctx.m_cmd->m_weapon_sub_type );
-		}
-	}
+	// NOTE(para): to investigate crash
+	// if ( g_ctx.m_cmd->m_weapon_select ) {
+	// 	auto weapon = g_csgo.m_ent_list->get< sdk::weapon_cs_base* >( g_ctx.m_cmd->m_weapon_select );
+	// 	if ( weapon ) {
+	// 		auto weapon_info = weapon->get_cs_weapon_info( );
+	// 		if ( weapon_info )
+	// 			g_ctx.m_local.get( ).select_item( weapon_info->m_weapon_name, g_ctx.m_cmd->m_weapon_sub_type );
+	// 	}
+	// }
 
 	if ( g_ctx.m_cmd->m_impulse )
 		g_ctx.m_local.get( ).get_impulse( ) = g_ctx.m_cmd->m_impulse;

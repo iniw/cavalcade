@@ -70,6 +70,8 @@ void mem::impl::add_addresses( ) {
 
 			ADD_PATTERN( CLIENT_DLL, "C_BaseEntity::SetAbsOrigin", "55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8" );
 
+			ADD_PATTERN_REL( CLIENT_DLL, "WeaponReticleKnifeShow", "E8 ? ? ? ? 84 C0 74 1C A1 ? ? ? ? " );
+
 			ADD_PATTERN_REL( CLIENT_DLL, "C_BaseEntity::SetAbsAngles", "E8 ? ? ? ? 53 8D 45 F0" );
 			ADD_PATTERN_REL( CLIENT_DLL, "C_BaseEntity::CalcAbsoluteVelocity", "E8 ? ? ? ? 83 7B 30 00" );
 			ADD_PATTERN_REL( CLIENT_DLL, "C_BaseEntity::GetGroundEntity", "E8 ? ? ? ? 8B 4C 24 14 85 C0" );

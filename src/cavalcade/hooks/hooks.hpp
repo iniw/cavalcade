@@ -91,6 +91,11 @@ namespace cavalcade {
 			static void __fastcall on_remove_entity( unk, unk, unk, sdk::handle handle );
 		};
 
+		struct sfhud {
+			using fn = bool( __fastcall* )( unk, unk );
+			static bool __fastcall weapon_reticle_knife_show( unk, unk );
+		};
+
 		struct steam {
 			// hook GameConnectedFriendChatMsg_t
 			STEAM_CALLBACK( steam, on_friend_message, GameConnectedFriendChatMsg_t );

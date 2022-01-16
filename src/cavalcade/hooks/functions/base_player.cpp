@@ -3,6 +3,8 @@
 bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 input_sample_time, sdk::user_cmd* cmd ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< create_move_fn >( HASH_CT( "C_BasePlayer::CreateMove" ) );
 
+	// NOTE(para): we should probably consider a grace period for createmove from spawntime because there's some retarded stuff that might intersect
+
 	// NOTE(para): don't do local checks in features ty
 	// sidenote: when I see pointer checks I want to cry myself to Rust now, honestly
 	if ( !g_ctx.m_local || ( g_ctx.m_local && !g_ctx.m_local.get( ).is_alive( ) ) )
