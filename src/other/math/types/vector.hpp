@@ -179,8 +179,11 @@ namespace math {
 			m_data.fill( value );
 		}
 
-		constexpr void normalize( ) {
-			( *this ) /= length( );
+		constexpr void normalize( ) requires( std::is_same_v< T, float > ) {
+			if ( length( ) != 0.F )
+				( *this ) /= length( );
+			else
+				fill( 0.f );
 		}
 
 		constexpr vec_t cross_product( const vec_t& other, const bool normalize_cross_product = false ) const {

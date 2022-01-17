@@ -32,6 +32,7 @@ namespace cavalcade {
 			sdk::cvar* mp_teammates_are_enemies;
 
 			sdk::cvar* sensitivity;
+			sdk::cvar* zoom_sensitivity_ratio_mouse;
 
 			sdk::cvar* m_pitch;
 			sdk::cvar* m_yaw;
