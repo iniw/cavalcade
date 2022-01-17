@@ -21,6 +21,8 @@ set(SOURCES
     src/cavalcade/cavalcade.cpp
     # hack - other
     src/cavalcade/hack/other/prediction.cpp
+    src/cavalcade/hack/translator/translator.cpp
+    src/cavalcade/hack/trainer/trainer.cpp
     # hooks - functions
     src/cavalcade/hooks/functions/push_notice.cpp
     src/cavalcade/hooks/functions/client_cmd.cpp

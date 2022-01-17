@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../other.hpp"
+
 namespace sdk {
 	struct move_data {
 		bool m_first_run_of_functions : 1;

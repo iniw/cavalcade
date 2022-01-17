@@ -1,11 +1,10 @@
 #include "../hooks.hpp"
-#include "../../../other/translator/translator.hpp"
 
 void cavalcade::hooks::client_cmd_::client_cmd( unk ecx, unk edx, const char* cmd ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< client_cmd_fn >( HASH_CT( "CEngineClient::ClientCmd" ) );
 
 	std::string_view text{ cmd };
-	if ( g_ctx.m_translator_initialized ) {
+	if ( g_hack.m_translator.m_valid ) {
 		constexpr const char expected_suffix[] = "say \"/translate";
 
 		// verify command
@@ -41,23 +40,23 @@ void cavalcade::hooks::client_cmd_::client_cmd( unk ecx, unk edx, const char* cm
 
 			g_io.log( "{}", sz_first_language );
 
-			auto source = translator::get_code_name( sz_first_language );
-			if ( source == translator::e_languages::FAIL )
+			auto source = hack::translator::get_code_name( sz_first_language );
+			if ( source == hack::translator::e_languages::FAIL )
 				return og( ecx, edx, cmd );
 
 			std::ignore = std::remove( sz_second_language.begin( ), sz_second_language.end( ), ' ' );
 
 			g_io.log( "{}", sz_second_language );
 
-			auto target = translator::get_code_name( sz_second_language );
-			if ( target == translator::e_languages::FAIL )
+			auto target = hack::translator::get_code_name( sz_second_language );
+			if ( target == hack::translator::e_languages::FAIL )
 				return og( ecx, edx, cmd );
 
 			auto translate = std::string( new_range.begin( ) + text_to_translate_pos_start + 1, new_range.begin( ) + text_to_translate_pos_end );
 
 			g_io.log( "{}", translate );
 
-			g_ctx.translate( source, target, translate, "[CMD]" );
+			g_hack.m_translator.translate( source, target, translate, "[CMD]" );
 
 			return;
 		}

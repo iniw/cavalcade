@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../../ctx/ctx.hpp"
+#include "../../../other/other.hpp"
+#include "../../../sdk/types/move_data.hpp"
 
 namespace hack::other {
 	struct prediction {

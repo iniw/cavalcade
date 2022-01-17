@@ -1,5 +1,7 @@
 #include "prediction.hpp"
 
+#include "../../ctx/ctx.hpp"
+
 void hack::other::prediction::start( ) {
 	g_csgo.m_move_helper->set_host( g_ctx.m_local );
 

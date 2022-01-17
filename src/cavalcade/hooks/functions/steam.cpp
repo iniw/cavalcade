@@ -1,5 +1,4 @@
 #include "../hooks.hpp"
-#include "../../../other/translator/translator.hpp"
 
 void cavalcade::hooks::steam::on_friend_message( GameConnectedFriendChatMsg_t* callback ) {
 	if ( !callback )
@@ -48,7 +47,8 @@ void cavalcade::hooks::steam::on_friend_message( GameConnectedFriendChatMsg_t* c
 
 			auto ttext = io::format( "*{}*: {}", friend_name, ( const char* )msg );
 
-			g_ctx.translate( translator::e_languages::ENGLISH, translator::e_languages::RUSSIAN, ttext, "[<font color=\"#00FF00\">FRIEND</font>]" );
+			g_hack.m_translator.translate( hack::translator::e_languages::ENGLISH, hack::translator::e_languages::RUSSIAN, ttext,
+			                               "[<font color=\"#00FF00\">FRIEND</font>]" );
 		}
 
 		free( msg );

@@ -1,8 +1,5 @@
 #pragma once
 
-#include "../../other/lib/include/http/http.hpp"
-#include "../../other/translator/translator.hpp"
-
 #include "../../other/other.hpp"
 #include "../../sdk/sdk.hpp"
 
@@ -10,12 +7,6 @@
 
 namespace cavalcade {
 	struct ctx {
-		ctx( );
-
-		httplib::Client m_translator;
-		bool m_translator_initialized;
-		std::vector< std::string > m_pending_translations;
-		std::shared_mutex m_translations_mutex;
 		sdk::player m_local;
 		sdk::user_cmd* m_cmd;
 		std::optional< CSteamID > m_last_friend_to_message;
@@ -57,16 +48,7 @@ namespace cavalcade {
 			ISteamUtils* m_steam_utils;
 		} m_steam;
 
-		struct {
-			// todo make this vector and add more options
-			std::optional< std::pair< math::v3f, math::ang > > m_checkpoint;
-		} m_trainer;
-
-		bool go_to_checkpoint( );
-
 		bool init( );
-
-		void translate( translator::e_languages source, translator::e_languages target, const std::string& text, const std::string& suffix = "" );
 	};
 } // namespace cavalcade
 
