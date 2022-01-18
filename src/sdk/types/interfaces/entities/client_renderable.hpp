@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../model_info.hpp"
 namespace sdk::interfaces {
 	struct client_unknown;
 
@@ -12,7 +13,7 @@ namespace sdk::interfaces {
 		virtual bool is_transparent( )                                                                                         = 0;
 		virtual u16 get_shadow_handle( ) const                                                                                 = 0;
 		virtual u16& render_handle( )                                                                                          = 0;
-		virtual const unk get_model( ) const                                                                                   = 0;
+		virtual const model* get_model( ) const                                                                                = 0;
 		virtual i32 draw_model( i32 flags, const u16& instance )                                                               = 0;
 		virtual i32 get_body( )                                                                                                = 0;
 		virtual void get_color_modulation( f32 color )                                                                         = 0;

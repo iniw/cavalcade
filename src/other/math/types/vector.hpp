@@ -1,5 +1,7 @@
 #pragma once
 
+#include <corecrt_math_defines.h>
+
 // just to make accessing vector elements less annoying
 enum vec_accessors
 {
@@ -223,6 +225,44 @@ namespace math {
 				dot += m_data[ i ] * other[ i ];
 
 			return dot;
+		}
+
+		constexpr T dot_product( const T* other ) const {
+			auto dot = static_cast< T >( 0 );
+
+			for ( u32 i = 0; i < N; i++ )
+				dot += m_data[ i ] * other[ i ];
+
+			return dot;
+		}
+
+		void vector_angles( const vec_t& forward ) {
+			if ( forward[ 1 ] == 0.f && forward[ 0 ] == 0.f ) {
+				m_data[ 0 ] = ( forward[ 2 ] > 0.f ) ? 270.f : 90.f; // pitch
+				m_data[ 1 ] = 0.f;                                   // yaw
+			} else {
+				m_data[ 0 ] = std::atan2( -forward[ 2 ], forward.length_2d( ) ) * ( -180.f / M_PI );
+				m_data[ 1 ] = std::atan2( forward[ 1 ], forward[ 0 ] ) * ( 180.f / M_PI );
+
+				if ( m_data[ 1 ] > 90.f )
+					m_data[ 1 ] -= 180.f;
+				else if ( m_data[ 1 ] < 90.f )
+					m_data[ 1 ] += 180.f;
+				else if ( m_data[ 1 ] == 90.f )
+					m_data[ 1 ] = 0.f;
+			}
+
+			m_data[ 2 ] = 0.F;
+		}
+
+		inline vec_t calculate_angle( const vec_t& dst ) requires( N == 3 ) {
+			vec_t a    = { 0.F, 0.F, 0.F };
+			auto delta = ( ( *this ) - dst );
+
+			delta.normalize( );
+			a.vector_angles( delta );
+
+			return a;
 		}
 
 		constexpr vec_t& floor( ) {

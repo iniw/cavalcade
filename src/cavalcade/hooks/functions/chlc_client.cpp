@@ -21,14 +21,12 @@ void cavalcade::hooks::chlc_client::level_init_post_entity( ) {
 	og( );
 }
 
-void cavalcade::hooks::chlc_client::on_override_mouse_input( unk ecx, unk edx, int slot, float& x, float& y ) {
+void cavalcade::hooks::chlc_client::on_override_mouse_input( unk ecx, unk edx, i32 slot, f32& x, f32& y ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< on_override_mouse_input_fn >( HASH_CT( "OnOverrideMouseInput" ) );
+
 	og( ecx, edx, slot, std::ref( x ), std::ref( y ) );
-	g_hack.m_aimbot.run( x, y );
+
 	if ( g_ctx.m_cmd ) {
-		// g_io.log( "{}", g_ctx.m_cmd->m_tick_count );
-		if ( g_io.key_state< io::key_state::DOWN >( 'L' ) ) {
-			x -= 1;
-		}
+		g_hack.m_aimbot.run( x, y );
 	}
 }

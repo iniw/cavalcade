@@ -41,8 +41,8 @@ namespace cavalcade {
 			using level_init_post_entity_fn = void( __cdecl* )( );
 			static void __cdecl level_init_post_entity( );
 
-			using on_override_mouse_input_fn = void( __fastcall* )( unk, unk, int, float&, float& );
-			static void __fastcall on_override_mouse_input( unk, unk, int, float&, float& );
+			using on_override_mouse_input_fn = void( __fastcall* )( unk, unk, i32, f32&, f32& );
+			static void __fastcall on_override_mouse_input( unk, unk, i32, f32&, f32& );
 		};
 
 		struct push_notice_ {

@@ -19,6 +19,7 @@ namespace sdk {
 		interfaces::prediction* m_prediction;
 		interfaces::mdl_cache* m_mdl_cache;
 		interfaces::game_movement* m_game_movement;
+		interfaces::model_info* m_model_info;
 
 		globals* m_globals;
 		move_helper* m_move_helper;

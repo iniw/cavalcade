@@ -2,6 +2,8 @@
 
 #include "base_animating.hpp"
 
+#include "../../../other/other.hpp"
+
 namespace sdk {
 	struct cs_player : base_animating {
 		NETVAR( bool, is_immune, "DT_CSPlayer->m_bGunGameImmunity" );
@@ -15,5 +17,9 @@ namespace sdk {
 		bool is_enemy( base_player* player );
 
 		void post_think( );
+
+		math::v3f get_hitbox_position( i32 hitbox_id );
+
+		math::v3f get_eye_position( );
 	};
 } // namespace sdk

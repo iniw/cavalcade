@@ -19,5 +19,6 @@
 #include "move_helper.hpp"
 #include "client_state.hpp"
 #include "client_mode_shared.hpp"
+#include "model_info.hpp"
 
 #include "interfaces/interfaces.hpp"

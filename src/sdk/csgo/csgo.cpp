@@ -25,6 +25,10 @@ bool sdk::csgo::init( ) {
 		m_mdl_cache = find_interface< interfaces::mdl_cache* >( g_mem[ DATACACHE_DLL ], HASH_CT( "MDLCache" ) );
 		if ( !m_mdl_cache )
 			return false;
+
+		m_model_info = find_interface< interfaces::model_info* >( g_mem[ ENGINE_DLL ], HASH_CT( "VModelInfoClient" ) );
+		if ( !m_model_info )
+			return false;
 	}
 
 	m_globals = mem::get_v_func( m_client, 11 ).add( 0xA ).get< globals* >( 2 );
