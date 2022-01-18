@@ -26,7 +26,7 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 		ecx->set_local_view_angles( cmd->m_view_angles );
 
 	// NOTE(para): retarded,,, leaving it just in case for now
-	if ( g_ctx.m_cmd )
+	if ( !g_ctx.m_cmd )
 		return og( ecx, input_sample_time, cmd );
 
 	// masturbation mode

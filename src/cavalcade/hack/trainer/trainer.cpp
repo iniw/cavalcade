@@ -36,7 +36,8 @@ void hack::trainer::run( ) {
 		m_checkpoint = { g_ctx.m_local.get( ).get_origin( ), g_ctx.m_local.get( ).get_abs_angles( ) };
 		g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
 			0, 0, "<<<NO_TRANSLATE>>> [<font color=\"#FF0000\">TRAINER</font>] Updated checkpoint..." );
-	} else if ( g_io.key_state< io::key_state::RELEASED >( VK_XBUTTON2 ) ) {
+	}
+	if ( g_io.key_state< io::key_state::RELEASED >( VK_XBUTTON2 ) ) {
 		go( );
 	}
 }
