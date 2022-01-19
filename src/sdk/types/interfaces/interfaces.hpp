@@ -17,6 +17,7 @@
 #include "prediction.hpp"
 #include "mdl_cache.hpp"
 #include "game_movement.hpp"
+#include "input.hpp"
 
 namespace sdk::interfaces {
 	struct registry {

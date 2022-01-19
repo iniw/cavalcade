@@ -1,5 +1,6 @@
 #include "../hooks.hpp"
 
+#define MULTIPLAYER_BACKUP 150
 bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 input_sample_time, sdk::user_cmd* cmd ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< create_move_fn >( HASH_CT( "C_BasePlayer::CreateMove" ) );
 
@@ -29,6 +30,13 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 	if ( !g_ctx.m_cmd )
 		return og( ecx, input_sample_time, cmd );
 
+	// NOTE(para): update our command after modification, just in case
+	auto slot         = cmd->m_command_number % MULTIPLAYER_BACKUP;
+	auto verified_cmd = g_csgo.m_input->get_verified_cmd( slot );
+
+	if ( !verified_cmd )
+		return og( ecx, input_sample_time, cmd );
+
 	// masturbation mode
 	g_ctx.m_cvars.viewmodel_offset_z->set_value( sin( g_csgo.m_globals->m_curtime * 3 ) * 2.f );
 
@@ -40,11 +48,11 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 
 	g_hack.m_prediction.end( );
 
-	// NOTE(para): should we even do this? wouldn't it be better if we didnt touch these, ever?
-	// outside of buttons of course, but that's going to be marked as untrusted, anyway.
-	// it'd be stupid if Valve didn't verify user commands on server.
 	cmd->m_view_angles.sanitize( );
 	cmd->m_view_angles.clamp_angle( );
+
+	verified_cmd->m_cmd = *cmd;
+	verified_cmd->m_crc = cmd->get_checksum( );
 
 	return false;
 }

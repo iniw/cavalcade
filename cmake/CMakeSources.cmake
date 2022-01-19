@@ -52,6 +52,7 @@ set(SOURCES
     src/other/utils/utils.cpp
     # math
     src/other/math/math.cpp
+    src/other/lib/include/crc32/crc32.cpp
     # render - imgui
     src/other/render/imgui/misc/freetype/imgui_freetype.cpp
     src/other/render/imgui/imgui_draw.cpp

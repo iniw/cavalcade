@@ -20,7 +20,8 @@ void hack::aimbot::run( float& x, float& y ) {
 	if ( g_ctx.m_local && g_ctx.m_local.get( ).is_alive( ) ) {
 		if ( auto weap = g_csgo.m_ent_list->get_handle< sdk::weapon_cs_base* >( g_ctx.m_local.get( ).get_active_weapon( ) ); weap )
 			if ( auto info = weap->get_cs_weapon_info( ); info ) {
-				if ( info->m_type == sdk::weapon_type::KNIFE || ( info->m_type >= sdk::weapon_type::C4 && info->m_type < sdk::weapon_type::MELEE ) )
+				if ( info->m_max_clip1 <= 0 || info->m_type == sdk::weapon_type::KNIFE ||
+				     ( info->m_type >= sdk::weapon_type::C4 && info->m_type < sdk::weapon_type::MELEE ) )
 					return;
 			} else
 				return;
@@ -28,7 +29,7 @@ void hack::aimbot::run( float& x, float& y ) {
 			return;
 
 		auto local_pos = g_ctx.m_local.get( ).get_eye_position( );
-        // TODO(para): target selection
+		// TODO(para): target selection
 		g_entity_cacher.for_each( [ & ]( auto& p ) {
 			if ( !p )
 				return;
