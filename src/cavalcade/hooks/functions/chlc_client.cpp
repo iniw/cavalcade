@@ -30,7 +30,5 @@ void cavalcade::hooks::chlc_client::on_override_mouse_input( unk ecx, unk edx, i
 
 	og( ecx, edx, slot, std::ref( x ), std::ref( y ) );
 
-	if ( g_ctx.m_cmd ) {
-		g_hack.m_aimbot.run( x, y );
-	}
+	g_hack.m_aimbot.run( x, y );
 }

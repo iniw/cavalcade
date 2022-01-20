@@ -69,5 +69,11 @@ namespace sdk::interfaces {
 		steam_api_context_t* get_steam_api_context( ) {
 			return mem::call_v_func< steam_api_context_t*, 185 >( this );
 		}
+
+		math::ang get_view_angles( ) {
+			math::ang angles{ };
+			mem::call_v_func< void, 18 >( this, std::ref( angles ) );
+			return angles;
+		}
 	};
 } // namespace sdk::interfaces

@@ -41,13 +41,12 @@ void hack::aimbot::run( float& x, float& y ) {
 			auto _aim_angle = local_pos.calculate_angle( hitbox_pos );
 			auto aim_angle  = ( *( math::ang* )&_aim_angle ).clamp_angle( );
 
-			// NOTE(para): maybe move to CM?
 			if ( m_rcs )
 				aim_angle -= g_ctx.m_local.get( ).get_aim_punch_angle( ) * 2.F;
 
 			auto move_ang = pixels_to_angle( x, y );
 
-			auto view_angles = g_ctx.m_cmd->m_view_angles;
+			auto view_angles = g_csgo.m_engine->get_view_angles( );
 
 			// TODO(anyone): unfuck ang/vec mess.
 			auto _view_delta = ( aim_angle - view_angles ).clamp_angle( );
