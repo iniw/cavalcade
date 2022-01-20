@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../shape.hpp"
+#include "../../types/types.hpp"
 
 struct ImFont;
 
@@ -17,8 +18,8 @@ namespace render::geometry {
 
 		bool init( std::string_view path, f32 size );
 
-		void draw( const point& pos, std::string_view text, color col );
+		void draw( const point& pos, std::string_view text, color col ) const;
 
-		size calc_size( std::string_view text );
+		size calc_size( std::string_view text ) const;
 	};
 } // namespace render::geometry

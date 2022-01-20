@@ -69,8 +69,6 @@ namespace render {
 
 		math::v2i m_screen_size;
 
-		std::array< geometry::font, ENUM_IDX( font::MAX ) > m_fonts;
-
 		// helper for drawing any geometry
 		// this can't be put in render.inl for some reason
 		template< geometry::Shape T, typename... VA >
@@ -88,6 +86,8 @@ namespace render {
 		point handle_alignment( align alignment, const point& pos, const size& size );
 
 	public:
+
+		std::array< geometry::font, ENUM_IDX( font::MAX ) > m_fonts;
 
 		struct safe {
 			std::shared_mutex m_rendering_mutex;
