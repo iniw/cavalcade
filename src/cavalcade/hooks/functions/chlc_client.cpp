@@ -4,9 +4,7 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 	static auto og = g_mem[ CLIENT_DLL ].get_og< frame_stage_notify_fn >( HASH_CT( "CHLClient::FrameStageNotify" ) );
 	og( ecx, stage );
 
-	g_render.m_safe.clear( );
-	if ( g_csgo.m_engine->is_in_game( ) )
-		g_hack.m_esp.run( );
+	g_render.m_safe.frame( [ & ]( ) { g_hack.m_esp.run( ); } );
 }
 
 void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {

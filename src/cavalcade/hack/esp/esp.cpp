@@ -50,6 +50,9 @@ void hack::esp::run( ) {
 	if ( !g_ctx.m_local )
 		return;
 
+	if ( !g_csgo.m_engine->is_in_game( ) )
+		return;
+
 	g_entity_cacher.for_each( [ & ]( auto& p ) {
 		if ( !p )
 			return;

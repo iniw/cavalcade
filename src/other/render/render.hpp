@@ -96,20 +96,23 @@ namespace render {
 
 			template< geometry::Shape T, typename... VA >
 			inline void draw_shape( VA&&... args ) {
-				std::unique_lock lock( m_rendering_mutex );
 				m_queue_back.push_front( std::make_shared< T >( std::forward< VA >( args )... ) );
 			}
 
 			template< geometry::Shape T, typename... VA >
 			inline void draw_shape_front( VA&&... args ) {
-				std::unique_lock lock( m_rendering_mutex );
 				m_queue_front.push_front( std::make_shared< T >( std::forward< VA >( args )... ) );
 			}
 
 			inline void clear( ) {
-				std::unique_lock lock( m_rendering_mutex );
 				m_queue_back.clear( );
 				m_queue_front.clear( );
+			}
+
+			void frame( std::function< void( ) >&& fn ) {
+				std::unique_lock lock( m_rendering_mutex );
+				clear( );
+				fn( );
 			}
 		} m_safe;
 
