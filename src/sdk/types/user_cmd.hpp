@@ -4,7 +4,8 @@
 
 namespace sdk {
 	struct user_cmd {
-		PAD( 0x4 );
+		virtual ~user_cmd( ){ };
+
 		i32 m_command_number;
 		i32 m_tick_count;
 		math::ang m_view_angles;
@@ -13,13 +14,14 @@ namespace sdk {
 		f32 m_side_move;
 		f32 m_up_move;
 		i32 m_buttons;
-		byte m_impulse;
+		char m_impulse;
 		i32 m_weapon_select;
 		i32 m_weapon_sub_type;
 		i32 m_random_seed;
 		i16 m_moused_x;
 		i16 m_moused_y;
 		bool m_has_been_predicted;
+		PAD( 0x18 );
 
 		CRC32_t get_checksum( ) const {
 			CRC32_t crc;
