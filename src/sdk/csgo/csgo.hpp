@@ -21,6 +21,7 @@ namespace sdk {
 		interfaces::game_movement* m_game_movement;
 		interfaces::model_info* m_model_info;
 		interfaces::input* m_input;
+		interfaces::debug_overlay* m_debug_overlay;
 
 		globals* m_globals;
 		move_helper* m_move_helper;

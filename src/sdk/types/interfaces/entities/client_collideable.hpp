@@ -20,7 +20,7 @@ namespace sdk::interfaces {
 		virtual i32 get_solid_flags( ) const                                                          = 0;
 		virtual client_unknown* get_client_unknown( )                                                 = 0;
 		virtual i32 get_collision_group( ) const                                                      = 0;
-		virtual void world_space_surrounding_bounds( math::v3f* mins, math::v3f* maxs )               = 0;
+		virtual bool world_space_surrounding_bounds( math::v3f* mins, math::v3f* maxs )               = 0;
 		virtual u32 get_required_trigger_flags( ) const                                               = 0;
 		virtual const math::matrix_3x4* get_root_parent_to_world_transform( ) const                   = 0;
 		virtual unk get_v_physics_object( ) const                                                     = 0;

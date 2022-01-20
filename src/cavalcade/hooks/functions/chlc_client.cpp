@@ -5,10 +5,8 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 	og( ecx, stage );
 
 	g_render.m_safe.clear( );
-
-	g_render.m_safe.draw_shape< render::geometry::rect_filled >( render::point{ 10, 10 }, render::point{ 30, 30 }, 0xffffffff );
-	static auto f = &g_render.m_fonts[ render::font::MENU ];
-	g_render.m_safe.draw_shape< render::geometry::text >( f, render::point{ 10, 40 }, "hello world", 0xffffffff );
+	if ( g_csgo.m_engine->is_in_game( ) )
+		g_hack.m_esp.run( );
 }
 
 void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {

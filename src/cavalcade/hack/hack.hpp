@@ -4,6 +4,7 @@
 #include "translator/translator.hpp"
 #include "trainer/trainer.hpp"
 #include "aimbot/aimbot.hpp"
+#include "esp/esp.hpp"
 
 namespace hack {
 	struct impl {
@@ -11,6 +12,7 @@ namespace hack {
 		translator m_translator;
 		trainer m_trainer;
 		aimbot m_aimbot;
+		esp m_esp;
 	};
 } // namespace hack
 

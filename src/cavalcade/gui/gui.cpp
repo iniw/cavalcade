@@ -8,14 +8,7 @@ void gui::impl::init( ) {
 	{
 		gb->add< objects::checkbox >( "check1", "check 1" );
 		gb->add< objects::checkbox >( "check2", "check 2" );
-		gb->add< objects::slider< i32 > >( "slider2", "slider 2", 0, 100 );
-		gb->add< objects::slider< f32 > >( "slider3", "slider 3", 0.f, 100.f );
-		gb->add< objects::slider< f32 > >( "slider4", "slider 4", 0.f, 100.f, 5 );
-		gb->add< objects::slider< f32 > >( "slider5", "slider 5", 0.f, 100.f, 5 );
-		gb->add< objects::slider< f32 > >( "slider6", "slider 6", 0.f, 100.f, 5 );
-		gb->add< objects::slider< f32 > >( "slider7", "slider 7", 0.f, 100.f, 5 );
-		gb->add< objects::slider< f32 > >( "slider8", "slider 8", 0.f, 100.f, 5 );
-		gb->add< objects::slider< f32 > >( "slider9", "slider 9", 0.f, 100.f, 5 );
+		gb->add< objects::slider< i32 > >( "smoothing", "smoothing", 0, 100 );
 	}
 
 	auto gb3 = window->add< objects::groupbox >( "group2", "test 3", 90 );

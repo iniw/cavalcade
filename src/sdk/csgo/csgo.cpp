@@ -33,6 +33,10 @@ bool sdk::csgo::init( ) {
 		m_input = g_mem[ CLIENT_DLL ].find_pattern( STB( "B9 ? ? ? ? F3 0F 11 04 24 FF 50 10" ) ).add( 0x1 ).get< interfaces::input* >( 1 );
 		if ( !m_input )
 			return false;
+
+		m_debug_overlay = find_interface< interfaces::debug_overlay* >( g_mem[ ENGINE_DLL ], HASH_CT( "VDebugOverlay" ) );
+		if ( !m_debug_overlay )
+			return false;
 	}
 
 	m_globals = mem::get_v_func( m_client, 11 ).add( 0xA ).get< globals* >( 2 );
