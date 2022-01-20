@@ -7,8 +7,8 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 	g_render.m_safe.clear( );
 
 	g_render.m_safe.draw_shape< render::geometry::rect_filled >( render::point{ 10, 10 }, render::point{ 30, 30 }, 0xffffffff );
-	g_render.m_safe.draw_shape< render::geometry::text >( &g_render.m_fonts[ ENUM_IDX( render::font::MENU ) ], render::point{ 10, 40 }, "hello world",
-	                                                      0xffffffff );
+	static auto f = &g_render.m_fonts[ ENUM_IDX( render::font::MENU ) ];
+	g_render.m_safe.draw_shape< render::geometry::text >( f, render::point{ 10, 40 }, "hello world", 0xffffffff );
 }
 
 void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
