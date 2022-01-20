@@ -21,7 +21,7 @@ namespace render {
 		CENTERED
 	};
 
-	enum class font
+	enum font
 	{
 		MENU = 0,
 		MAX
@@ -87,7 +87,7 @@ namespace render {
 
 	public:
 
-		std::array< geometry::font, ENUM_IDX( font::MAX ) > m_fonts;
+		std::array< geometry::font, font::MAX > m_fonts;
 
 		struct safe {
 			std::shared_mutex m_rendering_mutex;

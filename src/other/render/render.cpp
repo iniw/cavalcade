@@ -5,7 +5,7 @@
 
 #include "../../sdk/csgo/csgo.hpp"
 
-#define FONT_GET( font ) m_fonts[ ENUM_IDX( font ) ]
+#define FONT_GET( font ) m_fonts[ font ]
 
 bool render::impl::init( ) {
 	m_d3d9.m_device = g_csgo.m_d3d9_device;

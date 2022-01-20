@@ -1,9 +1,5 @@
 #pragma once
 
-// used to convert an enum class value to size_t
-// to access arrays and stuff
-#define ENUM_IDX( enum ) static_cast< size_t >( enum )
-
 #define HASH_RT( str ) hash::xxhash::gen( str, hash::SEED )
 #define HASH_CT( str ) utils::cx::data< hash::xxhash::gen( str, hash::SEED ) >::value
 
