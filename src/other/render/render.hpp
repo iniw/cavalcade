@@ -89,6 +89,30 @@ namespace render {
 
 	public:
 
+		struct safe {
+			std::shared_mutex m_rendering_mutex;
+			std::deque< std::shared_ptr< geometry::base_shape > > m_queue_back;
+			std::deque< std::shared_ptr< geometry::base_shape > > m_queue_front;
+
+			template< geometry::Shape T, typename... VA >
+			inline void draw_shape( VA&&... args ) {
+				std::unique_lock lock( m_rendering_mutex );
+				m_queue_back.push_front( std::make_shared< T >( std::forward< VA >( args )... ) );
+			}
+
+			template< geometry::Shape T, typename... VA >
+			inline void draw_shape_front( VA&&... args ) {
+				std::unique_lock lock( m_rendering_mutex );
+				m_queue_front.push_front( std::make_shared< T >( std::forward< VA >( args )... ) );
+			}
+
+			inline void clear( ) {
+				std::unique_lock lock( m_rendering_mutex );
+				m_queue_back.clear( );
+				m_queue_front.clear( );
+			}
+		} m_safe;
+
 		bool init( );
 
 		void unload( );

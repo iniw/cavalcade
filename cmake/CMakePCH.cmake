@@ -36,6 +36,10 @@ set(PCH
     <unordered_map>
     <vector>
     <array>
+    <deque>
+    #safety
+    <mutex>
+    <shared_mutex>
     # data
     <source_location>
 

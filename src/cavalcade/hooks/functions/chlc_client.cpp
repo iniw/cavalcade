@@ -3,6 +3,10 @@
 void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame_stage stage ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< frame_stage_notify_fn >( HASH_CT( "CHLClient::FrameStageNotify" ) );
 	og( ecx, stage );
+
+	g_render.m_safe.clear( );
+
+	g_render.m_safe.draw_shape< render::geometry::rect_filled >( render::point{ 10, 10 }, render::point{ 30, 30 }, 0xffffffff );
 }
 
 void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {

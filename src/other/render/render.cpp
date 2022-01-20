@@ -35,9 +35,18 @@ void render::impl::begin( ) {
 	m_imgui.begin( );
 
 	m_d3d9.backup_render_states( );
+
+	std::unique_lock lock( m_safe.m_rendering_mutex );
+	for ( auto& e : m_safe.m_queue_back ) {
+		e->draw( );
+	}
 }
 
 void render::impl::end( ) {
+	std::unique_lock lock( m_safe.m_rendering_mutex );
+	for ( auto& e : m_safe.m_queue_front ) {
+		e->draw( );
+	}
 	m_imgui.end( );
 
 	m_d3d9.restore_render_states( );
