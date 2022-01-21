@@ -78,6 +78,11 @@ namespace cavalcade {
 			static bool __fastcall is_hltv( unk ecx, unk );
 		};
 
+		struct prediction {
+			using setup_move_fn = void( __fastcall* )( unk, unk, sdk::cs_player*, sdk::user_cmd*, unk, sdk::move_data* );
+			static void __fastcall setup_move( unk, unk, sdk::cs_player*, sdk::user_cmd*, unk, sdk::move_data* );
+		};
+
 		struct sequence_transitioner {
 			using check_for_sequence_change_fn = void( __thiscall* )( unk, unk, i32, bool, bool );
 			static void __fastcall check_for_sequence_change( unk ecx, unk, unk hdr, i32 cur_sequence, bool force_new_sequence, bool interpolate );

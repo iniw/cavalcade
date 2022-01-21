@@ -29,6 +29,7 @@ set(SOURCES
     src/cavalcade/hooks/functions/push_notice.cpp
     src/cavalcade/hooks/functions/client_cmd.cpp
     src/cavalcade/hooks/functions/base_player.cpp
+    src/cavalcade/hooks/functions/prediction.cpp
     src/cavalcade/hooks/functions/chlc_client.cpp
     src/cavalcade/hooks/functions/d3d9_device.cpp
     src/cavalcade/hooks/functions/steam.cpp

@@ -44,6 +44,7 @@ static auto distance_point_to_line( const math::v3f& point, const math::v3f& lin
 }
 
 void hack::aimbot::run( f32& x, f32& y ) {
+	m_aiming = false;
 	if ( g_ctx.m_local && g_ctx.m_local.get( ).is_alive( ) ) {
 		if ( auto weap = g_csgo.m_ent_list->get_handle< sdk::weapon_cs_base* >( g_ctx.m_local.get( ).get_active_weapon( ) ); weap )
 			if ( auto info = weap->get_cs_weapon_info( ); info ) {
@@ -73,7 +74,8 @@ void hack::aimbot::run( f32& x, f32& y ) {
 
 			auto hitbox_pos = p.get( ).get_hitbox_position( sdk::e_hitbox::HEAD );
 			if ( hitbox_pos ==
-			     math::v3f{ std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) } )
+			         math::v3f{ std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) } ||
+			     hitbox_pos == math::v3f{ 0, 0, 0 } )
 				return;
 			auto _aim_angle = local_pos.calculate_angle( hitbox_pos );
 			auto aim_angle  = ( *( math::ang* )&_aim_angle ).clamp_angle( );
@@ -97,8 +99,9 @@ void hack::aimbot::run( f32& x, f32& y ) {
 
 					for ( auto h : e ) {
 						auto hitbox_pos = m_best_player->get_hitbox_position( h );
-						if ( hitbox_pos ==
-						     math::v3f{ std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) } )
+						if ( hitbox_pos == math::v3f{ std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ),
+						                              std::numeric_limits< f32 >::max( ) } ||
+						     hitbox_pos == math::v3f{ 0, 0, 0 } )
 							continue;
 						auto _aim_angle = local_pos.calculate_angle( hitbox_pos );
 						auto aim_angle  = ( *( math::ang* )&_aim_angle ).clamp_angle( );
@@ -127,6 +130,7 @@ void hack::aimbot::run( f32& x, f32& y ) {
 			auto view_angles = g_csgo.m_engine->get_view_angles( );
 			auto _view_delta = ( aim_angle - view_angles ).clamp_angle( );
 			auto view_delta  = *( math::v3f* )&_view_delta;
+			m_aiming         = true;
 			if ( smooth > 1 ) {
 				auto move_ang = pixels_to_angle( x, y );
 

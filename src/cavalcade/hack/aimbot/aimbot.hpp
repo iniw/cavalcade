@@ -28,6 +28,10 @@ namespace hack {
 		f32 m_best_fov{ std::numeric_limits< f32 >::max( ) };
 		bool m_is_attacking{ false };
 
+		bool m_aiming{ false };
+		math::ang m_old_angles{ };
+		bool m_movement_fix{ false };
+
 		// move to cfg
 		bool m_rcs{ true };
 	};

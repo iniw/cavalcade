@@ -24,6 +24,7 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 	// get updated enough times), so we rely on a flag that should be accurate 99.9% of the time.
 	// - Alternative is verifying IO but this feels better for some reason.
 	g_hack.m_aimbot.m_is_attacking = g_ctx.m_cmd->m_buttons & 1;
+	g_hack.m_aimbot.m_old_angles   = g_csgo.m_engine->get_view_angles( );
 
 	if ( !input_sample_time ) {
 		return og( ecx, input_sample_time, cmd );
