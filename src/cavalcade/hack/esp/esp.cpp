@@ -68,8 +68,8 @@ void hack::esp::run( ) {
 			auto box = bounding_box( p, bbox );
 			if ( box ) {
 				const auto& [ aa, bb ] = bbox;
-				auto clr               = render::color( 0xffffffff ).frac_alpha( anim.m_animation_factor );
-				g_render.m_safe.draw_shape< render::geometry::rect >( aa, aa + bb, clr.to_imgui( ), 1.F );
+				g_render.m_safe.draw_shape< render::geometry::rect >(
+					aa, aa + bb, render::color( 0xffffffff ).frac_alpha( anim.m_animation_factor ).to_imgui( ), 1.F );
 			}
 		}
 	} );
