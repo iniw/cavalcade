@@ -26,6 +26,7 @@ namespace hack {
 
 		sdk::cs_player* m_best_player{ nullptr };
 		f32 m_best_fov{ std::numeric_limits< f32 >::max( ) };
+		bool m_is_attacking{ false };
 
 		// move to cfg
 		bool m_rcs{ true };

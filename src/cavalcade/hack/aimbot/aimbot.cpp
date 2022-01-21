@@ -72,6 +72,9 @@ void hack::aimbot::run( f32& x, f32& y ) {
 				return;
 
 			auto hitbox_pos = p.get( ).get_hitbox_position( sdk::e_hitbox::HEAD );
+			if ( hitbox_pos ==
+			     math::v3f{ std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) } )
+				return;
 			auto _aim_angle = local_pos.calculate_angle( hitbox_pos );
 			auto aim_angle  = ( *( math::ang* )&_aim_angle ).clamp_angle( );
 			if ( m_rcs )
@@ -94,6 +97,9 @@ void hack::aimbot::run( f32& x, f32& y ) {
 
 					for ( auto h : e ) {
 						auto hitbox_pos = m_best_player->get_hitbox_position( h );
+						if ( hitbox_pos ==
+						     math::v3f{ std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) } )
+							continue;
 						auto _aim_angle = local_pos.calculate_angle( hitbox_pos );
 						auto aim_angle  = ( *( math::ang* )&_aim_angle ).clamp_angle( );
 

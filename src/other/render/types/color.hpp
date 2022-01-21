@@ -22,6 +22,10 @@ namespace render {
 			return color( m_r, m_g, m_b, new_alpha );
 		}
 
+		constexpr color frac_alpha( f32 mod ) {
+			return color( m_r, m_g, m_b, m_a * std::min( mod, 1.F ) );
+		}
+
 		constexpr static color white( u8 alpha = 255 ) {
 			return color( 255, 255, 255, alpha );
 		}

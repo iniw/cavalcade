@@ -57,14 +57,24 @@ void hack::esp::run( ) {
 		if ( !p )
 			return;
 
-		if ( p == g_ctx.m_local || !p.get( ).is_alive( ) || p.get( ).is_dormant( ) || !p.get( ).is_enemy( g_ctx.m_local ) )
+		if ( p == g_ctx.m_local || !p.get( ).is_alive( ) || !p.get( ).is_enemy( g_ctx.m_local ) )
 			return;
 
-		std::pair< render::point, render::point > bbox;
-		auto box = bounding_box( p, bbox );
-		if ( box ) {
-			const auto& [ aa, bb ] = bbox;
-			g_render.m_safe.draw_shape< render::geometry::rect >( aa, aa + bb, 0xffffffff, 1.F );
+		animator& anim = m_alpha[ p.get( ).get_networkable_index( ) ];
+		anim.bake( !p.get( ).is_dormant( ), animation{ 3.F, easing::out_quart }, animation{ 3.F, easing::out_quart } );
+
+		if ( anim.m_animation_factor > 0.F ) {
+			std::pair< render::point, render::point > bbox;
+			auto box = bounding_box( p, bbox );
+			if ( box ) {
+				const auto& [ aa, bb ] = bbox;
+				auto clr               = render::color( 0xffffffff ).frac_alpha( anim.m_animation_factor );
+				g_render.m_safe.draw_shape< render::geometry::rect >( aa, aa + bb, clr.to_imgui( ), 1.F );
+			}
 		}
 	} );
+}
+
+void hack::esp::clear( ) {
+	m_alpha.clear( );
 }
