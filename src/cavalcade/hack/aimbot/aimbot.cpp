@@ -3,6 +3,22 @@
 #include "../../entity_cacher/entity_cacher.hpp"
 #include "../../gui/cfg/cfg.hpp"
 
+const static std::map< hack::aimbot::e_hitboxes, std::vector< sdk::e_hitbox > > g_aim_hitboxes = {
+	{ hack::aimbot::e_hitboxes::HEAD, { sdk::e_hitbox::HEAD } },
+
+	{ hack::aimbot::e_hitboxes::NECK, { sdk::e_hitbox::NECK } },
+
+	{ hack::aimbot::e_hitboxes::BODY, { sdk::e_hitbox::BELLY, sdk::e_hitbox::THORAX, sdk::e_hitbox::LOWER_CHEST, sdk::e_hitbox::UPPER_CHEST } },
+
+	{ hack::aimbot::e_hitboxes::ARMS,
+	  { sdk::e_hitbox::LEFT_HAND, sdk::e_hitbox::RIGHT_HAND, sdk::e_hitbox::RIGHT_UPPER_ARM, sdk::e_hitbox::RIGHT_FOREARM,
+	    sdk::e_hitbox::LEFT_UPPER_ARM, sdk::e_hitbox::LEFT_FOREARM } },
+
+	{ hack::aimbot::e_hitboxes::LEGS,
+	  { sdk::e_hitbox::LEFT_THIGH, sdk::e_hitbox::RIGHT_THIGH, sdk::e_hitbox::LEFT_CALF, sdk::e_hitbox::RIGHT_CALF, sdk::e_hitbox::LEFT_FOOT,
+	    sdk::e_hitbox::RIGHT_FOOT } }
+};
+
 math::ang hack::aimbot::pixels_to_angle( float x, float y ) {
 	float px = x * g_ctx.m_cvars.m_pitch->get_float( );
 	float py = y * g_ctx.m_cvars.m_yaw->get_float( );
@@ -58,7 +74,6 @@ void hack::aimbot::run( f32& x, f32& y ) {
 			auto hitbox_pos = p.get( ).get_hitbox_position( sdk::e_hitbox::HEAD );
 			auto _aim_angle = local_pos.calculate_angle( hitbox_pos );
 			auto aim_angle  = ( *( math::ang* )&_aim_angle ).clamp_angle( );
-
 			if ( m_rcs )
 				aim_angle -= rcs_angle;
 
@@ -69,9 +84,34 @@ void hack::aimbot::run( f32& x, f32& y ) {
 			}
 		} );
 
-		if ( m_best_player && m_best_player->is_alive( ) && !m_best_player->is_dormant( ) && m_best_player->is_enemy( g_ctx.m_local ) &&
-		     !m_best_player->is_immune( ) ) {
-			auto hitbox_pos = m_best_player->get_hitbox_position( sdk::e_hitbox::HEAD );
+		if ( m_best_player ) {
+			auto best_hitbox = [ & ]( ) -> math::v3f {
+				auto best_fov    = std::numeric_limits< f32 >::max( );
+				auto best_hitbox = sdk::e_hitbox::HEAD;
+
+				for ( const auto& [ k, e ] : g_aim_hitboxes ) {
+					// TODO(para, wini (menu)): verify if k selected, if not, continue
+
+					for ( auto h : e ) {
+						auto hitbox_pos = m_best_player->get_hitbox_position( h );
+						auto _aim_angle = local_pos.calculate_angle( hitbox_pos );
+						auto aim_angle  = ( *( math::ang* )&_aim_angle ).clamp_angle( );
+
+						if ( m_rcs )
+							aim_angle -= rcs_angle;
+
+						auto dis = distance_point_to_line( hitbox_pos, local_pos, *( math::v3f* )&aim_angle );
+						if ( dis != std::numeric_limits< f32 >::max( ) && m_best_fov > dis ) {
+							best_hitbox = h;
+							best_fov    = dis;
+						}
+					}
+				}
+
+				return m_best_player->get_hitbox_position( best_hitbox );
+			};
+
+			auto hitbox_pos = best_hitbox( );
 			auto _aim_angle = local_pos.calculate_angle( hitbox_pos );
 			auto aim_angle  = ( *( math::ang* )&_aim_angle ).clamp_angle( );
 
@@ -95,10 +135,9 @@ void hack::aimbot::run( f32& x, f32& y ) {
 
 				auto pixels = angle_to_pixels( delta );
 
-				if ( view_delta.length_2d( ) <= m_fov ) {
-					x += pixels.pitch;
-					y += pixels.yaw;
-				}
+				x += pixels.pitch;
+				y += pixels.yaw;
+
 			} else {
 				auto position = angle_to_pixels( _view_delta );
 

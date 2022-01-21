@@ -7,10 +7,12 @@
 
 namespace hack {
 	struct trainer {
-		std::optional< std::pair< math::v3f, math::ang > > m_checkpoint;
+		std::vector< std::pair< math::v3f, math::ang > > m_checkpoints;
+		i32 m_entry;
 
 		void go( );
 		void run( );
+		void clear( );
 	};
 } // namespace hack
 

@@ -9,6 +9,16 @@ namespace sdk {
 
 namespace hack {
 	struct aimbot {
+		enum e_hitboxes
+		{
+			NEAREST = 0,
+			HEAD    = 1 << 1,
+			NECK    = 1 << 2,
+			BODY    = 1 << 3,
+			ARMS    = 1 << 4,
+			LEGS    = 1 << 5
+		};
+
 		static math::ang pixels_to_angle( f32 x, f32 y );
 		static math::ang angle_to_pixels( const math::ang& );
 
@@ -18,8 +28,6 @@ namespace hack {
 		f32 m_best_fov{ std::numeric_limits< f32 >::max( ) };
 
 		// move to cfg
-		i32 m_smoothing{ 85 };
-		i32 m_fov{ 50 };
 		bool m_rcs{ true };
 	};
 } // namespace hack

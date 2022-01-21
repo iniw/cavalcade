@@ -48,6 +48,14 @@ math::v3f sdk::cs_player::get_hitbox_position( i32 hitbox_id ) {
 					return r;
 				};
 
+				if ( hitbox->m_bb_min == math::v3f{ 0, 0, 0 } ) {
+					return { std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) };
+				}
+
+				if ( hitbox->m_bb_max == math::v3f{ 0, 0, 0 } ) {
+					return { std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) };
+				}
+
 				auto min = vector_transform( hitbox->m_bb_min );
 				auto max = vector_transform( hitbox->m_bb_max );
 
@@ -56,7 +64,7 @@ math::v3f sdk::cs_player::get_hitbox_position( i32 hitbox_id ) {
 		}
 	}
 
-	return { };
+	return { std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) };
 }
 
 math::v3f sdk::cs_player::get_eye_position( ) {
