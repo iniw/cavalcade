@@ -5,3 +5,4 @@
 #include "rect/rect_filled.hpp"
 #include "font/font.hpp"
 #include "text/text.hpp"
+#include "line/line.hpp"

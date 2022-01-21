@@ -21,7 +21,7 @@ render::geometry::rect_filled render::impl::rectangle_filled( const point& pos, 
 template< render::align alignment >
 render::geometry::rect_filled render::impl::rectangle_filled( const rect& rect, color col ) {
 	auto correct_pos = handle_alignment( alignment, rect.pos( ), rect.size( ) );
-	return draw_shape< geometry::rect_filled >( rect.pos( ), correct_pos, col.to_imgui( ) );
+	return draw_shape< geometry::rect_filled >( rect.pos( ), correct_pos, col );
 }
 
 template< render::font font_choice >

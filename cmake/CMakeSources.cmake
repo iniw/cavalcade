@@ -64,6 +64,8 @@ set(SOURCES
     # render - geometry
     src/other/render/geometry/rect/rect.cpp
     src/other/render/geometry/rect/rect_filled.cpp
+    src/other/render/geometry/rect/rect_grad.cpp
+    src/other/render/geometry/line/line.cpp
     src/other/render/geometry/font/font.cpp
     src/other/render/geometry/text/text.cpp
     # render

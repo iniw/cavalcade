@@ -17,7 +17,7 @@ namespace render::geometry {
 
 		constexpr text( ) = default;
 
-		text( const font* f, const point& p, std::string text, u32 col ) : m_point( p ), m_text( std::move( text ) ), m_font( f ) {
+		text( const font* f, const point& p, std::string text, const render::color& col ) : m_point( p ), m_text( std::move( text ) ), m_font( f ) {
 			m_color = col;
 		}
 

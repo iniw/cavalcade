@@ -1,12 +1,14 @@
 #pragma once
 
+#include "../types/color.hpp"
+
 struct ImDrawList;
 
 namespace render::geometry {
 	struct base_shape {
 	protected:
 
-		u32 m_color;
+		color m_color;
 
 	public:
 

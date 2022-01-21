@@ -1,6 +1,7 @@
 #include "esp.hpp"
 #include "../../ctx/ctx.hpp"
 #include "../../entity_cacher/entity_cacher.hpp"
+#include "../../gui/cfg/cfg.hpp"
 
 static bool bounding_box( sdk::player& p, std::pair< render::point, render::point >& out ) {
 	math::v3f mins{ }, maxs{ };
@@ -53,6 +54,9 @@ void hack::esp::run( ) {
 	if ( !g_csgo.m_engine->is_in_game( ) )
 		return;
 
+	static auto& box_w = gui::cfg::get< i32 >( HASH_CT( "main:group1:bw" ) );
+	static auto& box_h = gui::cfg::get< i32 >( HASH_CT( "main:group1:bh" ) );
+
 	g_entity_cacher.for_each( [ & ]( auto& p ) {
 		if ( !p )
 			return;
@@ -68,8 +72,59 @@ void hack::esp::run( ) {
 			auto box = bounding_box( p, bbox );
 			if ( box ) {
 				const auto& [ aa, bb ] = bbox;
-				g_render.m_safe.draw_shape< render::geometry::rect >(
-					aa, aa + bb, render::color( 0xffffffff ).frac_alpha( anim.m_animation_factor ).to_imgui( ), 1.F );
+
+				if ( box_w > 0 || box_h > 0 ) {
+					auto cw = .5F * ( box_w * .01F );
+					auto ch = .5F * ( box_h * .01F );
+					auto ow = box_w >= 99 ? 1 : 0;
+					auto oh = box_h >= 99 ? 1 : 0;
+
+					auto clr = render::color( 0xffffffff ).frac_alpha( anim.m_animation_factor );
+
+					if ( ow && oh ) {
+						g_render.m_safe.draw_shape< render::geometry::rect >(
+							aa, aa + bb, render::color( 0xffffffff ).frac_alpha( anim.m_animation_factor ), 1.F );
+					} else {
+						// NOTE(para): this is absolutely disgusting and probably a hog. the only alternative though is to batch a set of vertices and
+						// pass them
+
+						// @iniw do you think we could reduce this to a polyline at least?
+
+						// top left
+						g_render.m_safe.draw_shape< render::geometry::line >( aa, render::point{ ow + aa[ 0 ] + bb[ 0 ] * cw, aa[ 1 ] }, clr );
+
+						// top right
+						g_render.m_safe.draw_shape< render::geometry::line >( render::point{ aa[ 0 ] + bb[ 0 ] - 1, aa[ 1 ] },
+						                                                      render::point{ aa[ 0 ] + bb[ 0 ] * ( 1.F - cw ) - 1, aa[ 1 ] }, clr );
+
+						// bottom left
+						g_render.m_safe.draw_shape< render::geometry::line >( render::point{ aa[ 0 ], aa[ 1 ] + bb[ 1 ] - 1 },
+						                                                      render::point{ ow + aa[ 0 ] + bb[ 0 ] * cw, aa[ 1 ] + bb[ 1 ] - 1 },
+						                                                      clr );
+
+						// bottom right
+						g_render.m_safe.draw_shape< render::geometry::line >(
+							render::point{ aa[ 0 ] + bb[ 0 ] - 1, aa[ 1 ] + bb[ 1 ] - 1 },
+							render::point{ aa[ 0 ] + bb[ 0 ] * ( 1.F - cw ) - 1, aa[ 1 ] + bb[ 1 ] - 1 }, clr );
+
+						// left top
+						g_render.m_safe.draw_shape< render::geometry::line >( aa, render::point{ aa[ 0 ], oh + aa[ 1 ] + bb[ 1 ] * ch }, clr );
+
+						// left bottom
+						g_render.m_safe.draw_shape< render::geometry::line >( render::point{ aa[ 0 ], aa[ 1 ] + bb[ 1 ] - 1 },
+						                                                      render::point{ aa[ 0 ], aa[ 1 ] + bb[ 1 ] * ( 1.F - ch ) }, clr );
+
+						// right top
+						g_render.m_safe.draw_shape< render::geometry::line >( render::point{ aa[ 0 ] + bb[ 0 ] - 1, aa[ 1 ] },
+						                                                      render::point{ aa[ 0 ] + bb[ 0 ] - 1, oh + aa[ 1 ] + bb[ 1 ] * ch },
+						                                                      clr );
+
+						// right bottom
+						g_render.m_safe.draw_shape< render::geometry::line >(
+							render::point{ aa[ 0 ] + bb[ 0 ] - 1, aa[ 1 ] + bb[ 1 ] - 1 },
+							render::point{ aa[ 0 ] + bb[ 0 ] - 1, aa[ 1 ] + bb[ 1 ] * ( 1.F - ch ) }, clr );
+					}
+				}
 			}
 		}
 	} );

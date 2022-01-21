@@ -14,7 +14,7 @@ namespace render::geometry {
 
 		constexpr rect( ) = default;
 
-		constexpr rect( const point& point1, const point& point2, u32 col, f32 thickness )
+		constexpr rect( const point& point1, const point& point2, const render::color& col, f32 thickness )
 			: m_point1{ point1 }, m_point2{ point2 }, m_thickness{ thickness } {
 			m_color = col;
 		}

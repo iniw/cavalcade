@@ -55,7 +55,7 @@ void hack::aimbot::run( f32& x, f32& y ) {
 		else
 			return;
 
-		static int& smooth = gui::cfg::get< i32 >( HASH_CT( "main:group1:smoothing" ) );
+		static auto& smooth = gui::cfg::get< i32 >( HASH_CT( "main:group1:smoothing" ) );
 
 		auto local_pos = g_ctx.m_local.get( ).get_eye_position( );
 		auto rcs_angle = g_ctx.m_local.get( ).get_aim_punch_angle( ) * 2;

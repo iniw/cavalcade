@@ -9,6 +9,8 @@ void gui::impl::init( ) {
 		gb->add< objects::checkbox >( "check1", "check 1" );
 		gb->add< objects::checkbox >( "check2", "check 2" );
 		gb->add< objects::slider< i32 > >( "smoothing", "smoothing", 0, 100 );
+		gb->add< objects::slider< i32 > >( "bw", "bw", 0, 100 );
+		gb->add< objects::slider< i32 > >( "bh", "bh", 0, 100 );
 	}
 
 	auto gb3 = window->add< objects::groupbox >( "group2", "test 3", 90 );

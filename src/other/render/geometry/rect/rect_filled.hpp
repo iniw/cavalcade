@@ -6,7 +6,7 @@ namespace render::geometry {
 	struct rect_filled : rect {
 		constexpr rect_filled( ) = default;
 
-		constexpr rect_filled( const point& point1, const point& point2, u32 col ) {
+		constexpr rect_filled( const point& point1, const point& point2, const render::color& col ) {
 			m_point1    = point1;
 			m_point2    = point2;
 			m_thickness = 1.f;
