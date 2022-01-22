@@ -5,7 +5,7 @@
 
 DWORD WINAPI cavalcade::init( unk module_handle ) {
 	handle = static_cast< HMODULE >( module_handle );
-	window = LI_FN( FindWindowA )( XOR( "Valve001" ), nullptr );
+	window = LI_FN( FindWindowA )( _( "Valve001" ), nullptr );
 
 	H_ENFORCE( g_io.init( ), "failed to initialize io" );
 
@@ -22,7 +22,6 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
 	H_ENFORCE( g_render.init( ), "failed to initialize renderer" );
 
 	H_ENFORCE( g_hooks.init( ), "failed to initialize hooks" );
-
 
 #ifdef DEV
 

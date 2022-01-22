@@ -27,9 +27,9 @@ void hack::indicators::screen::draw( ) {
 		if ( m_anim_last_vel.m_animation_factor > 0.F ) {
 			auto size = text->calc_size( );
 
-			auto new_text =
-				std::make_shared< render::geometry::text >( fb, render::point{ g_render.get_screen_size( )[ 0 ] / 2, y },
-			                                                "[" + std::to_string( m_last_vel.value( ) ) + "]", render::color( 185, 185, 185, 255 ) );
+			auto new_text = std::make_shared< render::geometry::text >( fb, render::point{ g_render.get_screen_size( )[ 0 ] / 2, y },
+			                                                            _( "[" ) + std::to_string( m_last_vel.value( ) ) + _( "]" ),
+			                                                            render::color( 185, 185, 185, 255 ) );
 			new_text->m_point[ 0 ] -= new_text->calc_size( )[ 0 ] / 2;
 			new_text->m_point[ 1 ] -= ( size[ 1 ] - 5 ) * m_anim_last_vel.m_animation_factor;
 			new_text->m_color = render::color( 185, 185, 185, 255 ).frac_alpha( m_anim_last_vel.m_animation_factor );

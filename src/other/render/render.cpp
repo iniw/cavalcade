@@ -13,16 +13,16 @@ bool render::impl::init( ) {
 	MOCKING_TRY;
 
 	MOCK m_imgui.init( m_d3d9.m_device );
-	MOCK FONT_GET( font::MENU ).init( XOR( "C:\\Windows\\Fonts\\segoeui.ttf" ), 16.f );
-	MOCK FONT_GET( font::ESP ).init( XOR( "C:\\Windows\\Fonts\\segoeui.ttf" ), 16.f );
-	MOCK FONT_GET( font::IND_BIG ).init( XOR( "C:\\Windows\\Fonts\\segoeui.ttf" ), 42.f );
-	MOCK FONT_GET( font::IND_SMALL ).init( XOR( "C:\\Windows\\Fonts\\segoeui.ttf" ), 26.f );
+	MOCK FONT_GET( font::MENU ).init( _( "C:\\Windows\\Fonts\\segoeui.ttf" ), 16.f );
+	MOCK FONT_GET( font::ESP ).init( _( "C:\\Windows\\Fonts\\segoeui.ttf" ), 16.f );
+	MOCK FONT_GET( font::IND_BIG ).init( _( "C:\\Windows\\Fonts\\segoeui.ttf" ), 42.f );
+	MOCK FONT_GET( font::IND_SMALL ).init( _( "C:\\Windows\\Fonts\\segoeui.ttf" ), 26.f );
 
 	MOCKING_CATCH( return false );
 
 	update_screen_size( g_csgo.m_client_mode_shared->m_root_size );
 
-	g_io.log( "initialized renderer" );
+	g_io.log( _( "initialized renderer" ) );
 
 	return true;
 }

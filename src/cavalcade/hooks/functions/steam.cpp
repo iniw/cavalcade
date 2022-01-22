@@ -16,7 +16,7 @@ void cavalcade::hooks::steam::on_friend_message( GameConnectedFriendChatMsg_t* c
 
 			std::optional< std::string > image = std::nullopt;
 			// https://steamuserimages-a.akamaihd.net/ugc/1
-			auto find  = message_interp.find( "https://steamuserimages-a.akamaihd.net/ugc/" );
+			auto find  = message_interp.find( _( "https://steamuserimages-a.akamaihd.net/ugc/" ) );
 			size_t end = 0;
 			if ( find != std::string::npos ) {
 				auto end = message_interp.find_first_of( ' ', find );
@@ -26,29 +26,29 @@ void cavalcade::hooks::steam::on_friend_message( GameConnectedFriendChatMsg_t* c
 
 				auto make = std::string( message_interp.begin( ) + find, message_interp.begin( ) + end );
 
-				if ( make.ends_with( "/" ) ) {
+				if ( make.ends_with( _( "/" ) ) ) {
 					image = make;
 				}
 			}
 
 			g_ctx.m_last_friend_to_message = callback->m_steamIDUser;
-			auto text                      = io::format( "*<font color=\"#00FF00\">{}</font>*: {}", friend_name, ( const char* )msg );
+			auto text                      = io::format( _( "*<font color=\"#00FF00\">{}</font>*: {}" ), friend_name, ( const char* )msg );
 
 			// hack, we want prefix to translation
-			g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0, "<<<NO_TRANSLATE>>> %s", text.c_str( ) );
+			g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0, _( "<<<NO_TRANSLATE>>> %s" ), text.c_str( ) );
 
 			if ( image.has_value( ) ) {
 				g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
-					0, 0, "<<<NO_TRANSLATE>>> [<font color=\"#00FF00\">FRIEND</font>] Image from *<font color=\"#00FF00\">%s</font>*...",
+					0, 0, _( "<<<NO_TRANSLATE>>> [<font color=\"#00FF00\">FRIEND</font>] Image from *<font color=\"#00FF00\">%s</font>*..." ),
 					friend_name );
-				auto fmt = io::format( "<<<NO_TRANSLATE>>> <img src=\"{}\"></img>", image.value( ) );
+				auto fmt = io::format( _( "<<<NO_TRANSLATE>>> <img src=\"{}\"></img>" ), image.value( ) );
 				g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0, fmt.c_str( ) );
 			}
 
-			auto ttext = io::format( "*{}*: {}", friend_name, ( const char* )msg );
+			auto ttext = io::format( _( "*{}*: {}" ), friend_name, ( const char* )msg );
 
 			g_hack.m_translator.translate( hack::translator::e_languages::ENGLISH, hack::translator::e_languages::RUSSIAN, ttext,
-			                               "[<font color=\"#00FF00\">FRIEND</font>]" );
+			                               _( "[<font color=\"#00FF00\">FRIEND</font>]" ) );
 		}
 
 		free( msg );

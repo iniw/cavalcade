@@ -41,5 +41,7 @@ namespace render {
 		constexpr static color red( u8 alpha = 255 ) {
 			return color( 255, 0, 0, alpha );
 		}
+
+		constexpr auto operator<=>( const color& ) const = default;
 	};
 } // namespace render

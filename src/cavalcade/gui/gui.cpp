@@ -2,34 +2,34 @@
 #include "objects/objects.hpp"
 
 void gui::impl::init( ) {
-	auto window = objects::window::make( "main", "cavalcade_menu", { 300, 300 } );
+	auto window = objects::window::make( _( "main" ), _( "cavalcade_menu" ), { 300, 300 } );
 
-	auto gb = window->add< objects::groupbox >( "group1", "test", 70 );
+	auto gb = window->add< objects::groupbox >( _( "group1" ), _( "test" ), 70 );
 	{
-		gb->add< objects::checkbox >( "check1", "check 1" );
-		gb->add< objects::checkbox >( "on attack", "on attack" );
-		gb->add< objects::slider< i32 > >( "fov", "fov", 0, 180 );
-		gb->add< objects::slider< i32 > >( "smoothing", "smoothing", 0, 100 );
-		gb->add< objects::slider< i32 > >( "bw", "bw", 0, 100 );
-		gb->add< objects::slider< i32 > >( "bh", "bh", 0, 100 );
+		gb->add< objects::checkbox >( _( "check1" ), "check 1" );
+		gb->add< objects::checkbox >( _( "on attack" ), _( "on attack" ) );
+		gb->add< objects::slider< i32 > >( _( "fov" ), _( "fov" ), 0, 180 );
+		gb->add< objects::slider< i32 > >( _( "smoothing" ), _( "smoothing" ), 0, 100 );
+		gb->add< objects::slider< i32 > >( _( "bw" ), _( "bw" ), 0, 100 );
+		gb->add< objects::slider< i32 > >( _( "bh" ), _( "bh" ), 0, 100 );
 	}
 
-	auto gb3 = window->add< objects::groupbox >( "group2", "test 3", 90 );
+	auto gb3 = window->add< objects::groupbox >( _( "group2" ), ( "test 3" ), 90 );
 	{
-		auto tab1 = gb3->add< objects::tab >( "tab1", "tab" );
+		auto tab1 = gb3->add< objects::tab >( _( "tab1" ), _( "tab" ) );
 		{ }
-		auto tab2 = gb3->add< objects::tab >( "tab2", "tab" );
+		auto tab2 = gb3->add< objects::tab >( _( "tab2" ), _( "tab" ) );
 		{
-			tab2->add< objects::checkbox >( "check3", "check 2" );
-			tab2->add< objects::slider< i32 > >( "slider4", "slider 2", 0, 100 );
-			tab2->add< objects::slider< f32 > >( "slider5", "slider 3", 0.f, 100.f );
-			tab2->add< objects::slider< f32 > >( "slider6", "slider 4", 0.f, 100.f );
+			tab2->add< objects::checkbox >( _( "check3" ), _( "check 2" ) );
+			tab2->add< objects::slider< i32 > >( _( "slider4" ), _( "slider 2" ), 0, 100 );
+			tab2->add< objects::slider< f32 > >( _( "slider5" ), _( "slider 3" ), 0.f, 100.f );
+			tab2->add< objects::slider< f32 > >( _( "slider6" ), _( "slider 4" ), 0.f, 100.f );
 		}
 	}
 
 	m_windows.emplace_back( window );
 
-	g_io.log( XOR( "initialized gui, objects: {}" ), objects::base_object::s_object_count );
+	g_io.log( _( "initialized gui, objects: {}" ), objects::base_object::s_object_count );
 }
 
 void gui::impl::render( ) {

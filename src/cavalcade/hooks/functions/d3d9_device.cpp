@@ -9,7 +9,7 @@ HRESULT D3DAPI cavalcade::hooks::d3d9_device::end_scene( IDirect3DDevice9* devic
 		std::unique_lock< std::shared_mutex > lock( g_hack.m_translator.m_translations_mutex );
 		if ( !g_hack.m_translator.m_pending_translations.empty( ) ) {
 			for ( const auto& entry : g_hack.m_translator.m_pending_translations ) {
-				g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0, "%s", entry.c_str( ) );
+				g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0, _( "%s" ), entry.c_str( ) );
 			}
 
 			g_hack.m_translator.m_pending_translations.clear( );

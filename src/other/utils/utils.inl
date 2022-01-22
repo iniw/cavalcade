@@ -7,11 +7,11 @@ bool utils::enforce( bool expression, std::string_view id, std::string_view msg,
 	if ( !expression ) {
 		std::string fmt_msg = io::format( msg, std::forward< VA >( fmt )... );
 
-		g_io.log< level >( XOR( "enforce failed: id=\"{}\" - msg=\"{}\"" ), id, fmt_msg );
+		g_io.log< level >( _( "enforce failed: id=\"{}\" - msg=\"{}\"" ), id, fmt_msg );
 
 #ifndef NDEBUG
 
-		MessageBox( cavalcade::window, fmt_msg.data( ), XOR( "enforce failed" ), MB_OK );
+		MessageBox( cavalcade::window, fmt_msg.data( ), _( "enforce failed" ), MB_OK );
 
 #endif
 

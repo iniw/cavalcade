@@ -39,7 +39,7 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 		return og( ecx, input_sample_time, cmd );
 
 	// masturbation mode
-	g_ctx.m_cvars.viewmodel_offset_z->set_value( sin( g_csgo.m_globals->m_curtime * 3 ) * 2.f );
+	// g_ctx.m_cvars.viewmodel_offset_z->set_value( sin( g_csgo.m_globals->m_curtime * 3 ) * 2.f );
 
 	g_hack.m_velgraph.gather( );
 	g_hack.m_indscreen.gather( );

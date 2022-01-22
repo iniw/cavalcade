@@ -25,14 +25,13 @@
 #	error Unsupported platform
 #endif
 
-#ifndef DEV
-#	define XOR( str )                                                                                                                               \
+#ifndef _DEBUG
+#	define _( str )                                                                                                                                 \
 		::jm::xor_string( []( ) { return str; }, std::integral_constant< std::size_t, sizeof( str ) / sizeof( *str ) >{ },                           \
 		                  std::make_index_sequence< ::jm::detail::_buffer_size< sizeof( str ) >( ) >{ } )                                            \
 			.crypt_get( )
 #else
-#	define XOR( str )    str
-#	define XORSTR( str ) str
+#	define _( str ) str
 #endif
 
 #ifdef _MSC_VER

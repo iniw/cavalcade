@@ -27,15 +27,19 @@ bool io::impl::key_state( u8 key_id ) {
 
 template< io::log_level level, typename... VA >
 void io::impl::log( std::string_view str, VA&&... args ) {
+#if _DEBUG
 	auto fmt = io::format( str, std::forward< VA >( args )... );
 
 	m_console.print< level >( fmt );
 	m_files.log< level >( fmt );
+#endif
 }
 
 template< io::log_level level, typename... VA >
 void io::impl::print( std::string_view str, VA&&... args ) {
+#if _DEBUG
 	auto fmt = io::format( str, std::forward< VA >( args )... );
 
 	m_console.print< level >( fmt );
+#endif
 }

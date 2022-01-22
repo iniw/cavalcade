@@ -24,7 +24,7 @@ bool mem::impl::init( ) {
 		m_modules[ HASH_RT( name ) ] = module_info( address( ldr_entry->DllBase ) );
 	}
 
-	g_io.log( XOR( "initialized modules" ) );
+	g_io.log( _( "initialized modules" ) );
 
 	return !m_modules.empty( );
 }
@@ -35,7 +35,7 @@ bool mem::impl::setup( ) {
 	if ( !validate_addresses( ) )
 		return false;
 
-	g_io.log( XOR( "initialized addresses" ) );
+	g_io.log( _( "initialized addresses" ) );
 
 	return true;
 }

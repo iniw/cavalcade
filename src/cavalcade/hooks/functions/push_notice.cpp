@@ -6,7 +6,7 @@ void cavalcade::hooks::push_notice_::push_notice( unk ecx, unk edx, const char* 
 	// TODO: properly verify if the text is being translated
 	auto stext = std::string_view( text );
 
-	if ( !stext.starts_with( "<<<NO_TRANSLATE>>>" ) ) {
+	if ( !stext.starts_with( _( "<<<NO_TRANSLATE>>>" ) ) ) {
 		if ( g_hack.m_translator.m_valid ) {
 			g_hack.m_translator.translate( hack::translator::e_languages::ENGLISH, hack::translator::e_languages::RUSSIAN, std::string( text ) );
 		}

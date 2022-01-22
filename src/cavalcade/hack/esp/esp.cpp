@@ -128,7 +128,7 @@ void hack::esp::run( ) {
 					}
 
 					auto name   = std::string( p.get_name( ) );
-					auto offset = /* HACK */ name.find( "ygjpq" ) != std::string::npos ? 2 : 0;
+					auto offset = /* HACK */ name.find( _( "ygjpq" ) ) != std::string::npos ? 4 : 0;
 					auto text   = std::make_shared< render::geometry::text >( f, aa, std::move( name ), clr );
 					text->m_point[ 1 ] -= text->calc_size( )[ 1 ] + 3 + offset;
 					g_render.m_safe.draw_shape_p( std::move( text ) );
