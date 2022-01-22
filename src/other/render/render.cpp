@@ -15,6 +15,8 @@ bool render::impl::init( ) {
 	MOCK m_imgui.init( m_d3d9.m_device );
 	MOCK FONT_GET( font::MENU ).init( XOR( "C:\\Windows\\Fonts\\segoeui.ttf" ), 16.f );
 	MOCK FONT_GET( font::ESP ).init( XOR( "C:\\Windows\\Fonts\\segoeui.ttf" ), 16.f );
+	MOCK FONT_GET( font::IND_BIG ).init( XOR( "C:\\Windows\\Fonts\\segoeui.ttf" ), 42.f );
+	MOCK FONT_GET( font::IND_SMALL ).init( XOR( "C:\\Windows\\Fonts\\segoeui.ttf" ), 26.f );
 
 	MOCKING_CATCH( return false );
 

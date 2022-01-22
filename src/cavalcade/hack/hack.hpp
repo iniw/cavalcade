@@ -5,6 +5,8 @@
 #include "trainer/trainer.hpp"
 #include "aimbot/aimbot.hpp"
 #include "esp/esp.hpp"
+#include "graph/graph.hpp"
+#include "indicators/screen.hpp"
 
 namespace hack {
 	struct impl {
@@ -13,6 +15,8 @@ namespace hack {
 		trainer m_trainer;
 		aimbot m_aimbot;
 		esp m_esp;
+		graph m_velgraph;
+		indicators::screen m_indscreen;
 	};
 } // namespace hack
 

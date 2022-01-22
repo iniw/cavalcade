@@ -25,6 +25,8 @@ namespace render {
 	{
 		MENU = 0,
 		ESP,
+		IND_BIG,
+		IND_SMALL,
 		MAX
 	};
 

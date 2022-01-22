@@ -4,7 +4,11 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 	static auto og = g_mem[ CLIENT_DLL ].get_og< frame_stage_notify_fn >( HASH_CT( "CHLClient::FrameStageNotify" ) );
 	og( ecx, stage );
 
-	g_render.m_safe.frame( [ & ]( ) { g_hack.m_esp.run( ); } );
+	g_render.m_safe.frame( [ & ]( ) {
+		g_hack.m_esp.run( );
+		g_hack.m_velgraph.draw( );
+		g_hack.m_indscreen.draw( );
+	} );
 }
 
 void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
@@ -13,6 +17,8 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	g_entity_cacher.clear( );
 	g_hack.m_trainer.clear( );
 	g_hack.m_esp.clear( );
+	g_hack.m_velgraph.clear( );
+	g_hack.m_indscreen.clear( );
 	g_ctx.m_cmd = nullptr;
 
 	static auto og = g_mem[ CLIENT_DLL ].get_og< level_init_pre_entity_fn >( HASH_CT( "CHLClient::LevelInitPreEntity" ) );

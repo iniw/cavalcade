@@ -8,6 +8,7 @@ void gui::impl::init( ) {
 	{
 		gb->add< objects::checkbox >( "check1", "check 1" );
 		gb->add< objects::checkbox >( "on attack", "on attack" );
+		gb->add< objects::slider< i32 > >( "fov", "fov", 0, 180 );
 		gb->add< objects::slider< i32 > >( "smoothing", "smoothing", 0, 100 );
 		gb->add< objects::slider< i32 > >( "bw", "bw", 0, 100 );
 		gb->add< objects::slider< i32 > >( "bh", "bh", 0, 100 );

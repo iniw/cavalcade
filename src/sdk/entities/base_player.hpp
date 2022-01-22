@@ -25,6 +25,8 @@ namespace sdk {
 
 		NETVAR( f32, get_fall_velocity, "DT_BasePlayer->m_flFallVelocity" );
 
+		NETVAR( math::v3f, get_velocity, "DT_BasePlayer->m_vecVelocity[0]" );
+
 		NETVAR( math::ang, get_aim_punch_angle, "DT_BasePlayer->m_aimPunchAngle" );
 
 		NETVAR_OFFSET( i32, get_button_disabled, "DT_BasePlayer->m_hViewEntity", -0xC );

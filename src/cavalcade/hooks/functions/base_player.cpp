@@ -6,8 +6,13 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 
 	// NOTE(para): don't do local checks in features ty
 	// sidenote: when I see pointer checks I want to cry myself to Rust now, honestly
-	if ( !g_ctx.m_local || ( g_ctx.m_local && !g_ctx.m_local.get( ).is_alive( ) ) )
+	if ( !g_ctx.m_local )
 		return og( ecx, input_sample_time, cmd );
+
+	if ( ( g_ctx.m_local && !g_ctx.m_local.get( ).is_alive( ) ) ) {
+		g_hack.m_indscreen.clear( );
+		return og( ecx, input_sample_time, cmd );
+	}
 
 	if ( !cmd || !cmd->m_command_number )
 		return og( ecx, input_sample_time, cmd );
@@ -35,6 +40,9 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 
 	// masturbation mode
 	g_ctx.m_cvars.viewmodel_offset_z->set_value( sin( g_csgo.m_globals->m_curtime * 3 ) * 2.f );
+
+	g_hack.m_velgraph.gather( );
+	g_hack.m_indscreen.gather( );
 
 	g_hack.m_trainer.run( );
 

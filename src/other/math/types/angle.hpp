@@ -2,7 +2,6 @@
 
 #include <corecrt_math_defines.h>
 
-#include "vector.hpp"
 namespace math {
 	struct ang {
 		f32 pitch, yaw, roll;

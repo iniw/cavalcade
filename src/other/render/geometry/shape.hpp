@@ -6,8 +6,6 @@ struct ImDrawList;
 
 namespace render::geometry {
 	struct base_shape {
-	protected:
-
 		color m_color;
 
 	public:

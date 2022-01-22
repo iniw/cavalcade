@@ -33,14 +33,27 @@ math::ang hack::aimbot::angle_to_pixels( const math::ang& angle ) {
 	return math::ang( -y, x, 0.F );
 }
 
-static auto distance_point_to_line( const math::v3f& point, const math::v3f& line_origin, const math::v3f& direction ) {
-	auto point_direction = point - line_origin;
-	const auto temp      = point_direction.dot_product( direction ) / direction.length_sqr( );
-	if ( temp < 0.000001f )
-		return std::numeric_limits< f32 >::max( );
+math::v3f angle_vectors( const math::ang& angles ) {
+	constexpr auto DEG2RAD = []( const f32 x ) -> f32 { return x * ( M_PI / 180.F ); };
 
-	const auto perpendicular_point = line_origin + direction * temp;
-	return ( point - perpendicular_point ).length( );
+	f32 sp{ }, sy{ }, cp{ }, cy{ };
+
+	sy = sin( DEG2RAD( angles.yaw ) );
+	cy = cos( DEG2RAD( angles.yaw ) );
+
+	sp = sin( DEG2RAD( angles.pitch ) );
+	cp = cos( DEG2RAD( angles.pitch ) );
+
+	return { cp * cy, cp * sy, -sp };
+}
+
+static auto get_fov( const math::ang& view, const math::ang& aim ) {
+	constexpr auto RAD2DEG = []( const f32 x ) -> f32 { return x * ( 180.f / M_PI ); };
+
+	math::v3f _aim = angle_vectors( view );
+	math::v3f _ang = angle_vectors( aim );
+
+	return RAD2DEG( acos( _aim.dot_product( _ang ) / _aim.length_sqr( ) ) );
 }
 
 void hack::aimbot::run( f32& x, f32& y ) {
@@ -56,14 +69,16 @@ void hack::aimbot::run( f32& x, f32& y ) {
 		else
 			return;
 
+		static auto& fov       = gui::cfg::get< i32 >( HASH_CT( "main:group1:fov" ) );
 		static auto& smooth    = gui::cfg::get< i32 >( HASH_CT( "main:group1:smoothing" ) );
 		static auto& on_attack = gui::cfg::get< bool >( HASH_CT( "main:group1:on attack" ) );
 
-		auto local_pos = g_ctx.m_local.get( ).get_eye_position( );
-		auto rcs_angle = g_ctx.m_local.get( ).get_aim_punch_angle( ) * 2;
+		auto local_pos   = g_ctx.m_local.get( ).get_eye_position( );
+		auto rcs_angle   = g_ctx.m_local.get( ).get_aim_punch_angle( ) * 2;
+		auto view_angles = g_csgo.m_engine->get_view_angles( );
 
 		m_best_player = nullptr;
-		m_best_fov    = std::numeric_limits< f32 >::max( );
+		m_best_fov    = fov;
 
 		g_entity_cacher.for_each( [ & ]( auto& p ) {
 			if ( !p )
@@ -83,8 +98,8 @@ void hack::aimbot::run( f32& x, f32& y ) {
 			if ( m_rcs )
 				aim_angle -= rcs_angle;
 
-			auto dis = distance_point_to_line( hitbox_pos, local_pos, *( math::v3f* )&aim_angle );
-			if ( dis != std::numeric_limits< f32 >::max( ) && m_best_fov > dis ) {
+			auto dis = get_fov( view_angles, aim_angle );
+			if ( m_best_fov > dis ) {
 				m_best_player = p;
 				m_best_fov    = dis;
 			}
@@ -95,7 +110,7 @@ void hack::aimbot::run( f32& x, f32& y ) {
 
 		if ( m_best_player ) {
 			auto best_hitbox = [ & ]( ) -> math::v3f {
-				auto best_fov    = std::numeric_limits< f32 >::max( );
+				auto best_fov    = fov;
 				auto best_hitbox = sdk::e_hitbox::HEAD;
 
 				for ( const auto& [ k, e ] : g_aim_hitboxes ) {
@@ -113,8 +128,8 @@ void hack::aimbot::run( f32& x, f32& y ) {
 						if ( m_rcs )
 							aim_angle -= rcs_angle;
 
-						auto dis = distance_point_to_line( hitbox_pos, local_pos, *( math::v3f* )&aim_angle );
-						if ( dis != std::numeric_limits< f32 >::max( ) && m_best_fov > dis ) {
+						auto dis = get_fov( view_angles, aim_angle );
+						if ( m_best_fov > dis ) {
 							best_hitbox = h;
 							best_fov    = dis;
 						}
@@ -131,7 +146,6 @@ void hack::aimbot::run( f32& x, f32& y ) {
 			if ( m_rcs )
 				aim_angle -= rcs_angle;
 
-			auto view_angles = g_csgo.m_engine->get_view_angles( );
 			auto _view_delta = ( aim_angle - view_angles ).clamp_angle( );
 			auto view_delta  = *( math::v3f* )&_view_delta;
 			m_aiming         = true;
