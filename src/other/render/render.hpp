@@ -122,7 +122,7 @@ namespace render {
 				m_queue_front.clear( );
 			}
 
-			void frame( std::function< void( ) > fn ) {
+			void frame( std::function< void( ) >&& fn ) {
 				std::unique_lock lock( m_rendering_mutex );
 				clear( );
 				fn( );
