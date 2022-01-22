@@ -7,7 +7,7 @@ void gui::impl::init( ) {
 	auto gb = window->add< objects::groupbox >( "group1", "test", 70 );
 	{
 		gb->add< objects::checkbox >( "check1", "check 1" );
-		gb->add< objects::checkbox >( "check2", "check 2" );
+		gb->add< objects::checkbox >( "on attack", "on attack" );
 		gb->add< objects::slider< i32 > >( "smoothing", "smoothing", 0, 100 );
 		gb->add< objects::slider< i32 > >( "bw", "bw", 0, 100 );
 		gb->add< objects::slider< i32 > >( "bh", "bh", 0, 100 );

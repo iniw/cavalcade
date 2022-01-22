@@ -24,6 +24,7 @@ namespace render {
 	enum font
 	{
 		MENU = 0,
+		ESP,
 		MAX
 	};
 
@@ -91,17 +92,27 @@ namespace render {
 
 		struct safe {
 			std::shared_mutex m_rendering_mutex;
-			std::deque< std::shared_ptr< geometry::base_shape > > m_queue_back;
-			std::deque< std::shared_ptr< geometry::base_shape > > m_queue_front;
+			std::vector< std::shared_ptr< geometry::base_shape > > m_queue_back;
+			std::vector< std::shared_ptr< geometry::base_shape > > m_queue_front;
 
 			template< geometry::Shape T, typename... VA >
 			inline void draw_shape( VA&&... args ) {
-				m_queue_back.push_front( std::make_shared< T >( std::forward< VA >( args )... ) );
+				m_queue_back.push_back( std::make_shared< T >( std::forward< VA >( args )... ) );
 			}
 
 			template< geometry::Shape T, typename... VA >
 			inline void draw_shape_front( VA&&... args ) {
-				m_queue_front.push_front( std::make_shared< T >( std::forward< VA >( args )... ) );
+				m_queue_front.push_back( std::make_shared< T >( std::forward< VA >( args )... ) );
+			}
+
+			template< geometry::Shape T >
+			inline void draw_shape_p( std::shared_ptr< T >&& p ) {
+				m_queue_back.push_back( p );
+			}
+
+			template< geometry::Shape T >
+			inline void draw_shape_front_p( std::shared_ptr< T >&& p ) {
+				m_queue_front.push_back( p );
 			}
 
 			inline void clear( ) {

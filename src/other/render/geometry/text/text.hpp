@@ -7,10 +7,11 @@
 
 namespace render::geometry {
 	struct text : base_shape {
+		point m_point;
+
 	protected:
 
 		const font* m_font;
-		point m_point;
 		std::string m_text;
 
 	public:
@@ -23,7 +24,7 @@ namespace render::geometry {
 
 		void draw( ) override;
 
-		size calc_size( std::string_view text ) const;
+		size calc_size( ) const;
 	};
 } // namespace render::geometry
 

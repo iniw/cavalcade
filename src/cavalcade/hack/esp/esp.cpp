@@ -67,6 +67,8 @@ void hack::esp::run( ) {
 		animator& anim = m_alpha[ p.get( ).get_networkable_index( ) ];
 		anim.bake( !p.get( ).is_dormant( ), animation{ 3.F, easing::out_quart }, animation{ 3.F, easing::out_quart } );
 
+		static auto f = &g_render.m_fonts[ render::font::ESP ];
+
 		if ( anim.m_animation_factor > 0.F ) {
 			std::pair< render::point, render::point > bbox;
 			auto box = bounding_box( p, bbox );
@@ -123,6 +125,27 @@ void hack::esp::run( ) {
 						g_render.m_safe.draw_shape< render::geometry::line >(
 							render::point{ aa[ 0 ] + bb[ 0 ] - 1, aa[ 1 ] + bb[ 1 ] - 1 },
 							render::point{ aa[ 0 ] + bb[ 0 ] - 1, aa[ 1 ] + bb[ 1 ] * ( 1.F - ch ) }, clr );
+					}
+
+					auto text = std::make_shared< render::geometry::text >( f, aa, std::string( p.get_name( ) ), clr );
+					text->m_point[ 1 ] -= text->calc_size( )[ 1 ] + 3;
+					g_render.m_safe.draw_shape_p( std::move( text ) );
+
+					constexpr auto max_health = 100;
+					auto health               = std::min( max_health, p.get( ).get_health( ) );
+					auto height               = health * bb[ 1 ] / max_health;
+
+					{
+						auto health_aa = render::point{ aa[ 0 ] - 7, aa[ 1 ] + bb[ 1 ] - height + 1 };
+						g_render.m_safe.draw_shape< render::geometry::rect_filled >(
+							health_aa, health_aa + render::point{ 3, height - 2 },
+							render::color( 0x00000044 ).frac_alpha( anim.m_animation_factor ) );
+						g_render.m_safe.draw_shape< render::geometry::rect_filled >( health_aa, health_aa + render::point{ 3, height - 2 },
+						                                                             render::color( 0xffff00ff ).mod_alpha( clr.m_a ) );
+					}
+					{
+						auto health_aa = render::point{ aa[ 0 ] - 8, aa[ 1 ] };
+						g_render.m_safe.draw_shape< render::geometry::rect >( health_aa, health_aa + render::point{ 5, bb[ 1 ] }, clr, 1.F );
 					}
 				}
 			}

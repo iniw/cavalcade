@@ -56,7 +56,8 @@ void hack::aimbot::run( f32& x, f32& y ) {
 		else
 			return;
 
-		static auto& smooth = gui::cfg::get< i32 >( HASH_CT( "main:group1:smoothing" ) );
+		static auto& smooth    = gui::cfg::get< i32 >( HASH_CT( "main:group1:smoothing" ) );
+		static auto& on_attack = gui::cfg::get< bool >( HASH_CT( "main:group1:on attack" ) );
 
 		auto local_pos = g_ctx.m_local.get( ).get_eye_position( );
 		auto rcs_angle = g_ctx.m_local.get( ).get_aim_punch_angle( ) * 2;
@@ -88,6 +89,9 @@ void hack::aimbot::run( f32& x, f32& y ) {
 				m_best_fov    = dis;
 			}
 		} );
+
+		if ( on_attack && !g_io.key_state< io::key_state::DOWN >( VK_LBUTTON ) )
+			return;
 
 		if ( m_best_player ) {
 			auto best_hitbox = [ & ]( ) -> math::v3f {
@@ -131,6 +135,7 @@ void hack::aimbot::run( f32& x, f32& y ) {
 			auto _view_delta = ( aim_angle - view_angles ).clamp_angle( );
 			auto view_delta  = *( math::v3f* )&_view_delta;
 			m_aiming         = true;
+
 			if ( smooth > 1 ) {
 				auto move_ang = pixels_to_angle( x, y );
 

@@ -19,13 +19,6 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 	// NOTE(para:21-1-22): this is probably not needed.
 	g_ctx.m_cmd = cmd;
 
-	// NOTE(para): we don't want to verify if we have a cmd for aimbot because aimbot runs every frame
-	// and if we verify for cmd it'll stutter (for obvious reasons, the cmd doesn't
-	// get updated enough times), so we rely on a flag that should be accurate 99.9% of the time.
-	// - Alternative is verifying IO but this feels better for some reason.
-	g_hack.m_aimbot.m_is_attacking = g_ctx.m_cmd->m_buttons & 1;
-	g_hack.m_aimbot.m_old_angles   = g_csgo.m_engine->get_view_angles( );
-
 	if ( !input_sample_time ) {
 		return og( ecx, input_sample_time, cmd );
 	}
