@@ -19,6 +19,10 @@ namespace sdk {
 			return m_player;
 		}
 
+		constexpr auto valid( ) const {
+			return m_player && ( uintptr_t )m_player > 0x1000;
+		}
+
 	private:
 
 		sdk::cs_player* m_player;

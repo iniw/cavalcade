@@ -58,7 +58,7 @@ static auto get_fov( const math::ang& view, const math::ang& aim ) {
 
 void hack::aimbot::run( f32& x, f32& y ) {
 	m_aiming = false;
-	if ( g_ctx.m_local && g_ctx.m_local.get( ).is_alive( ) ) {
+	if ( g_ctx.m_local.valid( ) && g_ctx.m_local.get( ).is_alive( ) ) {
 		if ( auto weap = g_csgo.m_ent_list->get_handle< sdk::weapon_cs_base* >( g_ctx.m_local.get( ).get_active_weapon( ) ); weap )
 			if ( auto info = weap->get_cs_weapon_info( ); info ) {
 				if ( info->m_max_clip1 <= 0 || info->m_type == sdk::weapon_type::KNIFE ||
@@ -81,7 +81,7 @@ void hack::aimbot::run( f32& x, f32& y ) {
 		m_best_fov    = fov;
 
 		g_entity_cacher.for_each( [ & ]( auto& p ) {
-			if ( !p )
+			if ( !p.valid( ) )
 				return;
 
 			if ( p == g_ctx.m_local || !p.get( ).is_alive( ) || p.get( ).is_dormant( ) || !p.get( ).is_enemy( g_ctx.m_local ) ||

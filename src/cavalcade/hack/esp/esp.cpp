@@ -48,17 +48,17 @@ static bool bounding_box( sdk::player& p, std::pair< render::point, render::poin
 }
 
 void hack::esp::run( ) {
-	if ( !g_ctx.m_local )
+	if ( !g_csgo.m_engine->is_in_game( ) )
 		return;
 
-	if ( !g_csgo.m_engine->is_in_game( ) )
+	if ( !g_ctx.m_local )
 		return;
 
 	static auto& box_w = gui::cfg::get< i32 >( HASH_CT( "main:group1:bw" ) );
 	static auto& box_h = gui::cfg::get< i32 >( HASH_CT( "main:group1:bh" ) );
 
 	g_entity_cacher.for_each( [ & ]( auto& p ) {
-		if ( !p )
+		if ( !p.valid( ) )
 			return;
 
 		if ( p == g_ctx.m_local || !p.get( ).is_alive( ) || !p.get( ).is_enemy( g_ctx.m_local ) )

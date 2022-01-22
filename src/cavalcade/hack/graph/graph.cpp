@@ -17,7 +17,12 @@ void hack::graph::gather( ) {
 }
 
 void hack::graph::draw( ) {
-	if ( g_ctx.m_local && g_ctx.m_local.get( ).is_alive( ) ) {
+	if ( !g_csgo.m_engine->is_in_game( ) )
+		return;
+
+	// NOTE(para): there should be no data in the first place if player isn't alive so this should be fine.
+	// there's an issue in release if we check for alive...
+	if ( g_ctx.m_local.valid( ) ) {
 		if ( m_data.size( ) < 2 )
 			return;
 
