@@ -19,6 +19,8 @@
 #include "game_movement.hpp"
 #include "input.hpp"
 #include "ivdebugoverlay.hpp"
+#include "enginetrace.hpp"
+#include "physicssurfaceprops.hpp"
 
 namespace sdk::interfaces {
 	struct registry {

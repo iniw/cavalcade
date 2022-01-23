@@ -37,6 +37,14 @@ bool sdk::csgo::init( ) {
 		m_debug_overlay = find_interface< interfaces::debug_overlay* >( g_mem[ ENGINE_DLL ], HASH_CT( "VDebugOverlay" ) );
 		if ( !m_debug_overlay )
 			return false;
+
+		m_engine_trace = find_interface< interfaces::engine_trace* >( g_mem[ ENGINE_DLL ], HASH_CT( "EngineTraceClient" ) );
+		if ( !m_engine_trace )
+			return false;
+
+		m_physics_surface_props = find_interface< interfaces::physics_surface_props* >( g_mem[ PHYSICS_DLL ], HASH_CT( "VPhysicsSurfaceProps" ) );
+		if ( !m_physics_surface_props )
+			return false;
 	}
 
 	m_globals = mem::get_v_func( m_client, 11 ).add( 0xA ).get< globals* >( 2 );

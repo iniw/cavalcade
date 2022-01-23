@@ -7,6 +7,11 @@ bool sdk::cs_player::is_enemy( sdk::base_player* player ) {
 	return get_team( ) != player->get_team( );
 }
 
+bool sdk::cs_player::is_other_enemy( base_player* other ) {
+	static auto is_other_enemy_fn = g_mem[ CLIENT_DLL ].get_address< bool( __thiscall* )( cs_player*, base_player* ) >( HASH_CT( "IsOtherEnemy" ) );
+	return is_other_enemy_fn( this, other );
+}
+
 void sdk::cs_player::post_think( ) {
 	g_csgo.m_mdl_cache->begin_lock( );
 

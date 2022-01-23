@@ -22,6 +22,8 @@ namespace sdk {
 		interfaces::model_info* m_model_info;
 		interfaces::input* m_input;
 		interfaces::debug_overlay* m_debug_overlay;
+		interfaces::engine_trace* m_engine_trace;
+		interfaces::physics_surface_props* m_physics_surface_props;
 
 		globals* m_globals;
 		move_helper* m_move_helper;

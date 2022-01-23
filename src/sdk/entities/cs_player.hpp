@@ -12,9 +12,15 @@ namespace sdk {
 
 		NETVAR( bool, is_scoped, "DT_CSPlayer->m_bIsScoped" );
 
+		NETVAR( bool, has_helmet, "DT_CSPlayer->m_bHasHelmet" );
+
+		NETVAR( i32, armor_value, "DT_CSPlayer->m_ArmorValue" );
+
 		NETVAR_OFFSET( bool, is_using_new_anim_state, "DT_CSPlayer->m_flLastExoJumpTime", 0x8 );
 
 		bool is_enemy( base_player* player );
+
+		bool is_other_enemy( base_player* other );
 
 		void post_think( );
 

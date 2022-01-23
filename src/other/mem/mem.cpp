@@ -62,6 +62,8 @@ void mem::impl::add_addresses( ) {
 		ADD_PATTERN( CLIENT_DLL, "CEntityListener::OnRemoveEntity", "55 8B EC 51 8B 45 0C 53 8B D9 56 57 83 F8 FF 75 07" );
 		ADD_PATTERN( CLIENT_DLL, "OnOverrideMouseInput", "55 8B EC 83 E4 F8 83 EC 18 56 8B 75 0C 57 8B 7D 10" );
 		ADD_ADDRESS( CLIENT_DLL, "CPrediction::SetupMove", get_v_func( g_csgo.m_prediction, 20 ) );
+		ADD_PATTERN( CLIENT_DLL, "TraceToExit", "55 8B EC 83 EC 4C F3 0F 10 75" );
+		ADD_PATTERN_REL( CLIENT_DLL, "IsOtherEnemy", "E8 ? ? ? ? 02 C0 32 87 ? ? ? ? 24 02 30 87" );
 
 		{ // C_BaseEntity
 
