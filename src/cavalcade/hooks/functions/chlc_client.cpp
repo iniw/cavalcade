@@ -3,12 +3,11 @@
 void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame_stage stage ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< frame_stage_notify_fn >( HASH_CT( "CHLClient::FrameStageNotify" ) );
 
-	if ( stage >= sdk::frame_stage::START )
-		g_render.m_safe.frame( [ & ]( ) {
-			g_hack.m_esp.run( );
-			g_hack.m_velgraph.draw( );
-			g_hack.m_indscreen.draw( );
-		} );
+	g_render.m_safe.frame( [ & ]( ) {
+		g_hack.m_esp.run( );
+		g_hack.m_velgraph.draw( );
+		g_hack.m_indscreen.draw( );
+	} );
 
 	og( ecx, stage );
 }

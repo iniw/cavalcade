@@ -32,14 +32,18 @@ void cavalcade::hooks::steam::on_friend_message( GameConnectedFriendChatMsg_t* c
 			}
 
 			g_ctx.m_last_friend_to_message = callback->m_steamIDUser;
-			auto text                      = io::format( _( "*<font color=\"#00FF00\">{}</font>*: {}" ), friend_name, ( const char* )msg );
+			auto text =
+				io::format( _( "<font color=\"#00FF00\">friend</font> <font color=\"#B9B9B9\"> | </font>*<font color=\"#00FF00\">{}</font>*: {}" ),
+			                friend_name, ( const char* )msg );
 
 			// hack, we want prefix to translation
 			g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0, _( "<<<NO_TRANSLATE>>> %s" ), text.c_str( ) );
 
 			if ( image.has_value( ) ) {
 				g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
-					0, 0, _( "<<<NO_TRANSLATE>>> [<font color=\"#00FF00\">FRIEND</font>] Image from *<font color=\"#00FF00\">%s</font>*..." ),
+					0, 0,
+					_( "<<<NO_TRANSLATE>>> <font color=\"#00FF00\">friend</font> <font color=\"#B9B9B9\"> | image from </font>*<font "
+				       "color=\"#00FF00\">%s</font>*..." ),
 					friend_name );
 				auto fmt = io::format( _( "<<<NO_TRANSLATE>>> <img src=\"{}\"></img>" ), image.value( ) );
 				g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0, fmt.c_str( ) );
@@ -48,7 +52,7 @@ void cavalcade::hooks::steam::on_friend_message( GameConnectedFriendChatMsg_t* c
 			auto ttext = io::format( _( "*{}*: {}" ), friend_name, ( const char* )msg );
 
 			g_hack.m_translator.translate( hack::translator::e_languages::ENGLISH, hack::translator::e_languages::RUSSIAN, ttext,
-			                               _( "[<font color=\"#00FF00\">FRIEND</font>]" ) );
+			                               _( "<font color=\"#00FF00\">friend</font> <font color=\"#B9B9B9\"> |</font>" ) );
 		}
 
 		free( msg );

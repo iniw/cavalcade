@@ -21,8 +21,8 @@ void hack::indicators::screen::draw( ) {
 		static auto fa = &g_render.m_fonts[ render::font::IND_BIG ];
 		static auto fb = &g_render.m_fonts[ render::font::IND_SMALL ];
 
-		m_anim_last_vel.bake( m_last_vel.has_value( ) && ( m_time > g_csgo.m_globals->m_curtime ), animation{ 3.F, easing::out_quart },
-		                      animation{ 3.F, easing::out_quart } );
+		m_anim_last_vel.bake( m_last_vel.has_value( ) && ( m_time > g_csgo.m_globals->m_curtime ), animation{ 3.F, easing::out_expo },
+		                      animation{ 3.F, easing::out_expo } );
 
 		auto text = std::make_shared< render::geometry::text >(
 			fa, render::point{ g_render.get_screen_size( )[ 0 ] / 2, y },

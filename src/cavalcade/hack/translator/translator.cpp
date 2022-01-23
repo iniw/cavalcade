@@ -25,9 +25,14 @@ void hack::translator::translate( e_languages source, e_languages target, const 
 						auto res = json[ "translatedText" ].get< std::string >( );
 
 						// TODO: get color dynamically for all cases, currently its static
-						auto formatted = io::format( _( "<<<NO_TRANSLATE>>> {}[<font color=\"{}\">{}</font>-><font color=\"{}\">{}</font>] {}" ),
-					                                 suffix.empty( ) ? "" : " " + suffix + " ", "#0000FF", get_human_name_code( source ), "#00FF00",
-					                                 get_human_name_code( target ), res );
+						auto tsource = std::string{ get_human_name_code( source ) };
+						std::transform( tsource.begin( ), tsource.end( ), tsource.begin( ), ::tolower );
+						auto ttarget = std::string{ get_human_name_code( target ) };
+						std::transform( ttarget.begin( ), ttarget.end( ), ttarget.begin( ), ::tolower );
+						auto formatted = io::format( _( "<<<NO_TRANSLATE>>> {}<font color=\"{}\">{}</font> <font color=\"#B9B9B9\">-></font> <font "
+					                                    "color=\"{}\">{}</font> <font color=\"#B9B9B9\"> |</font> {}" ),
+					                                 suffix.empty( ) ? "" : " " + suffix + " ", "#00FF00", std::move( tsource ), "#FFFF00",
+					                                 std::move( ttarget ), res );
 						std::unique_lock< std::shared_mutex > lock( m_translations_mutex );
 						m_pending_translations.push_back( formatted );
 					}

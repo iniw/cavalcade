@@ -21,9 +21,8 @@ struct animator {
 };
 
 namespace easing {
-	constexpr static f32 out_quart( f32 delta ) {
-		delta = ( --delta ) * delta;
-		return static_cast< f32 >( 1 - delta * delta );
+	static f32 out_expo( f32 delta ) {
+		return 1 - pow( 2, -8 * delta );
 	}
 } // namespace easing
 

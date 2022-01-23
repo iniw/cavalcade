@@ -58,14 +58,14 @@ void hack::esp::run( ) {
 	static auto& box_h = gui::cfg::get< i32 >( HASH_CT( "main:group1:bh" ) );
 
 	g_entity_cacher.for_each( [ & ]( auto& p ) {
-		if ( !p.valid( ) )
+		if ( !p )
 			return;
 
 		if ( p == g_ctx.m_local || !p.get( ).is_alive( ) || !p.get( ).is_enemy( g_ctx.m_local ) )
 			return;
 
 		animator& anim = m_alpha[ p.get( ).get_networkable_index( ) ];
-		anim.bake( !p.get( ).is_dormant( ), animation{ 3.F, easing::out_quart }, animation{ 3.F, easing::out_quart } );
+		anim.bake( !p.get( ).is_dormant( ), animation{ 3.F, easing::out_expo }, animation{ 3.F, easing::out_expo } );
 
 		static auto f = &g_render.m_fonts[ render::font::ESP ];
 
