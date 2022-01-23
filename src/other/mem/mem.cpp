@@ -64,6 +64,8 @@ void mem::impl::add_addresses( ) {
 		ADD_ADDRESS( CLIENT_DLL, "CPrediction::SetupMove", get_v_func( g_csgo.m_prediction, 20 ) );
 		ADD_PATTERN( CLIENT_DLL, "TraceToExit", "55 8B EC 83 EC 4C F3 0F 10 75" );
 		ADD_PATTERN_REL( CLIENT_DLL, "IsOtherEnemy", "E8 ? ? ? ? 02 C0 32 87 ? ? ? ? 24 02 30 87" );
+		ADD_PATTERN( CLIENT_DLL, "IsBreakableEntity", "55 8B EC 51 56 8B F1 85 F6 74 68 83 BE" );
+		ADD_PATTERN_REL( CLIENT_DLL, "ClipTraceToPlayers", "E8 ? ? ? ? 83 C4 18 8A 56 37" );
 
 		{ // C_BaseEntity
 

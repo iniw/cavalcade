@@ -22,6 +22,8 @@ namespace sdk {
 	};
 
 	struct trace_filter {
+		trace_filter( ) = default;
+
 		trace_filter( const base_entity* e ) : m_skip( e ) { }
 
 		virtual bool should_hit_entity( base_entity* e, int ) {
@@ -49,41 +51,18 @@ namespace sdk {
 			RIGHT_LEG,
 			GEAR = 10
 		};
-
-		constexpr f32 get_damage_multiplier( i32 group ) noexcept {
-			switch ( group ) {
-			case HEAD:
-				return 4.0f;
-			case STOMACH:
-				return 1.25f;
-			case LEFT_LEG:
-			case RIGHT_LEG:
-				return 0.75f;
-			default:
-				return 1.0f;
-			}
-		}
-
-		constexpr bool is_armored( i32 group, bool helmet ) noexcept {
-			switch ( group ) {
-			case HEAD:
-				return helmet;
-
-			case CHEST:
-			case STOMACH:
-			case LEFT_ARM:
-			case RIGHT_ARM:
-				return true;
-			default:
-				return false;
-			}
-		}
 	} // namespace hit_group
 
 	struct trace {
 		math::v3f m_start;
 		math::v3f m_end;
-		PAD( 20 );
+		struct plane {
+			math::v3f m_normal;
+			f32 m_dist;
+			uint8_t m_type;
+			uint8_t signbits;
+			PAD( 2 );
+		} m_plane;
 		f32 m_fraction;
 		i32 m_contents;
 		unsigned short m_disp_flags;
@@ -105,6 +84,10 @@ namespace sdk {
 		struct engine_trace {
 			i32 get_point_concents( const math::v3f& abs_pos, i32 contents ) {
 				return mem::call_v_func< i32, 0 >( this, std::cref( abs_pos ), contents, nullptr );
+			}
+
+			void clip_ray_to_entity( const sdk::ray& ray, unsigned int fmask, base_player* ent, sdk::trace& trace ) {
+				return mem::call_v_func< void, 3 >( this, std::cref( ray ), fmask, ent, std::ref( trace ) );
 			}
 
 			void trace_ray( const sdk::ray& ray, unsigned int mask, const trace_filter& filter, sdk::trace& trace ) {
