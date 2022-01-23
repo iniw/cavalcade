@@ -48,12 +48,6 @@ static bool bounding_box( sdk::player& p, std::pair< render::point, render::poin
 }
 
 void hack::esp::run( ) {
-	if ( !g_csgo.m_engine->is_in_game( ) )
-		return;
-
-	if ( !g_ctx.m_local )
-		return;
-
 	static auto& box_w = gui::cfg::get< i32 >( HASH_CT( "main:group1:bw" ) );
 	static auto& box_h = gui::cfg::get< i32 >( HASH_CT( "main:group1:bh" ) );
 

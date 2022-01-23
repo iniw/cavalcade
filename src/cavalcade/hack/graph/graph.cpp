@@ -17,26 +17,21 @@ void hack::graph::gather( ) {
 }
 
 void hack::graph::draw( ) {
-	if ( !g_csgo.m_engine->is_in_game( ) )
+	if ( m_data.size( ) < 2 )
 		return;
 
-	if ( g_ctx.m_local.valid( ) && g_ctx.m_local.get( ).is_alive( ) ) {
-		if ( m_data.size( ) < 2 )
-			return;
+	for ( auto i = 0; i < m_data.size( ) - 1; ++i ) {
+		const auto& c = m_data[ i ];
+		const auto& n = m_data[ i + 1 ];
 
-		for ( auto i = 0; i < m_data.size( ) - 1; ++i ) {
-			const auto& c = m_data[ i ];
-			const auto& n = m_data[ i + 1 ];
+		auto pos = render::point{ g_render.get_screen_size( )[ 0 ] / 2 + g_vel_graph_size * ( g_vel_graph_scale / 2.F ),
+			                      g_render.get_screen_size( )[ 1 ] / 1.2F + 130 };
 
-			auto pos = render::point{ g_render.get_screen_size( )[ 0 ] / 2 + g_vel_graph_size * ( g_vel_graph_scale / 2.F ),
-				                      g_render.get_screen_size( )[ 1 ] / 1.2F + 130 };
+		auto alpha = std::max( 10, std::min( 255, c.m_speed + 5 ) ) * .75F;
 
-			auto alpha = std::max( 10, std::min( 255, c.m_speed + 5 ) ) * .75F;
-
-			g_render.m_safe.draw_shape< render::geometry::line >( render::point{ pos[ 0 ] - ( i - 1 ) * g_vel_graph_scale, pos[ 1 ] - c.m_speed },
-			                                                      render::point{ pos[ 0 ] - i * g_vel_graph_scale, pos[ 1 ] - n.m_speed },
-			                                                      render::color( 255, 255, 255, alpha ), 1.F );
-		}
+		g_render.m_safe.draw_shape< render::geometry::line >( render::point{ pos[ 0 ] - ( i - 1 ) * g_vel_graph_scale, pos[ 1 ] - c.m_speed },
+		                                                      render::point{ pos[ 0 ] - i * g_vel_graph_scale, pos[ 1 ] - n.m_speed },
+		                                                      render::color( 255, 255, 255, alpha ), 1.F );
 	}
 }
 
