@@ -4,6 +4,8 @@
 #include "../../gui/cfg/cfg.hpp"
 #include "autowall/autowall.hpp"
 
+#define AUTOWALL_DEBUG 0
+
 const static std::map< hack::aimbot::e_hitboxes, std::vector< sdk::e_hitbox > > g_aim_hitboxes = {
 	{ hack::aimbot::e_hitboxes::HEAD, { sdk::e_hitbox::HEAD } },
 
@@ -19,6 +21,16 @@ const static std::map< hack::aimbot::e_hitboxes, std::vector< sdk::e_hitbox > > 
 	  { sdk::e_hitbox::LEFT_THIGH, sdk::e_hitbox::RIGHT_THIGH, sdk::e_hitbox::LEFT_CALF, sdk::e_hitbox::RIGHT_CALF, sdk::e_hitbox::LEFT_FOOT,
 	    sdk::e_hitbox::RIGHT_FOOT } }
 };
+
+static bool can_see( sdk::cs_player* e, const math::v3f& p ) {
+	auto eye_pos = g_ctx.m_local.get( ).get_eye_position( );
+
+	sdk::trace trace;
+	sdk::trace_filter filter{ g_ctx.m_local };
+	g_csgo.m_engine_trace->trace_ray( sdk::ray( eye_pos, p ), 0x46004009, filter, trace );
+	return ( trace.m_entity == e && trace.m_hitgroup != sdk::hit_group::GENERIC && trace.m_hitgroup != sdk::hit_group::GEAR ) ||
+	       trace.m_fraction > 0.97F;
+}
 
 math::ang hack::aimbot::pixels_to_angle( float x, float y ) {
 	float px = x * g_ctx.m_cvars.m_pitch->get_float( );
@@ -95,10 +107,17 @@ void hack::aimbot::run( f32& x, f32& y ) {
 			if ( m_rcs )
 				aim_angle -= rcs_angle;
 
-			// f32 dmg   = 0;
-			// auto scan = can_hit( p, weap, info, hitbox_pos, dmg );
-			// g_io.log( XOR( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
-			// if ( !scan )
+			f32 dmg   = 0;
+			auto scan = autowall::can_hit( p, weap, info, hitbox_pos, dmg );
+#if AUTOWALL_DEBUG
+			g_io.log( XOR( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
+#endif
+			if ( !scan ) {
+				// TODO(para): verify other hitboxes in accordance to config too
+				return;
+			}
+
+			// if ( !can_see( p, hitbox_pos ) )
 			// 	return;
 
 			auto dis = get_fov( view_angles, aim_angle );
@@ -128,10 +147,15 @@ void hack::aimbot::run( f32& x, f32& y ) {
 						if ( m_rcs )
 							aim_angle -= rcs_angle;
 
-						// f32 dmg   = 0;
-						// auto scan = can_hit( m_best_player, weap, info, hitbox_pos, dmg );
-						// g_io.log( XOR( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
-						// if ( !scan )
+						f32 dmg   = 0;
+						auto scan = autowall::can_hit( m_best_player, weap, info, hitbox_pos, dmg );
+#if AUTOWALL_DEBUG
+						g_io.log( XOR( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
+#endif
+						if ( !scan )
+							continue;
+
+						// if ( !can_see( m_best_player, hitbox_pos ) )
 						// 	continue;
 
 						auto dis = get_fov( view_angles, aim_angle );

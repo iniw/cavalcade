@@ -10,40 +10,29 @@ namespace sdk {
 } // namespace sdk
 
 namespace sdk {
-	struct __declspec( align( 16 ) ) v3f_aligned {
-		v3f_aligned( ) = default;
+	struct vec3 {
+		vec3( ) = default;
+		vec3( const math::v3f& v ) : x( v[ 0 ] ), y( v[ 1 ] ), z( v[ 2 ] ) { }
 
 		f32 x;
 		f32 y;
 		f32 z;
-		f32 w;
 
-		explicit v3f_aligned( const math::v3f& v ) {
-			x = v[ 0 ];
-			y = v[ 1 ];
-			z = v[ 2 ];
-			w = 0;
-		}
-
-		constexpr v3f_aligned& operator=( const math::v3f& v ) {
-			x = v[ 0 ];
-			y = v[ 1 ];
-			z = v[ 2 ];
-			w = 0;
-
-			return *this;
-		}
+		f32 w{ 0 };
 	};
 
 	struct ray {
 		ray( const math::v3f& src, const math::v3f& dest ) : m_start( src ), m_delta( dest - src ) {
 			m_is_swept = m_delta.x || m_delta.y || m_delta.z;
+
+			m_extents.x = m_extents.y = m_extents.z = 0;
+			m_start_offset.x = m_start_offset.y = m_start_offset.z = 0;
 		}
 
-		v3f_aligned m_start;
-		v3f_aligned m_delta;
-		v3f_aligned m_start_offset;
-		v3f_aligned m_vec_extents;
+		__declspec( align( 16 ) ) vec3 m_start;
+		__declspec( align( 16 ) ) vec3 m_delta;
+		__declspec( align( 16 ) ) vec3 m_start_offset;
+		__declspec( align( 16 ) ) vec3 m_extents;
 		PAD( 4 );
 		bool m_is_ray{ true };
 		bool m_is_swept{ };
@@ -87,9 +76,9 @@ namespace sdk {
 		struct plane {
 			math::v3f m_normal;
 			f32 m_dist;
-			uint8_t m_type;
-			uint8_t signbits;
-			PAD( 2 );
+			u8 m_type;
+			u8 m_signbits;
+			u8 pad[ 2 ];
 		} m_plane;
 		f32 m_fraction;
 		i32 m_contents;

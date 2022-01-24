@@ -151,11 +151,6 @@ bool autowall::handle_bullet_penetration( sdk::cs_weapon_info* info, fire_bullet
 	data.m_trace_length += data.m_enter_trace.m_fraction * data.m_trace_length_remaining;
 	data.m_current_damage *= pow( ( info->m_range_modifier ), ( data.m_trace_length * 0.002F ) );
 
-	// NOTE(para): this implies new server penetration type.
-	// we could essentially break most autowalls by using the old one on a server (kek)
-	if ( !( data.m_enter_trace.m_contents >> 3 & 1 ) )
-		data.m_penetrate_count = 0;
-
 	if ( ( data.m_trace_length > 3000.f ) || ( enter_surf_penetration_modifier < 0.1f ) )
 		data.m_penetrate_count = 0;
 
