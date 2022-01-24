@@ -8,15 +8,41 @@
 namespace sdk {
 	struct base_entity;
 
-	struct ray {
-		ray( const math::v3f& src, const math::v3f& dest ) : m_start( src ), m_delta( dest - src ) {
-			m_is_swept = m_delta[ 0 ] || m_delta[ 1 ] || m_delta[ 2 ];
+	struct __declspec( align( 16 ) ) v3f_aligned {
+		v3f_aligned( ) = default;
+
+		f32 x;
+		f32 y;
+		f32 z;
+		f32 w;
+
+		explicit v3f_aligned( const math::v3f& v ) {
+			x = v[ 0 ];
+			y = v[ 1 ];
+			z = v[ 2 ];
+			w = 0;
 		}
 
-		math::v3f m_start;
+		constexpr v3f_aligned& operator=( const math::v3f& v ) {
+			x = v[ 0 ];
+			y = v[ 1 ];
+			z = v[ 2 ];
+			w = 0;
+
+			return *this;
+		}
+	};
+
+	struct ray {
+		ray( const math::v3f& src, const math::v3f& dest ) : m_start( src ), m_delta( dest - src ) {
+			m_is_swept = m_delta.x || m_delta.y || m_delta.z;
+		}
+
+		v3f_aligned m_start;
+		v3f_aligned m_delta;
+		v3f_aligned m_start_offset;
+		v3f_aligned m_vec_extents;
 		PAD( 4 );
-		math::v3f m_delta;
-		PAD( 40 );
 		bool m_is_ray{ true };
 		bool m_is_swept{ };
 	};

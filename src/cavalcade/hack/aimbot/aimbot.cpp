@@ -97,18 +97,53 @@ static void scale_damage( i32 hitgroup, sdk::cs_player* e, f32 weapon_armor_rati
 }
 
 static void UTIL_clip_trace_to_players( const math::v3f& abs_start, const math::v3f& abs_end, unsigned int mask, sdk::trace_filter& filter,
-                                        sdk::trace& trace, f32 range = -60.F ) {
-	static auto og = g_mem[ CLIENT_DLL ].get_address< uintptr_t >( HASH_CT( "ClipTraceToPlayers" ) );
-	__asm {
-        mov ecx, abs_start
-        mov edx, abs_end
-        push range
-        push trace
-        push filter
-        push mask
-        call og
-        add esp, 16
-	}
+                                        sdk::trace& enter_trace, f32 min_range = -60.F ) {
+	sdk::trace trace;
+	auto smallest_fraction = trace.m_fraction;
+
+	auto ray = sdk::ray( abs_start, abs_end );
+	g_entity_cacher.for_each( [ & ]( auto& p ) {
+		if ( !p || !p.get( ).is_alive( ) || p.get( ).is_dormant( ) )
+			return;
+
+		if ( filter.m_skip == p )
+			return;
+
+		auto collideable = p.get( ).get_collideable( );
+		if ( collideable )
+			return;
+
+		const auto min = collideable->obb_mins( );
+		const auto max = collideable->obb_maxs( );
+
+		const auto center = ( max + min ) * .5F;
+		const auto pos    = center + p.get( ).get_origin( );
+
+		const auto to  = pos - abs_start;
+		auto dir       = abs_end - abs_start;
+		const auto len = dir.length( );
+		dir.normalize( );
+
+		const auto range_along = dir.dot_product( to );
+		auto range             = .0F;
+
+		if ( range_along < .0F )
+			range = -to.length( );
+		else if ( range_along > len )
+			range = -( pos - abs_end ).length( );
+		else
+			range = ( pos - ( dir * range_along + abs_start ) ).length( );
+
+		if ( range < min_range || range > 60.F )
+			return;
+
+		g_csgo.m_engine_trace->clip_ray_to_entity( ray, mask | 0x40000000, p, trace );
+
+		if ( trace.m_fraction < smallest_fraction ) {
+			enter_trace       = trace;
+			smallest_fraction = trace.m_fraction;
+		}
+	} );
 }
 
 static void trace_line( const math::v3f& abs_start, const math::v3f& abs_end, unsigned int mask, sdk::base_entity* filter_ent, sdk::trace& trace ) {
@@ -190,8 +225,8 @@ static bool trace_to_exit( sdk::base_entity* target, const sdk::trace& enter_tra
 
 static bool handle_bullet_penetration( sdk::cs_weapon_info* info, fire_bullet_data& data ) {
 	auto enter_surface_data              = g_csgo.m_physics_surface_props->get_surface_data( data.m_enter_trace.m_surface.m_surface_props );
-	auto enter_material                  = enter_surface_data->m_game.m_material;
-	auto enter_surf_penetration_modifier = enter_surface_data->m_game.m_penetration_modifier;
+	auto enter_material                  = enter_surface_data->m_material;
+	auto enter_surf_penetration_modifier = enter_surface_data->m_penetration_modifier;
 
 	data.m_trace_length += data.m_enter_trace.m_fraction * data.m_trace_length_remaining;
 	data.m_current_damage *= pow( ( info->m_range_modifier ), ( data.m_trace_length * 0.002F ) );
@@ -210,12 +245,14 @@ static bool handle_bullet_penetration( sdk::cs_weapon_info* info, fire_bullet_da
 	math::v3f dummy;
 	sdk::trace exit_trace;
 
-	if ( !trace_to_exit( g_ctx.m_local, data.m_enter_trace, data.m_enter_trace.m_end, data.m_direction, dummy, exit_trace ) )
-		return false;
+	if ( !trace_to_exit( g_ctx.m_local, data.m_enter_trace, data.m_enter_trace.m_end, data.m_direction, dummy, exit_trace ) ) {
+		if ( ( g_csgo.m_engine_trace->get_point_concents( data.m_enter_trace.m_end, 0x600400b ) & 0x600400b ) == 0 )
+			return false;
+	}
 
 	auto exit_surface_data              = g_csgo.m_physics_surface_props->get_surface_data( exit_trace.m_surface.m_surface_props );
-	auto exit_material                  = exit_surface_data->m_game.m_material;
-	auto exit_surf_penetration_modifier = exit_surface_data->m_game.m_penetration_modifier;
+	auto exit_material                  = exit_surface_data->m_material;
+	auto exit_surf_penetration_modifier = exit_surface_data->m_penetration_modifier;
 	auto final_damage_modifier          = 0.16F;
 	auto combined_penetration_modifier  = 0.F;
 
@@ -267,7 +304,7 @@ static bool simulate_fire_bullet( sdk::base_player* target, sdk::weapon_cs_base*
 
 		auto end = data.m_src + data.m_direction * data.m_trace_length_remaining;
 
-		trace_line( data.m_src, end, 0x4600400B, target, data.m_enter_trace );
+		trace_line( data.m_src, end, 0x4600400B, g_ctx.m_local, data.m_enter_trace );
 
 		UTIL_clip_trace_to_players( data.m_src, end + data.m_direction * 40.F, 0x4600400B, data.m_filter, data.m_enter_trace );
 
@@ -275,7 +312,8 @@ static bool simulate_fire_bullet( sdk::base_player* target, sdk::weapon_cs_base*
 			break;
 
 		if ( data.m_enter_trace.m_hitgroup != sdk::hit_group::GENERIC && data.m_enter_trace.m_hitgroup != sdk::hit_group::GEAR &&
-		     data.m_enter_trace.m_entity == target && g_ctx.m_local.get( ).is_enemy( ( sdk::cs_player* )data.m_enter_trace.m_entity ) ) {
+		     data.m_enter_trace.m_entity && data.m_enter_trace.m_entity->get_networkable_index( ) != 0 && data.m_enter_trace.m_entity == target &&
+		     g_ctx.m_local.get( ).is_enemy( ( sdk::cs_player* )data.m_enter_trace.m_entity ) ) {
 			data.m_trace_length += data.m_enter_trace.m_fraction * data.m_trace_length_remaining;
 			data.m_current_damage *= pow( info->m_range_modifier, data.m_trace_length * 0.002F );
 
@@ -360,11 +398,11 @@ void hack::aimbot::run( f32& x, f32& y ) {
 			if ( m_rcs )
 				aim_angle -= rcs_angle;
 
-			f32 dmg   = 0;
-			auto scan = can_hit( p, weap, info, hitbox_pos, dmg );
-			g_io.log( XOR( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
-			if ( !scan )
-				return;
+			// f32 dmg   = 0;
+			// auto scan = can_hit( p, weap, info, hitbox_pos, dmg );
+			// g_io.log( XOR( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
+			// if ( !scan )
+			// 	return;
 
 			auto dis = get_fov( view_angles, aim_angle );
 			if ( m_best_fov > dis ) {
@@ -393,11 +431,11 @@ void hack::aimbot::run( f32& x, f32& y ) {
 						if ( m_rcs )
 							aim_angle -= rcs_angle;
 
-						f32 dmg   = 0;
-						auto scan = can_hit( m_best_player, weap, info, hitbox_pos, dmg );
-						g_io.log( XOR( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
-						if ( !scan )
-							continue;
+						// f32 dmg   = 0;
+						// auto scan = can_hit( m_best_player, weap, info, hitbox_pos, dmg );
+						// g_io.log( XOR( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
+						// if ( !scan )
+						// 	continue;
 
 						auto dis = get_fov( view_angles, aim_angle );
 						if ( m_best_fov > dis ) {
