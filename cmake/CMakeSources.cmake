@@ -24,6 +24,7 @@ set(SOURCES
     src/cavalcade/hack/translator/translator.cpp
     src/cavalcade/hack/trainer/trainer.cpp
     src/cavalcade/hack/aimbot/aimbot.cpp
+    src/cavalcade/hack/aimbot/autowall/autowall.cpp
     src/cavalcade/hack/esp/esp.cpp
     src/cavalcade/hack/graph/graph.cpp
     src/cavalcade/hack/indicators/screen.cpp

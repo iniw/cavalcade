@@ -7,7 +7,9 @@
 
 namespace sdk {
 	struct base_entity;
+} // namespace sdk
 
+namespace sdk {
 	struct __declspec( align( 16 ) ) v3f_aligned {
 		v3f_aligned( ) = default;
 
@@ -50,9 +52,9 @@ namespace sdk {
 	struct trace_filter {
 		trace_filter( ) = default;
 
-		trace_filter( const base_entity* e ) : m_skip( e ) { }
+		trace_filter( const sdk::base_entity* e ) : m_skip( e ) { }
 
-		virtual bool should_hit_entity( base_entity* e, int ) {
+		virtual bool should_hit_entity( sdk::base_entity* e, int ) {
 			return e != m_skip;
 		}
 
@@ -60,7 +62,7 @@ namespace sdk {
 			return 0;
 		}
 
-		const base_entity* m_skip;
+		const sdk::base_entity* m_skip;
 	};
 
 	namespace hit_group {
@@ -102,7 +104,7 @@ namespace sdk {
 		} m_surface;
 		i32 m_hitgroup;
 		PAD( 4 );
-		base_entity* m_entity;
+		sdk::base_entity* m_entity;
 		i32 m_hitbox;
 	};
 
@@ -112,7 +114,7 @@ namespace sdk {
 				return mem::call_v_func< i32, 0 >( this, std::cref( abs_pos ), contents, nullptr );
 			}
 
-			void clip_ray_to_entity( const sdk::ray& ray, unsigned int fmask, base_player* ent, sdk::trace& trace ) {
+			void clip_ray_to_entity( const sdk::ray& ray, unsigned int fmask, sdk::base_entity* ent, sdk::trace& trace ) {
 				return mem::call_v_func< void, 3 >( this, std::cref( ray ), fmask, ent, std::ref( trace ) );
 			}
 
