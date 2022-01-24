@@ -6,7 +6,7 @@ bool io::files::init( ) {
 
 #ifdef IO_LOG_FILE
 
-	m_log_file.open( m_directories[ dirs::LOGS ].append( _( "log.bm" ) ), std::ios::trunc );
+	m_log_file.open( m_directories[ dirs::LOGS ].append( XOR( "log.bm" ) ), std::ios::trunc );
 
 	return m_log_file.good( );
 
@@ -29,15 +29,15 @@ bool io::files::create_directories( ) {
 	} else
 		return false;
 
-	m_directories[ dirs::CHEAT ].assign( m_directories[ dirs::DOCS ] ).append( _( "cavalcade" ) );
+	m_directories[ dirs::CHEAT ].assign( m_directories[ dirs::DOCS ] ).append( XOR( "cavalcade" ) );
 	if ( !fs::exists( m_directories[ dirs::CHEAT ] ) )
 		ret = fs::create_directory( m_directories[ dirs::CHEAT ] );
 
-	m_directories[ dirs::LOGS ].assign( m_directories[ dirs::CHEAT ] ).append( _( "logs" ) );
+	m_directories[ dirs::LOGS ].assign( m_directories[ dirs::CHEAT ] ).append( XOR( "logs" ) );
 	if ( !fs::exists( m_directories[ dirs::LOGS ] ) )
 		ret = fs::create_directory( m_directories[ dirs::LOGS ] );
 
-	m_directories[ dirs::CFG ].assign( m_directories[ dirs::CHEAT ] ).append( _( "cfg" ) );
+	m_directories[ dirs::CFG ].assign( m_directories[ dirs::CHEAT ] ).append( XOR( "cfg" ) );
 	if ( !fs::exists( m_directories[ dirs::CFG ] ) )
 		ret = fs::create_directory( m_directories[ dirs::CFG ] );
 

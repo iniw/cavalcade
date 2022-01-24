@@ -28,7 +28,7 @@ void hack::indicators::screen::draw( ) {
 		auto size = text->calc_size( );
 
 		auto new_text = std::make_shared< render::geometry::text >( fb, render::point{ g_render.get_screen_size( )[ 0 ] / 2, y },
-		                                                            _( "[" ) + std::to_string( m_last_vel.value( ) ) + _( "]" ),
+		                                                            XOR( "[" ) + std::to_string( m_last_vel.value( ) ) + XOR( "]" ),
 		                                                            render::color( 185, 185, 185, 255 ) );
 		new_text->m_point[ 0 ] -= new_text->calc_size( )[ 0 ] / 2;
 		new_text->m_point[ 1 ] -= ( size[ 1 ] - 5 ) * m_anim_last_vel.m_animation_factor;

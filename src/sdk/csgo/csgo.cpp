@@ -73,7 +73,7 @@ bool sdk::csgo::init( ) {
 	if ( !m_prediction )
 		return false;
 
-	g_io.log( _( "initialized csgo" ) );
+	g_io.log( XOR( "initialized csgo" ) );
 
 	return true;
 }

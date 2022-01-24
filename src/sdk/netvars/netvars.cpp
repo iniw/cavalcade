@@ -29,7 +29,7 @@ bool sdk::netvars::init( ) {
 
 #endif
 
-	g_io.log( _( "initialized netvars" ) );
+	g_io.log( XOR( "initialized netvars" ) );
 
 	return !m_offsets.empty( );
 }
@@ -82,7 +82,7 @@ void sdk::netvars::store( std::string_view table_name, const recv_table* table, 
 		if ( child && child->m_props && child->m_net_table_name[ 0 ] == 'D' && prop->m_recv_type == prop_type::DATATABLE )
 			store( table_name, child, prop->m_offset + offset, depth + 1 );
 
-		auto hash = HASH_RT( io::format( _( "{}->{}" ), table_name, prop->m_var_name ) );
+		auto hash = HASH_RT( io::format( XOR( "{}->{}" ), table_name, prop->m_var_name ) );
 
 		if ( !m_offsets[ hash ] ) {
 			m_offsets[ hash ] = prop->m_offset + offset;
@@ -103,32 +103,32 @@ std::string sdk::netvars::get_type( const recv_prop* prop ) {
 	case prop_type::INT:
 
 		if ( prop->m_proxy_fn == std_recv_proxies->int32_to_int8 )
-			return _( "i8" );
+			return XOR( "i8" );
 		else if ( prop->m_proxy_fn == std_recv_proxies->int32_to_int16 )
-			return _( "i16" );
+			return XOR( "i16" );
 
-		return _( "i32" );
+		return XOR( "i32" );
 
 	case prop_type::FLOAT:
-		return _( "f32" );
+		return XOR( "f32" );
 
 	case prop_type::VECTOR:
-		return _( "v3f" );
+		return XOR( "v3f" );
 
 	case prop_type::VECTOR2D:
-		return _( "v2f" );
+		return XOR( "v2f" );
 
 	case prop_type::STRING:
-		return io::format( _( "char[{}]" ), prop->m_string_buffer_size );
+		return io::format( XOR( "char[{}]" ), prop->m_string_buffer_size );
 
 	case prop_type::ARRAY:
-		return io::format( _( "array[{}]" ), prop->m_elements );
+		return io::format( XOR( "array[{}]" ), prop->m_elements );
 
 	case prop_type::DATATABLE:
-		return _( "unk" );
+		return XOR( "unk" );
 
 	case prop_type::INT64:
-		return _( "i64" );
+		return XOR( "i64" );
 
 	default:
 		return "";

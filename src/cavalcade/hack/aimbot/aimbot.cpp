@@ -124,64 +124,64 @@ static bool is_breakable_entity( sdk::base_entity* e ) {
 	return og( e );
 }
 
-static bool trace_to_exit( const sdk::trace& enter_trace, const math::v3f& start, const math::v3f& direction, math::v3f& end,
-                           sdk::trace& exit_trace ) {
-	auto distance = 0.F;
+static bool trace_to_exit( sdk::base_entity* target, const sdk::trace& enter_trace, const math::v3f& start, const math::v3f& direction,
+                           math::v3f& end, sdk::trace& exit_trace ) {
+	auto distance       = 0.F;
+	auto first_contents = 0;
 
 	while ( distance <= 90.F ) {
 		distance += 4.F;
 
 		end = start + ( direction * distance );
 
+		if ( !first_contents )
+			first_contents = g_csgo.m_engine_trace->get_point_concents( end, 0x600400b | 0x40000000 );
+
 		auto point_contents = g_csgo.m_engine_trace->get_point_concents( end, 0x600400b | 0x40000000 );
 
-		if ( point_contents & 0x600400b && ( !( point_contents & 0x40000000 ) ) )
-			continue;
+		if ( !( point_contents & 0x600400b ) || ( point_contents & 0x40000000 && point_contents != first_contents ) ) {
+			auto new_end = end - ( direction * 4.F );
 
-		auto new_end = end - ( direction * 4.F );
+			trace_line( end, new_end, 0x4600400b, nullptr, exit_trace );
 
-		trace_line( end, new_end, 0x4600400b, nullptr, exit_trace );
+			sdk::trace_filter filter{ target };
 
-		UTIL_clip_trace_to_players( out, new_end, 0x4600400b, sdk::trace_filter{ nullptr }, exit_trace );
+			UTIL_clip_trace_to_players( end, new_end, 0x4600400b, filter, exit_trace );
 
-		if ( exit_trace.m_all_solid && exit_trace.m_surface.m_flags & 0x8000 ) {
-			trace_line( end, start, 0x600400B, exit_trace.m_entity, exit_trace );
+			if ( exit_trace.m_start_solid && exit_trace.m_surface.m_flags & 0x8000 ) {
+				trace_line( end, start, 0x600400b, exit_trace.m_entity, exit_trace );
 
-			if ( ( exit_trace.m_fraction < 1.F || exit_trace.m_all_solid || exit_trace.m_start_solid ) && !exit_trace.m_start_solid ) {
-				end = exit_trace.m_end;
-				return true;
-			}
-			continue;
-		}
-
-		if ( !( exit_trace.m_fraction < 1.F || exit_trace.m_all_solid || exit_trace.m_start_solid ) || exit_trace.m_start_solid ) {
-			if ( exit_trace.m_entity ) {
-				if ( ( enter_trace.m_entity &&
-				       enter_trace.m_entity != g_csgo.m_ent_list->get< sdk::base_entity* >( 0 ) /* did_hit_non_world_entity*/ ) &&
-				     is_breakable_entity( enter_trace.m_entity ) ) {
-					exit_trace       = enter_trace;
-					exit_trace.m_end = start + direction;
-
+				if ( ( exit_trace.m_fraction < 1.F || exit_trace.m_all_solid || exit_trace.m_start_solid ) && !exit_trace.m_start_solid ) {
+					end = exit_trace.m_end;
 					return true;
 				}
-			}
-			continue;
-		}
 
-		if ( ( exit_trace.m_surface.m_flags >> 7 ) & 1 ) {
-			if ( exit_trace.m_entity && is_breakable_entity( exit_trace.m_entity ) && is_breakable_entity( enter_trace.m_entity ) ) {
-				end = exit_trace.m_end;
-
-				return true;
-			}
-
-			if ( !( ( enter_trace.m_surface.m_flags ) & 1 ) )
 				continue;
-		}
+			}
 
-		if ( exit_trace.m_plane.m_normal.dot_product( direction ) <= 1.F ) {
-			end = end - ( direction * ( exit_trace.m_fraction * 4.F ) );
-			return true;
+			if ( ( exit_trace.m_fraction < 1.F || exit_trace.m_all_solid || exit_trace.m_start_solid ) && !exit_trace.m_start_solid ) {
+				if ( enter_trace.m_entity && is_breakable_entity( enter_trace.m_entity ) && exit_trace.m_entity &&
+				     is_breakable_entity( exit_trace.m_entity ) )
+					return true;
+
+				if ( enter_trace.m_surface.m_flags & 0x80 ||
+				     ( !( enter_trace.m_surface.m_flags & 0x80 ) && exit_trace.m_plane.m_normal.dot_product( direction ) <= 1.F ) ) {
+					end -= direction * ( exit_trace.m_fraction * 4.F );
+					return true;
+				}
+
+				continue;
+			}
+
+			if ( !( exit_trace.m_fraction < 1.F || exit_trace.m_all_solid || exit_trace.m_start_solid ) || exit_trace.m_start_solid ) {
+				if ( enter_trace.m_entity && enter_trace.m_entity->get_networkable_index( ) != 0 && is_breakable_entity( enter_trace.m_entity ) ) {
+					exit_trace       = enter_trace;
+					exit_trace.m_end = end + direction;
+					return true;
+				}
+
+				continue;
+			}
 		}
 	}
 
@@ -190,38 +190,40 @@ static bool trace_to_exit( const sdk::trace& enter_trace, const math::v3f& start
 
 static bool handle_bullet_penetration( sdk::cs_weapon_info* info, fire_bullet_data& data ) {
 	auto enter_surface_data              = g_csgo.m_physics_surface_props->get_surface_data( data.m_enter_trace.m_surface.m_surface_props );
-	auto enter_material                  = enter_surface_data->m_material;
-	auto enter_surf_penetration_modifier = enter_surface_data->m_penetration_modifier;
+	auto enter_material                  = enter_surface_data->m_game.m_material;
+	auto enter_surf_penetration_modifier = enter_surface_data->m_game.m_penetration_modifier;
 
 	data.m_trace_length += data.m_enter_trace.m_fraction * data.m_trace_length_remaining;
 	data.m_current_damage *= pow( ( info->m_range_modifier ), ( data.m_trace_length * 0.002F ) );
 
 	// NOTE(para): this implies new server penetration type.
 	// we could essentially break most autowalls by using the old one on a server (kek)
-	if ( data.m_trace_length > 3000.F || enter_surf_penetration_modifier < 0.1F )
+	if ( !( data.m_enter_trace.m_contents >> 3 & 1 ) )
+		data.m_penetrate_count = 0;
+
+	if ( ( data.m_trace_length > 3000.f ) || ( enter_surf_penetration_modifier < 0.1f ) )
 		data.m_penetrate_count = 0;
 
 	if ( data.m_penetrate_count <= 0 )
 		return false;
 
-	math::v3f dummy{ };
+	math::v3f dummy;
 	sdk::trace exit_trace;
 
-	if ( !trace_to_exit( data.m_enter_trace, data.m_enter_trace.m_end, data.m_direction, dummy, exit_trace ) )
+	if ( !trace_to_exit( g_ctx.m_local, data.m_enter_trace, data.m_enter_trace.m_end, data.m_direction, dummy, exit_trace ) )
 		return false;
 
 	auto exit_surface_data              = g_csgo.m_physics_surface_props->get_surface_data( exit_trace.m_surface.m_surface_props );
-	auto exit_material                  = exit_surface_data->m_material;
-	auto exit_surf_penetration_modifier = exit_surface_data->m_penetration_modifier;
+	auto exit_material                  = exit_surface_data->m_game.m_material;
+	auto exit_surf_penetration_modifier = exit_surface_data->m_game.m_penetration_modifier;
 	auto final_damage_modifier          = 0.16F;
 	auto combined_penetration_modifier  = 0.F;
 
 	if ( ( ( data.m_enter_trace.m_contents & 8 ) != 0 ) || ( enter_material == 89 ) || ( enter_material ) == 71 ) {
 		combined_penetration_modifier = 3.F;
 		final_damage_modifier         = 0.05F;
-	} else {
+	} else
 		combined_penetration_modifier = ( enter_surf_penetration_modifier + exit_surf_penetration_modifier ) * 0.5F;
-	}
 
 	if ( enter_material == exit_material ) {
 		if ( exit_material == 87 || exit_material == 85 )
@@ -243,7 +245,7 @@ static bool handle_bullet_penetration( sdk::cs_weapon_info* info, fire_bullet_da
 	if ( lost_damage > data.m_current_damage )
 		return false;
 
-	if ( lost_damage >= 0.F )
+	if ( lost_damage > 0.F )
 		data.m_current_damage -= lost_damage;
 
 	if ( data.m_current_damage < 1.F )
@@ -260,20 +262,23 @@ static bool simulate_fire_bullet( sdk::base_player* target, sdk::weapon_cs_base*
 	data.m_trace_length    = 0.F;
 	data.m_current_damage  = info->m_damage;
 
-	while ( ( data.m_penetrate_count > 0 ) && ( data.m_current_damage >= 1.F ) ) {
+	while ( data.m_penetrate_count > 0 && data.m_current_damage >= 1.F ) {
 		data.m_trace_length_remaining = info->m_range - data.m_trace_length;
 
 		auto end = data.m_src + data.m_direction * data.m_trace_length_remaining;
 
-		trace_line( data.m_src, end, 0x46004003, g_ctx.m_local, data.m_enter_trace );
+		trace_line( data.m_src, end, 0x4600400B, target, data.m_enter_trace );
+
 		UTIL_clip_trace_to_players( data.m_src, end + data.m_direction * 40.F, 0x4600400B, data.m_filter, data.m_enter_trace );
 
 		if ( data.m_enter_trace.m_fraction == 1.F )
 			break;
 
-		if ( ( data.m_enter_trace.m_hitgroup <= 7 ) && ( data.m_enter_trace.m_hitgroup > 0 ) && data.m_enter_trace.m_entity == target ) {
+		if ( data.m_enter_trace.m_hitgroup != sdk::hit_group::GENERIC && data.m_enter_trace.m_hitgroup != sdk::hit_group::GEAR &&
+		     data.m_enter_trace.m_entity == target && g_ctx.m_local.get( ).is_enemy( ( sdk::cs_player* )data.m_enter_trace.m_entity ) ) {
 			data.m_trace_length += data.m_enter_trace.m_fraction * data.m_trace_length_remaining;
 			data.m_current_damage *= pow( info->m_range_modifier, data.m_trace_length * 0.002F );
+
 			scale_damage( data.m_enter_trace.m_hitgroup, ( sdk::cs_player* )data.m_enter_trace.m_entity, info->m_armor_ratio, data.m_current_damage );
 
 			return true;
@@ -355,14 +360,14 @@ void hack::aimbot::run( f32& x, f32& y ) {
 			if ( m_rcs )
 				aim_angle -= rcs_angle;
 
+			f32 dmg   = 0;
+			auto scan = can_hit( p, weap, info, hitbox_pos, dmg );
+			g_io.log( XOR( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
+			if ( !scan )
+				return;
+
 			auto dis = get_fov( view_angles, aim_angle );
 			if ( m_best_fov > dis ) {
-				f32 dmg   = 0;
-				auto scan = can_hit( p, weap, info, hitbox_pos, dmg );
-				g_io.log( _( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
-				if ( !scan )
-					return;
-
 				m_best_player = p;
 				m_best_fov    = dis;
 			}
@@ -388,14 +393,14 @@ void hack::aimbot::run( f32& x, f32& y ) {
 						if ( m_rcs )
 							aim_angle -= rcs_angle;
 
+						f32 dmg   = 0;
+						auto scan = can_hit( m_best_player, weap, info, hitbox_pos, dmg );
+						g_io.log( XOR( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
+						if ( !scan )
+							continue;
+
 						auto dis = get_fov( view_angles, aim_angle );
 						if ( m_best_fov > dis ) {
-							f32 dmg   = 0;
-							auto scan = can_hit( m_best_player, weap, info, hitbox_pos, dmg );
-							g_io.log( _( "hitbox scan: {} scan: {}" ), dmg, scan ? "true" : "false" );
-							if ( !scan )
-								continue;
-
 							best_hitbox = h;
 							best_fov    = dis;
 						}

@@ -26,12 +26,12 @@
 #endif
 
 #ifndef _DEBUG
-#	define _( str )                                                                                                                                 \
+#	define XOR( str )                                                                                                                               \
 		::jm::xor_string( []( ) { return str; }, std::integral_constant< std::size_t, sizeof( str ) / sizeof( *str ) >{ },                           \
 		                  std::make_index_sequence< ::jm::detail::_buffer_size< sizeof( str ) >( ) >{ } )                                            \
 			.crypt_get( )
 #else
-#	define _( str ) str
+#	define XOR( str ) str
 #endif
 
 #ifdef _MSC_VER

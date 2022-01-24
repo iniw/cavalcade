@@ -13,7 +13,7 @@ bool io::impl::init( ) {
 
 	MOCKING_CATCH( return false );
 
-	log( _( "initialized io" ) );
+	log( XOR( "initialized io" ) );
 	return true;
 }
 

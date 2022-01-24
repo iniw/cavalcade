@@ -378,18 +378,18 @@ namespace math {
 template< math::Number T, u32 N >
 struct fmt::formatter< math::vector< T, N > > : fmt::formatter< std::string > {
 	auto format( const math::vector< T, N >& p, format_context& ctx ) {
-		std::string buf = _( "[ " );
+		std::string buf = XOR( "[ " );
 
 		for ( u32 i = 0; i < N; i++ ) {
-			buf.append( _( "{}" ) );
+			buf.append( XOR( "{}" ) );
 
 			if ( i != N - 1 )
-				buf.append( _( " - " ) );
+				buf.append( XOR( " - " ) );
 
 			buf = fmt::format( buf, p[ i ] );
 		}
 
-		buf.append( _( " ]" ) );
+		buf.append( XOR( " ]" ) );
 
 		return formatter< std::string >::format( buf, ctx );
 	}
