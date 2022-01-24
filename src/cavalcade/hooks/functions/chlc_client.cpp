@@ -30,6 +30,10 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	g_hack.m_esp.clear( );
 	g_hack.m_velgraph.clear( );
 	g_hack.m_indscreen.clear( );
+
+	// NOTE(para): it's particularly important for this to be here, before og
+	g_hack.m_nightmode.clear( );
+
 	g_ctx.m_cmd = nullptr;
 
 	static auto og = g_mem[ CLIENT_DLL ].get_og< level_init_pre_entity_fn >( HASH_CT( "CHLClient::LevelInitPreEntity" ) );

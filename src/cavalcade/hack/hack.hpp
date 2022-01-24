@@ -7,6 +7,7 @@
 #include "esp/esp.hpp"
 #include "graph/graph.hpp"
 #include "indicators/screen.hpp"
+#include "nightmode/nightmode.hpp"
 
 namespace hack {
 	struct impl {
@@ -17,6 +18,7 @@ namespace hack {
 		esp m_esp;
 		graph m_velgraph;
 		indicators::screen m_indscreen;
+		nightmode m_nightmode;
 	};
 } // namespace hack
 

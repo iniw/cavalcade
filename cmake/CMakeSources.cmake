@@ -28,6 +28,7 @@ set(SOURCES
     src/cavalcade/hack/esp/esp.cpp
     src/cavalcade/hack/graph/graph.cpp
     src/cavalcade/hack/indicators/screen.cpp
+    src/cavalcade/hack/nightmode/nightmode.cpp
     # hooks - functions
     src/cavalcade/hooks/functions/push_notice.cpp
     src/cavalcade/hooks/functions/client_cmd.cpp
@@ -39,6 +40,8 @@ set(SOURCES
     src/cavalcade/hooks/functions/sfhud.cpp
     src/cavalcade/hooks/functions/crosshair.cpp
     src/cavalcade/hooks/functions/entity_listener.cpp
+    src/cavalcade/hooks/functions/static_prop_mgr.cpp
+    src/cavalcade/hooks/functions/material_system.cpp
     # hooks
     src/cavalcade/hooks/hooks.cpp
 

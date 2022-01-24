@@ -10,7 +10,8 @@ void gui::managers::children::render( const render::rect& area, const objects::b
 
 	// iterate our children in reverse, guarantees that the most recently interacted-with object renders last
 	for ( auto it = m_list.rbegin( ); it != m_list.rend( ); ++it )
-		( *it )->render( );
+		if ( ( *it ) != nullptr )
+			( *it )->render( );
 
 	g_render.pop_clip_rect( );
 

@@ -67,6 +67,9 @@ void mem::impl::add_addresses( ) {
 		ADD_PATTERN( CLIENT_DLL, "IsBreakableEntity", "55 8B EC 51 56 8B F1 85 F6 74 68 83 BE" );
 		ADD_PATTERN_REL( CLIENT_DLL, "ClipTraceToPlayers", "E8 ? ? ? ? 83 C4 18 8A 56 37" );
 		ADD_PATTERN( CLIENT_DLL, "CrosshairShouldDraw", "55 8B EC 83 E4 F0 83 EC 78 56 8B F1 8B 0D" );
+		ADD_PATTERN_REL( ENGINE_DLL, "StaticPropMgrPrecacheLighting", "E8 ? ? ? ? FF 76 60" );
+
+		ADD_PATTERN( MATERIALSYSTEM_DLL, "GetColorModulation", "55 8B EC 83 EC ? 56 8B F1 8A 46" );
 
 		{ // C_BaseEntity
 

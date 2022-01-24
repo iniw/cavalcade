@@ -109,6 +109,16 @@ namespace cavalcade {
 			static bool __fastcall should_draw( unk, unk );
 		};
 
+		struct static_prop_mgr {
+			using precache_lighting_fn = void( __fastcall* )( unk, unk );
+			static void __fastcall precache_lighting( unk, unk );
+		};
+
+		struct material_system {
+			using get_color_modulation_fn = void( __fastcall* )( sdk::material*, unk, f32&, f32&, f32& );
+			static void __fastcall get_color_modulation( sdk::material*, unk, f32&, f32&, f32& );
+		};
+
 		struct steam {
 			// hook GameConnectedFriendChatMsg_t
 			STEAM_CALLBACK( steam, on_friend_message, GameConnectedFriendChatMsg_t );
