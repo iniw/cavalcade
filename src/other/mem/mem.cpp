@@ -66,6 +66,7 @@ void mem::impl::add_addresses( ) {
 		ADD_PATTERN_REL( CLIENT_DLL, "IsOtherEnemy", "E8 ? ? ? ? 02 C0 32 87 ? ? ? ? 24 02 30 87" );
 		ADD_PATTERN( CLIENT_DLL, "IsBreakableEntity", "55 8B EC 51 56 8B F1 85 F6 74 68 83 BE" );
 		ADD_PATTERN_REL( CLIENT_DLL, "ClipTraceToPlayers", "E8 ? ? ? ? 83 C4 18 8A 56 37" );
+		ADD_PATTERN( CLIENT_DLL, "CrosshairShouldDraw", "55 8B EC 83 E4 F0 83 EC 78 56 8B F1 8B 0D" );
 
 		{ // C_BaseEntity
 

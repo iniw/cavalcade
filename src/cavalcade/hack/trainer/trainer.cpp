@@ -3,7 +3,7 @@
 #include "../../ctx/ctx.hpp"
 
 void hack::trainer::go( ) {
-	auto cheats = g_ctx.m_cvars.sv_cheats->get_int( ) == 1;
+	auto cheats = g_ctx.m_cvars.sv_cheats->get_int( ) >= 1;
 	if ( cheats ) {
 		if ( !m_checkpoints.empty( ) ) {
 			auto n                  = std::min( m_checkpoints.size( ) - m_entry - 1, m_checkpoints.size( ) - 1 );
@@ -35,52 +35,59 @@ void hack::trainer::go( ) {
 }
 
 void hack::trainer::run( ) {
-	if ( g_io.key_state< io::key_state::RELEASED >( VK_XBUTTON1 ) ) {
-		m_entry = 0;
-		m_checkpoints.emplace_back( g_ctx.m_local.get( ).get_origin( ), g_ctx.m_local.get( ).get_abs_angles( ) );
-		g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
-			0, 0,
-			XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font "
-		         "color=\"#B9B9B9\"> | pushed checkpoint... updated focus to #1 (%d total)</font>" ),
-			m_checkpoints.size( ) );
-	} else if ( g_io.key_state< io::key_state::RELEASED >( VK_XBUTTON2 ) ) {
+	auto cheats = g_ctx.m_cvars.sv_cheats->get_int( ) >= 1;
+
+	if ( g_io.key_state< io::key_state::RELEASED >( VK_XBUTTON2 ) ) {
 		go( );
-	} else if ( g_io.key_state< io::key_state::RELEASED >( '4' ) ) {
-		if ( ( m_entry + 1 ) < m_checkpoints.size( ) ) {
-			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
-				0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font color=\"#B9B9B9\"> | updated focus to #%d</font>" ),
-				++m_entry + 1 );
-		} else {
+	}
+
+	if ( cheats ) {
+		if ( g_io.key_state< io::key_state::RELEASED >( VK_XBUTTON1 ) ) {
+			m_entry = 0;
+			m_checkpoints.emplace_back( g_ctx.m_local.get( ).get_origin( ), g_ctx.m_local.get( ).get_abs_angles( ) );
 			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
 				0, 0,
 				XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font "
-			         "color=\"#B9B9B9\"> | not enough entries to update focus forward...</font>" ) );
-		}
-	} else if ( g_io.key_state< io::key_state::RELEASED >( '5' ) ) {
-		if ( ( m_entry - 1 ) >= 0 ) {
-			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
-				0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font color=\"#B9B9B9\"> | updated focus to #%d</font>" ),
-				--m_entry + 1 );
-		} else {
-			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
-				0, 0,
-				XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font color=\"#B9B9B9\"> | entry indice is already #1...</font>" ) );
-		}
-	} else if ( g_io.key_state< io::key_state::RELEASED >( '6' ) ) {
-		if ( !m_checkpoints.empty( ) ) {
-			g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0,
-			                                                          XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font "
-			                                                               "color=\"#B9B9B9\"> | erased entry that was formerly #%d</font>" ),
-			                                                          m_entry + 1 );
-
-			m_checkpoints.erase( m_checkpoints.begin( ) + m_entry );
-
-			if ( m_entry > ( m_checkpoints.size( ) - 1 ) ) {
-				m_entry = ( m_checkpoints.size( ) - 1 );
+			         "color=\"#B9B9B9\"> | pushed checkpoint... updated focus to #1 (%d total)</font>" ),
+				m_checkpoints.size( ) );
+		} else if ( g_io.key_state< io::key_state::RELEASED >( '4' ) ) {
+			if ( ( m_entry + 1 ) < m_checkpoints.size( ) ) {
+				g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
+					0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font color=\"#B9B9B9\"> | updated focus to #%d</font>" ),
+					++m_entry + 1 );
+			} else {
+				g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
+					0, 0,
+					XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font "
+				         "color=\"#B9B9B9\"> | not enough entries to update focus forward...</font>" ) );
 			}
-		} else {
-			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
-				0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font color=\"#B9B9B9\"> | no entries to erase...</font>" ) );
+		} else if ( g_io.key_state< io::key_state::RELEASED >( '5' ) ) {
+			if ( ( m_entry - 1 ) >= 0 ) {
+				g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
+					0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font color=\"#B9B9B9\"> | updated focus to #%d</font>" ),
+					--m_entry + 1 );
+			} else {
+				g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0,
+				                                                          XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font "
+				                                                               "color=\"#B9B9B9\"> | entry indice is already #1...</font>" ) );
+			}
+		} else if ( g_io.key_state< io::key_state::RELEASED >( '6' ) ) {
+			if ( !m_checkpoints.empty( ) ) {
+				g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0,
+				                                                          XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font "
+				                                                               "color=\"#B9B9B9\"> | erased entry that was formerly #%d</font>" ),
+				                                                          m_entry + 1 );
+
+				m_checkpoints.erase( m_checkpoints.begin( ) + m_entry );
+
+				if ( m_entry > ( m_checkpoints.size( ) - 1 ) ) {
+					m_entry = ( m_checkpoints.size( ) - 1 );
+				}
+			} else {
+				g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
+					0, 0,
+					XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font color=\"#B9B9B9\"> | no entries to erase...</font>" ) );
+			}
 		}
 	}
 }

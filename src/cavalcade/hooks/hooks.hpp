@@ -104,6 +104,11 @@ namespace cavalcade {
 			static bool __fastcall weapon_reticle_knife_show( unk, unk );
 		};
 
+		struct crosshair {
+			using should_draw_fn = bool( __fastcall* )( unk, unk );
+			static bool __fastcall should_draw( unk, unk );
+		};
+
 		struct steam {
 			// hook GameConnectedFriendChatMsg_t
 			STEAM_CALLBACK( steam, on_friend_message, GameConnectedFriendChatMsg_t );

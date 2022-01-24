@@ -12,8 +12,9 @@ bool cavalcade::hooks::init( ) {
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CPrediction::SetupMove" ), &prediction::setup_move );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "C_BasePlayer::CreateMove" ), &base_player::create_move );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CEntityListener::OnAddEntity" ), &entity_listener::on_add_entity );
-	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "WeaponReticleKnifeShow" ), &sfhud::weapon_reticle_knife_show );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CEntityListener::OnRemoveEntity" ), &entity_listener::on_remove_entity );
+	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "WeaponReticleKnifeShow" ), &sfhud::weapon_reticle_knife_show );
+	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CrosshairShouldDraw" ), &crosshair::should_draw );
 	MOCK g_mem[ SHADERAPIDX9_DLL ].hook( HASH_CT( "IDirect3DDevice9::EndScene" ), &d3d9_device::end_scene );
 	MOCK g_mem[ SHADERAPIDX9_DLL ].hook( HASH_CT( "IDirect3DDevice9::Reset" ), &d3d9_device::reset );
 

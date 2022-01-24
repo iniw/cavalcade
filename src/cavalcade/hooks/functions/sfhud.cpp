@@ -10,7 +10,7 @@ bool cavalcade::hooks::sfhud::weapon_reticle_knife_show( unk ecx, unk edx ) {
 		auto handle = g_ctx.m_local.get( ).get_active_weapon( );
 		if ( auto ent = g_csgo.m_ent_list->get_handle< sdk::weapon_cs_base* >( handle ); !g_ctx.m_local.get( ).is_scoped( ) && ent ) {
 			auto wi = ent->get_cs_weapon_info( );
-			if ( auto ty = ent->get_cs_weapon_info( )->m_type; wi && ty == sdk::weapon_type::SNIPER ) {
+			if ( auto ty = wi->m_type; wi && ty == sdk::weapon_type::SNIPER ) {
 				run = !run;
 			}
 		}

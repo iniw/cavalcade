@@ -37,6 +37,7 @@ set(SOURCES
     src/cavalcade/hooks/functions/d3d9_device.cpp
     src/cavalcade/hooks/functions/steam.cpp
     src/cavalcade/hooks/functions/sfhud.cpp
+    src/cavalcade/hooks/functions/crosshair.cpp
     src/cavalcade/hooks/functions/entity_listener.cpp
     # hooks
     src/cavalcade/hooks/hooks.cpp
