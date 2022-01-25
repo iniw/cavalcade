@@ -9,6 +9,7 @@ static bool local_on_ladder_or_noclip( ) {
 
 void hack::movement::pre( ) {
 	m_jumpbugged     = false;
+	m_longjumped     = false;
 	m_old_velocity_z = g_ctx.m_local.get( ).get_velocity( )[ 2 ];
 	m_base_flags     = g_ctx.m_local.get( ).get_flags( );
 
@@ -59,15 +60,20 @@ void hack::movement::longjump( ) {
 		g_ctx.m_cmd->m_buttons &= ~( 1 << 4 );
 		g_ctx.m_cmd->m_forward_move = 0;
 
+		bool ever = false;
 		if ( m_base_flags & 1 ) {
+			ever = true;
 			g_ctx.m_cmd->m_buttons |= ( 1 << 1 );
 			m_lj_ducked_ticks = 0;
 		}
 
 		if ( m_lj_ducked_ticks < 2 ) {
+			ever = true;
 			g_ctx.m_cmd->m_buttons |= ( 1 << 2 );
 			++m_lj_ducked_ticks;
 		}
+
+		m_longjumped = ever;
 	}
 }
 
@@ -79,6 +85,4 @@ void hack::movement::post( ) {
 	m_jumpbugged = ( g_ctx.m_local.get( ).get_velocity( )[ 2 ] > m_old_velocity_z ) &&
 	               ( !g_ctx.m_local.get( ).get_ground_entity( ).get( ) && !( m_base_flags & 1 ) && !( g_ctx.m_local.get( ).get_flags( ) & 1 ) ) &&
 	               !local_on_ladder_or_noclip( );
-	if ( m_jumpbugged )
-		g_io.log( XOR( "jumpbugged" ) );
 }

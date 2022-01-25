@@ -31,6 +31,8 @@ namespace sdk {
 		client_mode_shared* m_client_mode_shared;
 		IDirect3DDevice9* m_d3d9_device;
 
+		std::optional< std::string > m_sky_name;
+
 		bool init( );
 	};
 } // namespace sdk

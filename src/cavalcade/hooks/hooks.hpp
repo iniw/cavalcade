@@ -21,8 +21,7 @@ namespace cavalcade {
 		};
 
 		struct csgo_player_anim_state {
-			// static void __fastcall modify_eye_position( sdk::csgo_player_anim_state* ecx,
-			// unk, math::v3& input_eye_pos );
+			static void __fastcall modify_eye_position( unk, unk, math::v3f& );
 		};
 
 		struct c_cs_player {

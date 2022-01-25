@@ -75,12 +75,14 @@ void render::impl::pop_clip_rect( ) {
 
 void render::impl::pre_reset( ) {
 	ImGui_ImplDX9_InvalidateDeviceObjects( );
+	g_render.m_safe.clear( );
 }
 
 void render::impl::post_reset( ) {
 	update_screen_size( g_csgo.m_engine->get_screen_size( ) );
 
 	ImGui_ImplDX9_CreateDeviceObjects( );
+	g_render.m_safe.clear( );
 }
 
 render::point render::impl::handle_alignment( align alignment, const point& pos, const size& size ) {

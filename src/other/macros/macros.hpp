@@ -63,3 +63,4 @@ public:
 #define MATCHMAKING_DLL         HASH_CT( "matchmaking.dll" )
 #define SERVER_DLL              HASH_CT( "server.dll" )
 #define SERVERBROWSER_DLL       HASH_CT( "serverbrowser.dll" )
+#define PANORAMA_DLL            HASH_CT( "panorama.dll" )

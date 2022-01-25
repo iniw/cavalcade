@@ -47,7 +47,7 @@ void hack::nightmode::run_props( ) {
 }
 
 void hack::nightmode::run( sdk::material* mat, f32& r, f32& g, f32& b ) {
-	if ( !g_csgo.m_engine->is_in_game( ) )
+	if ( !g_ctx.m_local || !g_csgo.m_engine->is_in_game( ) )
 		return;
 
 	static auto& nm = gui::cfg::get< bool >( HASH_CT( "main:group1:nightmode" ) );

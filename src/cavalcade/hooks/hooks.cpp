@@ -1,5 +1,7 @@
 #include "hooks.hpp"
 
+#define PANORAMA_DEBUG 1
+
 bool cavalcade::hooks::init( ) {
 	MOCKING_TRY;
 
@@ -15,6 +17,7 @@ bool cavalcade::hooks::init( ) {
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CEntityListener::OnRemoveEntity" ), &entity_listener::on_remove_entity );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "WeaponReticleKnifeShow" ), &sfhud::weapon_reticle_knife_show );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CrosshairShouldDraw" ), &crosshair::should_draw );
+	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CCSGOPlayerAnimState::ModifyEyePosition" ), &csgo_player_anim_state::modify_eye_position );
 	MOCK g_mem[ ENGINE_DLL ].hook( HASH_CT( "StaticPropMgrPrecacheLighting" ), &static_prop_mgr::precache_lighting );
 	MOCK g_mem[ MATERIALSYSTEM_DLL ].hook( HASH_CT( "GetColorModulation" ), &material_system::get_color_modulation );
 	MOCK g_mem[ SHADERAPIDX9_DLL ].hook( HASH_CT( "IDirect3DDevice9::EndScene" ), &d3d9_device::end_scene );

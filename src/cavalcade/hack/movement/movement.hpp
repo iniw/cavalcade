@@ -19,9 +19,10 @@ namespace hack {
 		i32 m_base_flags{ };
 		bool m_in_jumpbug{ false };
 		bool m_jumpbugged{ false };
+		bool m_longjumped{ false };
 		i32 m_lj_ducked_ticks{ 0 };
 
-		f32 m_old_velocity_z;
+		f32 m_old_velocity_z{ 0 };
 	};
 } // namespace hack
 

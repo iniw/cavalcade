@@ -24,6 +24,7 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 
 void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	// begone
+	g_csgo.m_sky_name = std::nullopt;
 	g_hack.m_translator.m_pending_translations.clear( );
 	g_entity_cacher.clear( );
 	g_hack.m_trainer.clear( );
@@ -38,6 +39,8 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 
 	static auto og = g_mem[ CLIENT_DLL ].get_og< level_init_pre_entity_fn >( HASH_CT( "CHLClient::LevelInitPreEntity" ) );
 	og( name );
+
+	g_csgo.m_sky_name = g_ctx.m_cvars.sv_skyname->get_string( );
 }
 
 void cavalcade::hooks::chlc_client::level_init_post_entity( ) {

@@ -24,8 +24,9 @@ void hack::graph::draw( ) {
 		const auto& c = m_data[ i ];
 		const auto& n = m_data[ i + 1 ];
 
-		auto pos = render::point{ g_render.get_screen_size( )[ 0 ] / 2 + g_vel_graph_size * ( g_vel_graph_scale / 2.F ),
-			                      g_render.get_screen_size( )[ 1 ] / 1.2F + 130 };
+		auto ss  = g_render.get_screen_size( );
+		auto pad = ceil( ss[ 1 ] * .12F );
+		auto pos = render::point{ ss[ 0 ] / 2 + g_vel_graph_size * ( g_vel_graph_scale / 2.F ), ss[ 1 ] / 1.2F + pad };
 
 		auto alpha = std::max( 10, std::min( 255, c.m_speed + 5 ) ) * .75F;
 
@@ -40,5 +41,7 @@ void hack::graph::clear( ) {
 }
 
 i32 hack::graph::get_upmost_y_scenario( ) {
-	return ( g_render.get_screen_size( )[ 1 ] / 1.2F + 130 ) - 250;
+	auto ss = g_render.get_screen_size( );
+	auto pad = ceil( ss[ 1 ] * .12F );
+	return ( ss[ 1 ] / 1.2F + pad ) - 250;
 }

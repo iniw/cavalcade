@@ -43,6 +43,7 @@ set(SOURCES
     src/cavalcade/hooks/functions/entity_listener.cpp
     src/cavalcade/hooks/functions/static_prop_mgr.cpp
     src/cavalcade/hooks/functions/material_system.cpp
+    src/cavalcade/hooks/functions/animstate.cpp
     # hooks
     src/cavalcade/hooks/hooks.cpp
 

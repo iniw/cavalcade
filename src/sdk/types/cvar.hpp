@@ -28,10 +28,17 @@ namespace sdk {
 
 		VFUNC( void, set_value, idx::SET_VALUE_I32, ( i32 value ), value );
 
+		const std::optional< std::string > get_string( ) {
+			if ( m_string == nullptr )
+				return std::nullopt;
+
+			return std::string( m_string );
+		}
+
 		PAD( 0x19 );
 		cvar* m_parent;
 		PAD( 0x4 );
-		str m_string;
+		const char* m_string;
 		PAD( 0x4 );
 		f32 m_f32;
 		i32 m_i32;

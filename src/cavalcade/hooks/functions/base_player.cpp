@@ -14,7 +14,7 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 		return og( ecx, input_sample_time, cmd );
 	}
 
-	if ( !cmd || !cmd->m_command_number )
+	if ( !cmd || !cmd->m_command_number || !input_sample_time )
 		return og( ecx, input_sample_time, cmd );
 
 	if ( og( ecx, input_sample_time, cmd ) )

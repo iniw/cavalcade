@@ -28,6 +28,7 @@ namespace cavalcade {
 			sdk::cvar* sv_showlagcompensation_duration;
 
 			sdk::cvar* sv_autobunnyhopping;
+			sdk::cvar* sv_skyname;
 
 			sdk::cvar* mp_teammates_are_enemies;
 
