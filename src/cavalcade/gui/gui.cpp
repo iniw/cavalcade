@@ -7,6 +7,7 @@ void gui::impl::init( ) {
 	auto gb = window->add< objects::groupbox >( XOR( "group1" ), XOR( "test" ), 70 );
 	{
 		gb->add< objects::checkbox >( XOR( "check1" ), "check 1" );
+		gb->add< objects::checkbox >( XOR( "trainer" ), XOR( "trainer" ) );
 		gb->add< objects::checkbox >( XOR( "nightmode" ), XOR( "nightmode" ) );
 		gb->add< objects::slider< i32 > >( XOR( "factor" ), XOR( "factor" ), 0, 100 );
 		gb->add< objects::checkbox >( XOR( "on attack" ), XOR( "on attack" ) );

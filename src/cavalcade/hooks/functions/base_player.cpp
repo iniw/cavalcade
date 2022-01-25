@@ -17,17 +17,6 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 	if ( !cmd || !cmd->m_command_number )
 		return og( ecx, input_sample_time, cmd );
 
-	// NOTE(para): IIRC, in mouse shittery, input sample time is an identifier. if we will store any datamap backups, we should prevent our cheat
-	// create-move from running there.
-	// we though want to update our global cmd for it ***(FOR READS ONLY!!!)***
-
-	// NOTE(para:21-1-22): this is probably not needed.
-	g_ctx.m_cmd = cmd;
-
-	if ( !input_sample_time ) {
-		return og( ecx, input_sample_time, cmd );
-	}
-
 	if ( og( ecx, input_sample_time, cmd ) )
 		ecx->set_local_view_angles( cmd->m_view_angles );
 
@@ -37,6 +26,10 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 
 	if ( !verified_cmd )
 		return og( ecx, input_sample_time, cmd );
+
+	g_ctx.m_cmd = cmd;
+
+	g_hack.m_movement.pre( );
 
 	// masturbation mode
 	// g_ctx.m_cvars.viewmodel_offset_z->set_value( sin( g_csgo.m_globals->m_curtime * 3 ) * 2.f );
@@ -49,10 +42,10 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 	// NOTE(para): RED BLOCK
 	{
 		g_hack.m_prediction.update( );
-
 		g_hack.m_prediction.start( );
-
 		g_hack.m_prediction.end( );
+
+		g_hack.m_movement.post( );
 
 		cmd->m_view_angles.sanitize( );
 		cmd->m_view_angles.clamp_angle( );

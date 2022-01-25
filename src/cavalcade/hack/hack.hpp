@@ -8,6 +8,7 @@
 #include "graph/graph.hpp"
 #include "indicators/screen.hpp"
 #include "nightmode/nightmode.hpp"
+#include "movement/movement.hpp"
 
 namespace hack {
 	struct impl {
@@ -19,6 +20,7 @@ namespace hack {
 		graph m_velgraph;
 		indicators::screen m_indscreen;
 		nightmode m_nightmode;
+		movement m_movement;
 	};
 } // namespace hack
 

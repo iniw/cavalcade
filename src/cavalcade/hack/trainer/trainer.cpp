@@ -1,6 +1,7 @@
 #include "trainer.hpp"
 
 #include "../../ctx/ctx.hpp"
+#include "../../gui/cfg/cfg.hpp"
 
 void hack::trainer::go( ) {
 	auto cheats = g_ctx.m_cvars.sv_cheats->get_int( ) >= 1;
@@ -35,14 +36,17 @@ void hack::trainer::go( ) {
 }
 
 void hack::trainer::run( ) {
+	static auto& tr = gui::cfg::get< bool >( HASH_CT( "main:group1:trainer" ) );
+	if ( !tr )
+		return;
+
 	auto cheats = g_ctx.m_cvars.sv_cheats->get_int( ) >= 1;
 
-	if ( g_io.key_state< io::key_state::RELEASED >( VK_XBUTTON2 ) ) {
+	if ( g_io.key_state< io::key_state::RELEASED >( '2' ) )
 		go( );
-	}
 
 	if ( cheats ) {
-		if ( g_io.key_state< io::key_state::RELEASED >( VK_XBUTTON1 ) ) {
+		if ( g_io.key_state< io::key_state::RELEASED >( '1' ) ) {
 			m_entry = 0;
 			m_checkpoints.emplace_back( g_ctx.m_local.get( ).get_origin( ), g_ctx.m_local.get( ).get_abs_angles( ) );
 			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
@@ -61,7 +65,7 @@ void hack::trainer::run( ) {
 					XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font "
 				         "color=\"#B9B9B9\"> | not enough entries to update focus forward...</font>" ) );
 			}
-		} else if ( g_io.key_state< io::key_state::RELEASED >( '5' ) ) {
+		} else if ( g_io.key_state< io::key_state::RELEASED >( '3' ) ) {
 			if ( ( m_entry - 1 ) >= 0 ) {
 				g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
 					0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font color=\"#B9B9B9\"> | updated focus to #%d</font>" ),
@@ -71,7 +75,7 @@ void hack::trainer::run( ) {
 				                                                          XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font "
 				                                                               "color=\"#B9B9B9\"> | entry indice is already #1...</font>" ) );
 			}
-		} else if ( g_io.key_state< io::key_state::RELEASED >( '6' ) ) {
+		} else if ( g_io.key_state< io::key_state::RELEASED >( '5' ) ) {
 			if ( !m_checkpoints.empty( ) ) {
 				g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0,
 				                                                          XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font "

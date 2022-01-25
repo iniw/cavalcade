@@ -44,6 +44,7 @@ namespace sdk {
 		DATAFIELD_PRED( i32, get_button_released, "m_afButtonReleased" );
 
 		DATAFIELD_PRED( move_type, get_move_type, "m_MoveType" );
+		DATAFIELD_PRED( handle, get_ground_entity, "m_hGroundEntity" );
 
 		DATAFIELD_PRED( i32, get_impulse, "m_nImpulse" );
 

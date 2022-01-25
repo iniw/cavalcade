@@ -29,6 +29,7 @@ set(SOURCES
     src/cavalcade/hack/graph/graph.cpp
     src/cavalcade/hack/indicators/screen.cpp
     src/cavalcade/hack/nightmode/nightmode.cpp
+    src/cavalcade/hack/movement/movement.cpp
     # hooks - functions
     src/cavalcade/hooks/functions/push_notice.cpp
     src/cavalcade/hooks/functions/client_cmd.cpp
