@@ -118,6 +118,11 @@ namespace cavalcade {
 			static void __fastcall get_color_modulation( sdk::material*, unk, f32&, f32&, f32& );
 		};
 
+		struct protobuf {
+			using report_hit_fn = bool( __cdecl* )( uintptr_t* );
+			static bool __cdecl report_hit( uintptr_t* );
+		};
+
 		struct steam {
 			// hook GameConnectedFriendChatMsg_t
 			STEAM_CALLBACK( steam, on_friend_message, GameConnectedFriendChatMsg_t );

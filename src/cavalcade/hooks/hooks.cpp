@@ -10,6 +10,7 @@ bool cavalcade::hooks::init( ) {
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CHLClient::LevelInitPostEntity" ), &chlc_client::level_init_post_entity );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "OnOverrideMouseInput" ), &chlc_client::on_override_mouse_input );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "PushNotice" ), &push_notice_::push_notice );
+	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "ReportHit" ), &protobuf::report_hit );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CEngineClient::ClientCmd" ), &client_cmd_::client_cmd );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CPrediction::SetupMove" ), &prediction::setup_move );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "C_BasePlayer::CreateMove" ), &base_player::create_move );

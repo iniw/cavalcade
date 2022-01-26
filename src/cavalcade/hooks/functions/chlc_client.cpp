@@ -17,6 +17,7 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 
 		g_hack.m_velgraph.draw( );
 		g_hack.m_indscreen.draw( );
+		g_hack.m_hitmarker.draw( );
 	} );
 
 	og( ecx, stage );
@@ -31,6 +32,7 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	g_hack.m_esp.clear( );
 	g_hack.m_velgraph.clear( );
 	g_hack.m_indscreen.clear( );
+	g_hack.m_hitmarker.clear( );
 
 	// NOTE(para): it's particularly important for this to be here, before og
 	g_hack.m_nightmode.clear( );

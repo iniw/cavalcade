@@ -9,6 +9,7 @@
 #include "indicators/screen.hpp"
 #include "nightmode/nightmode.hpp"
 #include "movement/movement.hpp"
+#include "hitmarker/hitmarker.hpp"
 
 namespace hack {
 	struct impl {
@@ -21,6 +22,7 @@ namespace hack {
 		indicators::screen m_indscreen;
 		nightmode m_nightmode;
 		movement m_movement;
+		hitmarker m_hitmarker;
 	};
 } // namespace hack
 

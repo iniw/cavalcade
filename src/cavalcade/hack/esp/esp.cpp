@@ -124,7 +124,10 @@ void hack::esp::run( ) {
 					auto name   = std::string( p.get_name( ) );
 					auto offset = /* HACK */ name.find( XOR( "ygjpq" ) ) != std::string::npos ? 4 : 0;
 					auto text   = std::make_shared< render::geometry::text >( f, aa, std::move( name ), clr );
-					text->m_point[ 1 ] -= text->calc_size( )[ 1 ] + 3 + offset;
+					auto ts     = text->calc_size( );
+					text->m_point[ 0 ] += bb[ 0 ] / 2;
+					text->m_point[ 0 ] -= ts[ 0 ] / 2;
+					text->m_point[ 1 ] -= ts[ 1 ] + 3 + offset;
 					g_render.m_safe.draw_shape_p( std::move( text ) );
 
 					constexpr auto max_health = 100;

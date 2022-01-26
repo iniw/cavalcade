@@ -30,6 +30,7 @@ set(SOURCES
     src/cavalcade/hack/indicators/screen.cpp
     src/cavalcade/hack/nightmode/nightmode.cpp
     src/cavalcade/hack/movement/movement.cpp
+    src/cavalcade/hack/hitmarker/hitmarker.cpp
     # hooks - functions
     src/cavalcade/hooks/functions/push_notice.cpp
     src/cavalcade/hooks/functions/client_cmd.cpp
@@ -44,6 +45,7 @@ set(SOURCES
     src/cavalcade/hooks/functions/static_prop_mgr.cpp
     src/cavalcade/hooks/functions/material_system.cpp
     src/cavalcade/hooks/functions/animstate.cpp
+    src/cavalcade/hooks/functions/protobuf.cpp
     # hooks
     src/cavalcade/hooks/hooks.cpp
 
