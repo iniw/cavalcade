@@ -8,8 +8,11 @@ void gui::impl::init( ) {
 	{
 		gb->add< objects::checkbox >( XOR( "check1" ), "check 1" );
 		gb->add< objects::checkbox >( XOR( "trainer" ), XOR( "trainer" ) );
+		gb->add< objects::checkbox >( XOR( "longjump on edge" ), XOR( "longjump on edge" ) );
 		gb->add< objects::checkbox >( XOR( "nightmode" ), XOR( "nightmode" ) );
 		gb->add< objects::slider< i32 > >( XOR( "factor" ), XOR( "factor" ), 0, 100 );
+		gb->add< objects::slider< i32 > >( XOR( "edgebug scaling" ), XOR( "edgebug scaling" ), 0, 100 );
+		gb->add< objects::slider< i32 > >( XOR( "edgebug radius" ), XOR( "edgebug radius" ), 0, 128 );
 		gb->add< objects::checkbox >( XOR( "on attack" ), XOR( "on attack" ) );
 		gb->add< objects::slider< i32 > >( XOR( "fov" ), XOR( "fov" ), 0, 180 );
 		gb->add< objects::slider< i32 > >( XOR( "smoothing" ), XOR( "smoothing" ), 0, 100 );

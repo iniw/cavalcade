@@ -15,6 +15,10 @@ namespace sdk {
 
 		VFUNC( void, select_item, idx::SELECT_ITEM, ( cstr item, i32 sub_type ), item, sub_type );
 
+		NETVAR( f32, get_duck_amount, "DT_BasePlayer->m_flDuckAmount" );
+
+		NETVAR( f32, get_duck_speed, "DT_BasePlayer->m_flDuckSpeed" );
+
 		NETVAR( i32, get_health, "DT_BasePlayer->m_iHealth" );
 
 		NETVAR( i32, get_flags, "DT_BasePlayer->m_fFlags" );
@@ -26,6 +30,8 @@ namespace sdk {
 		NETVAR( f32, get_fall_velocity, "DT_BasePlayer->m_flFallVelocity" );
 
 		NETVAR( math::v3f, get_velocity, "DT_BasePlayer->m_vecVelocity[0]" );
+
+		NETVAR( math::v3f, get_view_offset, "DT_BasePlayer->m_vecViewOffset[0]" );
 
 		NETVAR( math::ang, get_aim_punch_angle, "DT_BasePlayer->m_aimPunchAngle" );
 
@@ -76,6 +82,13 @@ namespace sdk {
 
 			get_button_pressed( )  = buttons_changed & buttons;
 			get_button_released( ) = buttons_changed & ( ~buttons );
+		}
+
+		void set_abs_origin( const math::v3f& origin ) {
+			static auto function =
+				g_mem[ CLIENT_DLL ].get_address< void( __thiscall* )( base_player*, const math::v3f& ) >( HASH_CT( "C_BaseEntity::SetAbsOrigin" ) );
+
+			function( this, origin );
 		}
 	};
 } // namespace sdk

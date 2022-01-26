@@ -6,6 +6,8 @@
 
 namespace sdk {
 	struct cs_player : base_animating {
+		NETVAR( f32, get_velocity_modifier, "DT_CSPlayer->m_flVelocityModifier" );
+
 		NETVAR( bool, is_immune, "DT_CSPlayer->m_bGunGameImmunity" );
 
 		NETVAR( bool, is_player_ghost, "DT_CSPlayer->m_bIsPlayerGhost" );

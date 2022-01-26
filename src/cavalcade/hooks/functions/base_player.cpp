@@ -43,7 +43,8 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 	{
 		g_hack.m_prediction.update( );
 		g_hack.m_prediction.start( );
-		g_hack.m_prediction.end( );
+		g_hack.m_prediction.apply( );
+		g_hack.m_prediction.restore( );
 
 		g_hack.m_movement.post( );
 

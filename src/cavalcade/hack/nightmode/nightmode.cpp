@@ -36,13 +36,15 @@ void hack::nightmode::run_props( ) {
 	// we've changed color, therefore when we turn off nightmode we should restore it
 	m_reset = true;
 
-	// have we called for an update?
-	if ( m_set || !m_old_factor.has_value( ) || ( m_old_factor.has_value( ) && m_old_factor.value( ) != ft ) ) {
-		for ( auto& [ prop, clr ] : m_static_props )
-			prop->m_diffuse_modulation = clr * ( ft * 0.0039215F );
+	if ( !m_static_props.empty( ) ) {
+		// have we called for an update?
+		if ( m_set || !m_old_factor.has_value( ) || ( m_old_factor.has_value( ) && m_old_factor.value( ) != ft ) ) {
+			for ( auto& [ prop, clr ] : m_static_props )
+				prop->m_diffuse_modulation = clr * ( ft * 0.0039215F );
 
-		m_old_factor = ft;
-		m_set        = false;
+			m_old_factor = ft;
+			m_set        = false;
+		}
 	}
 }
 

@@ -116,6 +116,9 @@ namespace cavalcade {
 		struct material_system {
 			using get_color_modulation_fn = void( __fastcall* )( sdk::material*, unk, f32&, f32&, f32& );
 			static void __fastcall get_color_modulation( sdk::material*, unk, f32&, f32&, f32& );
+
+			using find_material_fn = unk( __fastcall* )( unk, unk, const char*, const char*, i32, i32 );
+			static unk __fastcall find_material( unk, unk, const char*, const char*, i32, i32 );
 		};
 
 		struct protobuf {

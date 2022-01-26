@@ -30,6 +30,8 @@ namespace cavalcade {
 			sdk::cvar* sv_autobunnyhopping;
 			sdk::cvar* sv_skyname;
 
+            sdk::cvar* sv_gravity;
+
 			sdk::cvar* mp_teammates_are_enemies;
 
 			sdk::cvar* sensitivity;

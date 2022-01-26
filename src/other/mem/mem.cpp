@@ -68,6 +68,12 @@ void mem::impl::add_addresses( ) {
 		ADD_PATTERN_REL( CLIENT_DLL, "ClipTraceToPlayers", "E8 ? ? ? ? 83 C4 18 8A 56 37" );
 		ADD_PATTERN( CLIENT_DLL, "CrosshairShouldDraw", "55 8B EC 83 E4 F0 83 EC 78 56 8B F1 8B 0D" );
 		ADD_PATTERN( CLIENT_DLL, "ReportHit", "55 8B EC 8B 55 08 83 EC 1C F6 42 1C 01" );
+		ADD_PATTERN(
+			ENGINE_DLL, "MaterialSystem",
+			"8B 0D ? ? ? ? 6A 00 6A 01 68 ? ? ? ? 8B 01 68 ? ? ? ? FF 90 ? ? ? ? C3 85 C9 78 35 3B 0D ? ? ? ? 7D 2D A1 ? ? ? ? 8B 0C 88 85 C9" );
+		auto addr            = m_modules[ ENGINE_DLL ].get_address< uintptr_t >( HASH_CT( "MaterialSystem" ) ) + 2;
+		auto material_system = **( void*** )addr;
+		ADD_ADDRESS( MATERIALSYSTEM_DLL, "FindMaterial", get_v_func( material_system, 84 ) );
 		ADD_PATTERN_REL( ENGINE_DLL, "StaticPropMgrPrecacheLighting", "E8 ? ? ? ? FF 76 60" );
 
 		ADD_PATTERN( MATERIALSYSTEM_DLL, "GetColorModulation", "55 8B EC 83 EC ? 56 8B F1 8A 46" );

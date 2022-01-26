@@ -13,13 +13,15 @@ namespace hack::other {
 		bool m_backup_is_first_time_predicted;
 		bool m_backup_in_prediction;
 
-		sdk::move_data m_move_data;
-
 	public:
+
+		sdk::move_data m_move_data;
 
 		void start( );
 
-		void end( );
+		void apply( );
+
+		void restore( );
 
 		void update( );
 	};

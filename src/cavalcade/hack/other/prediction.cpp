@@ -47,20 +47,24 @@ void hack::other::prediction::start( ) {
 
 	g_csgo.m_prediction->run_think( g_ctx.m_local, g_ctx.m_local.get( ).get_tickbase( ) );
 
-	g_csgo.m_prediction->setup_move( g_ctx.m_local, g_ctx.m_cmd, g_csgo.m_move_helper, &m_move_data );
+	memset( &m_move_data, 0, sizeof( decltype( m_move_data ) ) );
 
+	g_csgo.m_prediction->setup_move( g_ctx.m_local, g_ctx.m_cmd, g_csgo.m_move_helper, &m_move_data );
+}
+
+void hack::other::prediction::apply( ) {
 	g_csgo.m_game_movement->process_movement( g_ctx.m_local, &m_move_data );
 
 	g_csgo.m_prediction->finish_move( g_ctx.m_local, g_ctx.m_cmd, &m_move_data );
 
 	g_csgo.m_move_helper->process_impacts( );
+}
 
+void hack::other::prediction::restore( ) {
 	g_csgo.m_prediction->run_post_think( g_ctx.m_local );
 
 	g_csgo.m_game_movement->finish_track_prediction_errors( g_ctx.m_local );
-}
 
-void hack::other::prediction::end( ) {
 	g_csgo.m_prediction->m_in_prediction           = m_backup_in_prediction;
 	g_csgo.m_prediction->m_is_first_time_predicted = m_backup_is_first_time_predicted;
 
@@ -69,9 +73,9 @@ void hack::other::prediction::end( ) {
 
 	g_csgo.m_prediction->finish_command( g_ctx.m_local );
 
-	g_csgo.m_game_movement->reset( );
-
 	g_csgo.m_move_helper->set_host( nullptr );
+
+	g_csgo.m_game_movement->reset( );
 }
 
 void hack::other::prediction::update( ) {
