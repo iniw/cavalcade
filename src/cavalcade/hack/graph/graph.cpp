@@ -22,6 +22,9 @@ void hack::graph::draw( ) {
 	static auto& gs  = gui::cfg::get< i32 >( HASH_CT( "main:group1:graph size" ) );
 	static auto& gsc = gui::cfg::get< f32 >( HASH_CT( "main:group1:graph scale" ) );
 
+	if ( gs == 0 || gsc == 0.F )
+		return;
+
 	if ( gs != m_old_gs ) {
 		m_old_gs = gs;
 		m_data.clear( );

@@ -192,14 +192,17 @@ void hack::movement::edgebug::run( i32 base_flags, f32 base_velocity ) {
 	if ( !( true && g_io.key_state< io::key_state::DOWN >( VK_MBUTTON ) ) || local_on_ladder_or_noclip( ) ) {
 		m_predicted   = false;
 		m_should_duck = false;
+		m_in_edgebug  = false;
 		return;
 	}
 
+	m_in_edgebug = false;
 	g_ctx.m_cmd->m_buttons &= ~( 1 << 2 );
 	if ( !m_predicted ) {
 		m_should_duck = false;
 
 		for ( auto runs = 0; runs < 2; ++runs ) {
+			m_in_edgebug = true;
 			if ( runs == 1 ) {
 				m_should_duck = true;
 				set( );
@@ -247,6 +250,8 @@ void hack::movement::edgebug::run( i32 base_flags, f32 base_velocity ) {
 		}
 	} else {
 		if ( g_csgo.m_globals->m_tickcount < ( m_simulation_tick + m_simulation_timestamp ) ) {
+			m_in_edgebug = true;
+
 			g_ctx.m_cmd->m_buttons &= ~( 1 << 3 );
 			g_ctx.m_cmd->m_buttons &= ~( 1 << 4 );
 			g_ctx.m_cmd->m_forward_move = 0.F;

@@ -10,6 +10,7 @@ namespace cavalcade {
 		sdk::player m_local;
 		sdk::user_cmd* m_cmd;
 		std::optional< CSteamID > m_last_friend_to_message;
+		bool m_in_deathcam{ false };
 
 		struct {
 			sdk::cvar* sv_cheats;
@@ -30,7 +31,7 @@ namespace cavalcade {
 			sdk::cvar* sv_autobunnyhopping;
 			sdk::cvar* sv_skyname;
 
-            sdk::cvar* sv_gravity;
+			sdk::cvar* sv_gravity;
 
 			sdk::cvar* mp_teammates_are_enemies;
 

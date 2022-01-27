@@ -50,11 +50,12 @@ namespace hack {
 			void run( i32 base_flags, f32 base_velocity );
 
 			sdk::move_data m_move_data;
-			bool m_predicted;
-			bool m_fail_predict;
-			bool m_should_duck;
-			i32 m_simulation_tick;
-			i32 m_simulation_timestamp;
+			bool m_in_edgebug{ false };
+			bool m_predicted{ false };
+			bool m_fail_predict{ false };
+			bool m_should_duck{ false };
+			i32 m_simulation_tick{ 0 };
+			i32 m_simulation_timestamp{ 0 };
 
 			backup m_backup;
 		} m_edgebug;

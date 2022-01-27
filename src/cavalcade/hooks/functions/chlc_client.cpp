@@ -12,7 +12,7 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 
 		g_hack.m_esp.run( );
 
-		if ( !g_ctx.m_local.get( ).is_alive( ) )
+		if ( g_ctx.m_in_deathcam || !g_ctx.m_local.get( ).is_alive( ) )
 			return;
 
 		g_hack.m_velgraph.draw( );

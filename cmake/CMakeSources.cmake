@@ -46,6 +46,7 @@ set(SOURCES
     src/cavalcade/hooks/functions/material_system.cpp
     src/cavalcade/hooks/functions/animstate.cpp
     src/cavalcade/hooks/functions/protobuf.cpp
+    src/cavalcade/hooks/functions/engine_sound.cpp
     # hooks
     src/cavalcade/hooks/hooks.cpp
 

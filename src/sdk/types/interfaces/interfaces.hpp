@@ -21,6 +21,7 @@
 #include "ivdebugoverlay.hpp"
 #include "enginetrace.hpp"
 #include "physicssurfaceprops.hpp"
+#include "enginesound.hpp"
 
 namespace sdk::interfaces {
 	struct registry {

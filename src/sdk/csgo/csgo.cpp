@@ -45,6 +45,10 @@ bool sdk::csgo::init( ) {
 		m_physics_surface_props = find_interface< interfaces::physics_surface_props* >( g_mem[ PHYSICS_DLL ], HASH_CT( "VPhysicsSurfaceProps" ) );
 		if ( !m_physics_surface_props )
 			return false;
+
+		m_engine_sound = find_interface< interfaces::engine_sound* >( g_mem[ ENGINE_DLL ], HASH_CT( "IEngineSoundClient" ) );
+		if ( !m_engine_sound )
+			return false;
 	}
 
 	m_globals = mem::get_v_func( m_client, 11 ).add( 0xA ).get< globals* >( 2 );

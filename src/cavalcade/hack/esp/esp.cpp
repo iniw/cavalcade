@@ -48,6 +48,7 @@ static bool bounding_box( sdk::player& p, std::pair< render::point, render::poin
 }
 
 void hack::esp::run( ) {
+	static auto& boxb  = gui::cfg::get< bool >( HASH_CT( "main:group1:box bob" ) );
 	static auto& box_w = gui::cfg::get< i32 >( HASH_CT( "main:group1:bw" ) );
 	static auto& box_h = gui::cfg::get< i32 >( HASH_CT( "main:group1:bh" ) );
 
@@ -67,7 +68,10 @@ void hack::esp::run( ) {
 			std::pair< render::point, render::point > bbox;
 			auto box = bounding_box( p, bbox );
 			if ( box ) {
-				const auto& [ aa, bb ] = bbox;
+				auto& [ aa, bb ] = bbox;
+
+				if ( boxb )
+					aa[ 1 ] += 16 - ( 16 * anim.m_animation_factor );
 
 				if ( box_w > 0 || box_h > 0 ) {
 					auto cw = .5F * ( box_w * .01F );
@@ -197,7 +201,6 @@ void hack::esp::run( ) {
 					std::vector< render::point > points{ { new_point_x - size, new_point_y - size },
 						                                 { new_point_x + size, new_point_y },
 						                                 { new_point_x - size, new_point_y + size } };
-
 					rotate_triangle( points, angle_yaw );
 
 					g_render.m_safe.draw_shape< render::geometry::polyfill >(

@@ -20,6 +20,7 @@ bool cavalcade::hooks::init( ) {
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CrosshairShouldDraw" ), &crosshair::should_draw );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CCSGOPlayerAnimState::ModifyEyePosition" ), &csgo_player_anim_state::modify_eye_position );
 	MOCK g_mem[ ENGINE_DLL ].hook( HASH_CT( "StaticPropMgrPrecacheLighting" ), &static_prop_mgr::precache_lighting );
+	MOCK g_mem[ ENGINE_DLL ].hook( HASH_CT( "EmitSound" ), &engine_sound::emit_sound );
 	// MOCK g_mem[ MATERIALSYSTEM_DLL ].hook( HASH_CT( "FindMaterial" ), &material_system::find_material );
 	MOCK g_mem[ MATERIALSYSTEM_DLL ].hook( HASH_CT( "GetColorModulation" ), &material_system::get_color_modulation );
 	MOCK g_mem[ SHADERAPIDX9_DLL ].hook( HASH_CT( "IDirect3DDevice9::EndScene" ), &d3d9_device::end_scene );

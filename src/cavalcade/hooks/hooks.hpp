@@ -126,6 +126,18 @@ namespace cavalcade {
 			static bool __cdecl report_hit( uintptr_t* );
 		};
 
+		struct engine_sound {
+			using emit_sound_fn = void( __fastcall* )( unk, unk, unk filter, i32 entity_index, i32 channel, const char* sound_entry,
+			                                           u32 sound_entry_hash, const char* sample, f32 volume, f32 attenuation, i32 seed, i32 flags,
+			                                           i32 pitch, const math::v3f* origin, const math::v3f* direction, math::v3f* vec_origins,
+			                                           bool update_positions, f32 sound_time, i32 speaker_entity, unk params );
+
+			static void __fastcall emit_sound( unk, unk, unk filter, i32 entity_index, i32 channel, const char* sound_entry, u32 sound_entry_hash,
+			                                   const char* sample, f32 volume, f32 attenuation, i32 seed, i32 flags, i32 pitch,
+			                                   const math::v3f* origin, const math::v3f* direction, math::v3f* vec_origins, bool update_positions,
+			                                   f32 sound_time, i32 speaker_entity, unk params );
+		};
+
 		struct steam {
 			// hook GameConnectedFriendChatMsg_t
 			STEAM_CALLBACK( steam, on_friend_message, GameConnectedFriendChatMsg_t );

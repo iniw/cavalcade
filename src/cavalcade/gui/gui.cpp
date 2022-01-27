@@ -8,6 +8,7 @@ void gui::impl::init( ) {
 	{
 		gb->add< objects::checkbox >( XOR( "check1" ), "check 1" );
 		gb->add< objects::checkbox >( XOR( "trainer" ), XOR( "trainer" ) );
+		gb->add< objects::checkbox >( XOR( "box bob" ), XOR( "box bob" ) );
 		gb->add< objects::checkbox >( XOR( "longjump on edge" ), XOR( "longjump on edge" ) );
 		gb->add< objects::checkbox >( XOR( "nightmode" ), XOR( "nightmode" ) );
 		gb->add< objects::slider< i32 > >( XOR( "factor" ), XOR( "factor" ), 0, 100 );
