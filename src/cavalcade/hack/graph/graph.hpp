@@ -18,6 +18,9 @@ namespace hack {
 
 		void clear( );
 
+		i32 m_old_gs{ -1 };
+		f32 m_old_gsc{ -1.F };
+
 		i32 get_upmost_y_scenario( );
 	};
 } // namespace hack

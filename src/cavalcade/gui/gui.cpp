@@ -18,8 +18,8 @@ void gui::impl::init( ) {
 		gb->add< objects::slider< i32 > >( XOR( "smoothing" ), XOR( "smoothing" ), 0, 100 );
 		gb->add< objects::slider< i32 > >( XOR( "bw" ), XOR( "bw" ), 0, 100 );
 		gb->add< objects::slider< i32 > >( XOR( "bh" ), XOR( "bh" ), 0, 100 );
-		gb->add< objects::slider< i32 > >( XOR( "graph size" ), XOR( "graph size" ), 0, 200 );
-		tab2->add< objects::slider< f32 > >( XOR( "graph scale" ), XOR( "graph scale" ), 0.F, 10.F );
+		gb->add< objects::slider< i32 > >( XOR( "graph size" ), XOR( "graph size" ), 10, 200 );
+		gb->add< objects::slider< f32 > >( XOR( "graph scale" ), XOR( "graph scale" ), 1.F, 4.5F );
 	}
 
 	auto gb3 = window->add< objects::groupbox >( XOR( "group2" ), ( "test 3" ), 90 );

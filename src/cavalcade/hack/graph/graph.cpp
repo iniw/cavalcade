@@ -19,11 +19,23 @@ void hack::graph::gather( ) {
 }
 
 void hack::graph::draw( ) {
-	if ( m_data.size( ) < 2 )
-		return;
-
 	static auto& gs  = gui::cfg::get< i32 >( HASH_CT( "main:group1:graph size" ) );
 	static auto& gsc = gui::cfg::get< f32 >( HASH_CT( "main:group1:graph scale" ) );
+
+	if ( gs != m_old_gs ) {
+		m_old_gs = gs;
+		m_data.clear( );
+		return;
+	}
+
+	if ( gsc != m_old_gsc ) {
+		m_old_gsc = gsc;
+		m_data.clear( );
+		return;
+	}
+
+	if ( m_data.size( ) < 2 )
+		return;
 
 	for ( auto i = 0; i < m_data.size( ) - 1; ++i ) {
 		const auto& c = m_data[ i ];
