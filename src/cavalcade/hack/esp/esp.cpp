@@ -148,6 +148,62 @@ void hack::esp::run( ) {
 					}
 				}
 			}
+			{
+				auto angles = g_csgo.m_engine->get_view_angles( );
+				auto ss     = g_render.get_screen_size( );
+
+				math::v3f screen;
+				g_csgo.m_debug_overlay->screen_position( p.get( ).get_origin( ), screen );
+
+				if ( screen[ 0 ] < 0 || screen[ 1 ] < 0 || screen[ 0 ] > ss[ 0 ] || screen[ 1 ] > ss[ 1 ] ) {
+					auto eye      = g_ctx.m_local.get( ).get_eye_position( );
+					auto rotation = angles.yaw - eye.calculate_angle( p.get( ).get_origin( ) )[ 1 ] - 90;
+
+					constexpr auto DEG2RAD     = []( const f32 x ) -> f32 { return x * ( M_PI / 180.F ); };
+					const auto rotate_triangle = [ & ]( std::vector< render::point >& points, f32 rotation ) {
+						constexpr auto DEG2RAD = []( const f32 x ) -> f32 { return x * ( M_PI / 180.F ); };
+						render::point points_center{ };
+
+						for ( const auto& e : points )
+							points_center += e;
+
+						points_center /= points.size( );
+
+						for ( auto& point : points ) {
+							point = point - points_center;
+
+							const auto temp_x = point[ 0 ];
+							const auto temp_y = point[ 1 ];
+
+							const auto theta = DEG2RAD( rotation );
+							const auto c     = std::cos( theta );
+							const auto s     = std::sin( theta );
+
+							point[ 0 ] = temp_x * c - temp_y * s;
+							point[ 1 ] = temp_x * s + temp_y * c;
+
+							point = point + points_center;
+						}
+					};
+
+					auto distance = 100;
+					auto size     = 15;
+
+					auto angle_yaw         = angles.yaw - eye.calculate_angle( p.get( ).get_origin( ) )[ 1 ] - 90;
+					auto angle_yaw_rad     = DEG2RAD( angle_yaw );
+					const auto new_point_x = ss[ 0 ] / 2 + distance * cosf( angle_yaw_rad );
+					const auto new_point_y = ss[ 1 ] / 2 + distance * sinf( angle_yaw_rad );
+
+					std::vector< render::point > points{ { new_point_x - size, new_point_y - size },
+						                                 { new_point_x + size, new_point_y },
+						                                 { new_point_x - size, new_point_y + size } };
+
+					rotate_triangle( points, angle_yaw );
+
+					g_render.m_safe.draw_shape< render::geometry::polyfill >(
+						std::move( points ), render::color( 255, 255, 255, 255 ).frac_alpha( anim.m_animation_factor ) );
+				}
+			}
 		}
 	} );
 }

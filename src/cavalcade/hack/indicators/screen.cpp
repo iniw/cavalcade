@@ -12,8 +12,7 @@ void hack::indicators::screen::gather( ) {
 }
 
 void hack::indicators::screen::draw( ) {
-	auto y = g_hack.m_velgraph.get_upmost_y_scenario( );
-	y -= 60;
+	auto y         = g_hack.m_velgraph.get_upmost_y_scenario( );
 	static auto fa = &g_render.m_fonts[ render::font::IND_BIG ];
 	static auto fb = &g_render.m_fonts[ render::font::IND_SMALL ];
 	auto ss        = g_render.get_screen_size( );
@@ -24,12 +23,14 @@ void hack::indicators::screen::draw( ) {
 	auto text = std::make_shared< render::geometry::text >( fa, render::point{ ss[ 0 ] / 2, y },
 	                                                        std::to_string( static_cast< int >( g_ctx.m_local.get( ).get_velocity( ).length_2d( ) ) ),
 	                                                        render::color( 255, 255, 255, 255 ) );
-	text->m_point[ 0 ] -= text->calc_size( )[ 0 ] / 2;
+	auto tss  = text->calc_size( );
+	text->m_point[ 0 ] -= tss[ 0 ] / 2;
+	text->m_point[ 1 ] -= tss[ 1 ] + 10;
 	i32 container_pad = 0;
 	if ( m_last_vel.has_value( ) && m_anim_last_vel.m_animation_factor > 0.F ) {
 		auto size = text->calc_size( );
 
-		auto new_text = std::make_shared< render::geometry::text >( fb, render::point{ ss[ 0 ] / 2, y },
+		auto new_text = std::make_shared< render::geometry::text >( fb, render::point{ ss[ 0 ] / 2, text->m_point[ 1 ] },
 		                                                            XOR( "[" ) + std::to_string( m_last_vel.value( ) ) + XOR( "]" ),
 		                                                            render::color( 185, 185, 185, 255 ) );
 		new_text->m_point[ 0 ] -= new_text->calc_size( )[ 0 ] / 2;

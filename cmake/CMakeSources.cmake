@@ -80,6 +80,7 @@ set(SOURCES
     src/other/render/geometry/line/line.cpp
     src/other/render/geometry/font/font.cpp
     src/other/render/geometry/text/text.cpp
+    src/other/render/geometry/poly/polyfill.cpp
     # render
     src/other/render/render.cpp
 

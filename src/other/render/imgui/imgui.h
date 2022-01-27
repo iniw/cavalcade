@@ -3217,6 +3217,7 @@ enum ImDrawListFlags_
 		1 << 3 // Can emit 'VtxOffset > 0' to allow large meshes. Set when 'ImGuiBackendFlags_RendererHasVtxOffset' is enabled.
 };
 
+#	include "../../render/types/types.hpp"
 // Draw command list
 // This is the low-level list of polygons that ImGui:: functions are filling. At the end of the frame,
 // all command lists are passed to your ImGuiIO::RenderDrawListFn function for rendering.
@@ -3303,6 +3304,8 @@ struct ImDrawList {
 	                        float wrap_width = 0.0f, const ImVec4* cpu_fine_clip_rect = NULL );
 	IMGUI_API void AddPolyline( const ImVec2* points, int num_points, ImU32 col, ImDrawFlags flags, float thickness );
 	IMGUI_API void AddConvexPolyFilled( const ImVec2* points, int num_points,
+	                                    ImU32 col ); // Note: Anti-aliased filling requires points to be in clockwise order.
+	IMGUI_API void AddConvexPolyFilled( const render::point* points, int num_points,
 	                                    ImU32 col ); // Note: Anti-aliased filling requires points to be in clockwise order.
 	IMGUI_API void AddBezierCubic( const ImVec2& p1, const ImVec2& p2, const ImVec2& p3, const ImVec2& p4, ImU32 col, float thickness,
 	                               int num_segments = 0 ); // Cubic Bezier (4 control points)
@@ -3707,7 +3710,7 @@ struct ImFontAtlas {
 
 #	ifndef IMGUI_DISABLE_OBSOLETE_FUNCTIONS
 	typedef ImFontAtlasCustomRect CustomRect; // OBSOLETED in 1.72+
-											  // typedef ImFontGlyphRangesBuilder GlyphRangesBuilder; // OBSOLETED in 1.67+
+	                                          // typedef ImFontGlyphRangesBuilder GlyphRangesBuilder; // OBSOLETED in 1.67+
 #	endif
 };
 
