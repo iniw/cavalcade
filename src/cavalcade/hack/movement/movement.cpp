@@ -224,8 +224,8 @@ void hack::movement::edgebug::run( i32 base_flags, f32 base_velocity ) {
 				predict( base_flags, base_velocity );
 
 				if ( m_predicted ) {
-					m_stimulation_tick      = radius;
-					m_stimulation_timestamp = g_csgo.m_globals->m_tickcount;
+					m_simulation_tick      = radius;
+					m_simulation_timestamp = g_csgo.m_globals->m_tickcount;
 					break;
 				}
 
@@ -246,7 +246,7 @@ void hack::movement::edgebug::run( i32 base_flags, f32 base_velocity ) {
 				break;
 		}
 	} else {
-		if ( g_csgo.m_globals->m_tickcount < ( m_stimulation_tick + m_stimulation_timestamp ) ) {
+		if ( g_csgo.m_globals->m_tickcount < ( m_simulation_tick + m_simulation_timestamp ) ) {
 			g_ctx.m_cmd->m_buttons &= ~( 1 << 3 );
 			g_ctx.m_cmd->m_buttons &= ~( 1 << 4 );
 			g_ctx.m_cmd->m_forward_move = 0.F;
@@ -269,4 +269,14 @@ void hack::movement::edgebug_scale_mouse( f32& x ) {
 	static auto& es = gui::cfg::get< i32 >( HASH_CT( "main:group1:edgebug scaling" ) );
 	if ( ( true && g_io.key_state< io::key_state::DOWN >( VK_MBUTTON ) ) && m_edgebug.m_predicted )
 		x *= ( 1.F - ( .01F * es ) );
+}
+
+void hack::movement::clear( ) {
+	m_jumpbugged                     = false;
+	m_longjumped                     = false;
+	m_edgebug.m_predicted            = false;
+	m_edgebug.m_fail_predict         = false;
+	m_edgebug.m_should_duck          = false;
+	m_edgebug.m_simulation_tick      = 0;
+	m_edgebug.m_simulation_timestamp = 0;
 }

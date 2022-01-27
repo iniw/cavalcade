@@ -33,6 +33,7 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	g_hack.m_velgraph.clear( );
 	g_hack.m_indscreen.clear( );
 	g_hack.m_hitmarker.clear( );
+	g_hack.m_movement.clear( );
 
 	// NOTE(para): it's particularly important for this to be here, before og
 	g_hack.m_nightmode.clear( );

@@ -53,8 +53,8 @@ namespace hack {
 			bool m_predicted;
 			bool m_fail_predict;
 			bool m_should_duck;
-			i32 m_stimulation_tick;
-			i32 m_stimulation_timestamp;
+			i32 m_simulation_tick;
+			i32 m_simulation_timestamp;
 
 			backup m_backup;
 		} m_edgebug;
@@ -64,6 +64,8 @@ namespace hack {
 		void edgebug_scale_mouse( f32& x );
 
 		void post( );
+
+		void clear( );
 
 		i32 m_base_flags{ };
 		bool m_in_jumpbug{ false };
