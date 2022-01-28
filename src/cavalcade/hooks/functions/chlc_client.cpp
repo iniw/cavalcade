@@ -25,7 +25,8 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 
 void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	// begone
-	g_csgo.m_sky_name = std::nullopt;
+	g_csgo.m_sky_name   = std::nullopt;
+	g_ctx.m_in_deathcam = false;
 	g_hack.m_translator.m_pending_translations.clear( );
 	g_entity_cacher.clear( );
 	g_hack.m_trainer.clear( );
