@@ -36,36 +36,34 @@ void sdk::cs_player::post_think( ) {
 }
 
 math::v3f sdk::cs_player::get_hitbox_position( i32 hitbox_id ) {
-	math::matrix_3x4 bone_matrix[ 128 ];
+	auto model = g_csgo.m_model_info->get_studio_model( get_model( ) );
 
-	if ( setup_bones( bone_matrix, 128, 0x100, 0.F ) ) {
-		auto model = g_csgo.m_model_info->get_studio_model( get_model( ) );
+	if ( model ) {
+		auto hitbox = model->get_hitbox_set( 0 )->get_hitbox( hitbox_id );
 
-		if ( model ) {
-			auto hitbox = model->get_hitbox_set( 0 )->get_hitbox( hitbox_id );
+		if ( hitbox ) {
+			auto vector_transform = [ & ]( const math::v3f& vec ) -> math::v3f {
+				math::v3f r{ };
+				for ( auto i = 0; i < 3; ++i )
+					r[ i ] = vec.dot_product( get_cached_bone_matrix( hitbox->m_bone ).data[ i ] ) +
+					         get_cached_bone_matrix( hitbox->m_bone ).data[ i ][ 3 ];
 
-			if ( hitbox ) {
-				auto vector_transform = [ &bone_matrix, hitbox ]( const math::v3f& vec ) -> math::v3f {
-					math::v3f r{ };
-					for ( auto i = 0; i < 3; ++i )
-						r[ i ] = vec.dot_product( bone_matrix[ hitbox->m_bone ].data[ i ] ) + bone_matrix[ hitbox->m_bone ].data[ i ][ 3 ];
+				return r;
+			};
 
-					return r;
-				};
+			if ( hitbox->m_bone < 0 && hitbox->m_bone > 256 )
+				return { std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) };
 
-				if ( hitbox->m_bb_min == math::v3f{ 0, 0, 0 } ) {
-					return { std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) };
-				}
+			if ( hitbox->m_bb_min == math::v3f{ 0, 0, 0 } )
+				return { std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) };
 
-				if ( hitbox->m_bb_max == math::v3f{ 0, 0, 0 } ) {
-					return { std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) };
-				}
+			if ( hitbox->m_bb_max == math::v3f{ 0, 0, 0 } )
+				return { std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) };
 
-				auto min = vector_transform( hitbox->m_bb_min );
-				auto max = vector_transform( hitbox->m_bb_max );
+			auto min = vector_transform( hitbox->m_bb_min );
+			auto max = vector_transform( hitbox->m_bb_max );
 
-				return ( min + max ) / 2.F;
-			}
+			return ( min + max ) / 2.F;
 		}
 	}
 

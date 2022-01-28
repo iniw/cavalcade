@@ -77,6 +77,64 @@ void mem::impl::add_addresses( ) {
 		ADD_ADDRESS( MATERIALSYSTEM_DLL, "FindMaterial", get_v_func( material_system, 84 ) );
 		ADD_PATTERN_REL( ENGINE_DLL, "StaticPropMgrPrecacheLighting", "E8 ? ? ? ? FF 76 60" );
 
+		/*
+		NOTE(para): in case of update
+
+		 v22 = dword_15306998;
+		(*(void (__thiscall **)(int))(*(_DWORD *)dword_15306998 + 132))(dword_15306998);
+		nRightHandWepBoneIndex = sub_101CA5F0("weapon_hand_R");
+		if ( nRightHandWepBoneIndex > 0
+		  && (*(_DWORD *)(*(_DWORD *)(sub_10193800(this) + 48) + 4 * nRightHandWepBoneIndex) & *(_DWORD *)(a7 + 4200)) != 0 )
+		{
+		  v23 = (*(int (__thiscall **)(_BYTE *))(*(_DWORD *)this + 1072))(this);
+		  if ( v23 )
+		  {
+		    v25 = sub_101A1C70(v23 + 12900);
+		    v56 = v25;
+		    if ( v25 )
+		    {
+		      if ( (unsigned __int8)sub_101A81B0(v25, v24) )
+		      {
+		        if ( sub_101A3240(v26) != -1 )
+		        {
+		          nBone = sub_101A3240(v56);
+		          if ( nBone > -1 )
+		          {
+		            pHdr = sub_10193800(v56);
+		            nWepAttach = nBone;
+		            v54 = (int *)pHdr;
+		            if ( (*(_DWORD *)(*(_DWORD *)(pHdr + 48) + 4 * nBone) & 0x80000) == 0 )
+		            {
+		              sub_1034DBA0(nBone, 0x80000);
+		              nWepAttach = nBone;
+		              pHdr = (int)v54;
+		            }
+		            if ( *(_DWORD *)(*(_DWORD *)(pHdr + 68) + 4 * nWepAttach) != -1
+		              && (unsigned __int8)BaseAnimating::IsBoneAvailableForRead(nWepAttach) )
+		            {
+		              IKContext::BuildBoneChain(pos, q, nRightHandWepBoneIndex, boneToWorld, boneComputed);
+		              v29 = *v54;
+		              nParent = *(_DWORD *)(216 * nBone + *(_DWORD *)(v29 + 160) + v29 + 4);
+		              if ( nParent == -1 )
+		              {
+		                v33 = 216 * nBone + *(_DWORD *)(v29 + 160);
+		                v30 = *(float *)(v33 + v29 + 32);
+		                v31 = *(float *)(v33 + v29 + 36);
+		                v32 = *(float *)(v33 + v29 + 40);
+		              }
+		              else
+		              {
+		                BaseAnimating::GetCachedBoneMatrix(nBone, Matrix); <--- THIS
+		                BaseAnimating::GetCachedBoneMatrix(nParent, v82);
+		                MatrixInvert(v82, v88);
+		                ConcatTransforms(v88, Matrix, v82);
+		                v30 = v83;
+		                v31 = v84;
+		                v32 = v85;
+		              }
+		*/
+		ADD_PATTERN_REL( CLIENT_DLL, "GetCachedBoneMatrix", "E8 ? ? ? ? 8B 4C 24 10 8D 44 24 6C" );
+
 		ADD_PATTERN( MATERIALSYSTEM_DLL, "GetColorModulation", "55 8B EC 83 EC ? 56 8B F1 8A 46" );
 
 		{ // C_BaseEntity

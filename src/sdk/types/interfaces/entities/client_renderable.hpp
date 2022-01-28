@@ -5,19 +5,20 @@ namespace sdk::interfaces {
 	struct client_unknown;
 
 	struct client_renderable {
-		virtual client_unknown* get_client_unknown( )                                                                          = 0;
-		virtual math::v3f& get_render_origin( )                                                                                = 0;
-		virtual math::ang& get_render_angles( )                                                                                = 0;
-		virtual bool should_draw( )                                                                                            = 0;
-		virtual i32 get_render_flags( )                                                                                        = 0;
-		virtual bool is_transparent( )                                                                                         = 0;
-		virtual u16 get_shadow_handle( ) const                                                                                 = 0;
-		virtual u16& render_handle( )                                                                                          = 0;
-		virtual const model* get_model( ) const                                                                                = 0;
-		virtual i32 draw_model( i32 flags, const u16& instance )                                                               = 0;
-		virtual i32 get_body( )                                                                                                = 0;
-		virtual void get_color_modulation( f32 color )                                                                         = 0;
-		virtual bool lod_test( )                                                                                               = 0;
+		virtual client_unknown* get_client_unknown( )            = 0;
+		virtual math::v3f& get_render_origin( )                  = 0;
+		virtual math::ang& get_render_angles( )                  = 0;
+		virtual bool should_draw( )                              = 0;
+		virtual i32 get_render_flags( )                          = 0;
+		virtual bool is_transparent( )                           = 0;
+		virtual u16 get_shadow_handle( ) const                   = 0;
+		virtual u16& render_handle( )                            = 0;
+		virtual const model* get_model( ) const                  = 0;
+		virtual i32 draw_model( i32 flags, const u16& instance ) = 0;
+		virtual i32 get_body( )                                  = 0;
+		virtual void get_color_modulation( f32 color )           = 0;
+		virtual bool lod_test( )                                 = 0;
+		// NOTE(para): use get_cached_bone_matrix from base_animating instead of this unless 100% necessary
 		virtual bool setup_bones( math::matrix_3x4* bone_sto_world_out, i32 max_bones, i32 bone_mask, f32 current_time )       = 0;
 		virtual void setup_weights( const math::matrix_3x4* bones_to_world, i32 count, f32* weights, f32* delay )              = 0;
 		virtual void do_animation_events( )                                                                                    = 0;
