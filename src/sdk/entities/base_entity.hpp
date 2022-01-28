@@ -20,8 +20,6 @@ namespace sdk {
 
 		VFUNC( u32, physics_solid_mask, idx::PHYSICS_SOLID_MASK, ( ) );
 
-		VFUNC( bool, is_alive, idx::IS_ALIVE, ( ) );
-
 		VFUNC( bool, is_player, idx::IS_PLAYER, ( ) );
 
 		VFUNC( bool, is_weapon, idx::IS_WEAPON, ( ) );

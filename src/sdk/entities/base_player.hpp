@@ -54,6 +54,14 @@ namespace sdk {
 
 		DATAFIELD_PRED( i32, get_impulse, "m_nImpulse" );
 
+		// vfunc for isalive is a horrible idea. vfcalls are one of the slowest operation possible by default
+		// VFUNC( bool, is_alive, idx::IS_ALIVE, ( ) );
+		NETVAR( i8, get_lifestate, "DT_BasePlayer->m_lifeState" );
+
+		bool is_alive( ) {
+			return get_health( ) > 0 || get_lifestate( ) == 0;
+		}
+
 		auto set_local_view_angles( const math::ang& view_angles ) {
 			return mem::call_v_func< void, idx::SET_LOCAL_VIEW_ANGLES, const math::ang& >( this, view_angles );
 		}
