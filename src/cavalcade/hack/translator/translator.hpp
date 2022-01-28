@@ -10,6 +10,7 @@ namespace hack {
 	struct translator {
 		enum e_languages
 		{
+			AUTO,
 			ENGLISH,
 			ARABIC,
 			AZERBAIJANI,
@@ -40,6 +41,8 @@ namespace hack {
 
 		constexpr static auto get_name_code( e_languages lang ) {
 			switch ( lang ) {
+			case e_languages::AUTO:
+				return "auto";
 			case e_languages::ENGLISH:
 				return "en";
 			case e_languages::ARABIC:
@@ -95,6 +98,8 @@ namespace hack {
 
 		constexpr static auto get_human_name_code( e_languages lang ) {
 			switch ( lang ) {
+			case e_languages::AUTO:
+				return "Auto";
 			case e_languages::ENGLISH:
 				return "English";
 			case e_languages::ARABIC:
@@ -150,6 +155,8 @@ namespace hack {
 
 		inline static auto get_code_name( const std::string_view lang ) {
 			switch ( HASH_RT( lang ) ) {
+			case HASH_CT( "auto" ):
+				return e_languages::AUTO;
 			case HASH_CT( "en" ):
 				return e_languages::ENGLISH;
 			case HASH_CT( "ar" ):

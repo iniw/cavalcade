@@ -6,6 +6,11 @@ constexpr auto g_vel_graph_size  = 80;
 constexpr auto g_vel_graph_scale = 4.F;
 
 void hack::graph::gather( ) {
+	static auto& g = gui::cfg::get< bool >( HASH_CT( "main:group1:graph" ) );
+
+	if ( !g )
+		return;
+
 	static auto& gs = gui::cfg::get< i32 >( HASH_CT( "main:group1:graph size" ) );
 	if ( m_data.size( ) > gs ) {
 		m_data.pop_back( );
@@ -19,8 +24,14 @@ void hack::graph::gather( ) {
 }
 
 void hack::graph::draw( ) {
+	static auto& g   = gui::cfg::get< bool >( HASH_CT( "main:group1:graph" ) );
 	static auto& gs  = gui::cfg::get< i32 >( HASH_CT( "main:group1:graph size" ) );
 	static auto& gsc = gui::cfg::get< f32 >( HASH_CT( "main:group1:graph scale" ) );
+
+	if ( !g ) {
+		m_data.clear( );
+		return;
+	}
 
 	if ( gs == 0 || gsc == 0.F )
 		return;
@@ -61,6 +72,16 @@ void hack::graph::clear( ) {
 }
 
 i32 hack::graph::get_upmost_y_scenario( ) {
+	static auto& g   = gui::cfg::get< bool >( HASH_CT( "main:group1:graph" ) );
+	static auto& gs  = gui::cfg::get< i32 >( HASH_CT( "main:group1:graph size" ) );
+	static auto& gsc = gui::cfg::get< f32 >( HASH_CT( "main:group1:graph scale" ) );
+
+	if ( !g )
+		return get_bottommost_y_scenario( );
+
+	if ( gs == 0 || gsc == 0.F )
+		return get_bottommost_y_scenario( );
+
 	auto ss  = g_render.get_screen_size( );
 	auto pad = ceil( ss[ 1 ] * .12F );
 	return ( ss[ 1 ] / 1.2F + pad ) - 250;

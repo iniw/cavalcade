@@ -8,7 +8,7 @@ void cavalcade::hooks::push_notice_::push_notice( unk ecx, unk edx, const char* 
 
 	if ( !stext.starts_with( XOR( "<<<NO_TRANSLATE>>>" ) ) ) {
 		if ( g_hack.m_translator.m_valid ) {
-			g_hack.m_translator.translate( hack::translator::e_languages::ENGLISH, hack::translator::e_languages::RUSSIAN, std::string( text ) );
+			g_hack.m_translator.translate( hack::translator::e_languages::AUTO, hack::translator::e_languages::RUSSIAN, std::string( text ) );
 		}
 	} else {
 		// ensured
