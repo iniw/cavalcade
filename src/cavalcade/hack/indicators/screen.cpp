@@ -1,6 +1,7 @@
 #include "screen.hpp"
 #include "../../ctx/ctx.hpp"
 #include "../hack.hpp"
+#include "../../gui/cfg/cfg.hpp"
 
 void hack::indicators::screen::gather( ) {
 	if ( m_previously_on_ground && !( g_ctx.m_local.get( ).get_flags( ) & sdk::flags::ONGROUND ) ) {
@@ -12,10 +13,35 @@ void hack::indicators::screen::gather( ) {
 }
 
 void hack::indicators::screen::draw( ) {
-	auto y         = g_hack.m_velgraph.get_upmost_y_scenario( );
-	static auto fa = &g_render.m_fonts[ render::font::IND_BIG ];
-	static auto fb = &g_render.m_fonts[ render::font::IND_SMALL ];
-	auto ss        = g_render.get_screen_size( );
+	static auto& wasd = gui::cfg::get< bool >( HASH_CT( "main:group1:wasd ind" ) );
+	static auto fa    = &g_render.m_fonts[ render::font::IND_BIG ];
+	static auto fb    = &g_render.m_fonts[ render::font::IND_SMALL ];
+
+	auto y = g_hack.m_velgraph.get_upmost_y_scenario( );
+
+	auto ss = g_render.get_screen_size( );
+
+	if ( wasd ) {
+		y -= 10;
+		// NOTE(para): there might be people with different keybinds but they're horrible people
+		auto w      = g_io.key_state< io::key_state::DOWN >( 'W' );
+		auto a      = g_io.key_state< io::key_state::DOWN >( 'A' );
+		auto s      = g_io.key_state< io::key_state::DOWN >( 'S' );
+		auto d      = g_io.key_state< io::key_state::DOWN >( 'D' );
+		auto c      = g_ctx.m_cmd ? g_ctx.m_cmd->m_buttons & ( 1 << 2 ) : false;
+		auto j      = g_ctx.m_cmd ? g_ctx.m_cmd->m_buttons & ( 1 << 1 ) : false;
+		auto format = []( bool state, char case_be ) { return state ? case_be : '_'; };
+
+		auto fmt = io::format( "{} {} {} {} {} {}", format( w, 'W' ), format( a, 'A' ), format( s, 'S' ), format( d, 'D' ), format( c, 'C' ),
+		                       format( j, 'J' ) );
+
+		auto text = std::make_shared< render::geometry::text >( fa, render::point{ ss[ 0 ] / 2, g_hack.m_velgraph.get_bottommost_y_scenario( ) }, fmt,
+		                                                        render::color( 255, 255, 255, 255 ) );
+
+		auto tss = text->calc_size( );
+		text->m_point[ 0 ] -= tss[ 0 ] / 2;
+		g_render.m_safe.draw_shape_p( std::move( text ) );
+	}
 
 	m_anim_last_vel.bake( m_last_vel.has_value( ) && ( m_time > g_csgo.m_globals->m_curtime ), animation{ 3.F, easing::out_expo },
 	                      animation{ 3.F, easing::out_expo } );
@@ -26,6 +52,7 @@ void hack::indicators::screen::draw( ) {
 	auto tss  = text->calc_size( );
 	text->m_point[ 0 ] -= tss[ 0 ] / 2;
 	text->m_point[ 1 ] -= tss[ 1 ] + 10;
+
 	i32 container_pad = 0;
 	if ( m_last_vel.has_value( ) && m_anim_last_vel.m_animation_factor > 0.F ) {
 		auto size = text->calc_size( );

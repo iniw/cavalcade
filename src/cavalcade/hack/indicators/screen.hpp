@@ -13,7 +13,7 @@ namespace hack::indicators {
 
 		std::optional< i32 > m_last_vel;
 		bool m_previously_on_ground{ false };
-		animator m_anim_last_vel;
+		animator m_anim_last_vel{ };
 		f32 m_time{ 0 };
 	};
 } // namespace hack::indicators

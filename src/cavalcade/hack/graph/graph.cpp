@@ -65,3 +65,9 @@ i32 hack::graph::get_upmost_y_scenario( ) {
 	auto pad = ceil( ss[ 1 ] * .12F );
 	return ( ss[ 1 ] / 1.2F + pad ) - 250;
 }
+
+i32 hack::graph::get_bottommost_y_scenario( ) {
+	auto ss  = g_render.get_screen_size( );
+	auto pad = ceil( ss[ 1 ] * .12F );
+	return ( ss[ 1 ] / 1.2F + pad );
+}

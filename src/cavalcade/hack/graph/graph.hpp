@@ -22,6 +22,7 @@ namespace hack {
 		f32 m_old_gsc{ -1.F };
 
 		i32 get_upmost_y_scenario( );
+		i32 get_bottommost_y_scenario( );
 	};
 } // namespace hack
 
