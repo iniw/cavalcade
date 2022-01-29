@@ -105,6 +105,8 @@ void hack::indicators::screen::draw( ) {
 			flags.push_back( flag( g_hack.m_movement.m_jumpbugged, "JB" ) );
 		if ( g_io.key_state< io::key_state::DOWN >( VK_XBUTTON2 ) )
 			flags.push_back( flag( g_hack.m_movement.m_longjumped, "LJ" ) );
+		if ( g_io.key_state< io::key_state::DOWN >( 'V' ) )
+			flags.push_back( flag( g_hack.m_movement.m_in_ladderjump, "LAJ" ) );
 		if ( g_io.key_state< io::key_state::DOWN >( VK_MBUTTON ) )
 			flags.push_back( flag( g_hack.m_movement.m_edgebug.m_predicted, "EB" ) );
 

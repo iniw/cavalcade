@@ -142,9 +142,53 @@ void hack::movement::longjump( ) {
 	}
 }
 
+void hack::movement::ladderjump( ) {
+	if ( !( true && g_io.key_state< io::key_state::DOWN >( 'V' ) ) ) {
+		m_ladder_jump_tick = 0;
+		m_in_ladderjump    = false;
+		return;
+	}
+
+	m_in_ladderjump = false;
+
+	static auto& claj = gui::cfg::get< bool >( HASH_CT( "main:group1:crouch after ladderjump" ) );
+
+	auto base_move_type = g_ctx.m_local.get( ).get_move_type( );
+
+	g_hack.m_prediction.start( );
+	g_hack.m_prediction.apply( );
+	g_hack.m_prediction.restore( );
+
+	if ( base_move_type == sdk::move_type::LADDER && g_ctx.m_local.get( ).get_move_type( ) != sdk::move_type::LADDER ) {
+		m_ladder_jump_tick = g_csgo.m_globals->m_tickcount;
+		g_ctx.m_cmd->m_buttons |= ( 1 << 1 );
+		g_ctx.m_cmd->m_forward_move = 0;
+		g_ctx.m_cmd->m_side_move    = 0;
+		g_ctx.m_cmd->m_buttons &= ~( 1 << 3 );
+		g_ctx.m_cmd->m_buttons &= ~( 1 << 4 );
+		g_ctx.m_cmd->m_buttons &= ~( 1 << 9 );
+		g_ctx.m_cmd->m_buttons &= ~( 1 << 10 );
+		m_in_ladderjump = true;
+	}
+
+	if ( claj ) {
+		if ( ( g_csgo.m_globals->m_tickcount - m_ladder_jump_tick ) > 1 && ( g_csgo.m_globals->m_tickcount - m_ladder_jump_tick ) < 15 ) {
+			g_ctx.m_cmd->m_forward_move = 0;
+			g_ctx.m_cmd->m_side_move    = 0;
+			g_ctx.m_cmd->m_buttons &= ~( 1 << 3 );
+			g_ctx.m_cmd->m_buttons &= ~( 1 << 4 );
+			g_ctx.m_cmd->m_buttons &= ~( 1 << 9 );
+			g_ctx.m_cmd->m_buttons &= ~( 1 << 10 );
+			g_ctx.m_cmd->m_buttons |= ( 1 << 2 );
+			m_in_ladderjump = true;
+		}
+	}
+}
+
 void hack::movement::post( ) {
 	jumpbug( );
 	longjump( );
+	ladderjump( );
 	edgebug( );
 }
 

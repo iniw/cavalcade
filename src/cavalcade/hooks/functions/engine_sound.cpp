@@ -26,7 +26,7 @@ void cavalcade::hooks::engine_sound::emit_sound( unk ecx, unk edx, unk filter, i
 
 	if ( entity_index == g_ctx.m_local.get( ).get_networkable_index( ) ) {
 		if ( se.find( "land" ) != std::string_view::npos ) {
-			if ( g_hack.m_movement.m_in_jumpbug || g_hack.m_movement.m_edgebug.m_in_edgebug ) {
+			if ( g_hack.m_movement.m_in_jumpbug || g_hack.m_movement.m_edgebug.m_in_edgebug || g_hack.m_movement.m_in_ladderjump ) {
 				volume = 0.F;
 			}
 		}

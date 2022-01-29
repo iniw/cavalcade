@@ -16,6 +16,7 @@ void gui::impl::init( ) {
 		gb->add< objects::checkbox >( XOR( "wasd ind" ), XOR( "wasd ind" ) );
 		gb->add< objects::checkbox >( XOR( "box bob" ), XOR( "box bob" ) );
 		gb->add< objects::checkbox >( XOR( "longjump on edge" ), XOR( "longjump on edge" ) );
+		gb->add< objects::checkbox >( XOR( "crouch after ladderjump" ), XOR( "crouch after ladderjump" ) );
 		gb->add< objects::checkbox >( XOR( "nightmode" ), XOR( "nightmode" ) );
 		gb->add< objects::slider< i32 > >( XOR( "factor" ), XOR( "factor" ), 0, 100 );
 		gb->add< objects::slider< i32 > >( XOR( "edgebug scaling" ), XOR( "edgebug scaling" ), 0, 100 );

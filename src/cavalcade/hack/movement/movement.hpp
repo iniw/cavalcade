@@ -39,6 +39,7 @@ namespace hack {
 		void bunnyhop( );
 		void jumpbug( );
 		void longjump( );
+		void ladderjump( );
 
 		// Aug 3, 2021
 		/*
@@ -80,6 +81,8 @@ namespace hack {
 		bool m_wait_till_grounded{ false };
 		bool m_lj_grounded{ false };
 		f32 m_old_velocity_z{ 0 };
+		i32 m_ladder_jump_tick{ 0 };
+		bool m_in_ladderjump{ false };
 	};
 } // namespace hack
 
