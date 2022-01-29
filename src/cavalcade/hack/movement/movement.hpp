@@ -27,6 +27,10 @@ namespace hack {
 			f32 m_old_fall_velocity;
 			f32 m_old_sim_time;
 			sdk::handle m_old_ground_entity;
+			i32 m_old_impulse;
+			i32 m_old_buttons;
+			math::v3f m_old_base_velocity;
+			i32 m_old_eflags;
 		};
 
 		void pre( );

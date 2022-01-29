@@ -21,6 +21,10 @@ void hack::movement::backup::store( ) {
 	m_old_fall_velocity     = g_ctx.m_local.get( ).get_fall_velocity( );
 	m_old_sim_time          = g_ctx.m_local.get( ).get_sim_time( );
 	m_old_ground_entity     = g_ctx.m_local.get( ).get_ground_entity( );
+	m_old_impulse           = g_ctx.m_local.get( ).get_impulse( );
+	m_old_buttons           = g_ctx.m_local.get( ).get_buttons( );
+	m_old_base_velocity     = g_ctx.m_local.get( ).get_base_velocity( );
+	m_old_eflags            = g_ctx.m_local.get( ).get_eflags( );
 }
 
 void hack::movement::backup::set( ) {
@@ -36,6 +40,10 @@ void hack::movement::backup::set( ) {
 	g_ctx.m_local.get( ).get_fall_velocity( ) = m_old_fall_velocity;
 	g_ctx.m_local.get( ).get_sim_time( )      = m_old_sim_time;
 	g_ctx.m_local.get( ).get_ground_entity( ) = m_old_ground_entity;
+	g_ctx.m_local.get( ).get_impulse( )       = m_old_impulse;
+	g_ctx.m_local.get( ).get_buttons( )       = m_old_buttons;
+	g_ctx.m_local.get( ).get_base_velocity( ) = m_old_base_velocity;
+	g_ctx.m_local.get( ).get_eflags( )        = m_old_eflags;
 }
 
 void hack::movement::pre( ) {

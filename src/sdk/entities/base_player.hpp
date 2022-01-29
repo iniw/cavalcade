@@ -53,6 +53,8 @@ namespace sdk {
 		DATAFIELD_PRED( handle, get_ground_entity, "m_hGroundEntity" );
 
 		DATAFIELD_PRED( i32, get_impulse, "m_nImpulse" );
+		DATAFIELD_PRED( math::v3f, get_base_velocity, "m_vecBaseVelocity" );
+		DATAFIELD_PRED( i32, get_eflags, "m_iEFlags" );
 
 		// vfunc for isalive is a horrible idea. vfcalls are one of the slowest operation possible by default
 		// VFUNC( bool, is_alive, idx::IS_ALIVE, ( ) );
