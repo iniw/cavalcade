@@ -169,8 +169,8 @@ void hack::movement::edgebug::predict( i32 base_flags, f32 base_velocity ) {
 	if ( static_cast< int >( g_ctx.m_local.get( ).get_velocity( )[ 2 ] ) == 0 || base_flags & 1 ) {
 		m_predicted    = false;
 		m_fail_predict = true;
-	} else if ( base_velocity < -6.F && g_ctx.m_local.get( ).get_velocity( )[ 2 ] > base_velocity &&
-	            g_ctx.m_local.get( ).get_velocity( )[ 2 ] < -6.F && !( g_ctx.m_local.get( ).get_flags( ) & 1 ) ) {
+	} else if ( base_velocity < -6.25F && g_ctx.m_local.get( ).get_velocity( )[ 2 ] > base_velocity &&
+	            g_ctx.m_local.get( ).get_velocity( )[ 2 ] < -6.25F && !( g_ctx.m_local.get( ).get_flags( ) & 1 ) ) {
 		auto zvel = g_ctx.m_local.get( ).get_velocity( )[ 2 ];
 
 		g_hack.m_prediction.start( );
@@ -180,7 +180,7 @@ void hack::movement::edgebug::predict( i32 base_flags, f32 base_velocity ) {
 
 		auto gravity_velocity = roundf( ( -g_ctx.m_cvars.sv_gravity->get_float( ) ) * g_csgo.m_globals->m_interval_per_tick + zvel );
 
-		if ( gravity_velocity == roundf( g_ctx.m_local.get( ).get_velocity( )[ 2 ] ) ) {
+		if ( fabs( gravity_velocity - roundf( g_ctx.m_local.get( ).get_velocity( )[ 2 ] ) ) < 0.001F ) {
 			m_predicted    = true;
 			m_fail_predict = false;
 		} else {

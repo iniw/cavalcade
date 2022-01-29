@@ -20,7 +20,7 @@ namespace sdk {
 		}
 
 		constexpr auto valid( ) const {
-			return m_player && ( uintptr_t )m_player > 0x1000;
+			return m_player && ( uintptr_t )m_player > 0x10000;
 		}
 
 	private:

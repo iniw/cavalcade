@@ -10,18 +10,22 @@ void cavalcade::hooks::engine_sound::emit_sound( unk ecx, unk edx, unk filter, i
 		return og( ecx, edx, filter, entity_index, channel, sound_entry, sound_entry_hash, sample, volume, attenuation, seed, flags, pitch, origin,
 		           direction, vec_origins, update_positions, sound_time, speaker_entity, params );
 
-	if ( !g_ctx.m_local || !g_ctx.m_local.get( ).is_alive( ) )
+	if ( !g_ctx.m_local || !g_ctx.m_local.valid( ) )
 		return og( ecx, edx, filter, entity_index, channel, sound_entry, sound_entry_hash, sample, volume, attenuation, seed, flags, pitch, origin,
 		           direction, vec_origins, update_positions, sound_time, speaker_entity, params );
 
-	auto hash = HASH_RT( sound_entry );
-	if ( hash == HASH_CT( "Deathcam.Review_Start" ) || hash == HASH_CT( "Deathcam.Review_Victory" ) )
+	auto se = std::string_view{ sound_entry };
+	if ( se.find( "Deathcam.Review_Start" ) != std::string_view::npos || se.find( "Deathcam.Review_Victory" ) != std::string_view::npos )
 		g_ctx.m_in_deathcam = true;
-	else if ( hash == HASH_CT( "Deathcam.Review_End" ) )
+	else if ( se.find( "Deathcam.Review_End" ) != std::string_view::npos )
 		g_ctx.m_in_deathcam = false;
 
+	if ( !g_ctx.m_local.get( ).is_alive( ) )
+		return og( ecx, edx, filter, entity_index, channel, sound_entry, sound_entry_hash, sample, volume, attenuation, seed, flags, pitch, origin,
+		           direction, vec_origins, update_positions, sound_time, speaker_entity, params );
+
 	if ( entity_index == g_ctx.m_local.get( ).get_networkable_index( ) ) {
-		if ( std::string_view{ sound_entry }.find( "land" ) != std::string_view::npos ) {
+		if ( se.find( "land" ) != std::string_view::npos ) {
 			if ( g_hack.m_movement.m_in_jumpbug || g_hack.m_movement.m_edgebug.m_in_edgebug ) {
 				volume = 0.F;
 			}
