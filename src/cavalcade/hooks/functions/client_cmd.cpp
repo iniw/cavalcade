@@ -69,12 +69,12 @@ void cavalcade::hooks::client_cmd_::client_cmd( unk ecx, unk edx, const char* cm
 			g_ctx.m_steam.m_steam_friends->ReplyToFriendMessage( g_ctx.m_last_friend_to_message.value( ), message.c_str( ) );
 			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
 				0, 0,
-				XOR( "<<<NO_TRANSLATE>>> <font color=\"#00FF00\">friend</font> <font color=\"#B9B9B9\"> | replied: \"%s\" to </font>*<font "
+				XOR( "<<<NO_TRANSLATE>>> <font color=\"#00FF00\">friend</font><font color=\"#B9B9B9\"> | replied: \"%s\" to </font>*<font "
 			         "color=\"#00FF00\">%s</font>*" ),
 				message.c_str( ), g_ctx.m_steam.m_steam_friends->GetFriendPersonaName( g_ctx.m_last_friend_to_message.value( ) ) );
 		} else {
 			g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0,
-			                                                          XOR( "<<<NO_TRANSLATE>>> <font color=\"#00FF00\">friend</font> <font "
+			                                                          XOR( "<<<NO_TRANSLATE>>> <font color=\"#00FF00\">friend</font><font "
 			                                                               "color=\"#B9B9B9\"> | no messages received in this session yet</font>" ) );
 		}
 

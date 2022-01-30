@@ -18,20 +18,20 @@ void hack::trainer::go( ) {
 		} else {
 			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
 				0, 0,
-				XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font color=\"#B9B9B9\"> | failed teleporting to checkpoint (no "
+				XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font><font color=\"#B9B9B9\"> | failed teleporting to checkpoint (no "
 			         "previous checkpoint)...</font>" ) );
 			return;
 		}
 	} else {
 		g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
 			0, 0,
-			XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font color=\"#B9B9B9\"> | failed teleporting to "
+			XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font><font color=\"#B9B9B9\"> | failed teleporting to "
 		         "checkpoint (</font><font color=\"#FF0000\">sv_cheats was 0</font><font color=\"#B9B9B9\">)...</font>" ) );
 		return;
 	}
 
 	g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
-		0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font color=\"#B9B9B9\"> | teleported to checkpoint #%d...</font>" ),
+		0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font><font color=\"#B9B9B9\"> | teleported to checkpoint #%d...</font>" ),
 		m_entry + 1 );
 }
 
@@ -51,34 +51,34 @@ void hack::trainer::run( ) {
 			m_checkpoints.emplace_back( g_ctx.m_local.get( ).get_origin( ), g_ctx.m_local.get( ).get_abs_angles( ) );
 			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
 				0, 0,
-				XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font "
+				XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font><font "
 			         "color=\"#B9B9B9\"> | pushed checkpoint... updated focus to #1 (%d total)</font>" ),
 				m_checkpoints.size( ) );
 		} else if ( g_io.key_state< io::key_state::RELEASED >( '4' ) ) {
 			if ( ( m_entry + 1 ) < m_checkpoints.size( ) ) {
 				g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
-					0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font color=\"#B9B9B9\"> | updated focus to #%d</font>" ),
+					0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font><font color=\"#B9B9B9\"> | updated focus to #%d</font>" ),
 					++m_entry + 1 );
 			} else {
 				g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
 					0, 0,
-					XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font "
+					XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font><font "
 				         "color=\"#B9B9B9\"> | not enough entries to update focus forward...</font>" ) );
 			}
 		} else if ( g_io.key_state< io::key_state::RELEASED >( '3' ) ) {
 			if ( ( m_entry - 1 ) >= 0 ) {
 				g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
-					0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font color=\"#B9B9B9\"> | updated focus to #%d</font>" ),
+					0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font><font color=\"#B9B9B9\"> | updated focus to #%d</font>" ),
 					--m_entry + 1 );
 			} else {
 				g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0,
-				                                                          XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font "
+				                                                          XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font><font "
 				                                                               "color=\"#B9B9B9\"> | entry indice is already #1...</font>" ) );
 			}
 		} else if ( g_io.key_state< io::key_state::RELEASED >( '5' ) ) {
 			if ( !m_checkpoints.empty( ) ) {
 				g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0,
-				                                                          XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font "
+				                                                          XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font><font "
 				                                                               "color=\"#B9B9B9\"> | erased entry that was formerly #%d</font>" ),
 				                                                          m_entry + 1 );
 
@@ -90,7 +90,7 @@ void hack::trainer::run( ) {
 			} else {
 				g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
 					0, 0,
-					XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font> <font color=\"#B9B9B9\"> | no entries to erase...</font>" ) );
+					XOR( "<<<NO_TRANSLATE>>> <font color=\"#FF0000\">trainer</font><font color=\"#B9B9B9\"> | no entries to erase...</font>" ) );
 			}
 		}
 	}

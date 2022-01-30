@@ -96,7 +96,7 @@ void hack::movement::jumpbug( ) {
 
 	if ( m_jumpbugged )
 		g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
-			0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#fbf7f5\">movement</font> <font color=\"#B9B9B9\"> | jumpbugged</font>" ) );
+			0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#fbf7f5\">movement</font><font color=\"#B9B9B9\"> | jumpbugged</font>" ) );
 }
 
 // NOTE(para): this could be red but should be explicitly advertised as so
@@ -316,7 +316,7 @@ void hack::movement::edgebug::run( i32 base_flags, f32 base_velocity ) {
 				g_ctx.m_cmd->m_buttons |= ( 1 << 2 );
 		} else {
 			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
-				0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#fbf7f5\">movement</font> <font color=\"#B9B9B9\"> | edgebugged</font>" ) );
+				0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#fbf7f5\">movement</font><font color=\"#B9B9B9\"> | edgebugged</font>" ) );
 
 			m_predicted   = false;
 			m_should_duck = false;

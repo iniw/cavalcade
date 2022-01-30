@@ -33,7 +33,7 @@ void cavalcade::hooks::steam::on_friend_message( GameConnectedFriendChatMsg_t* c
 
 			g_ctx.m_last_friend_to_message = callback->m_steamIDUser;
 			auto text =
-				io::format( XOR( "<font color=\"#00FF00\">friend</font> <font color=\"#B9B9B9\"> | </font>*<font color=\"#00FF00\">{}</font>*: {}" ),
+				io::format( XOR( "<font color=\"#00FF00\">friend</font><font color=\"#B9B9B9\"> | </font>*<font color=\"#00FF00\">{}</font>*: {}" ),
 			                friend_name, ( const char* )msg );
 
 			// hack, we want prefix to translation
@@ -42,7 +42,7 @@ void cavalcade::hooks::steam::on_friend_message( GameConnectedFriendChatMsg_t* c
 			if ( image.has_value( ) ) {
 				g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
 					0, 0,
-					XOR( "<<<NO_TRANSLATE>>> <font color=\"#00FF00\">friend</font> <font color=\"#B9B9B9\"> | image from </font>*<font "
+					XOR( "<<<NO_TRANSLATE>>> <font color=\"#00FF00\">friend</font><font color=\"#B9B9B9\"> | image from </font>*<font "
 				         "color=\"#00FF00\">%s</font>*..." ),
 					friend_name );
 				auto fmt = io::format( XOR( "<<<NO_TRANSLATE>>> <img src=\"{}\"></img>" ), image.value( ) );
