@@ -138,6 +138,11 @@ namespace cavalcade {
 			                                   f32 sound_time, i32 speaker_entity, unk params );
 		};
 
+		struct fx {
+			using post_screen_fn = void( __fastcall* )( unk, unk, unk );
+			static void __fastcall post_screen_fx( unk, unk, unk );
+		};
+
 		struct steam {
 			// hook GameConnectedFriendChatMsg_t
 			STEAM_CALLBACK( steam, on_friend_message, GameConnectedFriendChatMsg_t );

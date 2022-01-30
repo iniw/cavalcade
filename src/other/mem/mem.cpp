@@ -68,6 +68,8 @@ void mem::impl::add_addresses( ) {
 		ADD_PATTERN_REL( CLIENT_DLL, "ClipTraceToPlayers", "E8 ? ? ? ? 83 C4 18 8A 56 37" );
 		ADD_PATTERN( CLIENT_DLL, "CrosshairShouldDraw", "55 8B EC 83 E4 F0 83 EC 78 56 8B F1 8B 0D" );
 		ADD_PATTERN( CLIENT_DLL, "ReportHit", "55 8B EC 8B 55 08 83 EC 1C F6 42 1C 01" );
+		ADD_PATTERN( CLIENT_DLL, "PostScreenFx", "55 8B EC 8B 49 18 56 8B 35" );
+		ADD_PATTERN( CLIENT_DLL, "GlowManager", "0F 11 05 ? ? ? ? 83 C8 01 C7 05 ? ? ? ? 00 00 00 00" );
 		ADD_ADDRESS( ENGINE_DLL, "EmitSound", get_v_func( g_csgo.m_engine_sound, 5 ) );
 		ADD_PATTERN(
 			ENGINE_DLL, "MaterialSystem",

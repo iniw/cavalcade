@@ -22,5 +22,6 @@
 #include "model_info.hpp"
 #include "staticprop.hpp"
 #include "material.hh"
+#include "glow.hpp"
 
 #include "interfaces/interfaces.hpp"

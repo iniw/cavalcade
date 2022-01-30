@@ -75,3 +75,26 @@ math::v3f sdk::cs_player::get_eye_position( ) {
 	mem::call_v_func< void, 285 >( this, std::ref( v ) );
 	return v;
 }
+
+bool sdk::cs_player::can_fire_shot( ) {
+	if ( !this )
+		return false;
+
+	if ( !g_ctx.m_cmd || g_ctx.m_cmd->m_weapon_select )
+		return false;
+
+	auto server_time = sdk::ticks_to_time( g_ctx.m_local.get( ).get_tickbase( ) );
+
+	auto weap = get_active_weapon( ).get< sdk::weapon_cs_base* >( );
+
+	if ( !weap || !weap->get_ammo( ) )
+		return false;
+
+	if ( get_next_attack( ) > server_time )
+		return false;
+
+	if ( weap->get_next_primary_attack( ) > server_time )
+		return false;
+
+	return true;
+}

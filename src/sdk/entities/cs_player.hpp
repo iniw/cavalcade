@@ -29,5 +29,7 @@ namespace sdk {
 		math::v3f get_hitbox_position( i32 hitbox_id );
 
 		math::v3f get_eye_position( );
+
+		bool can_fire_shot( );
 	};
 } // namespace sdk

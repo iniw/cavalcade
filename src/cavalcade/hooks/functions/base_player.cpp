@@ -2,7 +2,9 @@
 
 #define MULTIPLAYER_BACKUP 150
 bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 input_sample_time, sdk::user_cmd* cmd ) {
-	static auto og = g_mem[ CLIENT_DLL ].get_og< create_move_fn >( HASH_CT( "C_BasePlayer::CreateMove" ) );
+	static auto og    = g_mem[ CLIENT_DLL ].get_og< create_move_fn >( HASH_CT( "C_BasePlayer::CreateMove" ) );
+	static bool shoot = false;
+	static auto& zb   = gui::cfg::get< bool >( HASH_CT( "main:group1:zeus bug" ) );
 
 	// NOTE(para): don't do local checks in features ty
 	// sidenote: when I see pointer checks I want to cry myself to Rust now, honestly
@@ -10,6 +12,7 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 		return og( ecx, input_sample_time, cmd );
 
 	if ( ( g_ctx.m_local && !g_ctx.m_local.get( ).is_alive( ) ) ) {
+		shoot = false;
 		g_hack.m_indscreen.clear( );
 		return og( ecx, input_sample_time, cmd );
 	}
@@ -47,6 +50,17 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 		g_hack.m_prediction.restore( );
 
 		g_hack.m_movement.post( );
+
+		if ( zb ) {
+			if ( shoot ) {
+				g_csgo.m_engine->execute_client_cmd( XOR( "use weapon_taser" ) );
+				shoot = false;
+			}
+
+			if ( cmd->m_buttons & 1 && g_ctx.m_local.get( ).can_fire_shot( ) ) {
+				shoot = true;
+			}
+		}
 
 		cmd->m_view_angles.sanitize( );
 		cmd->m_view_angles.clamp_angle( );
