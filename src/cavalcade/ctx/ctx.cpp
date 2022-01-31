@@ -23,7 +23,7 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 	auto dummy_map   = std::unordered_map< std::string, std::vector< std::function< void( ) > > >{ };
 	// Initialize callbacks dictionary
 	dummy_map[ "FrameStageNotify" ] = { };
-	dummy_map[ "EndScene" ]         = { };
+	// dummy_map[ "EndScene" ]         = { };
 
 	auto& [ state, map ] = m_callbacks.emplace_back( std::move( dummy_state ), std::move( dummy_map ) );
 
@@ -46,29 +46,30 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 
 	// Rendering
 	{
-		state.set_function( "Caval_Rect", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
-			g_render.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
-		} );
+		// NOTE(para): Maybe having callbacks every frame isn't a great idea... Lets keep this to safe rendering only
+		// state.set_function( "Caval_Rect", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+		// 	g_render.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
+		// } );
 
-		state.set_function( "Caval_RectHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
-			g_render.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
-		} );
+		// state.set_function( "Caval_RectHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+		// 	g_render.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
+		// } );
 
-		state.set_function( "Caval_Line", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
-			g_render.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
-		} );
+		// state.set_function( "Caval_Line", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+		// 	g_render.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
+		// } );
 
-		state.set_function( "Caval_LineHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
-			g_render.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
-		} );
+		// state.set_function( "Caval_LineHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+		// 	g_render.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
+		// } );
 
-		state.set_function( "Caval_RectFilled", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
-			g_render.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ) );
-		} );
+		// state.set_function( "Caval_RectFilled", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
+		// 	g_render.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ) );
+		// } );
 
-		state.set_function( "Caval_RectFilledHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
-			g_render.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ) );
-		} );
+		// state.set_function( "Caval_RectFilledHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
+		// 	g_render.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ) );
+		// } );
 
 		state.set_function( "Caval_SafeRect", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
 			g_render.m_safe.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
@@ -204,14 +205,8 @@ bool cavalcade::ctx::init( ) {
                 --Caval_DbgPrint('Hello from Lua Second Callback in same script')
             end
 
-            local function end_scene()
-                Caval_RectFilled(50, 50, 100, 100, 255, 255, 255, 255)
-                Caval_Line(120, 120, 240, 240, 2.3, 255, 255, 255, 255)
-            end
-
             Caval_PushCallback('FrameStageNotify', hello)
             Caval_PushCallback('FrameStageNotify', hello_again)
-            Caval_PushCallback('EndScene', end_scene)
         )" );
 
 	g_io.log( XOR( "initialized ctx" ) );
