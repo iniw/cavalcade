@@ -5,8 +5,9 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 	og( ecx, stage );
 
 	g_render.m_safe.frame( [ & ]( ) {
-		for ( const auto& [ _, callbacks ] : g_ctx.m_lua.m_callbacks ) {
-			for ( const auto& callback : callbacks.at( "FrameStageNotify" ) ) {
+		for ( auto& [ state, callbacks ] : g_ctx.m_lua.m_callbacks ) {
+			state[ "g_FrameStage" ] = ( i32 )stage;
+			for ( const auto& callback : callbacks[ "FrameStageNotify" ] ) {
 				callback( );
 			}
 		}
@@ -39,6 +40,10 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	g_hack.m_indscreen.clear( );
 	g_hack.m_hitmarker.clear( );
 	g_hack.m_movement.clear( );
+	for ( auto& [ state, callbacks ] : g_ctx.m_lua.m_callbacks ) {
+		state[ XOR( "g_FrameStage" ) ] = -1;
+		state.set( XOR( "g_Cmd" ), sol::lua_nil );
+	}
 
 	// NOTE(para): it's particularly important for this to be here, before og
 	g_hack.m_nightmode.clear( );
