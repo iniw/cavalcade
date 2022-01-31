@@ -20,6 +20,12 @@ HRESULT D3DAPI cavalcade::hooks::d3d9_device::end_scene( IDirect3DDevice9* devic
 
 	g_gui.render( );
 
+	for ( const auto& [ _, callbacks ] : g_ctx.m_lua.m_callbacks ) {
+		for ( const auto& callback : callbacks.at( "EndScene" ) ) {
+			callback( );
+		}
+	}
+
 	g_render.end( );
 
 	return og( device );

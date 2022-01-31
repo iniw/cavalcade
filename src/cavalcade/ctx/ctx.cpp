@@ -5,28 +5,91 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 	auto dummy_map   = std::unordered_map< std::string, std::vector< std::function< void( ) > > >{ };
 	// Initialize callbacks dictionary
 	dummy_map[ "FrameStageNotify" ] = { };
+	dummy_map[ "EndScene" ]         = { };
 
-	auto& e = m_callbacks.emplace_back( std::move( dummy_state ), std::move( dummy_map ) );
+	auto& [ state, map ] = m_callbacks.emplace_back( std::move( dummy_state ), std::move( dummy_map ) );
 
-	e.first.open_libraries( sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::os, sol::lib::jit, sol::lib::ffi );
+	state.open_libraries( sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::os, sol::lib::jit, sol::lib::ffi );
 
-	// testing fn
-	e.first.set_function( "Print", [ & ]( std::string what ) { g_io.log( XOR( "{}" ), what ); } );
+	// Initialize Lua locals
+	// Debugging
+	{
+		state.set_function( "Caval_DbgPrint", [ & ]( std::string&& what ) { g_io.log( XOR( "{}" ), what ); } );
+	}
 
-	e.first.set_function( "PushCallback", [ & ]( std::string at, std::function< void( ) > what ) {
-		if ( e.second.contains( at ) ) {
-			e.second[ at ].push_back( what );
-		} // else...
-	} );
+	// Rendering
+	{
+		state.set_function( "Caval_Rect", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+			g_render.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
+		} );
 
-	auto state = e.first.load( code );
+		state.set_function( "Caval_RectHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+			g_render.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
+		} );
 
-	if ( !state.valid( ) ) {
+		state.set_function( "Caval_RectFilled", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
+			g_render.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ) );
+		} );
+
+		state.set_function( "Caval_RectFilledHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
+			g_render.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ) );
+		} );
+
+		state.set_function( "Caval_SafeRect", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+			g_render.m_safe.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
+		} );
+
+		state.set_function( "Caval_SafeRectHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+			g_render.m_safe.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
+		} );
+
+		state.set_function( "Caval_SafeRectForward", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+			g_render.m_safe.draw_shape_front< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ),
+			                                                            t );
+		} );
+
+		state.set_function( "Caval_SafeRectForwardHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+			g_render.m_safe.draw_shape_front< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
+		} );
+
+		state.set_function( "Caval_SafeRectFilled", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
+			g_render.m_safe.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ),
+			                                                             render::color( r, g, b, a ) );
+		} );
+
+		state.set_function( "Caval_SafeRectFilledHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
+			g_render.m_safe.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ) );
+		} );
+
+		state.set_function( "Caval_SafeRectFilledForward", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
+			g_render.m_safe.draw_shape_front< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ),
+			                                                                   render::color( r, g, b, a ) );
+		} );
+
+		state.set_function( "Caval_SafeRectFilledForwardHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
+			g_render.m_safe.draw_shape_front< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ),
+			                                                                   render::color( rgba ) );
+		} );
+	}
+
+	// Context
+	{
+		state.set_function( "Caval_PushCallback", [ & ]( std::string&& at, std::function< void( ) >&& what ) {
+			if ( map.contains( at ) ) {
+				map[ at ].push_back( what );
+			} // else...
+		} );
+	}
+
+	auto load = state.load( code );
+
+	if ( !load.valid( ) ) {
+		g_io.log( XOR( "{}" ), ( i32 )load.status( ) );
 		// alert...
 		return;
 	}
 
-	state( );
+	load( );
 }
 
 bool cavalcade::ctx::init( ) {
@@ -76,17 +139,25 @@ bool cavalcade::ctx::init( ) {
 	m_steam.m_steam_friends->SetListenForFriendsMessages( true );
 
 	m_lua.push( R"(
+            string = 'Hello from Lua'
             local function hello()
-                Print('Hello from Lua')
+                Caval_DbgPrint(string)
+                Caval_SafeRectFilled(10, 10, 30, 30, 255, 0, 0, 255)
+                Caval_SafeRectFilledHex(10, 50, 30, 100, 0xff00ffff)
             end
 
             local function hello_again()
-                Print('Hello from Lua Second Callback in same script')
+                Caval_DbgPrint('Hello from Lua Second Callback in same script')
+            end
+
+            local function end_scene()
+                Caval_RectFilled(50, 50, 100, 100, 255, 255, 255, 255)
             end
 
 
-            PushCallback('FrameStageNotify', hello)
-            PushCallback('FrameStageNotify', hello_again)
+            Caval_PushCallback('FrameStageNotify', hello)
+            Caval_PushCallback('FrameStageNotify', hello_again)
+            Caval_PushCallback('EndScene', end_scene)
         )" );
 
 	g_io.log( XOR( "initialized ctx" ) );

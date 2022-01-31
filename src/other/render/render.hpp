@@ -72,6 +72,13 @@ namespace render {
 
 		math::v2i m_screen_size;
 
+		// to the abstraced wrappers we pass pos + size,
+		// but the geometry classes use two positions,
+		// so we use this function to handle that and aligment quickly
+		point handle_alignment( align alignment, const point& pos, const size& size );
+
+	public:
+
 		// helper for drawing any geometry
 		// this can't be put in render.inl for some reason
 		template< geometry::Shape T, typename... VA >
@@ -82,13 +89,6 @@ namespace render {
 
 			return shape;
 		}
-
-		// to the abstraced wrappers we pass pos + size,
-		// but the geometry classes use two positions,
-		// so we use this function to handle that and aligment quickly
-		point handle_alignment( align alignment, const point& pos, const size& size );
-
-	public:
 
 		std::array< geometry::font, font::MAX > m_fonts;
 
