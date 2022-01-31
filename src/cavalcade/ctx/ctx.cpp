@@ -71,55 +71,55 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 		// 	g_render.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ) );
 		// } );
 
-		state.set_function( "Caval_SafeRect", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+		state.set_function( "Caval_Rect", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
 			g_render.m_safe.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
 		} );
 
-		state.set_function( "Caval_SafeRectHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+		state.set_function( "Caval_RectHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
 			g_render.m_safe.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
 		} );
 
-		state.set_function( "Caval_SafeRectForward", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+		state.set_function( "Caval_RectForward", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
 			g_render.m_safe.draw_shape_front< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ),
 			                                                            t );
 		} );
 
-		state.set_function( "Caval_SafeRectForwardHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+		state.set_function( "Caval_RectForwardHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
 			g_render.m_safe.draw_shape_front< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
 		} );
 
-		state.set_function( "Caval_SafeLine", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+		state.set_function( "Caval_Line", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
 			g_render.m_safe.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
 		} );
 
-		state.set_function( "Caval_SafeLineHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+		state.set_function( "Caval_LineHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
 			g_render.m_safe.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
 		} );
 
-		state.set_function( "Caval_SafeLineForward", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+		state.set_function( "Caval_LineForward", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
 			g_render.m_safe.draw_shape_front< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ),
 			                                                            t );
 		} );
 
-		state.set_function( "Caval_SafeLineForwardHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+		state.set_function( "Caval_LineForwardHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
 			g_render.m_safe.draw_shape_front< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
 		} );
 
-		state.set_function( "Caval_SafeRectFilled", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
+		state.set_function( "Caval_RectFilled", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
 			g_render.m_safe.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ),
 			                                                             render::color( r, g, b, a ) );
 		} );
 
-		state.set_function( "Caval_SafeRectFilledHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
+		state.set_function( "Caval_RectFilledHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
 			g_render.m_safe.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ) );
 		} );
 
-		state.set_function( "Caval_SafeRectFilledForward", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
+		state.set_function( "Caval_RectFilledForward", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
 			g_render.m_safe.draw_shape_front< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ),
 			                                                                   render::color( r, g, b, a ) );
 		} );
 
-		state.set_function( "Caval_SafeRectFilledForwardHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
+		state.set_function( "Caval_RectFilledForwardHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
 			g_render.m_safe.draw_shape_front< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ),
 			                                                                   render::color( rgba ) );
 		} );
@@ -194,11 +194,15 @@ bool cavalcade::ctx::init( ) {
 	m_lua.push( R"(
             local string = require('string')
 
+            state = false
             addy = Caval_PatternScan('client.dll', '55 8B EC', '.text')
             local function hello()
-                --Caval_DbgPrint(string.format('%x', addy))
-                Caval_SafeRectFilled(10, 10, 30, 30, 255, 0, 0, 255)
-                Caval_SafeRectFilledHex(10, 50, 30, 100, 0xff00ffff)
+                if (state ~= true) then
+                    Caval_DbgPrint(string.format('%x', addy))
+                    state = true
+                end
+                Caval_RectFilled(10, 10, 30, 30, 255, 0, 0, 255)
+                Caval_RectFilledHex(10, 50, 30, 100, 0xff00ffff)
             end
 
             local function hello_again()
