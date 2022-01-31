@@ -1,5 +1,23 @@
 #include "ctx.hpp"
 
+static auto pattern_to_bytes( std::string&& pattern ) {
+	auto bytes = std::vector< int >{ };
+	auto start = const_cast< char* >( pattern.data( ) );
+	auto end   = const_cast< char* >( pattern.data( ) ) + pattern.size( );
+
+	for ( auto current = start; current < end; ++current ) {
+		if ( *current == '?' ) {
+			++current;
+			if ( *current == '?' )
+				++current;
+			bytes.push_back( -1 );
+		} else {
+			bytes.push_back( strtoul( current, &current, 16 ) );
+		}
+	}
+	return bytes;
+};
+
 void cavalcade::ctx::lua::push( std::string_view code ) {
 	auto dummy_state = sol::state{ };
 	auto dummy_map   = std::unordered_map< std::string, std::vector< std::function< void( ) > > >{ };
@@ -9,12 +27,21 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 
 	auto& [ state, map ] = m_callbacks.emplace_back( std::move( dummy_state ), std::move( dummy_map ) );
 
-	state.open_libraries( sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::os, sol::lib::jit, sol::lib::ffi );
+	state.open_libraries( sol::lib::base, sol::lib::package, sol::lib::string, sol::lib::math, sol::lib::os, sol::lib::jit, sol::lib::ffi );
 
 	// Initialize Lua locals
 	// Debugging
 	{
 		state.set_function( "Caval_DbgPrint", [ & ]( std::string&& what ) { g_io.log( XOR( "{}" ), what ); } );
+	}
+
+	// Memory
+	{
+		state.set_function( "Caval_PatternScan", [ & ]( std::string&& mod, std::string&& pattern, std::string&& section ) {
+			auto bytes = pattern_to_bytes( std::move( pattern ) );
+			auto& rmod = g_mem[ HASH_RT( mod.c_str( ) ) ];
+			return ( uint32_t )rmod.search_byte_array( bytes.data( ), bytes.size( ), rmod.m_sections[ HASH_RT( section.c_str( ) ) ] );
+		} );
 	}
 
 	// Rendering
@@ -25,6 +52,14 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 
 		state.set_function( "Caval_RectHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
 			g_render.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
+		} );
+
+		state.set_function( "Caval_Line", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+			g_render.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
+		} );
+
+		state.set_function( "Caval_LineHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+			g_render.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
 		} );
 
 		state.set_function( "Caval_RectFilled", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
@@ -50,6 +85,23 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 
 		state.set_function( "Caval_SafeRectForwardHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
 			g_render.m_safe.draw_shape_front< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
+		} );
+
+		state.set_function( "Caval_SafeLine", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+			g_render.m_safe.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
+		} );
+
+		state.set_function( "Caval_SafeLineHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+			g_render.m_safe.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
+		} );
+
+		state.set_function( "Caval_SafeLineForward", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+			g_render.m_safe.draw_shape_front< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ),
+			                                                            t );
+		} );
+
+		state.set_function( "Caval_SafeLineForwardHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+			g_render.m_safe.draw_shape_front< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
 		} );
 
 		state.set_function( "Caval_SafeRectFilled", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
@@ -139,21 +191,23 @@ bool cavalcade::ctx::init( ) {
 	m_steam.m_steam_friends->SetListenForFriendsMessages( true );
 
 	m_lua.push( R"(
-            string = 'Hello from Lua'
+            local string = require('string')
+
+            addy = Caval_PatternScan('client.dll', '55 8B EC', '.text')
             local function hello()
-                Caval_DbgPrint(string)
+                --Caval_DbgPrint(string.format('%x', addy))
                 Caval_SafeRectFilled(10, 10, 30, 30, 255, 0, 0, 255)
                 Caval_SafeRectFilledHex(10, 50, 30, 100, 0xff00ffff)
             end
 
             local function hello_again()
-                Caval_DbgPrint('Hello from Lua Second Callback in same script')
+                --Caval_DbgPrint('Hello from Lua Second Callback in same script')
             end
 
             local function end_scene()
                 Caval_RectFilled(50, 50, 100, 100, 255, 255, 255, 255)
+                Caval_Line(120, 120, 240, 240, 2.3, 255, 255, 255, 255)
             end
-
 
             Caval_PushCallback('FrameStageNotify', hello)
             Caval_PushCallback('FrameStageNotify', hello_again)

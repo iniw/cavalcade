@@ -23,14 +23,13 @@ void hack::indicators::screen::draw( ) {
 
 	auto ss = g_render.get_screen_size( );
 
-	if ( wasd ) {
-		// NOTE(para): there might be people with different keybinds but they're horrible people
-		auto w      = g_io.key_state< io::key_state::DOWN >( 'W' );
-		auto a      = g_io.key_state< io::key_state::DOWN >( 'A' );
-		auto s      = g_io.key_state< io::key_state::DOWN >( 'S' );
-		auto d      = g_io.key_state< io::key_state::DOWN >( 'D' );
-		auto c      = g_ctx.m_cmd ? g_ctx.m_cmd->m_buttons & ( 1 << 2 ) : false;
-		auto j      = g_ctx.m_cmd ? g_ctx.m_cmd->m_buttons & ( 1 << 1 ) : false;
+	if ( wasd && g_ctx.m_cmd ) {
+		auto w      = g_ctx.m_cmd->m_forward_move > 0;
+		auto a      = g_ctx.m_cmd->m_side_move < 0;
+		auto s      = g_ctx.m_cmd->m_forward_move < 0;
+		auto d      = g_ctx.m_cmd->m_side_move > 0;
+		auto c      = g_ctx.m_cmd->m_buttons & ( 1 << 2 );
+		auto j      = !( g_ctx.m_local.get( ).get_flags( ) & 1 );
 		auto format = []( bool state, char case_be ) { return state ? case_be : '_'; };
 
 		auto fmt = io::format( "{} {} {} {} {} {}", format( w, 'W' ), format( a, 'A' ), format( s, 'S' ), format( d, 'D' ), format( c, 'C' ),

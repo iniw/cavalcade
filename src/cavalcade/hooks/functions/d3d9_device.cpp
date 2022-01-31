@@ -18,13 +18,14 @@ HRESULT D3DAPI cavalcade::hooks::d3d9_device::end_scene( IDirect3DDevice9* devic
 
 	g_render.begin( );
 
-	g_gui.render( );
+	// NOTE(para): investigate crash
+	// for ( const auto& [ _, callbacks ] : g_ctx.m_lua.m_callbacks ) {
+	// 	for ( const auto& callback : callbacks.at( "EndScene" ) ) {
+	// 		callback( );
+	// 	}
+	// }
 
-	for ( const auto& [ _, callbacks ] : g_ctx.m_lua.m_callbacks ) {
-		for ( const auto& callback : callbacks.at( "EndScene" ) ) {
-			callback( );
-		}
-	}
+	g_gui.render( );
 
 	g_render.end( );
 

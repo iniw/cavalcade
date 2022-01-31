@@ -13,10 +13,11 @@ namespace mem {
 		PIMAGE_DOS_HEADER m_dos_header;
 		PIMAGE_NT_HEADERS m_nt_headers;
 
-		std::unordered_map< u32, section > m_sections;
 		std::unordered_map< u32, detour > m_addresses;
 
 	public:
+
+		std::unordered_map< u32, section > m_sections;
 
 		address m_module_base;
 
@@ -53,11 +54,11 @@ namespace mem {
 		template< typename T = address >
 		T get_og( u32 name_hash );
 
+		address search_byte_array( const i32* bytes, u32 size, const section& section );
+
 	private:
 
 		i32 rva_to_offset( u32 rva, PIMAGE_NT_HEADERS nt_headers, bool in_memory = false );
-
-		address search_byte_array( const i32* bytes, u32 size, const section& section );
 	};
 } // namespace mem
 
