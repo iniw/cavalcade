@@ -41,7 +41,6 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	g_hack.m_hitmarker.clear( );
 	g_hack.m_movement.clear( );
 	for ( auto& [ state, callbacks ] : g_ctx.m_lua.m_callbacks ) {
-		state[ XOR( "g_FrameStage" ) ] = -1;
 		state.set( XOR( "g_Cmd" ), sol::lua_nil );
 	}
 
