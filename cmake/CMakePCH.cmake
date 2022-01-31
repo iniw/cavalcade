@@ -55,6 +55,7 @@ set(PCH
     src/other/lib/include/lazyimporter/lazyimporter.hpp
     src/other/lib/include/xorstr/xorstr.hpp
     src/other/lib/include/stb/stb.hpp
+    src/other/lib/include/sol2/sol.hpp
     
     <fmt/core.h>
     <fmt/format.h> 

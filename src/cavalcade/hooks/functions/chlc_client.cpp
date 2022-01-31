@@ -19,6 +19,12 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 			g_hack.m_hitmarker.draw( );
 		}
 	} );
+
+	for ( const auto& [ _, callbacks ] : g_ctx.m_lua.m_callbacks ) {
+		for ( const auto& callback : callbacks.at( "FrameStageNotify" ) ) {
+			callback( );
+		}
+	}
 }
 
 void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {

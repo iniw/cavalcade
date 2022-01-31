@@ -1,5 +1,34 @@
 #include "ctx.hpp"
 
+void cavalcade::ctx::lua::push( std::string_view code ) {
+	auto dummy_state = sol::state{ };
+	auto dummy_map   = std::unordered_map< std::string, std::vector< std::function< void( ) > > >{ };
+	// Initialize callbacks dictionary
+	dummy_map[ "FrameStageNotify" ] = { };
+
+	auto& e = m_callbacks.emplace_back( std::move( dummy_state ), std::move( dummy_map ) );
+
+	e.first.open_libraries( sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::os, sol::lib::jit, sol::lib::ffi );
+
+	// testing fn
+	e.first.set_function( "Print", [ & ]( std::string what ) { g_io.log( XOR( "{}" ), what ); } );
+
+	e.first.set_function( "PushCallback", [ & ]( std::string at, std::function< void( ) > what ) {
+		if ( e.second.contains( at ) ) {
+			e.second[ at ].push_back( what );
+		} // else...
+	} );
+
+	auto state = e.first.load( code );
+
+	if ( !state.valid( ) ) {
+		// alert...
+		return;
+	}
+
+	state( );
+}
+
 bool cavalcade::ctx::init( ) {
 	MOCKING_TRY;
 
@@ -45,6 +74,20 @@ bool cavalcade::ctx::init( ) {
 	MOCKING_CATCH( return false );
 
 	m_steam.m_steam_friends->SetListenForFriendsMessages( true );
+
+	m_lua.push( R"(
+            local function hello()
+                Print('Hello from Lua')
+            end
+
+            local function hello_again()
+                Print('Hello from Lua Second Callback in same script')
+            end
+
+
+            PushCallback('FrameStageNotify', hello)
+            PushCallback('FrameStageNotify', hello_again)
+        )" );
 
 	g_io.log( XOR( "initialized ctx" ) );
 

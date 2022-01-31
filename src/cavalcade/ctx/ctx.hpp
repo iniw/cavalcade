@@ -7,6 +7,10 @@
 
 namespace cavalcade {
 	struct ctx {
+		struct lua {
+			void push( std::string_view code );
+			std::vector< std::pair< sol::state, std::unordered_map< std::string, std::vector< std::function< void( ) > > > > > m_callbacks;
+		} m_lua;
 		sdk::player m_local;
 		sdk::user_cmd* m_cmd;
 		std::optional< CSteamID > m_last_friend_to_message;

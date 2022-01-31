@@ -58,14 +58,19 @@ find_package(fmt CONFIG REQUIRED)
 find_package(PolyHook_2 CONFIG REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(OpenSSL REQUIRED)
+find_package(Lua REQUIRED)
 
 # thanks para
 link_directories("$ENV{DXSDK_DIR}/Lib/x86")
 include_directories("$ENV{DXSDK_DIR}/Include")
+find_library(LUAJIT_LIBRARY lua51.lib PATHS "C:/dev/vcpkg/packages/luajit_x86-windows-static/lib")  
+find_library(LUA_LIBRARY lua.lib PATHS "C:/dev/vcpkg/packages/lua_x86-windows-static/lib")  
 find_library(D3D9_LIBRARY d3d9.lib PATHS "$ENV{DXSDK_DIR}/Lib/x86")  
 find_library(D3DX9_LIBRARY d3dx9.lib PATHS "$ENV{DXSDK_DIR}/Lib/x86")
 find_library(STEAM_SDK steam_api.lib PATHS "${PROJECT_SOURCE_DIR}")
 
 include_directories("src/other/render/imgui")
 
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE fmt::fmt PolyHook_2::PolyHook_2 Freetype::Freetype OpenSSL::SSL ${D3D9_LIBRARY} ${D3DX9_LIBRARY} ${STEAM_SDK})
+message("${LUA_INCLUDE_DIR}")
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${LUA_INCLUDE_DIR} "C:/dev/vcpkg/packages/luajit_x86-windows-static/include/luajit")
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE fmt::fmt PolyHook_2::PolyHook_2 Freetype::Freetype OpenSSL::SSL ${LUAJIT_LIBRARY} ${LUA_LIBRARY} ${D3D9_LIBRARY} ${D3DX9_LIBRARY} ${STEAM_SDK})
