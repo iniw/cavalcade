@@ -189,7 +189,7 @@ namespace math {
 		}
 
 		constexpr vec_t cross_product( const vec_t& other, const bool normalize_cross_product = false ) const {
-			static_assert( N == 3, "cross product requires a 3 dimensional vector" );
+			// static_assert( N == 3, "cross product requires a 3 dimensional vector" );
 
 			vec_t vec = { m_data[ 1 ] * other[ 2 ] - m_data[ 2 ] * other[ 1 ], m_data[ 2 ] * other[ 0 ] - m_data[ 0 ] * other[ 2 ],
 				          m_data[ 0 ] * other[ 1 ] - m_data[ 1 ] * other[ 0 ] };
@@ -281,7 +281,7 @@ namespace math {
 
 		// NOTE(wini): these aren't animated.
 		constexpr vec_t shrink( const T& amt ) const {
-			static_assert( N == 4, "shrink requires a 4 dimensional vector" );
+			// static_assert( N == 4, "shrink requires a 4 dimensional vector" );
 
 			vec_t vec = *this;
 
@@ -295,7 +295,7 @@ namespace math {
 		}
 
 		constexpr vec_t expand( const T& amt ) const {
-			static_assert( N == 4, "expand requires a 4 dimensional vector" );
+			// static_assert( N == 4, "expand requires a 4 dimensional vector" );
 
 			vec_t vec = *this;
 
@@ -309,20 +309,20 @@ namespace math {
 		}
 
 		constexpr bool in_rect( const vector< T, 4 >& rect ) const {
-			static_assert( N == 2, "in_rect requires a 2 dimensional vector" );
+			// static_assert( N == 2, "in_rect requires a 2 dimensional vector" );
 
 			return m_data[ X ] >= rect[ X ] && m_data[ Y ] >= rect[ Y ] && m_data[ X ] <= rect[ X ] + rect[ X2 ] &&
 			       m_data[ Y ] <= rect[ Y ] + rect[ Y2 ];
 		}
 
 		constexpr vector< T, 2 > pos( ) const {
-			static_assert( N == 4, "pos requires a 4 dimensional vector" );
+			// static_assert( N == 4, "pos requires a 4 dimensional vector" );
 
 			return vector< T, 2 >( m_data[ X ], m_data[ Y ] );
 		}
 
 		constexpr vec_t& pos( const vector< T, 2 >& other ) {
-			static_assert( N == 4, "pos requires a 4 dimensional vector" );
+			// static_assert( N == 4, "pos requires a 4 dimensional vector" );
 
 			m_data[ X ] = other[ X ];
 			m_data[ Y ] = other[ Y ];
@@ -331,7 +331,7 @@ namespace math {
 		}
 
 		constexpr vec_t& size( const vector< T, 2 >& other ) {
-			static_assert( N == 4, "size requires a 4 dimensional vector" );
+			// static_assert( N == 4, "size requires a 4 dimensional vector" );
 
 			m_data[ X2 ] = other[ X ];
 			m_data[ Y2 ] = other[ Y ];
@@ -340,19 +340,19 @@ namespace math {
 		}
 
 		constexpr vector< T, 2 > size( ) const {
-			static_assert( N == 4, "size requires a 4 dimensional vector" );
+			// static_assert( N == 4, "size requires a 4 dimensional vector" );
 
 			return vector< T, 2 >( m_data[ X2 ], m_data[ Y2 ] );
 		}
 
 		constexpr T width( ) const {
-			static_assert( N == 4, "width requires a 4 dimensional vector" );
+			// static_assert( N == 4, "width requires a 4 dimensional vector" );
 
 			return m_data[ X2 ] - m_data[ X ];
 		}
 
 		constexpr T height( ) const {
-			static_assert( N == 4, "height requires a 4 dimensional vector" );
+			// static_assert( N == 4, "height requires a 4 dimensional vector" );
 
 			return m_data[ Y2 ] - m_data[ Y ];
 		}

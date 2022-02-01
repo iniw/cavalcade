@@ -32,7 +32,7 @@ void hack::indicators::screen::draw( ) {
 		auto j      = !( g_ctx.m_local.get( ).get_flags( ) & 1 );
 		auto format = []( bool state, char case_be ) { return state ? case_be : '_'; };
 
-		auto fmt = io::format( "{} {} {} {} {} {}", format( w, 'W' ), format( a, 'A' ), format( s, 'S' ), format( d, 'D' ), format( c, 'C' ),
+		auto fmt = io::format( XOR( "{} {} {} {} {} {}" ), format( w, 'W' ), format( a, 'A' ), format( s, 'S' ), format( d, 'D' ), format( c, 'C' ),
 		                       format( j, 'J' ) );
 
 		auto text = std::make_shared< render::geometry::text >( fa, render::point{ ss[ 0 ] / 2, g_hack.m_velgraph.get_bottommost_y_scenario( ) }, fmt,
@@ -88,7 +88,7 @@ void hack::indicators::screen::draw( ) {
 					m_string += f.m_text;
 					f.m_pad = 0;
 				} else {
-					f.m_pad = fa->calc_size( " " + m_string )[ 0 ];
+					f.m_pad = fa->calc_size( XOR( " " ) + m_string )[ 0 ];
 					m_string += " " + f.m_text;
 				}
 
@@ -101,13 +101,13 @@ void hack::indicators::screen::draw( ) {
 
 		container flags;
 		if ( g_io.key_state< io::key_state::DOWN >( VK_XBUTTON1 ) )
-			flags.push_back( flag( g_hack.m_movement.m_jumpbugged, "JB" ) );
+			flags.push_back( flag( g_hack.m_movement.m_jumpbugged, XOR( "JB" ) ) );
 		if ( g_io.key_state< io::key_state::DOWN >( VK_XBUTTON2 ) )
-			flags.push_back( flag( g_hack.m_movement.m_longjumped, "LJ" ) );
+			flags.push_back( flag( g_hack.m_movement.m_longjumped, XOR( "LJ" ) ) );
 		if ( g_io.key_state< io::key_state::DOWN >( 'V' ) )
-			flags.push_back( flag( g_hack.m_movement.m_in_ladderjump, "LAJ" ) );
+			flags.push_back( flag( g_hack.m_movement.m_in_ladderjump, XOR( "LAJ" ) ) );
 		if ( g_io.key_state< io::key_state::DOWN >( VK_MBUTTON ) )
-			flags.push_back( flag( g_hack.m_movement.m_edgebug.m_predicted, "EB" ) );
+			flags.push_back( flag( g_hack.m_movement.m_edgebug.m_predicted, XOR( "EB" ) ) );
 
 		auto container_text = std::make_shared< render::geometry::text >( fa, render::point{ ss[ 0 ] / 2, vi ? flags_y : y }, flags.m_string,
 		                                                                  render::color( 255, 255, 255, 255 ) );
