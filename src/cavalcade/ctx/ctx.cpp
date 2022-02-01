@@ -1,5 +1,11 @@
 #include "ctx.hpp"
 
+namespace lua {
+	struct dbg { };
+	struct mem { };
+	struct render { };
+} // namespace lua
+
 static auto pattern_to_bytes( std::string&& pattern ) {
 	auto bytes = std::vector< int >{ };
 	auto start = const_cast< char* >( pattern.data( ) );
@@ -18,8 +24,6 @@ static auto pattern_to_bytes( std::string&& pattern ) {
 	return bytes;
 };
 
-struct user_cmd { };
-
 void cavalcade::ctx::lua::push( std::string_view code ) {
 	auto dummy_state = sol::state{ };
 	auto dummy_map   = std::unordered_map< std::string, std::vector< std::function< void( ) > > >{ };
@@ -33,18 +37,31 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 	state.open_libraries( sol::lib::base, sol::lib::package, sol::lib::string, sol::lib::math, sol::lib::os, sol::lib::jit, sol::lib::ffi );
 
 	// Initialize Lua locals
+#ifdef _DEBUG
 	// Debugging
 	{
-		state.set_function( XOR( "Caval_DbgPrint" ), [ & ]( std::string&& what ) { g_io.log( XOR( "{}" ), what ); } );
+		state.new_usertype< ::lua::dbg >( XOR( "_Debug" ) );
+		state[ XOR( "_Debug" ) ][ XOR( "Print" ) ] = [ & ]( std::string&& text ) { g_io.log( XOR( "{}" ), text ); };
+		state.script( XOR( "g_Debug = _Debug.new()" ) );
 	}
+#endif
 
 	// Memory
 	{
-		state.set_function( XOR( "Caval_PatternScan" ), [ & ]( std::string&& mod, std::string&& pattern, std::string&& section ) {
+		state.new_usertype< ::lua::mem >( XOR( "_Memory" ) );
+		state[ XOR( "_Memory" ) ][ XOR( "PatternScan" ) ] = [ & ]( std::string&& mod, std::string&& pattern, std::string&& section ) {
 			auto bytes = pattern_to_bytes( std::move( pattern ) );
 			auto& rmod = g_mem[ HASH_RT( mod.c_str( ) ) ];
 			return ( uint32_t )rmod.search_byte_array( bytes.data( ), bytes.size( ), rmod.m_sections[ HASH_RT( section.c_str( ) ) ] );
-		} );
+		};
+
+		state.script( XOR( "g_Memory = _Memory.new()" ) );
+
+		// state.set_function( XOR( "Caval_PatternScan" ), [ & ]( std::string&& mod, std::string&& pattern, std::string&& section ) {
+		// 	auto bytes = pattern_to_bytes( std::move( pattern ) );
+		// 	auto& rmod = g_mem[ HASH_RT( mod.c_str( ) ) ];
+		// 	return ( uint32_t )rmod.search_byte_array( bytes.data( ), bytes.size( ), rmod.m_sections[ HASH_RT( section.c_str( ) ) ] );
+		// } );
 	}
 
 	// Rendering
@@ -74,58 +91,49 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 		// 	g_render.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ) );
 		// } );
 
-		state.set_function( XOR( "Caval_Rect" ), [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+		state.new_usertype< ::lua::render >( XOR( "_Render" ) );
+		state[ XOR( "_Render" ) ][ XOR( "Rect" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
 			g_render.m_safe.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
-		} );
-
-		state.set_function( XOR( "Caval_RectHex" ), [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+		};
+		state[ XOR( "_Render" ) ][ XOR( "RectHex" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
 			g_render.m_safe.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
-		} );
-
-		state.set_function( XOR( "Caval_RectForward" ), [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+		};
+		state[ XOR( "_Render" ) ][ XOR( "RectForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
 			g_render.m_safe.draw_shape_front< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ),
 			                                                            t );
-		} );
-
-		state.set_function( XOR( "Caval_RectForwardHex" ), [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+		};
+		state[ XOR( "_Render" ) ][ XOR( "RectForwardHex" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
 			g_render.m_safe.draw_shape_front< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
-		} );
-
-		state.set_function( XOR( "Caval_Line" ), [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+		};
+		state[ XOR( "_Render" ) ][ XOR( "Line" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
 			g_render.m_safe.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
-		} );
-
-		state.set_function( XOR( "Caval_LineHex" ), [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+		};
+		state[ XOR( "_Render" ) ][ XOR( "LineHex" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
 			g_render.m_safe.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
-		} );
-
-		state.set_function( XOR( "Caval_LineForward" ), [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
+		};
+		state[ XOR( "_Render" ) ][ XOR( "LineForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
 			g_render.m_safe.draw_shape_front< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ),
 			                                                            t );
-		} );
-
-		state.set_function( XOR( "Caval_LineForwardHex" ), [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
+		};
+		state[ XOR( "_Render" ) ][ XOR( "LineForwardHex" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
 			g_render.m_safe.draw_shape_front< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
-		} );
-
-		state.set_function( XOR( "Caval_RectFilled" ), [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
+		};
+		state[ XOR( "_Render" ) ][ XOR( "RectFilled" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
 			g_render.m_safe.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ),
 			                                                             render::color( r, g, b, a ) );
-		} );
-
-		state.set_function( XOR( "Caval_RectFilledHex" ), [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
+		};
+		state[ XOR( "_Render" ) ][ XOR( "RectFilledHex" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
 			g_render.m_safe.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ) );
-		} );
-
-		state.set_function( XOR( "Caval_RectFilledForward" ), [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
+		};
+		state[ XOR( "_Render" ) ][ XOR( "RectFilledForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
 			g_render.m_safe.draw_shape_front< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ),
 			                                                                   render::color( r, g, b, a ) );
-		} );
-
-		state.set_function( XOR( "Caval_RectFilledForwardHex" ), [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
+		};
+		state[ XOR( "_Render" ) ][ XOR( "RectFilledForwardHex" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
 			g_render.m_safe.draw_shape_front< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ),
 			                                                                   render::color( rgba ) );
-		} );
+		};
+		state.script( XOR( "g_Render = _Render.new()" ) );
 	}
 
 	// Context
@@ -144,6 +152,27 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 		state[ XOR( "UserCmd" ) ][ XOR( "GetMousedX" ) ]          = [ & ]( sdk::user_cmd& cmd ) { return cmd.m_moused_x; };
 		state[ XOR( "UserCmd" ) ][ XOR( "GetMousedY" ) ]          = [ & ]( sdk::user_cmd& cmd ) { return cmd.m_moused_y; };
 		state[ XOR( "UserCmd" ) ][ XOR( "GetHasBeenPredicted" ) ] = [ & ]( sdk::user_cmd& cmd ) { return cmd.m_has_been_predicted; };
+		state[ XOR( "UserCmd" ) ][ XOR( "SetCommandNumber" ) ]    = [ & ]( sdk::user_cmd& cmd, i32 command_number ) {
+            cmd.m_command_number = command_number;
+		};
+		state[ XOR( "UserCmd" ) ][ XOR( "SetTickCount" ) ]    = [ & ]( sdk::user_cmd& cmd, i32 tick_count ) { cmd.m_tick_count = tick_count; };
+		state[ XOR( "UserCmd" ) ][ XOR( "SetForwardMove" ) ]  = [ & ]( sdk::user_cmd& cmd, f32 forward_move ) { cmd.m_forward_move = forward_move; };
+		state[ XOR( "UserCmd" ) ][ XOR( "SetSideMove" ) ]     = [ & ]( sdk::user_cmd& cmd, f32 side_move ) { cmd.m_side_move = side_move; };
+		state[ XOR( "UserCmd" ) ][ XOR( "SetUpMove" ) ]       = [ & ]( sdk::user_cmd& cmd, f32 up_move ) { cmd.m_up_move = up_move; };
+		state[ XOR( "UserCmd" ) ][ XOR( "SetButtons" ) ]      = [ & ]( sdk::user_cmd& cmd, i32 buttons ) { cmd.m_buttons = buttons; };
+		state[ XOR( "UserCmd" ) ][ XOR( "SetImpulse" ) ]      = [ & ]( sdk::user_cmd& cmd, char impulse ) { cmd.m_impulse = impulse; };
+		state[ XOR( "UserCmd" ) ][ XOR( "SetWeaponSelect" ) ] = [ & ]( sdk::user_cmd& cmd, i32 weapon_select ) {
+			cmd.m_weapon_select = weapon_select;
+		};
+		state[ XOR( "UserCmd" ) ][ XOR( "SetWeaponSubType" ) ] = [ & ]( sdk::user_cmd& cmd, i32 weapon_sub_type ) {
+			cmd.m_weapon_sub_type = weapon_sub_type;
+		};
+		state[ XOR( "UserCmd" ) ][ XOR( "SetRandomSeed" ) ]       = [ & ]( sdk::user_cmd& cmd, i32 random_seed ) { cmd.m_random_seed = random_seed; };
+		state[ XOR( "UserCmd" ) ][ XOR( "SetMousedX" ) ]          = [ & ]( sdk::user_cmd& cmd, i16 moused_x ) { cmd.m_moused_x = moused_x; };
+		state[ XOR( "UserCmd" ) ][ XOR( "SetMousedY" ) ]          = [ & ]( sdk::user_cmd& cmd, i16 moused_y ) { cmd.m_moused_y = moused_y; };
+		state[ XOR( "UserCmd" ) ][ XOR( "SetHasBeenPredicted" ) ] = [ & ]( sdk::user_cmd& cmd, bool has_been_predicted ) {
+			cmd.m_has_been_predicted = has_been_predicted;
+		};
 		state.script( XOR( "g_Cmd = UserCmd.new()" ) );
 		state.script( XOR( "g_FrameStage = 0" ) );
 
@@ -215,26 +244,26 @@ bool cavalcade::ctx::init( ) {
             local string = require('string')
 
             state = false
-            addy = Caval_PatternScan('client.dll', '55 8B EC', '.text')
+            addy = g_Memory.PatternScan('client.dll', '55 8B EC', '.text')
             local function hello()
                 if (state ~= true) then
-                    Caval_DbgPrint(string.format('%x', addy))
+                    g_Debug.Print(string.format('%x', addy))
                     state = true
                 end
                 
-                Caval_RectFilled(10, 10, 30, 30, 255, 0, 0, 255)
-                Caval_RectFilledHex(10, 50, 30, 100, 0xff00ffff)
+                g_Render.RectFilled(10, 10, 30, 30, 255, 0, 0, 255)
+                g_Render.RectFilledHex(10, 50, 30, 100, 0xff00ffff)
             end
 
             local function hello_again()
-                --Caval_DbgPrint('Hello from Lua Second Callback in same script')
+                --g_Debug.Print('Hello from Lua Second Callback in same script')
             end
 
             local function create_move()
                 if (g_Cmd ~= nil) then
-                    Caval_DbgPrint(string.format('%d', g_Cmd:GetCommandNumber()))
+                    g_Debug.Print(string.format('%d', g_Cmd:GetCommandNumber()))
                 else
-                    Caval_DbgPrint('is nil')
+                    g_Debug.Print('is nil')
                 end
             end
 
