@@ -1,6 +1,7 @@
 #include "mem.hpp"
 
 #include "../../sdk/csgo/csgo.hpp"
+#include "../../cavalcade/hooks/hooks.hpp"
 
 bool mem::impl::init( ) {
 	const auto PEB = reinterpret_cast< win32::PEB* >( __readfsdword( 0x30 ) );
@@ -21,7 +22,14 @@ bool mem::impl::init( ) {
 
 		auto name = utils::str::to_lower( utils::str::wide_to_multi_byte( ldr_entry->BaseDllName.Buffer ) );
 
-		m_modules[ HASH_RT( name ) ] = module_info( address( ldr_entry->DllBase ) );
+		auto& e = m_modules[ HASH_RT( name ) ];
+		e       = module_info( address( ldr_entry->DllBase ) );
+		if ( ( std::string_view{ name }.find( "32" ) == std::string_view::npos ) &&
+		     e.find_pattern( STB( "55 8B EC 56 8B F1 33 C0 57 8B 7D 08 8B 8E ? ? ? ? 85" ) ).get< uintptr_t >( ) != 0 ) {
+			e.add_pattern( HASH_CT( "retaddr_bypass" ), STB( "55 8B EC 56 8B F1 33 C0 57 8B 7D 08 8B 8E ? ? ? ? 85" ) );
+			e.hook( HASH_CT( "retaddr_bypass" ), &cavalcade::hooks::valve::retaddr_bypass );
+			g_io.log( XOR( "retaddr check found in {}" ), name );
+		}
 	}
 
 	g_io.log( XOR( "initialized modules" ) );

@@ -6,13 +6,7 @@
 namespace sdk::auxiliary {
 	struct player_info_t {
 		uint64_t m_version;
-		union {
-			uint64_t m_steam_id;
-			struct {
-				uint32_t m_xuid_low;
-				uint32_t m_xuid_high;
-			};
-		};
+		uint64_t m_steam_id;
 		char m_name[ 128 ];
 		int m_user_id;
 		char m_guid[ 33 ];

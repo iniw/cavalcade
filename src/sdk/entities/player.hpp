@@ -10,6 +10,7 @@ namespace sdk {
 	struct player {
 		player( ) = default;
 		player( sdk::cs_player* p );
+		player( const player& ) = default;
 
 		sdk::cs_player& get( ) const;
 		const sdk::auxiliary::player_info_t& get_player_info( ) const;

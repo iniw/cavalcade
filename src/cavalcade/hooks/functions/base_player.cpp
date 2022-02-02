@@ -3,7 +3,7 @@
 #define MULTIPLAYER_BACKUP 150
 bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 input_sample_time, sdk::user_cmd* cmd ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< create_move_fn >( HASH_CT( "C_BasePlayer::CreateMove" ) );
-	for ( auto& [ state, _ ] : g_ctx.m_lua.m_callbacks ) {
+	for ( auto& [ state, _ ] : g_lua.m_callbacks ) {
 		state.set( XOR( "g_Cmd" ), sol::lua_nil );
 	}
 	static bool shoot = false;
@@ -35,7 +35,7 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 
 	g_ctx.m_cmd = cmd;
 
-	for ( auto& [ state, callbacks ] : g_ctx.m_lua.m_callbacks ) {
+	for ( auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 		state.set( XOR( "g_Cmd" ), g_ctx.m_cmd );
 		for ( const auto& callback : callbacks[ XOR( "CreateMove" ) ] ) {
 			callback( );

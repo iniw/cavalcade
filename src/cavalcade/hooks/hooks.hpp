@@ -9,8 +9,6 @@ namespace cavalcade {
 	struct hooks {
 		bool init( );
 
-	private:
-
 		struct base_animating {
 			using should_skip_animation_frame_fn = bool( __thiscall* )( unk );
 			static bool __fastcall should_skip_animation_frame( unk ecx, unk edx );
@@ -147,6 +145,11 @@ namespace cavalcade {
 			// hook GameConnectedFriendChatMsg_t
 			STEAM_CALLBACK( steam, on_friend_message, GameConnectedFriendChatMsg_t );
 			// STEAM_CALLBACK( steam, on_join_server, GSClientApprove_t );
+		};
+
+		struct valve {
+			using retaddr_bypass_fn = bool( __fastcall* )( unk, unk, const char* );
+			static bool __fastcall retaddr_bypass( unk, unk, const char* );
 		};
 
 		inline static steam whatever;

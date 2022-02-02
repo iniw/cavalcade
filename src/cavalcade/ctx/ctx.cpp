@@ -1,5 +1,7 @@
-#include "ctx.hpp"
+#define SOL_ALL_SAFETIES_ON 1
 
+#include "ctx.hpp"
+#include "../entity_cacher/entity_cacher.hpp"
 namespace lua {
 	struct dbg { };
 	struct mem { };
@@ -9,6 +11,11 @@ namespace lua {
 		constexpr vec( ) = default;
 		constexpr vec( f32 x, f32 y, f32 z ) : x( x ), y( y ), z( z ) { }
 		constexpr vec( const vec& v ) : x( v.x ), y( v.y ), z( v.z ) { }
+
+		constexpr vec operator+( const vec& v ) {
+			return vec( x + v.x, y + v.y, z + v.z );
+		}
+
 		f32 x{ }, y{ }, z{ };
 	};
 } // namespace lua
@@ -31,19 +38,17 @@ static auto pattern_to_bytes( std::string&& pattern ) {
 	return bytes;
 };
 
-void cavalcade::ctx::lua::push( std::string_view code ) {
-	auto dummy_state = sol::state{ };
-	auto dummy_map   = std::unordered_map< std::string, std::vector< std::function< void( ) > > >{ };
+void cavalcade::lua_impl::push( std::string_view code ) {
+	auto state = sol::state{ };
+	auto map   = std::unordered_map< std::string, std::vector< std::function< void( ) > > >{ };
 	// Initialize callbacks dictionary
-	dummy_map[ XOR( "FrameStageNotify" ) ] = { };
-	dummy_map[ XOR( "CreateMove" ) ]       = { };
+	map[ XOR( "FrameStageNotify" ) ] = { };
+	map[ XOR( "CreateMove" ) ]       = { };
 	// dummy_map[ "EndScene" ]         = { };
-
-	auto& [ state, map ] = m_callbacks.emplace_back( std::move( dummy_state ), std::move( dummy_map ) );
 
 	state.open_libraries( sol::lib::base, sol::lib::package, sol::lib::string, sol::lib::math, sol::lib::os, sol::lib::jit, sol::lib::ffi );
 
-	// Initialize Lua locals
+// Initialize Lua locals
 #ifdef _DEBUG
 	// Debugging
 	{
@@ -61,84 +66,32 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 			auto& rmod = g_mem[ HASH_RT( mod.c_str( ) ) ];
 			return ( uint32_t )rmod.search_byte_array( bytes.data( ), bytes.size( ), rmod.m_sections[ HASH_RT( section.c_str( ) ) ] );
 		};
-
 		state.script( XOR( "g_Memory = _Memory.new()" ) );
-
-		// state.set_function( XOR( "Caval_PatternScan" ), [ & ]( std::string&& mod, std::string&& pattern, std::string&& section ) {
-		// 	auto bytes = pattern_to_bytes( std::move( pattern ) );
-		// 	auto& rmod = g_mem[ HASH_RT( mod.c_str( ) ) ];
-		// 	return ( uint32_t )rmod.search_byte_array( bytes.data( ), bytes.size( ), rmod.m_sections[ HASH_RT( section.c_str( ) ) ] );
-		// } );
 	}
 
 	// Rendering
 	{
-		// NOTE(para): Maybe having callbacks every frame isn't a great idea... Lets keep this to safe rendering only
-		// state.set_function( "Caval_Rect", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
-		// 	g_render.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
-		// } );
-
-		// state.set_function( "Caval_RectHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
-		// 	g_render.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
-		// } );
-
-		// state.set_function( "Caval_Line", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
-		// 	g_render.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
-		// } );
-
-		// state.set_function( "Caval_LineHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
-		// 	g_render.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
-		// } );
-
-		// state.set_function( "Caval_RectFilled", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
-		// 	g_render.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ) );
-		// } );
-
-		// state.set_function( "Caval_RectFilledHex", [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
-		// 	g_render.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ) );
-		// } );
-
+		state.new_usertype< render::color >( XOR( "Color" ),
+		                                     sol::constructors< render::color( ), render::color( u8, u8, u8, u8 ), render::color( u32 ) >( ),
+		                                     XOR( "ToU32" ), &render::color::to_u32, XOR( "FracAlpha" ), &render::color::frac_alpha );
 		state.new_usertype< ::lua::render >( XOR( "_Render" ) );
-		state[ XOR( "_Render" ) ][ XOR( "Rect" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
-			g_render.m_safe.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
+		state[ XOR( "_Render" ) ][ XOR( "Rect" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, const render::color& clr ) {
+			g_render.m_safe.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), clr, t );
 		};
-		state[ XOR( "_Render" ) ][ XOR( "RectHex" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
-			g_render.m_safe.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
+		state[ XOR( "_Render" ) ][ XOR( "RectForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, const render::color& clr ) {
+			g_render.m_safe.draw_shape_front< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), clr, t );
 		};
-		state[ XOR( "_Render" ) ][ XOR( "RectForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
-			g_render.m_safe.draw_shape_front< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ),
-			                                                            t );
+		state[ XOR( "_Render" ) ][ XOR( "Line" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, const render::color& clr ) {
+			g_render.m_safe.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), clr, t );
 		};
-		state[ XOR( "_Render" ) ][ XOR( "RectForwardHex" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
-			g_render.m_safe.draw_shape_front< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
+		state[ XOR( "_Render" ) ][ XOR( "LineForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, const render::color& clr ) {
+			g_render.m_safe.draw_shape_front< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), clr, t );
 		};
-		state[ XOR( "_Render" ) ][ XOR( "Line" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
-			g_render.m_safe.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ), t );
+		state[ XOR( "_Render" ) ][ XOR( "RectFilled" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, const render::color& clr ) {
+			g_render.m_safe.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), clr );
 		};
-		state[ XOR( "_Render" ) ][ XOR( "LineHex" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
-			g_render.m_safe.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
-		};
-		state[ XOR( "_Render" ) ][ XOR( "LineForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u8 r, u8 g, u8 b, u8 a ) {
-			g_render.m_safe.draw_shape_front< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( r, g, b, a ),
-			                                                            t );
-		};
-		state[ XOR( "_Render" ) ][ XOR( "LineForwardHex" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, u32 rgba ) {
-			g_render.m_safe.draw_shape_front< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ), t );
-		};
-		state[ XOR( "_Render" ) ][ XOR( "RectFilled" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
-			g_render.m_safe.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ),
-			                                                             render::color( r, g, b, a ) );
-		};
-		state[ XOR( "_Render" ) ][ XOR( "RectFilledHex" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
-			g_render.m_safe.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), render::color( rgba ) );
-		};
-		state[ XOR( "_Render" ) ][ XOR( "RectFilledForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, u8 r, u8 g, u8 b, u8 a ) {
-			g_render.m_safe.draw_shape_front< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ),
-			                                                                   render::color( r, g, b, a ) );
-		};
-		state[ XOR( "_Render" ) ][ XOR( "RectFilledForwardHex" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, u32 rgba ) {
-			g_render.m_safe.draw_shape_front< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ),
-			                                                                   render::color( rgba ) );
+		state[ XOR( "_Render" ) ][ XOR( "RectFilledForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, const render::color& clr ) {
+			g_render.m_safe.draw_shape_front< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), clr );
 		};
 		state.script( XOR( "g_Render = _Render.new()" ) );
 	}
@@ -147,7 +100,7 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 	{
 		state.new_usertype< ::lua::vec >( XOR( "Vector3" ),
 		                                  sol::constructors< ::lua::vec( ), ::lua::vec( f32, f32, f32 ), ::lua::vec( const ::lua::vec& ) >( ),
-		                                  XOR( "x" ), &::lua::vec::x, XOR( "y" ), &::lua::vec::y, XOR( "z" ), &::lua::vec::z );
+		                                  XOR( "m_X" ), &::lua::vec::x, XOR( "m_Y" ), &::lua::vec::y, XOR( "m_Z" ), &::lua::vec::z );
 		state.new_usertype< sdk::user_cmd >(
 			XOR( "UserCmd" ), XOR( "m_CommandNumber" ), &sdk::user_cmd::m_command_number, XOR( "m_TickCount" ), &sdk::user_cmd::m_tick_count,
 			XOR( "m_ViewAngles" ), ( ::lua::vec( sdk::user_cmd::* ) ) & sdk::user_cmd::m_view_angles, XOR( "m_AimDirection" ),
@@ -156,11 +109,37 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 			&sdk::user_cmd::m_buttons, XOR( "m_Impulse" ), &sdk::user_cmd::m_impulse, XOR( "m_WeaponSelect" ), &sdk::user_cmd::m_weapon_select,
 			XOR( "m_WeaponSubType" ), &sdk::user_cmd::m_weapon_sub_type, XOR( "m_RandomSeed" ), &sdk::user_cmd::m_random_seed, XOR( "m_MousedX" ),
 			&sdk::user_cmd::m_moused_x, XOR( "m_Moused_Y" ), &sdk::user_cmd::m_moused_y );
+		state[ XOR( "UserCmd" ) ][ XOR( "GetChecksum" ) ] = []( sdk::user_cmd& cmd ) { return cmd.get_checksum( ); };
 
+		// Entity cacher
+		state.new_usertype< sdk::auxiliary::player_info_t >(
+			XOR( "PlayerInfo" ),
+			sol::constructors< sdk::auxiliary::player_info_t( ), sdk::auxiliary::player_info_t( const sdk::auxiliary::player_info_t& ) >( ),
+			XOR( "m_Version" ), &sdk::auxiliary::player_info_t::m_version, XOR( "m_SteamId" ), &sdk::auxiliary::player_info_t::m_steam_id,
+			XOR( "m_Name" ), &sdk::auxiliary::player_info_t::m_name, XOR( "m_UserId" ), &sdk::auxiliary::player_info_t::m_user_id, XOR( "m_Guid" ),
+			&sdk::auxiliary::player_info_t::m_guid, XOR( "m_FriendsId" ), &sdk::auxiliary::player_info_t::m_friends_id, XOR( "m_FriendsName" ),
+			&sdk::auxiliary::player_info_t::m_friends_name, XOR( "m_FakePlayer" ), &sdk::auxiliary::player_info_t::m_fake_player, XOR( "m_IsHltv" ),
+			&sdk::auxiliary::player_info_t::m_is_hltv, XOR( "m_CustomFiles" ), &sdk::auxiliary::player_info_t::m_custom_files,
+			XOR( "m_FilesDownloaded" ), &sdk::auxiliary::player_info_t::m_files_downloaded );
+		state.new_usertype< sdk::cs_player >( XOR( "CSPlayer" ), XOR( "IsAlive" ), &sdk::cs_player::is_alive, XOR( "GetEyePosition" ),
+		                                      [ & ]( sdk::cs_player& pl ) {
+												  auto vec = pl.get_eye_position( );
+												  return *( ::lua::vec* )&vec;
+											  } );
+		state.new_usertype< sdk::player >( XOR( "Player" ),
+		                                   sol::constructors< sdk::player( ), sdk::player( sdk::cs_player* ), sdk::player( const sdk::player& ) >( ),
+		                                   XOR( "GetRef" ), &sdk::player::get, XOR( "GetPlayerInfo" ), &sdk::player::get_player_info );
+		state.new_usertype< entity_cacher >( XOR( "_PlayerCache" ), XOR( "ForEach" ), &entity_cacher::for_each, XOR( "GetSize" ),
+		                                     []( const entity_cacher& c ) { return c.m_players.size( ); } );
+
+		// Global important variables
 		state.script( XOR( "g_Cmd = UserCmd.new()" ) );
 		state.script( XOR( "g_FrameStage = 0" ) );
+		state.set( XOR( "g_PlayerCache" ), &g_entity_cacher );
+		state.set( XOR( "g_Local" ), &g_ctx.m_local );
 
-		state.script( XOR( R"(
+		// Global enums
+		state.script( R"(
         Keys = {
             VK_LBUTTON = 0x01,
             VK_RBUTTON = 0x02,
@@ -329,7 +308,18 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
             DOWN = 2,
             RELEASED = 3
         }
-        )" ) );
+
+        FrameStages = {
+            UNDEFINED = -1,
+            START = 0,
+            NET_UPDATE_START = 1,
+            NET_UPDATE_POSTDATAUPDATE_START = 2,
+	    	NET_UPDATE_POSTDATAUPDATE_END = 3,
+	    	NET_UPDATE_END = 4,
+	    	RENDER_START = 5,
+	    	RENDER_END = 6
+        }
+        )" );
 
 		state.new_usertype< ::lua::ctx >( XOR( "_Ctx" ) );
 		state[ XOR( "_Ctx" ) ][ XOR( "GetKeyState" ) ] = [ & ]( u8 key, i32 key_state ) -> bool {
@@ -349,6 +339,7 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 
 			return false;
 		};
+
 		state[ XOR( "_Ctx" ) ][ XOR( "PushCallback" ) ] = [ & ]( std::string&& at, std::function< void( ) >&& what ) {
 			if ( map.contains( at ) ) {
 				map[ at ].push_back( what );
@@ -360,12 +351,16 @@ void cavalcade::ctx::lua::push( std::string_view code ) {
 	auto load = state.load( code );
 
 	if ( !load.valid( ) ) {
-		g_io.log( XOR( "{}" ), ( i32 )load.status( ) );
+		sol::error err = load;
+		g_io.log( XOR( "{} {}" ), ( i32 )load.status( ), err.what( ) );
 		// alert...
 		return;
 	}
 
+	// Initialize
 	load( );
+
+	m_callbacks.emplace_back( std::move( state ), std::move( map ) );
 }
 
 bool cavalcade::ctx::init( ) {
@@ -413,41 +408,6 @@ bool cavalcade::ctx::init( ) {
 	MOCKING_CATCH( return false );
 
 	m_steam.m_steam_friends->SetListenForFriendsMessages( true );
-
-	m_lua.push( R"(
-            local string = require('string')
-
-            state = false
-            addy = g_Memory.PatternScan('client.dll', '55 8B EC', '.text')
-            local function hello()
-                if (state ~= true) then
-                    g_Debug.Print(string.format('%x', addy))
-                    state = true
-                end
-                
-                g_Render.RectFilled(10, 10, 30, 30, 255, 0, 0, 255)
-                g_Render.RectFilledHex(10, 50, 30, 100, 0xff00ffff)
-            end
-
-            local function hello_again()
-                --g_Debug.Print('Hello from Lua Second Callback in same script')
-                --vec = Vector3.new(1.1, 2.2, 3.3)
-                --g_Debug.Print('here')
-            end
-
-            local function create_move()
-                if (g_Cmd ~= nil) then
-
-                    g_Debug.Print(string.format('%f %f %f', g_Cmd.m_ViewAngles[1],g_Cmd.m_ViewAngles[2],g_Cmd.m_ViewAngles[3]))
-                else
-                    g_Debug.Print('is nil')
-                end
-            end
-
-            g_Ctx.PushCallback('FrameStageNotify', hello)
-            g_Ctx.PushCallback('FrameStageNotify', hello_again)
-            g_Ctx.PushCallback('CreateMove', create_move)
-        )" );
 
 	g_io.log( XOR( "initialized ctx" ) );
 

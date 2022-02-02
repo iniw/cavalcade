@@ -16,7 +16,7 @@ struct entity_cacher {
 
 	void clear( );
 
-private:
+	// private:
 
 	std::vector< sdk::player > m_players;
 };

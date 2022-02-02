@@ -6,11 +6,12 @@
 #include <shared_mutex>
 
 namespace cavalcade {
+	struct lua_impl {
+		void push( std::string_view code );
+		std::vector< std::pair< mutable sol::state, std::unordered_map< std::string, std::vector< std::function< void( ) > > > > > m_callbacks;
+	};
+
 	struct ctx {
-		struct lua {
-			void push( std::string_view code );
-			std::vector< std::pair< mutable sol::state, std::unordered_map< std::string, std::vector< std::function< void( ) > > > > > m_callbacks;
-		} m_lua;
 		sdk::player m_local;
 		sdk::user_cmd* m_cmd;
 		std::optional< CSteamID > m_last_friend_to_message;
@@ -62,3 +63,4 @@ namespace cavalcade {
 } // namespace cavalcade
 
 inline cavalcade::ctx g_ctx;
+inline cavalcade::lua_impl g_lua;
