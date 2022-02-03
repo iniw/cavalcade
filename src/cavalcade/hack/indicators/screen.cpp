@@ -3,6 +3,11 @@
 #include "../hack.hpp"
 #include "../../gui/cfg/cfg.hpp"
 
+static bool local_on_ladder_or_noclip( ) {
+	return g_ctx.m_local &&
+	       ( g_ctx.m_local.get( ).get_move_type( ) == sdk::move_type::LADDER || g_ctx.m_local.get( ).get_move_type( ) == sdk::move_type::NOCLIP );
+}
+
 void hack::indicators::screen::gather( ) {
 	if ( m_previously_on_ground && !( g_ctx.m_local.get( ).get_flags( ) & sdk::flags::ONGROUND ) ) {
 		m_time     = g_csgo.m_globals->m_curtime + 1.F;
@@ -29,7 +34,7 @@ void hack::indicators::screen::draw( ) {
 		auto s      = g_ctx.m_cmd->m_forward_move < 0;
 		auto d      = g_ctx.m_cmd->m_side_move > 0;
 		auto c      = g_ctx.m_cmd->m_buttons & ( 1 << 2 );
-		auto j      = !( g_ctx.m_local.get( ).get_flags( ) & 1 );
+		auto j      = !( g_ctx.m_local.get( ).get_flags( ) & 1 ) && !local_on_ladder_or_noclip( );
 		auto format = []( bool state, char case_be ) { return state ? case_be : '_'; };
 
 		auto fmt = io::format( XOR( "{} {} {} {} {} {}" ), format( w, 'W' ), format( a, 'A' ), format( s, 'S' ), format( d, 'D' ), format( c, 'C' ),

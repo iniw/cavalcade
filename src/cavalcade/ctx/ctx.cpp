@@ -115,6 +115,12 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 		state[ XOR( "_Render" ) ][ XOR( "RectFilledForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, const render::color& clr ) {
 			g_render.m_safe.draw_shape_front< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), clr );
 		};
+		state[ XOR( "_Render" ) ][ XOR( "Text" ) ] = [ & ]( i32 x, i32 y, std::string&& text, u32 font, const render::color& clr ) {
+			g_render.m_safe.draw_shape< render::geometry::text >( &g_render.m_fonts[ font ], render::point( x, y ), std::move( text ), clr );
+		};
+		state[ XOR( "_Render" ) ][ XOR( "TextForward" ) ] = [ & ]( i32 x, i32 y, std::string&& text, u32 font, const render::color& clr ) {
+			g_render.m_safe.draw_shape_front< render::geometry::text >( &g_render.m_fonts[ font ], render::point( x, y ), std::move( text ), clr );
+		};
 		state[ XOR( "_Render" ) ][ XOR( "WorldToScreen" ) ] = [ & ]( ::lua::vec v ) {
 			math::v3f out{ };
 			if ( g_csgo.m_debug_overlay->screen_position( *( math::v3f* )&v, out ) )
@@ -393,6 +399,13 @@ void cavalcade::lua_impl::push( std::string_view code ) {
             UP = 1,
             DOWN = 2,
             RELEASED = 3
+        }
+
+        Fonts = {
+            MENU = 0,
+            ESP = 1,
+            INDICATOR_BIG = 2,
+            INDICATOR_SMALL = 3
         }
 
         FrameStages = {
