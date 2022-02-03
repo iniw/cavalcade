@@ -179,7 +179,7 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 					return std::string_view{ "(none)" };
 				}
 			},
-			XOR( "GetFloat" ), &sdk::cvar::get_float, XOR( "GetInt" ), &sdk::cvar::get_int, XOR( "SetStr" ),
+			XOR( "GetFloat" ), &sdk::cvar::get_float, XOR( "GetInt" ), &sdk::cvar::get_int, XOR( "SetString" ),
 			[ & ]( sdk::cvar& cv, std::string_view str ) { cv.set_value( str ); }, XOR( "SetFloat" ),
 			[ & ]( sdk::cvar& cv, f32 f ) { cv.set_value( f ); }, XOR( "SetInt" ), [ & ]( sdk::cvar& cv, i32 i ) { cv.set_value( i ); } );
 

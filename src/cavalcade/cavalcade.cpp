@@ -45,9 +45,9 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
 
             local function hello_again()
                 if (g_Local:IsValid() and g_Local:GetRef():IsAlive()) then
-                    g_PlayerCache.ForEach(function (player) 
+                    g_PlayerCache:ForEach(function (player) 
                         if (player:GetRef():IsEnemy(g_Local)) then
-                            g_ConVars:ConsolePrint(player.GetPlayerInfo().m_Name)
+                            g_ConVars:ConsolePrint(string.format('-- %s', player:GetPlayerInfo().m_Name))
                         end
                     end)
                 end

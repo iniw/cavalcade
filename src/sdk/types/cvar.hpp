@@ -35,7 +35,7 @@ namespace sdk {
 		PAD( 9 );
 		const char* m_name;
 
-		PAD( 0x10 );
+		PAD( 0xC );
 		cvar* m_parent;
 		PAD( 0x4 );
 		const char* m_string;
