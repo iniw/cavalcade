@@ -58,7 +58,8 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 	map[ XOR( "CreateMove" ) ]       = { };
 	// dummy_map[ "EndScene" ]         = { };
 
-	state.open_libraries( sol::lib::base, sol::lib::package, sol::lib::string, sol::lib::math, sol::lib::os, sol::lib::jit, sol::lib::ffi );
+	state.open_libraries( sol::lib::base, sol::lib::package, sol::lib::string, sol::lib::math, sol::lib::bit32, sol::lib::os, sol::lib::jit,
+	                      sol::lib::ffi );
 
 // Initialize Lua locals
 #ifdef _DEBUG
@@ -89,7 +90,7 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 	state.new_usertype< ::lua::bounds >(
 		XOR( "Bounds" ),
 		sol::constructors< ::lua::bounds( ), ::lua::bounds( const ::lua::vec&, const ::lua::vec& ), ::lua::bounds( const ::lua::bounds& ) >( ),
-		XOR( "m_AA" ), &::lua::bounds::a, XOR( "m_BB" ), &::lua::bounds::b );
+		XOR( "m_Mins" ), &::lua::bounds::a, XOR( "m_Maxs" ), &::lua::bounds::b );
 	// Rendering
 	{
 		state.new_usertype< render::color >( XOR( "Color" ),
@@ -162,7 +163,30 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			XOR( "GetVelocityModifier" ), &sdk::cs_player::get_velocity_modifier, XOR( "IsImmune" ), &sdk::cs_player::is_immune,
 			XOR( "IsPlayerGhost" ), &sdk::cs_player::is_player_ghost, XOR( "IsScoped" ), &sdk::cs_player::is_scoped, XOR( "HasHelmet" ),
 			&sdk::cs_player::has_helmet, XOR( "GetArmorValue" ), &sdk::cs_player::armor_value, XOR( "CanFireShot" ), &sdk::cs_player::can_fire_shot,
-			XOR( "IsEnemy" ), [ & ]( sdk::cs_player& p, sdk::player& rhs ) { return p.is_enemy( &rhs.get( ) ); } );
+			XOR( "IsEnemy" ), [ & ]( sdk::cs_player& p, sdk::player& rhs ) { return p.is_enemy( &rhs.get( ) ); }, XOR( "GetDuckAmount" ),
+			[ & ]( sdk::cs_player& p ) { return p.get_duck_amount( ); }, XOR( "GetDuckSpeed" ),
+			[ & ]( sdk::cs_player& p ) { return p.get_duck_speed( ); }, XOR( "GetHealth" ), [ & ]( sdk::cs_player& p ) { return p.get_health( ); },
+			XOR( "GetFlags" ), [ & ]( sdk::cs_player& p ) { return p.get_flags( ); }, XOR( "GetTickbase" ),
+			[ & ]( sdk::cs_player& p ) { return p.get_tickbase( ); }, XOR( "GetFallVelocity" ),
+			[ & ]( sdk::cs_player& p ) { return p.get_fall_velocity( ); }, XOR( "GetViewOffset" ),
+			[ & ]( sdk::cs_player& p ) {
+				auto what = p.get_view_offset( );
+				return *( ::lua::vec* )&what;
+			},
+			XOR( "GetVelocity" ),
+			[ & ]( sdk::cs_player& p ) {
+				auto what = p.get_velocity( );
+				return *( ::lua::vec* )&what;
+			},
+			XOR( "GetMoveType" ), [ & ]( sdk::cs_player& p ) { return ( i32 )p.get_move_type( ); }, XOR( "GetEFlags" ),
+			[ & ]( sdk::cs_player& p ) { return p.get_eflags( ); }, XOR( "GetLifestate" ), [ & ]( sdk::cs_player& p ) { return p.get_lifestate( ); },
+			XOR( "GetOrigin" ),
+			[ & ]( sdk::cs_player& p ) {
+				auto what = p.get_origin( );
+				return *( ::lua::vec* )&what;
+			},
+			XOR( "GetSimTime" ), [ & ]( sdk::cs_player& p ) { return p.get_sim_time( ); }, XOR( "GetEffects" ),
+			[ & ]( sdk::cs_player& p ) { return p.get_effects( ); }, XOR( "GetTeam" ), [ & ]( sdk::cs_player& p ) { return p.get_team( ); } );
 		state.new_usertype< sdk::player >(
 			XOR( "Player" ), sol::constructors< sdk::player( ), sdk::player( sdk::cs_player* ), sdk::player( const sdk::player& ) >( ),
 			XOR( "IsValid" ), &sdk::player::valid, XOR( "GetRef" ), &sdk::player::get, XOR( "GetPlayerInfo" ), &sdk::player::get_player_info );
@@ -380,6 +404,73 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 	    	NET_UPDATE_END = 4,
 	    	RENDER_START = 5,
 	    	RENDER_END = 6
+        }
+
+        MoveTypes = {
+            NONE = 0,
+            ISOMETRIC = 1,
+            WALK = 2,
+            STEP = 3,
+            FLY = 4,
+            FLY_GRAVITY = 5,
+            VPHYSICS = 6,
+            PUSH = 7,
+            NOCLIP = 8,
+            LADDER = 9,
+            OBSERVER = 10,
+            CUSTOM = 11
+        }
+        
+        local bit = require('bit')
+        Flags = {
+            ONGROUND = bit.lshift(1, 0),
+            DUCKING = bit.lshift(1, 1),
+            ANIMDUCKING = bit.lshift(1, 2),
+            WATERJUMP = bit.lshift(1, 3),
+            ONTRAIN = bit.lshift(1, 4),
+            INRAIN = bit.lshift(1, 5),
+            FROZEN = bit.lshift(1, 6),
+            ATCONTROLS = bit.lshift(1, 7),
+            CLIENT = bit.lshift(1, 8),
+            FAKECLIENT = bit.lshift(1, 9),
+            INWATER = bit.lshift(1, 10),
+            FLY = bit.lshift(1, 11),
+            SWIM = bit.lshift(1, 12),
+            CONVEYOR = bit.lshift(1, 13),
+            NPC = bit.lshift(1, 14),
+            GODMODE = bit.lshift(1, 15),
+            NOTARGET = bit.lshift(1, 16),
+            AIMTARGET = bit.lshift(1, 17),
+            PARTIALGROUND = bit.lshift(1, 18),
+            STATICPROP = bit.lshift(1, 19),
+            GRAPHED = bit.lshift(1, 20),
+            GRENADE = bit.lshift(1, 21),
+            STEPMOVEMENT = bit.lshift(1, 22),
+            DONTTOUCH = bit.lshift(1, 23),
+            BASEVELOCITY = bit.lshift(1, 24),
+            WORLDBRUSH = bit.lshift(1, 25),
+            OBJECT = bit.lshift(1, 26),
+            KILLME = bit.lshift(1, 27),
+            ONFIRE = bit.lshift(1, 28),
+            DISSOLVING = bit.lshift(1, 29),
+            TRANSRAGDOLL = bit.lshift(1, 30),
+            UNBLOCKABLE_BY_PLAYER = bit.lshift(1, 31)
+        }
+
+        LifeStates = {
+            ALIVE = 0,
+            DYING = 1,
+            DEAD = 2,
+            RESPAWNABLE = 3,
+            DISCARDBODY = 4
+        }
+
+        Teams = {
+            UNDEFINED = -1,
+            UNASSIGNED = 0,
+            SPECTATOR = 1,
+            TERRORIST = 2,
+            COUNTER_TERRORIST = 3
         }
         )" );
 

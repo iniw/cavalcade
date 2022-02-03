@@ -26,6 +26,7 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
 	g_lua.push( R"(
             local string = require('string')
             local math = require('math')
+            local bit = require('bit32')
 
             state = false
             addy = g_Memory.PatternScan('client.dll', '55 8B EC', '.text')
@@ -35,19 +36,25 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
                     g_ConVars:ConsolePrint(string.format('%x', addy))
                     g_ConVars:ConsolePrint(string.format('%s %d', cvar:GetName(), cvar:GetInt()))
                     cvar:SetInt(3)
-                    g_ConVars:ConsolePrint(string.format('%s %d', cvar:GetName(), cvar:GetInt()))
+                    g_ConVars:ConsolePrint(string.format('%s %d %d', cvar:GetName(), cvar:GetInt(), Flags.ANIMDUCKING))
                     state = true
                 end
                 
-                g_Render.RectFilled(10, 10, 30, 30, Color.new(255, 0, 255, 255))
-                g_Render.RectFilled(10, 50, 30, 100, Color.new(0xffff00ff))
+                --g_Render.RectFilled(10, 10, 30, 30, Color.new(255, 0, 255, 255))
+                --g_Render.RectFilled(10, 50, 30, 100, Color.new(0xffff00ff))
             end
 
             local function hello_again()
                 if (g_Local:IsValid() and g_Local:GetRef():IsAlive()) then
                     g_PlayerCache:ForEach(function (player) 
                         if (player:GetRef():IsEnemy(g_Local)) then
-                            g_ConVars:ConsolePrint(string.format('-- %s', player:GetPlayerInfo().m_Name))
+                            team_str = ''
+                            if (player:GetRef():GetTeam() == Teams.TERRORIST) then
+                                team_str = 'Terrorist'
+                            else 
+                                team_str = 'Counter-Terrorist'
+                            end
+                            g_ConVars:ConsolePrint(string.format('-- %s %d %d %s', player:GetPlayerInfo().m_Name, player:GetRef():GetHealth(), player:GetRef():GetMoveType(), team_str))
                         end
                     end)
                 end

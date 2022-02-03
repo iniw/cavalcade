@@ -40,6 +40,7 @@ namespace hack {
 		void jumpbug( );
 		void longjump( );
 		void ladderjump( );
+		void pixelsurf_calculator( );
 
 		// Aug 3, 2021
 		/*
@@ -83,6 +84,7 @@ namespace hack {
 		f32 m_old_velocity_z{ 0 };
 		i32 m_ladder_jump_tick{ 0 };
 		bool m_in_ladderjump{ false };
+		std::optional< math::v3f > m_pixelsurf_calculator_point{ };
 	};
 } // namespace hack
 

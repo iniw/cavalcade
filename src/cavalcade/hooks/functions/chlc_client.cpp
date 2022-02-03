@@ -26,6 +26,7 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 			g_hack.m_velgraph.draw( );
 			g_hack.m_indscreen.draw( );
 			g_hack.m_hitmarker.draw( );
+			g_hack.m_movement.pixelsurf_calculator( );
 		}
 	} );
 }

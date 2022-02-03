@@ -185,10 +185,14 @@ void hack::movement::ladderjump( ) {
 	}
 }
 
+void hack::movement::pixelsurf_calculator( ) { }
+
 void hack::movement::post( ) {
 	jumpbug( );
 	longjump( );
 	ladderjump( );
+
+	// if ( *( g_csgo.m_main_view_origin )[ 2 ] )
 	edgebug( );
 }
 
@@ -337,6 +341,7 @@ void hack::movement::edgebug_scale_mouse( f32& x ) {
 }
 
 void hack::movement::clear( ) {
+	m_pixelsurf_calculator_point     = std::nullopt;
 	m_jumpbugged                     = false;
 	m_longjumped                     = false;
 	m_edgebug.m_predicted            = false;

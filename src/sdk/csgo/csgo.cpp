@@ -77,6 +77,10 @@ bool sdk::csgo::init( ) {
 	if ( !m_prediction )
 		return false;
 
+	m_main_view_origin = g_mem[ ENGINE_DLL ].find_pattern( STB( "B9 ? ? ? ? 56 57 83 EC 08 F3 0F 58" ) ).add( 0x1 ).get< math::v3f* >( );
+	if ( !m_main_view_origin )
+		return false;
+
 	g_io.log( XOR( "initialized csgo" ) );
 
 	return true;
