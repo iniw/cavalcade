@@ -6,7 +6,6 @@ namespace sdk {
 	struct cvar {
 		enum idx
 		{
-			GET_NAME      = 5,
 			GET_FLOAT     = 12,
 			GET_INT       = 13,
 			SET_VALUE_STR = 14,
@@ -15,8 +14,6 @@ namespace sdk {
 		};
 
 		using change_callback_t = void( __cdecl* )( unk, cstr, f32 );
-
-		VFUNC( cstr, get_name, idx::GET_NAME, ( ) );
 
 		VFUNC( f32, get_float, idx::GET_FLOAT, ( ) );
 
@@ -35,7 +32,10 @@ namespace sdk {
 			return std::string( m_string );
 		}
 
-		PAD( 0x19 );
+		PAD( 9 );
+		const char* m_name;
+
+		PAD( 0x10 );
 		cvar* m_parent;
 		PAD( 0x4 );
 		const char* m_string;

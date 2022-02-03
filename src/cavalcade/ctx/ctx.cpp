@@ -7,16 +7,26 @@ namespace lua {
 	struct mem { };
 	struct render { };
 	struct ctx { };
+	struct vec2 {
+		constexpr vec2( ) = default;
+		constexpr vec2( f32 x, f32 y ) : x( x ), y( y ) { }
+		constexpr vec2( const vec2& v ) : x( v.x ), y( v.y ) { }
+		f32 x{ }, y{ };
+	};
 	struct vec {
 		constexpr vec( ) = default;
 		constexpr vec( f32 x, f32 y, f32 z ) : x( x ), y( y ), z( z ) { }
 		constexpr vec( const vec& v ) : x( v.x ), y( v.y ), z( v.z ) { }
 
-		constexpr vec operator+( const vec& v ) {
-			return vec( x + v.x, y + v.y, z + v.z );
-		}
-
 		f32 x{ }, y{ }, z{ };
+	};
+
+	struct bounds {
+		constexpr bounds( ) = default;
+		constexpr bounds( const vec& a, const vec& b ) : a( a ), b( b ) { }
+		constexpr bounds( const bounds& a ) : a( a.a ), b( a.b ) { }
+
+		vec a{ }, b{ };
 	};
 } // namespace lua
 
@@ -39,6 +49,8 @@ static auto pattern_to_bytes( std::string&& pattern ) {
 };
 
 void cavalcade::lua_impl::push( std::string_view code ) {
+	// std::unique_lock lock( m_mutex );
+
 	auto state = sol::state{ };
 	auto map   = std::unordered_map< std::string, std::vector< std::function< void( ) > > >{ };
 	// Initialize callbacks dictionary
@@ -68,7 +80,16 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 		};
 		state.script( XOR( "g_Memory = _Memory.new()" ) );
 	}
-
+	state.new_usertype< ::lua::vec2 >( XOR( "Vector2" ),
+	                                   sol::constructors< ::lua::vec2( ), ::lua::vec2( f32, f32 ), ::lua::vec2( const ::lua::vec2& ) >( ),
+	                                   XOR( "m_X" ), &::lua::vec2::x, XOR( "m_Y" ), &::lua::vec2::y );
+	state.new_usertype< ::lua::vec >( XOR( "Vector3" ),
+	                                  sol::constructors< ::lua::vec( ), ::lua::vec( f32, f32, f32 ), ::lua::vec( const ::lua::vec& ) >( ),
+	                                  XOR( "m_X" ), &::lua::vec::x, XOR( "m_Y" ), &::lua::vec::y, XOR( "m_Z" ), &::lua::vec::z );
+	state.new_usertype< ::lua::bounds >(
+		XOR( "Bounds" ),
+		sol::constructors< ::lua::bounds( ), ::lua::bounds( const ::lua::vec&, const ::lua::vec& ), ::lua::bounds( const ::lua::bounds& ) >( ),
+		XOR( "m_AA" ), &::lua::bounds::a, XOR( "m_BB" ), &::lua::bounds::b );
 	// Rendering
 	{
 		state.new_usertype< render::color >( XOR( "Color" ),
@@ -93,14 +114,18 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 		state[ XOR( "_Render" ) ][ XOR( "RectFilledForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, const render::color& clr ) {
 			g_render.m_safe.draw_shape_front< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), clr );
 		};
+		state[ XOR( "_Render" ) ][ XOR( "WorldToScreen" ) ] = [ & ]( ::lua::vec v ) {
+			math::v3f out{ };
+			if ( g_csgo.m_debug_overlay->screen_position( *( math::v3f* )&v, out ) )
+				return ::lua::vec2( 0, 0 );
+
+			return ::lua::vec2( out[ 0 ], out[ 1 ] );
+		};
 		state.script( XOR( "g_Render = _Render.new()" ) );
 	}
 
 	// Context
 	{
-		state.new_usertype< ::lua::vec >( XOR( "Vector3" ),
-		                                  sol::constructors< ::lua::vec( ), ::lua::vec( f32, f32, f32 ), ::lua::vec( const ::lua::vec& ) >( ),
-		                                  XOR( "m_X" ), &::lua::vec::x, XOR( "m_Y" ), &::lua::vec::y, XOR( "m_Z" ), &::lua::vec::z );
 		state.new_usertype< sdk::user_cmd >(
 			XOR( "UserCmd" ), XOR( "m_CommandNumber" ), &sdk::user_cmd::m_command_number, XOR( "m_TickCount" ), &sdk::user_cmd::m_tick_count,
 			XOR( "m_ViewAngles" ), ( ::lua::vec( sdk::user_cmd::* ) ) & sdk::user_cmd::m_view_angles, XOR( "m_AimDirection" ),
@@ -121,16 +146,53 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			&sdk::auxiliary::player_info_t::m_friends_name, XOR( "m_FakePlayer" ), &sdk::auxiliary::player_info_t::m_fake_player, XOR( "m_IsHltv" ),
 			&sdk::auxiliary::player_info_t::m_is_hltv, XOR( "m_CustomFiles" ), &sdk::auxiliary::player_info_t::m_custom_files,
 			XOR( "m_FilesDownloaded" ), &sdk::auxiliary::player_info_t::m_files_downloaded );
-		state.new_usertype< sdk::cs_player >( XOR( "CSPlayer" ), XOR( "IsAlive" ), &sdk::cs_player::is_alive, XOR( "GetEyePosition" ),
-		                                      [ & ]( sdk::cs_player& pl ) {
-												  auto vec = pl.get_eye_position( );
-												  return *( ::lua::vec* )&vec;
-											  } );
-		state.new_usertype< sdk::player >( XOR( "Player" ),
-		                                   sol::constructors< sdk::player( ), sdk::player( sdk::cs_player* ), sdk::player( const sdk::player& ) >( ),
-		                                   XOR( "GetRef" ), &sdk::player::get, XOR( "GetPlayerInfo" ), &sdk::player::get_player_info );
+		state.new_usertype< sdk::cs_player >(
+			XOR( "CSPlayer" ), XOR( "IsAlive" ), &sdk::cs_player::is_alive, XOR( "GetEyePosition" ),
+			[ & ]( sdk::cs_player& pl ) {
+				auto vec = pl.get_eye_position( );
+				return *( ::lua::vec* )&vec;
+			},
+			XOR( "GetMinsMaxs" ),
+			[ & ]( sdk::cs_player& pl ) {
+				math::v3f mins{ }, maxs{ };
+				if ( !pl.get_collideable( )->world_space_surrounding_bounds( &mins, &maxs ) )
+					return ::lua::bounds{ };
+				return ::lua::bounds( *( ::lua::vec* )&mins, *( ::lua::vec* )&maxs );
+			},
+			XOR( "GetVelocityModifier" ), &sdk::cs_player::get_velocity_modifier, XOR( "IsImmune" ), &sdk::cs_player::is_immune,
+			XOR( "IsPlayerGhost" ), &sdk::cs_player::is_player_ghost, XOR( "IsScoped" ), &sdk::cs_player::is_scoped, XOR( "HasHelmet" ),
+			&sdk::cs_player::has_helmet, XOR( "GetArmorValue" ), &sdk::cs_player::armor_value, XOR( "CanFireShot" ), &sdk::cs_player::can_fire_shot,
+			XOR( "IsEnemy" ), [ & ]( sdk::cs_player& p, sdk::player& rhs ) { return p.is_enemy( &rhs.get( ) ); } );
+		state.new_usertype< sdk::player >(
+			XOR( "Player" ), sol::constructors< sdk::player( ), sdk::player( sdk::cs_player* ), sdk::player( const sdk::player& ) >( ),
+			XOR( "IsValid" ), &sdk::player::valid, XOR( "GetRef" ), &sdk::player::get, XOR( "GetPlayerInfo" ), &sdk::player::get_player_info );
 		state.new_usertype< entity_cacher >( XOR( "_PlayerCache" ), XOR( "ForEach" ), &entity_cacher::for_each, XOR( "GetSize" ),
 		                                     []( const entity_cacher& c ) { return c.m_players.size( ); } );
+
+		state.new_usertype< sdk::cvar >(
+			XOR( "ConVar" ), XOR( "GetName" ), [ & ]( sdk::cvar& cv ) { return std::string_view{ cv.m_name }; }, XOR( "GetString" ),
+			[ & ]( sdk::cvar& cv ) {
+				auto str = cv.get_string( );
+				if ( str.has_value( ) ) {
+					return std::string_view{ str.value( ) };
+				} else {
+					return std::string_view{ "(none)" };
+				}
+			},
+			XOR( "GetFloat" ), &sdk::cvar::get_float, XOR( "GetInt" ), &sdk::cvar::get_int, XOR( "SetStr" ),
+			[ & ]( sdk::cvar& cv, std::string_view str ) { cv.set_value( str ); }, XOR( "SetFloat" ),
+			[ & ]( sdk::cvar& cv, f32 f ) { cv.set_value( f ); }, XOR( "SetInt" ), [ & ]( sdk::cvar& cv, i32 i ) { cv.set_value( i ); } );
+
+		state.new_usertype< sdk::interfaces::cvars >(
+			XOR( "_ConVars" ), XOR( "FindVar" ), [ & ]( sdk::interfaces::cvars& cv, std::string&& s ) { return cv.find_var( s ); },
+			XOR( "ConsolePrint" ),
+			[ & ]( sdk::interfaces::cvars& cv, std::string&& s ) {
+				cv.console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
+				cv.console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
+				cv.console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
+				cv.console_color_printf( render::color( 255, 255, 255, 255 ), ( s + "\n" ).c_str( ) );
+			} );
+		state.set( XOR( "g_ConVars" ), g_csgo.m_cvars );
 
 		// Global important variables
 		state.script( XOR( "g_Cmd = UserCmd.new()" ) );
@@ -354,6 +416,11 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 		sol::error err = load;
 		g_io.log( XOR( "{} {}" ), ( i32 )load.status( ), err.what( ) );
 		// alert...
+		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
+		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
+		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
+		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ),
+		                                      io::format( XOR( "Error status: {}, error: {}" ), ( i32 )load.status( ), err.what( ) ).c_str( ) );
 		return;
 	}
 

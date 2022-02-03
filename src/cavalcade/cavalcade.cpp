@@ -25,34 +25,32 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
 
 	g_lua.push( R"(
             local string = require('string')
+            local math = require('math')
 
             state = false
             addy = g_Memory.PatternScan('client.dll', '55 8B EC', '.text')
+            cvar = g_ConVars:FindVar('sv_cheats')
             local function hello()
                 if (state ~= true) then
-                    g_Debug.Print(string.format('%x', addy))
+                    g_ConVars:ConsolePrint(string.format('%x', addy))
+                    g_ConVars:ConsolePrint(string.format('%s %d', cvar:GetName(), cvar:GetInt()))
+                    cvar:SetInt(3)
+                    g_ConVars:ConsolePrint(string.format('%s %d', cvar:GetName(), cvar:GetInt()))
                     state = true
                 end
                 
                 g_Render.RectFilled(10, 10, 30, 30, Color.new(255, 0, 255, 255))
                 g_Render.RectFilled(10, 50, 30, 100, Color.new(0xffff00ff))
-                -- g_Debug.Print(string.format('%x', Color.new(255, 255, 0, 255):ToU32()))
-            end
-
-            local function player_stuff(player)
-                if (player:GetRef():IsAlive()) then
-                    --g_Debug.Print('Alive: ' .. player:GetPlayerInfo().m_Name)
-                else
-                    --g_Debug.Print('Dead: ' .. player:GetPlayerInfo().m_Name)
-                end
-
-                if (player == g_Local) then
-                    --g_Debug.Print('dis local!')
-                end
             end
 
             local function hello_again()
-                --g_PlayerCache:ForEach(function (player) player_stuff(player) end)
+                if (g_Local:IsValid() and g_Local:GetRef():IsAlive()) then
+                    g_PlayerCache.ForEach(function (player) 
+                        if (player:GetRef():IsEnemy(g_Local)) then
+                            g_ConVars:ConsolePrint(player.GetPlayerInfo().m_Name)
+                        end
+                    end)
+                end
             end
 
             local function create_move()

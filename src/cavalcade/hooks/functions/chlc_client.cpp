@@ -5,6 +5,8 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 	og( ecx, stage );
 
 	g_render.m_safe.frame( [ & ]( ) {
+		// std::unique_lock lock( g_lua.m_mutex );
+
 		for ( auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 			state[ "g_FrameStage" ] = ( i32 )stage;
 			for ( const auto& callback : callbacks[ "FrameStageNotify" ] ) {
@@ -40,6 +42,9 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	g_hack.m_indscreen.clear( );
 	g_hack.m_hitmarker.clear( );
 	g_hack.m_movement.clear( );
+
+	// std::unique_lock lock( g_lua.m_mutex );
+
 	for ( auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 		state.set( XOR( "g_Cmd" ), sol::lua_nil );
 	}
