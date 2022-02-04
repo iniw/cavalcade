@@ -40,15 +40,16 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 		state.set( XOR( "g_Cmd" ), g_ctx.m_cmd );
 		for ( const auto& callback : callbacks[ XOR( "CreateMove" ) ] ) {
 			if ( callback.valid( ) ) {
-				callback( );
-			} else {
-				sol::error err = callback( );
-				g_io.log( XOR( "{}" ), err.what( ) );
-				// alert...
-				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
-				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
-				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), io::format( XOR( "Error: {}" ), err.what( ) ).c_str( ) );
+				sol::protected_function_result result = callback( );
+
+				if ( !result.valid( ) ) {
+					sol::error err = result;
+					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
+					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
+					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
+					g_csgo.m_cvars->console_color_printf( render::color( 255, 0, 0, 255 ), XOR( "ERROR: " ) );
+					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), io::format( XOR( "{}\n" ), err.what( ) ).c_str( ) );
+				}
 			}
 		}
 	}

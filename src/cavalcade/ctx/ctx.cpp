@@ -28,40 +28,6 @@ namespace lua {
 	};
 } // namespace lua
 
-int my_exception_handler( lua_State* L, sol::optional< const std::exception& > maybe_exception, sol::string_view description ) {
-	// L is the lua state, which you can wrap in a state_view if necessary
-	// maybe_exception will contain exception, if it exists
-	// description will either be the what() of the exception or a description saying that we hit the general-case catch(...)
-	if ( maybe_exception ) {
-		const std::exception& ex = *maybe_exception;
-		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
-		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
-		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ),
-		                                      io::format( XOR( "(straight from the exception): {}\n" ), ex.what( ) ).c_str( ) );
-	} else {
-		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
-		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
-		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ),
-		                                      io::format( XOR( "(from the description parameter): {}\n" ), description.data( ) ).c_str( ) );
-	}
-
-	// you must push 1 element onto the stack to be
-	// transported through as the error object in Lua
-	// note that Lua -- and 99.5% of all Lua users and libraries -- expects a string
-	// so we push a single string (in our case, the description of the error)
-	return sol::stack::push( L, description );
-}
-
-inline void my_panic( sol::optional< std::string > maybe_msg ) {
-	if ( maybe_msg ) {
-		const std::string& msg = maybe_msg.value( );
-		std::cerr << "\terror message: " << msg << std::endl;
-	}
-	// When this function exits, Lua will exhibit default behavior and abort()
-}
-
 static auto pattern_to_bytes( std::string&& pattern ) {
 	auto bytes = std::vector< int >{ };
 	auto start = const_cast< char* >( pattern.data( ) );
@@ -95,7 +61,6 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 
 	state.open_libraries( sol::lib::base, sol::lib::package, sol::lib::string, sol::lib::math, sol::lib::bit32, sol::lib::os, sol::lib::jit,
 	                      sol::lib::ffi );
-	state.set_exception_handler( &my_exception_handler );
 
 // Initialize Lua locals
 #ifdef _DEBUG
@@ -248,7 +213,7 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 				cv.console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
 				cv.console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
 				cv.console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
-				cv.console_color_printf( render::color( 255, 255, 255, 255 ), ( s + "\n" ).c_str( ) );
+				cv.console_color_printf( render::color( 255, 255, 255, 255 ), ( s + XOR( "\n" ) ).c_str( ) );
 			} );
 
 		state.new_usertype< sdk::auxiliary::c_hud_chat >( XOR( "HudChat" ), XOR( "Print" ), [ & ]( sdk::auxiliary::c_hud_chat& h, std::string&& s ) {
@@ -575,8 +540,8 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
 		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
 		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
-		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ),
-		                                      io::format( XOR( "Error status: {}, error: {}" ), ( i32 )load.status( ), err.what( ) ).c_str( ) );
+		g_csgo.m_cvars->console_color_printf( render::color( 255, 0, 0, 255 ), XOR( "ERROR: " ) );
+		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), io::format( XOR( "{}\n" ), err.what( ) ).c_str( ) );
 		return;
 	}
 

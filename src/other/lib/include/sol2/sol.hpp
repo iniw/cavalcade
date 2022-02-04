@@ -242,6 +242,7 @@
 	#define SOL_DEBUG_BUILD_I_ SOL_DEFAULT_OFF
 #endif // We are in a debug mode of some sort
 
+#define SOL_NO_EXCEPTIONS 0
 #if defined(SOL_NO_EXCEPTIONS)
 	#if (SOL_NO_EXCEPTIONS != 0)
 		#define SOL_EXCEPTIONS_I_ SOL_OFF
@@ -250,7 +251,6 @@
 	#endif
 #elif SOL_IS_ON(SOL_COMPILER_VCXX_I_)
 
-		#define SOL_EXCEPTIONS_I_ SOL_ON
 #elif SOL_IS_ON(SOL_COMPILER_CLANG_I_) || SOL_IS_ON(SOL_COMPILER_GCC_I_)
 	#if !defined(__EXCEPTIONS)
 		#define SOL_EXCEPTIONS_I_ SOL_OFF
