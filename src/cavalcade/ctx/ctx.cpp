@@ -82,16 +82,22 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 		};
 		state.script( XOR( "g_Memory = _Memory.new()" ) );
 	}
+
 	state.new_usertype< ::lua::vec2 >( XOR( "Vector2" ),
 	                                   sol::constructors< ::lua::vec2( ), ::lua::vec2( f32, f32 ), ::lua::vec2( const ::lua::vec2& ) >( ),
 	                                   XOR( "m_X" ), &::lua::vec2::x, XOR( "m_Y" ), &::lua::vec2::y );
 	state.new_usertype< ::lua::vec >( XOR( "Vector3" ),
 	                                  sol::constructors< ::lua::vec( ), ::lua::vec( f32, f32, f32 ), ::lua::vec( const ::lua::vec& ) >( ),
 	                                  XOR( "m_X" ), &::lua::vec::x, XOR( "m_Y" ), &::lua::vec::y, XOR( "m_Z" ), &::lua::vec::z );
+	state.new_usertype< sdk::vec3 >(
+		XOR( "Vector3Aligned" ),
+		sol::constructors< sdk::vec3( ), sdk::vec3( f32, f32, f32 ), sdk::vec3( const sdk::vec3& ), sdk::vec3( const math::v3f& ) >( ), XOR( "m_X" ),
+		&sdk::vec3::x, XOR( "m_Y" ), &sdk::vec3::y, XOR( "m_Z" ), &sdk::vec3::z );
 	state.new_usertype< ::lua::bounds >(
 		XOR( "Bounds" ),
 		sol::constructors< ::lua::bounds( ), ::lua::bounds( const ::lua::vec&, const ::lua::vec& ), ::lua::bounds( const ::lua::bounds& ) >( ),
 		XOR( "m_Mins" ), &::lua::bounds::a, XOR( "m_Maxs" ), &::lua::bounds::b );
+
 	// Rendering
 	{
 		state.new_usertype< render::color >( XOR( "Color" ),
@@ -154,18 +160,28 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			&sdk::auxiliary::player_info_t::m_friends_name, XOR( "m_FakePlayer" ), &sdk::auxiliary::player_info_t::m_fake_player, XOR( "m_IsHltv" ),
 			&sdk::auxiliary::player_info_t::m_is_hltv, XOR( "m_CustomFiles" ), &sdk::auxiliary::player_info_t::m_custom_files,
 			XOR( "m_FilesDownloaded" ), &sdk::auxiliary::player_info_t::m_files_downloaded );
+		state.new_usertype< sdk::base_entity >(
+			XOR( "Entity" ), XOR( "GetMinsMaxs" ),
+			[ & ]( sdk::base_entity& pl ) {
+				math::v3f mins{ }, maxs{ };
+				if ( !pl.get_collideable( )->world_space_surrounding_bounds( &mins, &maxs ) )
+					return ::lua::bounds{ };
+				return ::lua::bounds( *( ::lua::vec* )&mins, *( ::lua::vec* )&maxs );
+			},
+			XOR( "GetOrigin" ),
+			[ & ]( sdk::base_entity& p ) {
+				auto what = p.get_origin( );
+				return *( ::lua::vec* )&what;
+			},
+			XOR( "GetSimTime" ), [ & ]( sdk::base_entity& p ) { return p.get_sim_time( ); }, XOR( "GetEffects" ),
+			[ & ]( sdk::base_entity& p ) { return p.get_effects( ); }, XOR( "IsPlayer" ), [ & ]( sdk::base_entity& p ) { return p.is_player( ); },
+			XOR( "IsWeapon" ), [ & ]( sdk::base_entity& p ) { return p.is_weapon( ); }, XOR( "GetClassName" ),
+			[ & ]( sdk::base_entity& p ) { return std::string{ p.get_class_name( ) }; } );
 		state.new_usertype< sdk::cs_player >(
 			XOR( "CSPlayer" ), XOR( "IsAlive" ), &sdk::cs_player::is_alive, XOR( "GetEyePosition" ),
 			[ & ]( sdk::cs_player& pl ) {
 				auto vec = pl.get_eye_position( );
 				return *( ::lua::vec* )&vec;
-			},
-			XOR( "GetMinsMaxs" ),
-			[ & ]( sdk::cs_player& pl ) {
-				math::v3f mins{ }, maxs{ };
-				if ( !pl.get_collideable( )->world_space_surrounding_bounds( &mins, &maxs ) )
-					return ::lua::bounds{ };
-				return ::lua::bounds( *( ::lua::vec* )&mins, *( ::lua::vec* )&maxs );
 			},
 			XOR( "GetVelocityModifier" ), &sdk::cs_player::get_velocity_modifier, XOR( "IsImmune" ), &sdk::cs_player::is_immune,
 			XOR( "IsPlayerGhost" ), &sdk::cs_player::is_player_ghost, XOR( "IsScoped" ), &sdk::cs_player::is_scoped, XOR( "HasHelmet" ),
@@ -187,25 +203,22 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			},
 			XOR( "GetMoveType" ), [ & ]( sdk::cs_player& p ) { return ( i32 )p.get_move_type( ); }, XOR( "GetEFlags" ),
 			[ & ]( sdk::cs_player& p ) { return p.get_eflags( ); }, XOR( "GetLifestate" ), [ & ]( sdk::cs_player& p ) { return p.get_lifestate( ); },
-			XOR( "GetOrigin" ),
-			[ & ]( sdk::cs_player& p ) {
-				auto what = p.get_origin( );
-				return *( ::lua::vec* )&what;
-			},
-			XOR( "GetSimTime" ), [ & ]( sdk::cs_player& p ) { return p.get_sim_time( ); }, XOR( "GetEffects" ),
-			[ & ]( sdk::cs_player& p ) { return p.get_effects( ); }, XOR( "GetTeam" ), [ & ]( sdk::cs_player& p ) { return p.get_team( ); } );
+			XOR( "GetTeam" ), [ & ]( sdk::cs_player& p ) { return p.get_team( ); }, XOR( "GetClassName" ),
+			[ & ]( sdk::base_entity& p ) { return std::string{ p.get_class_name( ) }; }, sol::base_classes, sol::bases< sdk::base_entity >( ) );
 		state.new_usertype< sdk::player >(
 			XOR( "Player" ), sol::constructors< sdk::player( ), sdk::player( sdk::cs_player* ), sdk::player( const sdk::player& ) >( ),
 			XOR( "IsValid" ), &sdk::player::valid, XOR( "GetRef" ), &sdk::player::get, XOR( "GetPlayerInfo" ), &sdk::player::get_player_info );
 		state.new_usertype< entity_cacher >( XOR( "_PlayerCache" ), XOR( "ForEach" ), &entity_cacher::for_each, XOR( "GetSize" ),
 		                                     []( const entity_cacher& c ) { return c.m_players.size( ); } );
 
+		// Cvar
 		state.new_usertype< sdk::cvar >(
 			XOR( "ConVar" ), XOR( "GetName" ), [ & ]( sdk::cvar& cv ) { return std::string_view{ cv.m_name }; }, XOR( "GetString" ),
 			[ & ]( sdk::cvar& cv ) { return cv.get_string( ); }, XOR( "GetFloat" ), &sdk::cvar::get_float, XOR( "GetInt" ), &sdk::cvar::get_int,
 			XOR( "SetString" ), [ & ]( sdk::cvar& cv, std::string_view str ) { cv.set_value( str ); }, XOR( "SetFloat" ),
 			[ & ]( sdk::cvar& cv, f32 f ) { cv.set_value( f ); }, XOR( "SetInt" ), [ & ]( sdk::cvar& cv, i32 i ) { cv.set_value( i ); } );
 
+		// Cvars
 		state.new_usertype< sdk::interfaces::cvars >(
 			XOR( "_ConVars" ), XOR( "FindVar" ), [ & ]( sdk::interfaces::cvars& cv, std::string&& s ) { return cv.find_var( s ); },
 			XOR( "ConsolePrint" ),
@@ -216,10 +229,13 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 				cv.console_color_printf( render::color( 255, 255, 255, 255 ), ( s + XOR( "\n" ) ).c_str( ) );
 			} );
 
+		// Cms
 		state.new_usertype< sdk::auxiliary::c_hud_chat >( XOR( "HudChat" ), XOR( "Print" ), [ & ]( sdk::auxiliary::c_hud_chat& h, std::string&& s ) {
 			h.chat_printf( 0, 0, io::format( XOR( "<<<NO_TRANSLATE>>> {}" ), std::move( s ) ).c_str( ) );
 		} );
 		state.new_usertype< sdk::client_mode_shared >( XOR( "_ClientModeShared" ), XOR( "m_ChatElement" ), &sdk::client_mode_shared::m_chat_element );
+
+		// Globals
 		state.new_usertype< sdk::globals >(
 			XOR( "_Globals" ), XOR( "m_RealTime" ), &sdk::globals::m_realtime, XOR( "m_FrameCount" ), &sdk::globals::m_framecount,
 			XOR( "m_AbsoluteFrameTime" ), &sdk::globals::m_absoluteframetime, XOR( "m_AbsoluteFrameStartTime" ),
@@ -227,6 +243,29 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			XOR( "m_MaxClients" ), &sdk::globals::m_max_clients, XOR( "m_TickCount" ), &sdk::globals::m_tickcount, XOR( "m_IntervalPerTick" ),
 			&sdk::globals::m_interval_per_tick, XOR( "m_InterpolationAmount" ), &sdk::globals::m_interpolation_amount, XOR( "m_SimTicksThisFrame" ),
 			&sdk::globals::m_sim_ticks_this_frame );
+
+		// Engine Trace
+		state.new_usertype< sdk::ray >(
+			XOR( "Ray" ),
+			sol::constructors< sdk::ray( ), sdk::ray( const math::v3f&, const math::v3f& ),
+		                       sdk::ray( const math::v3f&, const math::v3f&, const math::v3f&, const math::v3f& ), sdk::ray( const sdk::ray& ) >( ),
+			XOR( "m_Start" ), &sdk::ray::m_start, XOR( "m_Delta" ), &sdk::ray::m_delta, XOR( "m_StartOffset" ), &sdk::ray::m_start_offset,
+			XOR( "m_Extents" ), &sdk::ray::m_extents, XOR( "m_IsRay" ), &sdk::ray::m_is_ray, XOR( "m_IsSwept" ), &sdk::ray::m_is_swept );
+		state.new_usertype< sdk::trace_filter >(
+			XOR( "TraceFilter" ),
+			sol::constructors< sdk::trace_filter( ), sdk::trace_filter( sdk::cs_player* ), sdk::trace_filter( const sdk::trace_filter& ) >( ),
+			XOR( "m_Skip" ), &sdk::trace_filter::m_skip );
+		state.new_usertype< sdk::trace::plane >( XOR( "TracePlane" ), XOR( "m_Normal" ), &sdk::trace::plane::m_normal, XOR( "m_Dist" ),
+		                                         &sdk::trace::plane::m_dist, XOR( "m_Type" ), &sdk::trace::plane::m_type, XOR( "m_SignBits" ),
+		                                         &sdk::trace::plane::m_signbits );
+		state.new_usertype< sdk::trace::surface >( XOR( "TraceSurface" ), XOR( "m_Name" ), &sdk::trace::surface::m_name, XOR( "m_SurfaceProps" ),
+		                                           &sdk::trace::surface::m_surface_props, XOR( "m_Flags" ), &sdk::trace::surface::m_flags );
+		state.new_usertype< sdk::trace >( XOR( "Trace" ), XOR( "m_Start" ), &sdk::trace::m_start, XOR( "m_End" ), &sdk::trace::m_end,
+		                                  XOR( "m_Plane" ), &sdk::trace::m_plane, XOR( "m_Fraction" ), &sdk::trace::m_fraction, XOR( "m_Contents" ),
+		                                  &sdk::trace::m_contents, XOR( "m_DispFlags" ), &sdk::trace::m_disp_flags, XOR( "m_AllSolid" ),
+		                                  &sdk::trace::m_all_solid, XOR( "m_StartSolid" ), &sdk::trace::m_start_solid, XOR( "m_Surface" ),
+		                                  &sdk::trace::m_surface, XOR( "m_Hitgroup" ), &sdk::trace::m_hitgroup, XOR( "m_Entity" ),
+		                                  &sdk::trace::m_entity, XOR( "m_Hitbox" ), &sdk::trace::m_hitbox );
 
 		// Global important variables
 		state.script( XOR( "g_Cmd = UserCmd.new()" ) );

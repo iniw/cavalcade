@@ -4,6 +4,7 @@
 set(OPTIONS_GENERAL 
 
     /MP
+    /bigobj
 
 )
     
@@ -38,6 +39,13 @@ set(OPTIONS_RELEASE
 )
 
 # --- linker options ---
+
+set(LINKER_OPTIONS_DEBUG
+
+    /debug
+    /INCREMENTAL
+
+)
 
 set(LINKER_OPTIONS_RELWITHDEBINFO 
 

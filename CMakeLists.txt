@@ -43,6 +43,7 @@ target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE
     "$<$<CONFIG:Debug>:${OPTIONS_DEBUG}>")
 
 target_link_options(${CMAKE_PROJECT_NAME} PRIVATE 
+    "$<$<CONFIG:Debug>:${LINKER_OPTIONS_DEBUG}>" 
     "$<$<CONFIG:RelWithDebInfo>:${LINKER_OPTIONS_RELWITHDEBINFO}>" 
     "$<$<CONFIG:Release>:${LINKER_OPTIONS_RELEASE}>")
 

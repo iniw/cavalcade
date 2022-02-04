@@ -10,9 +10,11 @@ namespace sdk {
 } // namespace sdk
 
 namespace sdk {
-	struct vec3 {
+	__declspec( align( 16 ) ) struct vec3 {
 		vec3( ) = default;
+		vec3( f32 x, f32 y, f32 z ) : x( x ), y( y ), z( z ) { }
 		vec3( const math::v3f& v ) : x( v[ 0 ] ), y( v[ 1 ] ), z( v[ 2 ] ) { }
+		vec3( const vec3& v ) : x( v.x ), y( v.y ), z( v.z ) { }
 
 		f32 x;
 		f32 y;
@@ -22,6 +24,8 @@ namespace sdk {
 	};
 
 	struct ray {
+		ray( ) = default;
+
 		ray( const math::v3f& src, const math::v3f& dest ) : m_start( src ), m_delta( dest - src ) {
 			m_is_swept = m_delta.x || m_delta.y || m_delta.z;
 

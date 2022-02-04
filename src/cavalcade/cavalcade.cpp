@@ -46,40 +46,36 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
 
                 --g_Render.RectFilled(10, 10, 30, 30, Color.new(255, 0, 255, 255))
                 --g_Render.RectFilled(10, 50, 30, 100, Color.new(0xffff00ff))
-                g_Render.Text(10, 10, 'Hello World ' .. stage .. ' ' .. g_Globals.m_CurTime, Fonts.MENU, Color.new(0xffffffff))
+                --g_Render.Text(10, 10, 'Hello World ' .. stage .. ' ' .. g_Globals.m_CurTime, Fonts.MENU, Color.new(0xffffffff))
             end
 
             local function hello_again(stage)
                 if (g_Local:IsValid() and g_Local:GetRef():IsAlive()) then
                     g_PlayerCache:ForEach(function (player) 
                         if (player:GetRef():IsEnemy(g_Local)) then
-                            team_str = ''
-                            if (player:GetRef():GetTeam() == Teams.TERRORIST) then
-                                team_str = 'Terrorist'
-                            else 
-                                team_str = 'Counter-Terrorist'
-                            end
-                            g_ConVars:ConsolePrint(string.format('-- %s %d %d %s', player:GetPlayerInfo().m_Name, player:GetRef():GetHealth(), player:GetRef():GetMoveType(), team_str))
+                    
+                            g_ConVars:ConsolePrint(string.format('-- %f %f %f', player:GetRef():GetOrigin().m_X,player:GetRef():GetOrigin().m_Y, player:GetRef():GetOrigin().m_Z))
                         end
                     end)
 
-                    g_ClientModeShared.m_ChatElement:Print('Hello World ' .. g_Globals.m_CurTime)
+                    --g_ClientModeShared.m_ChatElement:Print('Hello World ' .. g_Globals.m_CurTime)
                 end
             end
 
             local function create_move(cmd)
-               if (g_Cmd ~= nil) then
-                    vec = Vector3.new(g_Cmd.m_ViewAngles)
-                    g_Debug.Print('x: ' .. vec.m_X .. ' y ' .. vec.m_Y .. ' z ' .. vec.m_Z)
-                    g_Cmd.m_ViewAngles.m_X = 57.0
-                else
-                    g_Debug.Print('is nil')
-                end
+               --if (cmd ~= nil) then
+               --     vec = Vector3.new(g_Cmd.m_ViewAngles)
+               --     g_Debug.Print('x: ' .. vec.m_X .. ' y ' .. vec.m_Y .. ' z ' .. vec.m_Z)
+               --     cmd.m_ViewAngles.m_X = 57.0
+               -- else
+               --     g_Debug.Print('is nil')
+               -- end
             end
 
             g_Ctx.PushCallback('FrameStageNotify', hello)
             g_Ctx.PushCallback('FrameStageNotify', hello_again)
             g_Ctx.PushCallback('CreateMove', create_move)
+            --g_Ctx.PushCallback('CreateMove', function() g_ConVars:ConsolePrint('hi') end)
             g_Ctx.PushCallback('LevelInitPreEntity', function (map)
                 g_ConVars:ConsolePrint(string.format('%s %s %s', g_Ctx.GetMapName(), map, g_Ctx.GetSkyName()))
             end)
@@ -91,7 +87,6 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
                     g_ConVars:ConsolePrint('nil')
                 end
             end)
-           -- g_Ctx.PushCallback('CreateMove', create_move)
         )" );
 
 #ifdef _DEBUG
