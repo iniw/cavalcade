@@ -11,7 +11,7 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 			state[ "g_FrameStage" ] = ( i32 )stage;
 			for ( const auto& callback : callbacks[ XOR( "FrameStageNotify" ) ] ) {
 				if ( callback.valid( ) ) {
-					sol::protected_function_result result = callback( );
+					sol::protected_function_result result = callback( stage );
 
 					if ( !result.valid( ) ) {
 						sol::error err = result;
@@ -60,7 +60,7 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	for ( const auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 		for ( const auto& callback : callbacks.at( XOR( "LevelInitPreEntity" ) ) ) {
 			if ( callback.valid( ) ) {
-				sol::protected_function_result result = callback( );
+				sol::protected_function_result result = callback( std::string{ name } );
 
 				if ( !result.valid( ) ) {
 					sol::error err = result;

@@ -27,7 +27,7 @@ void gui::impl::init( ) {
 		gb->add< objects::slider< i32 > >( XOR( "edgebug scaling" ), XOR( "edgebug scaling" ), 0, 100 );
 		/* NOTE: default value: 32 */
 		gb->add< objects::slider< i32 > >( XOR( "edgebug radius" ), XOR( "edgebug radius" ), 0, 128 );
-		/* NOTE: default value: 0.4 */
+		/* NOTE: default value: 0.0 */
 		gb->add< objects::slider< f32 > >( XOR( "edgebug margin of error" ), XOR( "edgebug margin of error" ), 0.F, 1.F );
 		gb->add< objects::checkbox >( XOR( "on attack" ), XOR( "on attack" ) );
 		gb->add< objects::slider< i32 > >( XOR( "fov" ), XOR( "fov" ), 0, 180 );

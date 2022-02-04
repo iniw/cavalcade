@@ -40,7 +40,7 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 		state.set( XOR( "g_Cmd" ), g_ctx.m_cmd );
 		for ( const auto& callback : callbacks[ XOR( "CreateMove" ) ] ) {
 			if ( callback.valid( ) ) {
-				sol::protected_function_result result = callback( );
+				sol::protected_function_result result = callback( cmd );
 
 				if ( !result.valid( ) ) {
 					sol::error err = result;
