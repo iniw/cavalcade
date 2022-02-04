@@ -11,7 +11,8 @@ void gui::impl::init( ) {
 		gb->add< objects::checkbox >( XOR( "trainer" ), XOR( "trainer" ) );
 		gb->add< objects::checkbox >( XOR( "graph" ), XOR( "graph" ) );
 		gb->add< objects::slider< i32 > >( XOR( "graph size" ), XOR( "graph size" ), 10, 200 );
-		gb->add< objects::slider< f32 > >( XOR( "graph scale" ), XOR( "graph scale" ), 1.F, 4.5F );
+		gb->add< objects::slider< f32 > >( XOR( "graph width scale" ), XOR( "graph width scale" ), 1.F, 4.5F );
+		gb->add< objects::slider< f32 > >( XOR( "graph height scale" ), XOR( "graph height scale" ), 0.F, 1.F );
 		gb->add< objects::checkbox >( XOR( "velocity ind" ), XOR( "velocity ind" ) );
 		gb->add< objects::checkbox >( XOR( "binds ind" ), XOR( "binds ind" ) );
 		gb->add< objects::checkbox >( XOR( "wasd ind" ), XOR( "wasd ind" ) );

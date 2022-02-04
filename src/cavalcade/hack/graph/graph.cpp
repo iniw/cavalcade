@@ -24,9 +24,10 @@ void hack::graph::gather( ) {
 }
 
 void hack::graph::draw( ) {
-	static auto& g   = gui::cfg::get< bool >( HASH_CT( "main:group1:graph" ) );
-	static auto& gs  = gui::cfg::get< i32 >( HASH_CT( "main:group1:graph size" ) );
-	static auto& gsc = gui::cfg::get< f32 >( HASH_CT( "main:group1:graph scale" ) );
+	static auto& g    = gui::cfg::get< bool >( HASH_CT( "main:group1:graph" ) );
+	static auto& gs   = gui::cfg::get< i32 >( HASH_CT( "main:group1:graph size" ) );
+	static auto& gsc  = gui::cfg::get< f32 >( HASH_CT( "main:group1:graph width scale" ) );
+	static auto& gsch = gui::cfg::get< f32 >( HASH_CT( "main:group1:graph height scale" ) );
 
 	if ( !g ) {
 		m_data.clear( );
@@ -61,8 +62,8 @@ void hack::graph::draw( ) {
 
 		auto alpha = std::max( 10, std::min( 255, c.m_speed + 5 ) ) * .75F;
 
-		g_render.m_safe.draw_shape< render::geometry::line >( render::point{ pos[ 0 ] - ( i - 1 ) * gsc, pos[ 1 ] - c.m_speed },
-		                                                      render::point{ pos[ 0 ] - i * gsc, pos[ 1 ] - n.m_speed },
+		g_render.m_safe.draw_shape< render::geometry::line >( render::point{ pos[ 0 ] - ( i - 1 ) * gsc, pos[ 1 ] - ( c.m_speed * gsch ) },
+		                                                      render::point{ pos[ 0 ] - i * gsc, pos[ 1 ] - ( n.m_speed * gsch ) },
 		                                                      render::color( 255, 255, 255, alpha ), 1.F );
 	}
 }
@@ -72,9 +73,10 @@ void hack::graph::clear( ) {
 }
 
 i32 hack::graph::get_upmost_y_scenario( ) {
-	static auto& g   = gui::cfg::get< bool >( HASH_CT( "main:group1:graph" ) );
-	static auto& gs  = gui::cfg::get< i32 >( HASH_CT( "main:group1:graph size" ) );
-	static auto& gsc = gui::cfg::get< f32 >( HASH_CT( "main:group1:graph scale" ) );
+	static auto& g    = gui::cfg::get< bool >( HASH_CT( "main:group1:graph" ) );
+	static auto& gs   = gui::cfg::get< i32 >( HASH_CT( "main:group1:graph size" ) );
+	static auto& gsc  = gui::cfg::get< f32 >( HASH_CT( "main:group1:graph width scale" ) );
+	static auto& gsch = gui::cfg::get< f32 >( HASH_CT( "main:group1:graph height scale" ) );
 
 	if ( !g )
 		return get_bottommost_y_scenario( );
@@ -84,7 +86,7 @@ i32 hack::graph::get_upmost_y_scenario( ) {
 
 	auto ss  = g_render.get_screen_size( );
 	auto pad = ceil( ss[ 1 ] * .12F );
-	return ( ss[ 1 ] / 1.2F + pad ) - 250;
+	return ( ss[ 1 ] / 1.2F + pad ) - ( 250 * gsch );
 }
 
 i32 hack::graph::get_bottommost_y_scenario( ) {
