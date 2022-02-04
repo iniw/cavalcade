@@ -21,6 +21,7 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 			return;
 
 		g_hack.m_esp.run( );
+		g_hack.m_fog.run( );
 
 		if ( !g_ctx.m_in_deathcam && g_ctx.m_local.get( ).is_alive( ) ) {
 			g_hack.m_velgraph.draw( );
@@ -36,6 +37,7 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 
 	// NOTE(para): it's particularly important for this to be here, before og
 	g_hack.m_nightmode.clear( );
+	g_hack.m_fog.reset( );
 
 	static auto og = g_mem[ CLIENT_DLL ].get_og< level_init_pre_entity_fn >( HASH_CT( "CHLClient::LevelInitPreEntity" ) );
 	og( name );

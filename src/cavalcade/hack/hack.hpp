@@ -10,6 +10,7 @@
 #include "nightmode/nightmode.hpp"
 #include "movement/movement.hpp"
 #include "hitmarker/hitmarker.hpp"
+#include "fog/fog.hpp"
 
 namespace hack {
 	struct impl {
@@ -23,6 +24,7 @@ namespace hack {
 		nightmode m_nightmode;
 		movement m_movement;
 		hitmarker m_hitmarker;
+		fog m_fog;
 	};
 } // namespace hack
 

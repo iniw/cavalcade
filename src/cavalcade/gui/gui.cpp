@@ -20,6 +20,9 @@ void gui::impl::init( ) {
 		gb->add< objects::checkbox >( XOR( "crouch after ladderjump" ), XOR( "crouch after ladderjump" ) );
 		gb->add< objects::checkbox >( XOR( "nightmode" ), XOR( "nightmode" ) );
 		gb->add< objects::slider< i32 > >( XOR( "factor" ), XOR( "factor" ), 0, 100 );
+		gb->add< objects::checkbox >( XOR( "fog" ), XOR( "fog" ) );
+		gb->add< objects::slider< f32 > >( XOR( "fog end" ), XOR( "fog end" ), 0.F, 1.F );
+		gb->add< objects::slider< f32 > >( XOR( "fog density" ), XOR( "fog density" ), 0.F, 1.F );
 		gb->add< objects::slider< i32 > >( XOR( "edgebug scaling" ), XOR( "edgebug scaling" ), 0, 100 );
 		/* NOTE: default value: 32 */
 		gb->add< objects::slider< i32 > >( XOR( "edgebug radius" ), XOR( "edgebug radius" ), 0, 128 );

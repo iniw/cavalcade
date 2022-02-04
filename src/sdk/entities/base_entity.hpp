@@ -44,6 +44,18 @@ namespace sdk {
 
 		DATAFIELD( math::matrix_3x4, get_coordinate_frame, "m_rgflCoordinateFrame" );
 
+		NETVAR( bool, fog_enabled, "DT_FogController->m_fog.enable" );
+
+		NETVAR( f32, fog_start, "DT_FogController->m_fog.start" );
+
+		NETVAR( f32, fog_end, "DT_FogController->m_fog.end" );
+
+		NETVAR( f32, fog_max_density, "DT_FogController->m_fog.maxdensity" );
+
+		NETVAR( render::color, fog_color_primary, "DT_FogController->m_fog.colorPrimary" );
+
+		NETVAR( render::color, fog_color_secondary, "DT_FogController->m_fog.colorSecondary" );
+
 		auto physics_run_think( i32 think_method = 0 ) {
 			static auto function = g_mem[ CLIENT_DLL ].get_address< bool( __thiscall* )( void*, i32 ) >( HASH_CT( "C_BaseEntity::PhysicsRunThink" ) );
 

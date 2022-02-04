@@ -7,7 +7,8 @@ namespace sdk::interfaces {
 		enum idx
 		{
 			GET_ENTITY             = 3,
-			GET_ENTITY_FROM_HANDLE = 4
+			GET_ENTITY_FROM_HANDLE = 4,
+			GET_HIGHEST_ENT_INDEX  = 6
 		};
 
 		VFUNC( client_entity*, get_entity, idx::GET_ENTITY, ( i32 idx ), idx );
@@ -15,6 +16,8 @@ namespace sdk::interfaces {
 		VFUNC( client_entity*, get_entity_from_handle, idx::GET_ENTITY_FROM_HANDLE, ( const handle& handle ), handle );
 
 	public:
+
+		VFUNC( i32, get_highest_entity_index, idx::GET_HIGHEST_ENT_INDEX, ( ) );
 
 		template< typename T = base_entity* >
 		T get( i32 idx ) {
