@@ -52,9 +52,18 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
             local function hello_again(stage)
                 if (g_Local:IsValid() and g_Local:GetRef():IsAlive()) then
                     g_PlayerCache:ForEach(function (player) 
-                        if (player:GetRef():IsEnemy(g_Local)) then
-                    
-                            g_ConVars:ConsolePrint(string.format('-- %f %f %f', player:GetRef():GetOrigin().m_X,player:GetRef():GetOrigin().m_Y, player:GetRef():GetOrigin().m_Z))
+                        if (player:GetRef():IsAlive() and player:GetRef():IsDormant() ~= true and player:GetRef():IsEnemy(g_Local)) then
+                            local_eye_pos = g_Local:GetRef():GetEyePosition()
+                            enemy_head_pos = player:GetRef():GetHitboxPosition(Hitboxes.HEAD)
+
+                            g_ConVars:ConsolePrint('Head pos x ' .. enemy_head_pos.m_X .. ' y ' .. enemy_head_pos.m_Y .. ' z ' .. enemy_head_pos.m_Z)
+                            
+                            trace = g_EngineTrace:TraceRay(Ray.new(local_eye_pos, enemy_head_pos), 0x46004009, TraceFilter.new(g_Local:GetRef()))
+                            
+                            -- if head visible
+                            if (trace.m_Entity == player:GetRef() or trace.m_Fraction > 0.97) then
+                                g_ConVars:ConsolePrint('Player ' .. player:GetPlayerInfo().m_Name .. ' is visible')
+                            end
                         end
                     end)
 

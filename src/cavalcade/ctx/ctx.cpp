@@ -160,6 +160,8 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			&sdk::auxiliary::player_info_t::m_friends_name, XOR( "m_FakePlayer" ), &sdk::auxiliary::player_info_t::m_fake_player, XOR( "m_IsHltv" ),
 			&sdk::auxiliary::player_info_t::m_is_hltv, XOR( "m_CustomFiles" ), &sdk::auxiliary::player_info_t::m_custom_files,
 			XOR( "m_FilesDownloaded" ), &sdk::auxiliary::player_info_t::m_files_downloaded );
+		state.new_usertype< sdk::client_class >( XOR( "_ClientClass" ), XOR( "m_NetworkName" ), &sdk::client_class::m_network_name,
+		                                         XOR( "m_ClassId" ), ( int( sdk::client_class::* ) ) & sdk::client_class::m_class_id );
 		state.new_usertype< sdk::base_entity >(
 			XOR( "Entity" ), XOR( "GetMinsMaxs" ),
 			[ & ]( sdk::base_entity& pl ) {
@@ -175,8 +177,9 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			},
 			XOR( "GetSimTime" ), [ & ]( sdk::base_entity& p ) { return p.get_sim_time( ); }, XOR( "GetEffects" ),
 			[ & ]( sdk::base_entity& p ) { return p.get_effects( ); }, XOR( "IsPlayer" ), [ & ]( sdk::base_entity& p ) { return p.is_player( ); },
-			XOR( "IsWeapon" ), [ & ]( sdk::base_entity& p ) { return p.is_weapon( ); }, XOR( "GetClassName" ),
-			[ & ]( sdk::base_entity& p ) { return std::string{ p.get_class_name( ) }; } );
+			XOR( "IsWeapon" ), [ & ]( sdk::base_entity& p ) { return p.is_weapon( ); }, XOR( "GetClientClass" ),
+			[ & ]( sdk::base_entity& p ) { return p.get_client_class( ); }, XOR( "IsDormant" ),
+			[ & ]( sdk::base_entity& p ) { return p.is_dormant( ); } );
 		state.new_usertype< sdk::cs_player >(
 			XOR( "CSPlayer" ), XOR( "IsAlive" ), &sdk::cs_player::is_alive, XOR( "GetEyePosition" ),
 			[ & ]( sdk::cs_player& pl ) {
@@ -203,8 +206,12 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			},
 			XOR( "GetMoveType" ), [ & ]( sdk::cs_player& p ) { return ( i32 )p.get_move_type( ); }, XOR( "GetEFlags" ),
 			[ & ]( sdk::cs_player& p ) { return p.get_eflags( ); }, XOR( "GetLifestate" ), [ & ]( sdk::cs_player& p ) { return p.get_lifestate( ); },
-			XOR( "GetTeam" ), [ & ]( sdk::cs_player& p ) { return p.get_team( ); }, XOR( "GetClassName" ),
-			[ & ]( sdk::base_entity& p ) { return std::string{ p.get_class_name( ) }; }, sol::base_classes, sol::bases< sdk::base_entity >( ) );
+			XOR( "GetTeam" ), [ & ]( sdk::cs_player& p ) { return p.get_team( ); }, XOR( "GetHitboxPosition" ),
+			[ & ]( sdk::cs_player& p, i32 i ) {
+				auto what = p.get_hitbox_position( i );
+				return *( ::lua::vec* )&what;
+			},
+			sol::base_classes, sol::bases< sdk::base_entity >( ) );
 		state.new_usertype< sdk::player >(
 			XOR( "Player" ), sol::constructors< sdk::player( ), sdk::player( sdk::cs_player* ), sdk::player( const sdk::player& ) >( ),
 			XOR( "IsValid" ), &sdk::player::valid, XOR( "GetRef" ), &sdk::player::get, XOR( "GetPlayerInfo" ), &sdk::player::get_player_info );
@@ -245,12 +252,47 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			&sdk::globals::m_sim_ticks_this_frame );
 
 		// Engine Trace
-		state.new_usertype< sdk::ray >(
+
+		// I'm so sorry
+		struct ray {
+			ray( ) = default;
+
+			ray( const ::lua::vec& src, const ::lua::vec& dest )
+				: m_start( math::v3f( src.x, src.y, src.z ) ), m_delta( math::v3f( dest.x, dest.y, dest.z ) - math::v3f( src.x, src.y, src.z ) ) {
+				m_is_swept = m_delta.x || m_delta.y || m_delta.z;
+
+				m_extents.x = m_extents.y = m_extents.z = 0;
+				m_start_offset.x = m_start_offset.y = m_start_offset.z = 0;
+			}
+
+			ray( const ::lua::vec& start, const ::lua::vec& end, const ::lua::vec& mins, const ::lua::vec& maxs ) {
+				m_delta = math::v3f( end.x, end.y, end.z ) - math::v3f( start.x, start.y, start.z );
+
+				m_is_swept = ( ( *( math::v3f* )&m_delta ).length_sqr( ) != 0.f );
+
+				m_extents = ( math::v3f( maxs.x, maxs.y, maxs.z ) - math::v3f( mins.x, mins.y, mins.z ) ) * 0.5f;
+				m_is_ray  = ( ( *( math::v3f* )&m_extents ).length_sqr( ) < 1e-6f );
+
+				m_start_offset = ( ( math::v3f( mins.x, mins.y, mins.z ) + math::v3f( maxs.x, maxs.y, maxs.z ) ) * 0.5F ) * -1.F;
+				m_start        = math::v3f( start.x, start.y, start.z ) +
+				          ( ( ( math::v3f( mins.x, mins.y, mins.z ) + math::v3f( maxs.x, maxs.y, maxs.z ) ) * 0.5F ) );
+			}
+
+			__declspec( align( 16 ) ) sdk::vec3 m_start;
+			__declspec( align( 16 ) ) sdk::vec3 m_delta;
+			__declspec( align( 16 ) ) sdk::vec3 m_start_offset;
+			__declspec( align( 16 ) ) sdk::vec3 m_extents;
+			PAD( 4 );
+			bool m_is_ray{ true };
+			bool m_is_swept{ };
+		};
+
+		state.new_usertype< ray >(
 			XOR( "Ray" ),
-			sol::constructors< sdk::ray( ), sdk::ray( const math::v3f&, const math::v3f& ),
-		                       sdk::ray( const math::v3f&, const math::v3f&, const math::v3f&, const math::v3f& ), sdk::ray( const sdk::ray& ) >( ),
-			XOR( "m_Start" ), &sdk::ray::m_start, XOR( "m_Delta" ), &sdk::ray::m_delta, XOR( "m_StartOffset" ), &sdk::ray::m_start_offset,
-			XOR( "m_Extents" ), &sdk::ray::m_extents, XOR( "m_IsRay" ), &sdk::ray::m_is_ray, XOR( "m_IsSwept" ), &sdk::ray::m_is_swept );
+			sol::constructors< ray( ), ray( const ::lua::vec&, const ::lua::vec& ),
+		                       ray( const ::lua::vec&, const ::lua::vec&, const ::lua::vec&, const ::lua::vec& ), ray( const ray& ) >( ),
+			XOR( "m_Start" ), &ray::m_start, XOR( "m_Delta" ), &ray::m_delta, XOR( "m_StartOffset" ), &ray::m_start_offset, XOR( "m_Extents" ),
+			&ray::m_extents, XOR( "m_IsRay" ), &ray::m_is_ray, XOR( "m_IsSwept" ), &ray::m_is_swept );
 		state.new_usertype< sdk::trace_filter >(
 			XOR( "TraceFilter" ),
 			sol::constructors< sdk::trace_filter( ), sdk::trace_filter( sdk::cs_player* ), sdk::trace_filter( const sdk::trace_filter& ) >( ),
@@ -266,6 +308,13 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 		                                  &sdk::trace::m_all_solid, XOR( "m_StartSolid" ), &sdk::trace::m_start_solid, XOR( "m_Surface" ),
 		                                  &sdk::trace::m_surface, XOR( "m_Hitgroup" ), &sdk::trace::m_hitgroup, XOR( "m_Entity" ),
 		                                  &sdk::trace::m_entity, XOR( "m_Hitbox" ), &sdk::trace::m_hitbox );
+		state.new_usertype< sdk::interfaces::engine_trace >(
+			XOR( "_EngineTrace" ), XOR( "TraceRay" ),
+			[ & ]( sdk::interfaces::engine_trace& t, const ray& ray, u32 mask, const sdk::trace_filter& tf ) {
+				sdk::trace tr{ };
+				t.trace_ray( *( sdk::ray* )&ray, mask, tf, tr );
+				return tr;
+			} );
 
 		// Global important variables
 		state.script( XOR( "g_Cmd = UserCmd.new()" ) );
@@ -275,6 +324,7 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 		state.set( XOR( "g_ConVars" ), g_csgo.m_cvars );
 		state.set( XOR( "g_ClientModeShared" ), g_csgo.m_client_mode_shared );
 		state.set( XOR( "g_Globals" ), g_csgo.m_globals );
+		state.set( XOR( "g_EngineTrace" ), g_csgo.m_engine_trace );
 
 		// Global enums
 		state.script( R"(
@@ -515,7 +565,9 @@ void cavalcade::lua_impl::push( std::string_view code ) {
             TRANSRAGDOLL = bit.lshift(1, 30),
             UNBLOCKABLE_BY_PLAYER = bit.lshift(1, 31)
         }
+        )" );
 
+		state.script( R"(   
         LifeStates = {
             ALIVE = 0,
             DYING = 1,
@@ -530,6 +582,315 @@ void cavalcade::lua_impl::push( std::string_view code ) {
             SPECTATOR = 1,
             TERRORIST = 2,
             COUNTER_TERRORIST = 3
+        }
+
+        Hitboxes = {
+            HEAD = 0,
+            NECK = 1,
+            PELVIS = 2,
+            BELLY = 3,
+            THORAX = 4,
+            LOWER_CHEST = 5,
+            UPPER_CHEST = 6,
+            RIGHT_THIGH = 7,
+            LEFT_THIGH = 8,
+            RIGHT_CALF = 9,
+            LEFT_CALF = 10,
+            RIGHT_FOOT = 11,
+            LEFT_FOOT = 12,
+            RIGHT_HAND = 13,
+            LEFT_HAND = 14,
+            RIGHT_UPPER_ARM = 15,
+            RIGHT_FOREARM = 16,
+            LEFT_UPPER_ARM = 17,
+            LEFT_FOREARM = 18
+        }
+
+        ClassIds = {
+            AI_BASE_NPC = 0,
+            AK47 = 1,
+            BASE_ANIMATING = 2,
+            BASE_ANIMATING_OVERLAY = 3,
+            BASE_ATTRIBUTABLE_ITEM = 4,
+            BASE_BUTTON = 5,
+            BASE_COMBAT_CHARACTER = 6,
+            BASE_COMBAT_WEAPON = 7,
+            BASE_CS_GRENADE = 8,
+            BASE_CS_GRENADE_PROJECTILE = 9,
+            BASE_DOOR = 10,
+            BASE_ENTITY = 11,
+            BASE_FLEX = 12,
+            BASE_GRENADE = 13,
+            BASE_PARTICLE_ENTITY = 14,
+            BASE_PLAYER = 15,
+            BASE_PROP_DOOR = 16,
+            BASE_TEAM_OBJECTIVE_RESOURCE = 17,
+            BASE_TEMP_ENTITY = 18,
+            BASE_TOGGLE = 19,
+            BASE_TRIGGER = 20,
+            BASE_VIEW_MODEL = 21,
+            BASE_V_PHYSICS_TRIGGER = 22,
+            BASE_WEAPON_WORLD_MODEL = 23,
+            BEAM = 24,
+            BEAM_SPOTLIGHT = 25,
+            BONE_FOLLOWER = 26,
+            BRC4_TARGET = 27,
+            BREACH_CHARGE = 28,
+            BREACH_CHARGE_PROJECTILE = 29,
+            BREAKABLE_PROP = 30,
+            BREAKABLE_SURFACE = 31,
+            BUMP_MINE = 32,
+            BUMP_MINE_PROJECTILE = 33,
+            C4 = 34,
+            CASCADE_LIGHT = 35,
+            CHICKEN = 36,
+            COLOR_CORRECTION = 37,
+            COLOR_CORRECTION_VOLUME = 38,
+            CS_GAME_RULES_PROXY = 39,
+            CS_PLAYER = 40,
+            CS_PLAYER_RESOURCE = 41,
+            CS_RAGDOLL = 42,
+            CS_TEAM = 43,
+            DANGER_ZONE = 44,
+            DANGER_ZONE_CONTROLLER = 45,
+            DEAGLE = 46,
+            DECOY_GRENADE = 47,
+            DECOY_PROJECTILE = 48,
+            DRONE = 49,
+            DRONEGUN = 50,
+            DYNAMIC_LIGHT = 51,
+            DYNAMIC_PROP = 52,
+            ECON_ENTITY = 53,
+            ECON_WEARABLE = 54,
+            EMBERS = 55,
+            ENTITY_DISSOLVE = 56,
+            ENTITY_FLAME = 57,
+            ENTITY_FREEZING = 58,
+            ENTITY_PARTICLE_TRAIL = 59,
+            ENV_AMBIENT_LIGHT = 60,
+            ENV_DETAIL_CONTROLLER = 61,
+            ENV_DOF_CONTROLLER = 62,
+            ENV_GAS_CANISTER = 63,
+            ENV_PARTICLE_SCRIPT = 64,
+            ENV_PROJECTED_TEXTURE = 65,
+            ENV_QUADRATIC_BEAM = 66,
+            ENV_SCREEN_EFFECT = 67,
+            ENV_SCREEN_OVERLAY = 68,
+            ENV_TONEMAP_CONTROLLER = 69,
+            ENV_WIND = 70,
+            FE_PLAYER_DECAL = 71,
+            FIRE_CRACKER_BLAST = 72,
+            FIRE_SMOKE = 73,
+            FIRE_TRAIL = 74,
+            FISH = 75,
+            FISTS = 76,
+            FLASHBANG = 77,
+            FOG_CONTROLLER = 78,
+            FOOTSTEP_CONTROL = 79,
+            FUNC_DUST = 80,
+            FUNC_LOD = 81,
+            FUNC_AREA_PORTAL_WINDOW = 82,
+            FUNC_BRUSH = 83,
+            FUNC_CONVEYOR = 84,
+            FUNC_LADDER = 85,
+            FUNC_MONITOR = 86,
+            FUNC_MOVE_LINEAR = 87,
+            FUNC_OCCLUDER = 88,
+            FUNC_REFLECTIVE_GLASS = 89,
+            FUNC_ROTATING = 90,
+            FUNC_SMOKE_VOLUME = 91,
+            FUNC_TRACK_TRAIN = 92,
+            GAME_RULES_PROXY = 93,
+            GRASS_BURN = 94,
+            HANDLE_TEST = 95,
+            HE_GRENADE = 96,
+            HOSTAGE = 97,
+            HOSTAGE_CARRIABLE_PROP = 98,
+            INCENDIARY_GRENADE = 99,
+            INFERNO = 100,
+            INFO_LADDER_DISMOUNT = 101,
+            INFO_MAP_REGION = 102,
+            INFO_OVERLAY_ACCESSOR = 103,
+            ITEM_HEALTHSHOT = 104,
+            ITEM_CASH = 105,
+            ITEM_DOGTAGS = 106,
+            KNIFE = 107,
+            KNIFE_GG = 108,
+            LIGHT_GLOW = 109,
+            MAP_VETO_PICK_CONTROLLER = 110,
+            MATERIAL_MODIFY_CONTROL = 111,
+            MELEE = 112,
+            MOLOTOV_GRENADE = 113,
+            MOLOTOV_PROJECTILE = 114,
+            MOVIE_DISPLAY = 115,
+            PARADROP_CHOPPER = 116,
+            PARTICLE_FIRE = 117,
+            PARTICLE_PERFORMANCE_MONITOR = 118,
+            PARTICLE_SYSTEM = 119,
+            PHYS_BOX = 120,
+            PHYS_BOX_MULTIPLAYER = 121,
+            PHYSICS_PROP = 122,
+            PHYSICS_PROP_MULTIPLAYER = 123,
+            PHYS_MAGNET = 124,
+            PHYS_PROP_AMMO_BOX = 125,
+            PHYS_PROP_LOOT_CRATE = 126,
+            PHYS_PROP_RADAR_JAMMER = 127,
+            PHYS_PROP_WEAPON_UPGRADE = 128,
+            PLANTED_C4 = 129,
+            PLASMA = 130,
+            PLAYER_PING = 131,
+            PLAYER_RESOURCE = 132,
+            POINT_CAMERA = 133,
+            POINT_COMMENTARY_NODE = 134,
+            POINT_WORLD_TEXT = 135,
+            POSE_CONTROLLER = 136,
+            POST_PROCESS_CONTROLLER = 137,
+            PRECIPITATION = 138,
+            PRECIPITATION_BLOCKER = 139,
+            PREDICTED_VIEW_MODEL = 140,
+            PROP_HALLUCINATION = 141,
+            PROP_COUNTER = 142,
+            PROP_DOOR_ROTATING = 143,
+            PROP_JEEP = 144,
+            PROP_VEHICLE_DRIVEABLE = 145,
+            RAGDOLL_MANAGER = 146,
+            RAGDOLL_PROP = 147,
+            RAGDOLL_PROP_ATTACHED = 148,
+            ROPE_KEYFRAME = 149,
+            SCAR17 = 150,
+            SCENE_ENTITY = 151,
+            SENSOR_GRENADE = 152,
+            SENSOR_GRENADE_PROJECTILE = 153,
+            SHADOW_CONTROL = 154,
+            SLIDESHOW_DISPLAY = 155,
+            SMOKE_GRENADE = 156,
+            SMOKE_GRENADE_PROJECTILE = 157,
+            SMOKE_STACK = 158,
+            SNOWBALL = 159,
+            SNOWBALL_PILE = 160,
+            SNOWBALL_PROJECTILE = 161,
+            SPATIAL_ENTITY = 162,
+            SPOTLIGHT_END = 163,
+            SPRITE = 164,
+            SPRITE_ORIENTED = 165,
+            SPRITE_TRAIL = 166,
+            STATUE_PROP = 167,
+            STEAM_JET = 168,
+            SUN = 169,
+            SUNLIGHT_SHADOW_CONTROL = 170,
+            SURVIVAL_SPAWN_CHOPPER = 171,
+            TABLET = 172,
+            TEAM = 173,
+            TEAMPLAY_ROUND_BASED_RULES_PROXY = 174,
+            TE_ARMOR_RICOCHET = 175,
+            TE_BASE_BEAM = 176,
+            TE_BEAM_ENT_POINT = 177,
+            TE_BEAM_ENTS = 178,
+            TE_BEAM_FOLLOW = 179,
+            TE_BEAM_LASER = 180,
+            TE_BEAM_POINTS = 181,
+            TE_BEAM_RING = 182,
+            TE_BEAM_RING_POINT = 183,
+            TE_BEAM_SPLINE = 184,
+            TE_BLOOD_SPRITE = 185,
+            TE_BLOOD_STREAM = 186,
+            TE_BREAK_MODEL = 187,
+            TEBSP_DECAL = 188,
+            TE_BUBBLES = 189,
+            TE_BUBBLE_TRAIL = 190,
+            TE_CLIENT_PROJECTILE = 191,
+            TE_DECAL = 192,
+            TE_DUST = 193,
+            TE_DYNAMIC_LIGHT = 194,
+            TE_EFFECT_DISPATCH = 195,
+            TE_ENERGY_SPLASH = 196,
+            TE_EXPLOSION = 197,
+            TE_FIRE_BULLETS = 198,
+            TE_FIZZ = 199,
+            TE_FOOTPRINT_DECAL = 200,
+            TE_FOUNDRY_HELPERS = 201,
+            TE_GAUSS_EXPLOSION = 202,
+            TE_GLOW_SPRITE = 203,
+            TE_IMPACT = 204,
+            TE_KILL_PLAYER_ATTACHMENTS = 205,
+            TE_LARGE_FUNNEL = 206,
+            TE_METAL_SPARKS = 207,
+            TE_MUZZLE_FLASH = 208,
+            TE_PARTICLE_SYSTEM = 209,
+            TE_PHYSICS_PROP = 210,
+            TE_PLANT_BOMB = 211,
+            TE_PLAYER_ANIM_EVENT = 212,
+            TE_PLAYER_DECAL = 213,
+            TE_PROJECTED_DECAL = 214,
+            TE_RADIO_ICON = 215,
+            TE_SHATTER_SURFACE = 216,
+            TE_SHOW_LINE = 217,
+            TESLA = 218,
+            TE_SMOKE = 219,
+            TE_SPARKS = 220,
+            TE_SPRITE = 221,
+            TE_SPRITE_SPRAY = 222,
+            TEST_PROXY_TOGGLE_NETWORKABLE = 223,
+            TEST_TRACELINE = 224,
+            TE_WORLD_DECAL = 225,
+            TRIGGER_PLAYER_MOVEMENT = 226,
+            TRIGGER_SOUND_OPERATOR = 227,
+            V_GUI_SCREEN = 228,
+            VOTE_CONTROLLER = 229,
+            WATER_BULLET = 230,
+            WATER_LOD_CONTROL = 231,
+            WEAPON_AUG = 232,
+            WEAPON_AWP = 233,
+            WEAPON_BASE_ITEM = 234,
+            WEAPON_BIZON = 235,
+            WEAPON_CS_BASE = 236,
+            WEAPON_CS_BASE_GUN = 237,
+            WEAPON_CYCLER = 238,
+            WEAPON_ELITE = 239,
+            WEAPON_FAMAS = 240,
+            WEAPON_FIVE_SEVEN = 241,
+            WEAPON_G3SG1 = 242,
+            WEAPON_GALIL = 243,
+            WEAPON_GALIL_AR = 244,
+            WEAPON_GLOCK = 245,
+            WEAPON_HKP2000 = 246,
+            WEAPON_M249 = 247,
+            WEAPON_M3 = 248,
+            WEAPON_M4A1 = 249,
+            WEAPON_MAC10 = 250,
+            WEAPON_MAG7 = 251,
+            WEAPON_MP5_NAVY = 252,
+            WEAPON_MP7 = 253,
+            WEAPON_MP9 = 254,
+            WEAPON_NEGEV = 255,
+            WEAPON_NOVA = 256,
+            WEAPON_P228 = 257,
+            WEAPON_P250 = 258,
+            WEAPON_P90 = 259,
+            WEAPON_SAWEDOFF = 260,
+            WEAPON_SCAR20 = 261,
+            WEAPON_SCOUT = 262,
+            WEAPON_SG550 = 263,
+            WEAPON_SG552 = 264,
+            WEAPON_SG556 = 265,
+            WEAPON_SHIELD = 266,
+            WEAPON_SSG08 = 267,
+            WEAPON_TASER = 268,
+            WEAPON_TEC9 = 269,
+            WEAPON_TMP = 270,
+            WEAPON_UMP45 = 271,
+            WEAPON_USP = 272,
+            WEAPON_XM1014 = 273,
+            WEAPON_ZONE_REPULSOR = 274,
+            WORLD = 275,
+            WORLD_VGUI_TEXT = 276,
+            DUST_TRAIL = 277,
+            MOVIE_EXPLOSION = 278,
+            PARTICLE_SMOKE_GRENADE = 279,
+            ROCKET_TRAIL = 280,
+            SMOKE_TRAIL = 281,
+            SPORE_EXPLOSION = 282,
+            SPORE_TRAIL = 283
         }
         )" );
 
