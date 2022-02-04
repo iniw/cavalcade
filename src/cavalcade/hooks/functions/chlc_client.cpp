@@ -10,7 +10,18 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 		for ( auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 			state[ "g_FrameStage" ] = ( i32 )stage;
 			for ( const auto& callback : callbacks[ XOR( "FrameStageNotify" ) ] ) {
-				callback( );
+				if ( callback.valid( ) ) {
+					sol::protected_function_result result = callback( );
+
+					if ( !result.valid( ) ) {
+						sol::error err = result;
+						g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
+						g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
+						g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
+						g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ),
+						                                      io::format( XOR( "Error: {}\n" ), err.what( ) ).c_str( ) );
+					}
+				}
 			}
 		}
 
@@ -47,7 +58,17 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 
 	for ( const auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 		for ( const auto& callback : callbacks.at( XOR( "LevelInitPreEntity" ) ) ) {
-			callback( );
+			if ( callback.valid( ) ) {
+				callback( );
+			} else {
+				sol::error err = callback( );
+				g_io.log( XOR( "{}" ), err.what( ) );
+				// alert...
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), io::format( XOR( "Error: {}" ), err.what( ) ).c_str( ) );
+			}
 		}
 	}
 }
@@ -57,7 +78,17 @@ void cavalcade::hooks::chlc_client::level_init_post_entity( ) {
 	og( );
 	for ( const auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 		for ( const auto& callback : callbacks.at( XOR( "LevelInitPostEntity" ) ) ) {
-			callback( );
+			if ( callback.valid( ) ) {
+				callback( );
+			} else {
+				sol::error err = callback( );
+				g_io.log( XOR( "{}" ), err.what( ) );
+				// alert...
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), io::format( XOR( "Error: {}" ), err.what( ) ).c_str( ) );
+			}
 		}
 	}
 }
@@ -79,7 +110,17 @@ void cavalcade::hooks::chlc_client::level_shutdown( unk ecx, unk edx ) {
 	for ( auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 		state.set( XOR( "g_Cmd" ), sol::lua_nil );
 		for ( const auto& callback : callbacks[ XOR( "LevelShutdown" ) ] ) {
-			callback( );
+			if ( callback.valid( ) ) {
+				callback( );
+			} else {
+				sol::error err = callback( );
+				g_io.log( XOR( "{}" ), err.what( ) );
+				// alert...
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), io::format( XOR( "Error: {}" ), err.what( ) ).c_str( ) );
+			}
 		}
 	}
 

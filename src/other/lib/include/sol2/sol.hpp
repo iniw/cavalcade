@@ -250,7 +250,7 @@
 	#endif
 #elif SOL_IS_ON(SOL_COMPILER_VCXX_I_)
 
-		#define SOL_EXCEPTIONS_I_ SOL_OFF
+		#define SOL_EXCEPTIONS_I_ SOL_ON
 #elif SOL_IS_ON(SOL_COMPILER_CLANG_I_) || SOL_IS_ON(SOL_COMPILER_GCC_I_)
 	#if !defined(__EXCEPTIONS)
 		#define SOL_EXCEPTIONS_I_ SOL_OFF
@@ -293,15 +293,7 @@
 	#define SOL_USE_THREAD_LOCAL_I_ SOL_DEFAULT_ON
 #endif // thread_local keyword is bjorked on some platforms
 
-#if defined(SOL_ALL_SAFETIES_ON)
-	#if SOL_ALL_SAFETIES_ON != 0
-		#define SOL_ALL_SAFETIES_ON_I_ SOL_ON
-	#else
-		#define SOL_ALL_SAFETIES_ON_I_ SOL_OFF
-	#endif
-#else
-	#define SOL_ALL_SAFETIES_ON_I_ SOL_DEFAULT_OFF
-#endif
+#define SOL_ALL_SAFETIES_ON_I_ SOL_ON
 
 #if defined(SOL_SAFE_GETTER)
 	#if SOL_SAFE_GETTER != 0

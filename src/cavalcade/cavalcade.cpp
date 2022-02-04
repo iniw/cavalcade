@@ -39,7 +39,11 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
                     g_ConVars:ConsolePrint(string.format('%s %d %d', cvar:GetName(), cvar:GetInt(), Flags.ANIMDUCKING))
                     state = true
                 end
-                
+
+                a = Vector3.new(1.2, 2.2, 3.3)
+                b = a + a
+                g_ConVars:ConsolePrint('x ' .. b.m_X)
+
                 --g_Render.RectFilled(10, 10, 30, 30, Color.new(255, 0, 255, 255))
                 --g_Render.RectFilled(10, 50, 30, 100, Color.new(0xffff00ff))
                 g_Render.Text(10, 10, 'Hello World ' .. g_Globals.m_CurTime, Fonts.MENU, Color.new(0xffffffff))

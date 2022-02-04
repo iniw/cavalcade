@@ -8,7 +8,7 @@
 namespace cavalcade {
 	struct lua_impl {
 		void push( std::string_view code );
-		std::vector< std::pair< mutable sol::state, std::unordered_map< std::string, std::vector< std::function< void( ) > > > > > m_callbacks;
+		std::vector< std::pair< mutable sol::state, std::unordered_map< std::string, std::vector< sol::protected_function > > > > m_callbacks;
 		// std::shared_mutex m_mutex;
 	};
 
