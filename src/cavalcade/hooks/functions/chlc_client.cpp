@@ -9,7 +9,7 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 
 		for ( auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 			state[ "g_FrameStage" ] = ( i32 )stage;
-			for ( const auto& callback : callbacks[ "FrameStageNotify" ] ) {
+			for ( const auto& callback : callbacks[ XOR( "FrameStageNotify" ) ] ) {
 				callback( );
 			}
 		}
@@ -32,10 +32,40 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 }
 
 void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
-	// begone
-	g_csgo.m_sky_name   = std::nullopt;
-	g_ctx.m_in_deathcam = false;
+	// std::unique_lock lock( g_lua.m_mutex );
+
+	// NOTE(para): it's particularly important for this to be here, before og
+	g_hack.m_nightmode.clear( );
+
+	static auto og = g_mem[ CLIENT_DLL ].get_og< level_init_pre_entity_fn >( HASH_CT( "CHLClient::LevelInitPreEntity" ) );
+	og( name );
+
+	g_csgo.m_map_name = std::string( name );
+	g_csgo.m_sky_name = g_ctx.m_cvars.sv_skyname->get_string( );
+
+	for ( const auto& [ state, callbacks ] : g_lua.m_callbacks ) {
+		for ( const auto& callback : callbacks.at( XOR( "LevelInitPreEntity" ) ) ) {
+			callback( );
+		}
+	}
+}
+
+void cavalcade::hooks::chlc_client::level_init_post_entity( ) {
+	static auto og = g_mem[ CLIENT_DLL ].get_og< level_init_post_entity_fn >( HASH_CT( "CHLClient::LevelInitPostEntity" ) );
+	og( );
+	for ( const auto& [ state, callbacks ] : g_lua.m_callbacks ) {
+		for ( const auto& callback : callbacks.at( XOR( "LevelInitPostEntity" ) ) ) {
+			callback( );
+		}
+	}
+}
+
+void cavalcade::hooks::chlc_client::level_shutdown( unk ecx, unk edx ) {
+	g_csgo.m_map_name = std::nullopt;
+	g_csgo.m_sky_name = std::nullopt;
+	g_ctx.m_cmd       = nullptr;
 	g_hack.m_translator.m_pending_translations.clear( );
+	g_ctx.m_in_deathcam = false;
 	g_entity_cacher.clear( );
 	g_hack.m_trainer.clear( );
 	g_hack.m_esp.clear( );
@@ -44,26 +74,15 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	g_hack.m_hitmarker.clear( );
 	g_hack.m_movement.clear( );
 
-	// std::unique_lock lock( g_lua.m_mutex );
-
 	for ( auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 		state.set( XOR( "g_Cmd" ), sol::lua_nil );
+		for ( const auto& callback : callbacks[ XOR( "LevelShutdown" ) ] ) {
+			callback( );
+		}
 	}
 
-	// NOTE(para): it's particularly important for this to be here, before og
-	g_hack.m_nightmode.clear( );
-
-	g_ctx.m_cmd = nullptr;
-
-	static auto og = g_mem[ CLIENT_DLL ].get_og< level_init_pre_entity_fn >( HASH_CT( "CHLClient::LevelInitPreEntity" ) );
-	og( name );
-
-	g_csgo.m_sky_name = g_ctx.m_cvars.sv_skyname->get_string( );
-}
-
-void cavalcade::hooks::chlc_client::level_init_post_entity( ) {
-	static auto og = g_mem[ CLIENT_DLL ].get_og< level_init_post_entity_fn >( HASH_CT( "CHLClient::LevelInitPostEntity" ) );
-	og( );
+	static auto og = g_mem[ CLIENT_DLL ].get_og< level_shutdown_fn >( HASH_CT( "CHLClient::LevelShutdown" ) );
+	og( ecx, edx );
 }
 
 void cavalcade::hooks::chlc_client::on_override_mouse_input( unk ecx, unk edx, i32 slot, f32& x, f32& y ) {

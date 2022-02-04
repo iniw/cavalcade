@@ -42,7 +42,7 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
                 
                 --g_Render.RectFilled(10, 10, 30, 30, Color.new(255, 0, 255, 255))
                 --g_Render.RectFilled(10, 50, 30, 100, Color.new(0xffff00ff))
-                g_Render.Text(10, 10, 'Hello World', Fonts.MENU, Color.new(0xffffffff))
+                g_Render.Text(10, 10, 'Hello World ' .. g_Globals.m_CurTime, Fonts.MENU, Color.new(0xffffffff))
             end
 
             local function hello_again()
@@ -58,6 +58,8 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
                             g_ConVars:ConsolePrint(string.format('-- %s %d %d %s', player:GetPlayerInfo().m_Name, player:GetRef():GetHealth(), player:GetRef():GetMoveType(), team_str))
                         end
                     end)
+
+                    g_ClientModeShared.m_ChatElement:Print('Hello World ' .. g_Globals.m_CurTime)
                 end
             end
 
@@ -73,6 +75,18 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
 
             g_Ctx.PushCallback('FrameStageNotify', hello)
             g_Ctx.PushCallback('FrameStageNotify', hello_again)
+            g_Ctx.PushCallback('CreateMove', create_move)
+            g_Ctx.PushCallback('LevelInitPreEntity', function ()
+                g_ConVars:ConsolePrint(string.format('%s %s', g_Ctx.GetMapName(), g_Ctx.GetSkyName()))
+            end)
+            g_Ctx.PushCallback('LevelInitPostEntity', function ()
+                g_ConVars:ConsolePrint(string.format('%s %s', g_Ctx.GetMapName(), g_Ctx.GetSkyName()))
+            end)
+            g_Ctx.PushCallback('LevelShutdown', function ()
+                if (g_Ctx.GetMapName() == nil) then
+                    g_ConVars:ConsolePrint('nil')
+                end
+            end)
             g_Ctx.PushCallback('CreateMove', create_move)
         )" );
 

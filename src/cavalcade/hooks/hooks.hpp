@@ -38,6 +38,9 @@ namespace cavalcade {
 			using level_init_post_entity_fn = void( __cdecl* )( );
 			static void __cdecl level_init_post_entity( );
 
+			using level_shutdown_fn = void( __fastcall* )( unk, unk );
+			static void __fastcall level_shutdown( unk, unk );
+
 			using on_override_mouse_input_fn = void( __fastcall* )( unk, unk, i32, f32&, f32& );
 			static void __fastcall on_override_mouse_input( unk, unk, i32, f32&, f32& );
 		};

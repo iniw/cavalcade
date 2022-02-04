@@ -29,6 +29,18 @@ namespace sdk {
 			m_start_offset.x = m_start_offset.y = m_start_offset.z = 0;
 		}
 
+		ray( const math::v3f& start, const math::v3f& end, const math::v3f& mins, const math::v3f& maxs ) {
+			m_delta = end - start;
+
+			m_is_swept = ( ( *( math::v3f* )&m_delta ).length_sqr( ) != 0.f );
+
+			m_extents = ( maxs - mins ) * 0.5f;
+			m_is_ray  = ( ( *( math::v3f* )&m_extents ).length_sqr( ) < 1e-6f );
+
+			m_start_offset = ( ( mins + maxs ) * 0.5F ) * -1.F;
+			m_start        = start + ( ( ( mins + maxs ) * 0.5F ) );
+		}
+
 		__declspec( align( 16 ) ) vec3 m_start;
 		__declspec( align( 16 ) ) vec3 m_delta;
 		__declspec( align( 16 ) ) vec3 m_start_offset;

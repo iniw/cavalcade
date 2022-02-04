@@ -54,8 +54,11 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 	auto state = sol::state{ };
 	auto map   = std::unordered_map< std::string, std::vector< std::function< void( ) > > >{ };
 	// Initialize callbacks dictionary
-	map[ XOR( "FrameStageNotify" ) ] = { };
-	map[ XOR( "CreateMove" ) ]       = { };
+	map[ XOR( "FrameStageNotify" ) ]    = { };
+	map[ XOR( "CreateMove" ) ]          = { };
+	map[ XOR( "LevelInitPreEntity" ) ]  = { };
+	map[ XOR( "LevelInitPostEntity" ) ] = { };
+	map[ XOR( "LevelShutdown" ) ]       = { };
 	// dummy_map[ "EndScene" ]         = { };
 
 	state.open_libraries( sol::lib::base, sol::lib::package, sol::lib::string, sol::lib::math, sol::lib::bit32, sol::lib::os, sol::lib::jit,
@@ -201,16 +204,8 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 
 		state.new_usertype< sdk::cvar >(
 			XOR( "ConVar" ), XOR( "GetName" ), [ & ]( sdk::cvar& cv ) { return std::string_view{ cv.m_name }; }, XOR( "GetString" ),
-			[ & ]( sdk::cvar& cv ) {
-				auto str = cv.get_string( );
-				if ( str.has_value( ) ) {
-					return std::string_view{ str.value( ) };
-				} else {
-					return std::string_view{ "(none)" };
-				}
-			},
-			XOR( "GetFloat" ), &sdk::cvar::get_float, XOR( "GetInt" ), &sdk::cvar::get_int, XOR( "SetString" ),
-			[ & ]( sdk::cvar& cv, std::string_view str ) { cv.set_value( str ); }, XOR( "SetFloat" ),
+			[ & ]( sdk::cvar& cv ) { return cv.get_string( ); }, XOR( "GetFloat" ), &sdk::cvar::get_float, XOR( "GetInt" ), &sdk::cvar::get_int,
+			XOR( "SetString" ), [ & ]( sdk::cvar& cv, std::string_view str ) { cv.set_value( str ); }, XOR( "SetFloat" ),
 			[ & ]( sdk::cvar& cv, f32 f ) { cv.set_value( f ); }, XOR( "SetInt" ), [ & ]( sdk::cvar& cv, i32 i ) { cv.set_value( i ); } );
 
 		state.new_usertype< sdk::interfaces::cvars >(
@@ -222,13 +217,27 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 				cv.console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 				cv.console_color_printf( render::color( 255, 255, 255, 255 ), ( s + "\n" ).c_str( ) );
 			} );
-		state.set( XOR( "g_ConVars" ), g_csgo.m_cvars );
+
+		state.new_usertype< sdk::auxiliary::c_hud_chat >( XOR( "HudChat" ), XOR( "Print" ), [ & ]( sdk::auxiliary::c_hud_chat& h, std::string&& s ) {
+			h.chat_printf( 0, 0, io::format( XOR( "<<<NO_TRANSLATE>>> {}" ), std::move( s ) ).c_str( ) );
+		} );
+		state.new_usertype< sdk::client_mode_shared >( XOR( "_ClientModeShared" ), XOR( "m_ChatElement" ), &sdk::client_mode_shared::m_chat_element );
+		state.new_usertype< sdk::globals >(
+			XOR( "_Globals" ), XOR( "m_RealTime" ), &sdk::globals::m_realtime, XOR( "m_FrameCount" ), &sdk::globals::m_framecount,
+			XOR( "m_AbsoluteFrameTime" ), &sdk::globals::m_absoluteframetime, XOR( "m_AbsoluteFrameStartTime" ),
+			&sdk::globals::m_absoluteframestarttime, XOR( "m_CurTime" ), &sdk::globals::m_curtime, XOR( "m_FrameTime" ), &sdk::globals::m_frametime,
+			XOR( "m_MaxClients" ), &sdk::globals::m_max_clients, XOR( "m_TickCount" ), &sdk::globals::m_tickcount, XOR( "m_IntervalPerTick" ),
+			&sdk::globals::m_interval_per_tick, XOR( "m_InterpolationAmount" ), &sdk::globals::m_interpolation_amount, XOR( "m_SimTicksThisFrame" ),
+			&sdk::globals::m_sim_ticks_this_frame );
 
 		// Global important variables
 		state.script( XOR( "g_Cmd = UserCmd.new()" ) );
 		state.script( XOR( "g_FrameStage = 0" ) );
 		state.set( XOR( "g_PlayerCache" ), &g_entity_cacher );
 		state.set( XOR( "g_Local" ), &g_ctx.m_local );
+		state.set( XOR( "g_ConVars" ), g_csgo.m_cvars );
+		state.set( XOR( "g_ClientModeShared" ), g_csgo.m_client_mode_shared );
+		state.set( XOR( "g_Globals" ), g_csgo.m_globals );
 
 		// Global enums
 		state.script( R"(
@@ -506,10 +515,20 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			return false;
 		};
 
+		state[ XOR( "_Ctx" ) ][ XOR( "GetMapName" ) ] = [ & ]( ) { return g_csgo.m_map_name; };
+		state[ XOR( "_Ctx" ) ][ XOR( "GetSkyName" ) ] = [ & ]( ) { return g_csgo.m_sky_name; };
+
 		state[ XOR( "_Ctx" ) ][ XOR( "PushCallback" ) ] = [ & ]( std::string&& at, std::function< void( ) >&& what ) {
 			if ( map.contains( at ) ) {
 				map[ at ].push_back( what );
-			} // else...
+			} else {
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
+				g_csgo.m_cvars->console_color_printf(
+					render::color( 255, 255, 255, 255 ),
+					io::format( XOR( "Trying to register callback for \"{}\", not present in callbacks dictionary" ), at ).c_str( ) );
+			}
 		};
 		state.script( XOR( "g_Ctx = _Ctx.new()" ) );
 	}
