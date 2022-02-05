@@ -23,6 +23,7 @@
 #include "physicssurfaceprops.hpp"
 #include "enginesound.hpp"
 #include "effects.hpp"
+#include "imaterialsystem.hpp"
 
 namespace sdk::interfaces {
 	struct registry {

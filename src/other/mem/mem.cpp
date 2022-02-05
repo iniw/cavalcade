@@ -79,6 +79,12 @@ void mem::impl::add_addresses( ) {
 		ADD_PATTERN( CLIENT_DLL, "ReportHit", "55 8B EC 8B 55 08 83 EC 1C F6 42 1C 01" );
 		ADD_PATTERN( CLIENT_DLL, "PostScreenFx", "55 8B EC 8B 49 18 56 8B 35" );
 		ADD_PATTERN( CLIENT_DLL, "GlowManager", "0F 11 05 ? ? ? ? 83 C8 01 C7 05 ? ? ? ? 00 00 00 00" );
+		ADD_PATTERN( CLIENT_DLL, "RenderView", "55 8B EC 83 E4 C0 81 EC ? ? ? ? 53 56 57 8B F9 89 7C 24 44" );
+		// They're turning the frogs gay
+		ADD_PATTERN( CLIENT_DLL, "GayFunction", "57 E8 ? ? ? ? 8B F8 85 FF 74 34" );
+		ADD_PATTERN( CLIENT_DLL, "UpdateScreenTexture", "55 8B EC 83 E4 F0 83 EC 48 8B 45 08 56 89 44 24 30 8B 45 0C 57" );
+		ADD_PATTERN( CLIENT_DLL, "g_pWorld", "A1 ? ? ? ? 81 C4 ? ? ? ? B9 ? ? ? ? 89 4D FC 85 C0 0F 84 ? ? ? ? F3 0F " );
+		ADD_PATTERN_REL( CLIENT_DLL, "GetFullFrameFrameBufferTexture", "E8 ? ? ? ? 8B 1E 8B F8" );
 		ADD_ADDRESS( ENGINE_DLL, "EmitSound", get_v_func( g_csgo.m_engine_sound, 5 ) );
 		ADD_PATTERN(
 			ENGINE_DLL, "MaterialSystem",
@@ -88,6 +94,8 @@ void mem::impl::add_addresses( ) {
 		ADD_ADDRESS( MATERIALSYSTEM_DLL, "FindMaterial", get_v_func( material_system, 84 ) );
 		ADD_PATTERN_REL( ENGINE_DLL, "StaticPropMgrPrecacheLighting", "E8 ? ? ? ? FF 76 60" );
 
+		ADD_PATTERN_REL( CLIENT_DLL, "DumpTGAofRenderTarget", "E8 ? ? ? ? 83 C4 04 8B 4D F0" );
+		ADD_PATTERN( CLIENT_DLL, "g_MotionBlurValues", "68 ? ? ? ? FF 50 34 8B 4E 08 5E 85 C9 74 0C" );
 		/*
 		NOTE(para): in case of update
 
@@ -149,7 +157,6 @@ void mem::impl::add_addresses( ) {
 		ADD_PATTERN( MATERIALSYSTEM_DLL, "GetColorModulation", "55 8B EC 83 EC ? 56 8B F1 8A 46" );
 
 		{ // C_BaseEntity
-
 			ADD_PATTERN( CLIENT_DLL, "C_BaseEntity->m_vecAbsVelocity", "F3 0F 10 A6 ? ? ? ? F3 0F 11 64 24 ?" );
 			ADD_PATTERN( CLIENT_DLL, "C_BaseEntity->m_nAnimOverlay", "8B 80 ? ? ? ? 03 C1 74 15" );
 			ADD_PATTERN( CLIENT_DLL, "C_BaseEntity->m_nPredictionRandomSeed", "8B 47 40 A3 ? ? ? ?" );
@@ -168,7 +175,6 @@ void mem::impl::add_addresses( ) {
 		}
 
 		{ // C_BasePlayer
-
 			ADD_PATTERN( CLIENT_DLL, "C_BasePlayer->m_LastCmd", "8D 8E ? ? ? ? 89 5C 24 3C" );
 			ADD_PATTERN( CLIENT_DLL, "C_BasePlayer->m_afButtonForced", "8B 86 ? ? ? ? 09 47 30" );
 			ADD_PATTERN( CLIENT_DLL, "C_BasePlayer->m_afButtonLast", "33 CA 89 86 ? ? ? ?" );
@@ -182,7 +188,6 @@ void mem::impl::add_addresses( ) {
 		}
 
 		{ // C_BaseAnimating
-
 			ADD_PATTERN( CLIENT_DLL, "C_BaseAnimating::ShouldSkipAnimationFrame", "57 8B F9 8B 07 8B 80 ? ? ? ? FF D0 84 C0 75 02" );
 			ADD_PATTERN( CLIENT_DLL, "C_BaseAnimating::BuildTransformations", "55 8B EC 53 56 57 FF 75 1C" );
 
@@ -195,7 +200,6 @@ void mem::impl::add_addresses( ) {
 		}
 
 		{ // CCSGOPlayerAnimState
-
 			ADD_PATTERN( CLIENT_DLL, "CCSGOPlayerAnimState::SetUpAimMatrix", "55 8B EC 81 EC ? ? ? ? 53 56 57 8B 3D ? ? ? ?" );
 			ADD_PATTERN( CLIENT_DLL, "CCSGOPlayerAnimState::SetUpWeaponAction", "55 8B EC 51 53 56 57 8B F9 8B 77 60" );
 

@@ -22,6 +22,8 @@ bool cavalcade::hooks::init( ) {
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "PostScreenFx" ), &fx::post_screen_fx );
 	MOCK g_mem[ ENGINE_DLL ].hook( HASH_CT( "StaticPropMgrPrecacheLighting" ), &static_prop_mgr::precache_lighting );
 	MOCK g_mem[ ENGINE_DLL ].hook( HASH_CT( "EmitSound" ), &engine_sound::emit_sound );
+	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "RenderView" ), &view_render::render_view );
+	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "GayFunction" ), &view_render::gay_function );
 	// MOCK g_mem[ MATERIALSYSTEM_DLL ].hook( HASH_CT( "FindMaterial" ), &material_system::find_material );
 	MOCK g_mem[ MATERIALSYSTEM_DLL ].hook( HASH_CT( "GetColorModulation" ), &material_system::get_color_modulation );
 	MOCK g_mem[ SHADERAPIDX9_DLL ].hook( HASH_CT( "IDirect3DDevice9::EndScene" ), &d3d9_device::end_scene );

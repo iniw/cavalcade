@@ -144,6 +144,13 @@ namespace cavalcade {
 			static void __fastcall post_screen_fx( unk, unk, unk );
 		};
 
+		struct view_render {
+			using render_view_fn = void( __fastcall* )( unk, unk, sdk::view&, sdk::view&, int, int );
+			static void __fastcall render_view( unk, unk, sdk::view&, sdk::view&, int, int );
+			using gay_function_fn = int( __cdecl* )( );
+			static int __cdecl gay_function( );
+		};
+
 		struct steam {
 			// hook GameConnectedFriendChatMsg_t
 			STEAM_CALLBACK( steam, on_friend_message, GameConnectedFriendChatMsg_t );

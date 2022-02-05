@@ -71,14 +71,14 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
                    --    end
                    --end)
 
-                   for i = 1, g_Globals.m_MaxClients, 1
-                   do
-                        player = g_EntList:GetPlayerRef(i)
-                        if (player ~= nil and player:IsAlive() and player:IsPlayer()) then
-                            info = g_EngineClient:GetPlayerInfo(i)
-                            g_ConVars:ConsolePrint(info.m_Name)
-                        end
-                   end
+                   --for i = 1, g_Globals.m_MaxClients, 1
+                   --do
+                   --     player = g_EntList:GetPlayerRef(i)
+                   --     if (player ~= nil and player:IsAlive() and player:IsPlayer()) then
+                   --         info = g_EngineClient:GetPlayerInfo(i)
+                   --         g_ConVars:ConsolePrint(info.m_Name)
+                   --     end
+                   --end
 
                     --g_ClientModeShared.m_ChatElement:Print('Hello World ' .. g_Globals.m_CurTime)
                 end

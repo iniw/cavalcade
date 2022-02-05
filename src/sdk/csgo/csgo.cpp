@@ -53,6 +53,10 @@ bool sdk::csgo::init( ) {
 		m_effects = find_interface< interfaces::effects* >( g_mem[ ENGINE_DLL ], HASH_CT( "VEngineEffects" ) );
 		if ( !m_effects )
 			return false;
+
+		m_material_system = find_interface< interfaces::material_system* >( g_mem[ MATERIALSYSTEM_DLL ], HASH_CT( "VMaterialSystem" ) );
+		if ( !m_material_system )
+			return false;
 	}
 
 	m_globals = mem::get_v_func( m_client, 11 ).add( 0xA ).get< globals* >( 2 );

@@ -17,6 +17,7 @@ namespace cavalcade {
 		sdk::user_cmd* m_cmd;
 		std::optional< CSteamID > m_last_friend_to_message;
 		bool m_in_deathcam{ false };
+		sdk::view m_view{ };
 
 		struct {
 			sdk::cvar* sv_cheats;

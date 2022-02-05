@@ -23,5 +23,7 @@
 #include "staticprop.hpp"
 #include "material.hh"
 #include "glow.hpp"
+#include "imatrendercontext.hpp"
+#include "view.hpp"
 
 #include "interfaces/interfaces.hpp"
