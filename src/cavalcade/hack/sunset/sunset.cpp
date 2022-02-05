@@ -23,6 +23,8 @@ void hack::sunset::run( ) {
 			e->max_shadow_dist( )        = m_max_shadow_dist;
 			e->light_shadow_direction( ) = m_light_shadow_direction;
 		}
+
+		break;
 	}
 }
 

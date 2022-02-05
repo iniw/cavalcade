@@ -37,6 +37,8 @@ void hack::fog::run( ) {
 			e->fog_color_primary( )   = m_fog_color_primary;
 			e->fog_color_secondary( ) = m_fog_color_secondary;
 		}
+
+		break;
 	}
 }
 
