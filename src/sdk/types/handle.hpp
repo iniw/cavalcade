@@ -32,8 +32,6 @@ namespace sdk {
 		template< typename T = base_entity* >
 		T get( ) const;
 
-	protected:
-
 		u32 m_idx;
 	};
 } // namespace sdk

@@ -179,7 +179,25 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			[ & ]( sdk::base_entity& p ) { return p.get_effects( ); }, XOR( "IsPlayer" ), [ & ]( sdk::base_entity& p ) { return p.is_player( ); },
 			XOR( "IsWeapon" ), [ & ]( sdk::base_entity& p ) { return p.is_weapon( ); }, XOR( "GetClientClass" ),
 			[ & ]( sdk::base_entity& p ) { return p.get_client_class( ); }, XOR( "IsDormant" ),
-			[ & ]( sdk::base_entity& p ) { return p.is_dormant( ); } );
+			[ & ]( sdk::base_entity& p ) { return p.is_dormant( ); }, XOR( "GetIndex" ),
+			[ & ]( sdk::base_entity& p ) { return p.get_networkable_index( ); } );
+		state.new_usertype< sdk::cs_weapon_info >(
+			XOR( "CSWeaponInfo" ), XOR( "m_MaxClip1" ), &sdk::cs_weapon_info::m_max_clip1, XOR( "m_MaxClip2" ), &sdk::cs_weapon_info::m_max_clip2,
+			XOR( "m_HudName" ), &sdk::cs_weapon_info::m_hud_name, XOR( "m_WeaponName" ), &sdk::cs_weapon_info::m_weapon_name, XOR( "m_Type" ),
+			&sdk::cs_weapon_info::m_type, XOR( "m_Price" ), &sdk::cs_weapon_info::m_price, XOR( "m_CycleTime" ), &sdk::cs_weapon_info::m_cycle_time,
+			XOR( "m_FullAuto" ), &sdk::cs_weapon_info::m_full_auto, XOR( "m_Damage" ), &sdk::cs_weapon_info::m_damage, XOR( "m_HeadshotMultiplier" ),
+			&sdk::cs_weapon_info::m_headshot_multiplier, XOR( "m_ArmorRatio" ), &sdk::cs_weapon_info::m_armor_ratio, XOR( "m_Bullets" ),
+			&sdk::cs_weapon_info::m_bullets, XOR( "m_Penetration" ), &sdk::cs_weapon_info::m_penetration, XOR( "m_Range" ),
+			&sdk::cs_weapon_info::m_range, XOR( "m_RangeModifier" ), &sdk::cs_weapon_info::m_range_modifier );
+		state.new_usertype< sdk::weapon_cs_base >(
+			XOR( "Weapon" ), XOR( "GetMaxSpeed" ), [ & ]( sdk::weapon_cs_base& w ) { return w.get_max_speed( ); }, XOR( "GetCSWeaponInfo" ),
+			[ & ]( sdk::weapon_cs_base& w ) { return w.get_cs_weapon_info( ); }, XOR( "IsBurstMode" ),
+			[ & ]( sdk::weapon_cs_base& w ) { return w.is_burst_mode( ); }, XOR( "GetFireReadyTime" ),
+			[ & ]( sdk::weapon_cs_base& w ) { return w.get_fire_ready_time( ); }, XOR( "GetBurstShotsRemaining" ),
+			[ & ]( sdk::weapon_cs_base& w ) { return w.get_burst_shots_remaining( ); }, XOR( "GetAmmo" ),
+			[ & ]( sdk::weapon_cs_base& w ) { return w.get_ammo( ); }, XOR( "GetViewModelIndex" ),
+			[ & ]( sdk::weapon_cs_base& w ) { return w.get_view_model_index( ); }, XOR( "GetNextPrimaryAttack" ),
+			[ & ]( sdk::weapon_cs_base& w ) { return w.get_next_primary_attack( ); }, sol::base_classes, sol::bases< sdk::base_entity >( ) );
 		state.new_usertype< sdk::cs_player >(
 			XOR( "CSPlayer" ), XOR( "IsAlive" ), &sdk::cs_player::is_alive, XOR( "GetEyePosition" ),
 			[ & ]( sdk::cs_player& pl ) {
@@ -189,7 +207,7 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			XOR( "GetVelocityModifier" ), &sdk::cs_player::get_velocity_modifier, XOR( "IsImmune" ), &sdk::cs_player::is_immune,
 			XOR( "IsPlayerGhost" ), &sdk::cs_player::is_player_ghost, XOR( "IsScoped" ), &sdk::cs_player::is_scoped, XOR( "HasHelmet" ),
 			&sdk::cs_player::has_helmet, XOR( "GetArmorValue" ), &sdk::cs_player::armor_value, XOR( "CanFireShot" ), &sdk::cs_player::can_fire_shot,
-			XOR( "IsEnemy" ), [ & ]( sdk::cs_player& p, sdk::player& rhs ) { return p.is_enemy( &rhs.get( ) ); }, XOR( "GetDuckAmount" ),
+			XOR( "IsEnemy" ), [ & ]( sdk::cs_player& p, sdk::cs_player& rhs ) { return p.is_enemy( &rhs ); }, XOR( "GetDuckAmount" ),
 			[ & ]( sdk::cs_player& p ) { return p.get_duck_amount( ); }, XOR( "GetDuckSpeed" ),
 			[ & ]( sdk::cs_player& p ) { return p.get_duck_speed( ); }, XOR( "GetHealth" ), [ & ]( sdk::cs_player& p ) { return p.get_health( ); },
 			XOR( "GetFlags" ), [ & ]( sdk::cs_player& p ) { return p.get_flags( ); }, XOR( "GetTickbase" ),
@@ -212,6 +230,13 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 				return *( ::lua::vec* )&what;
 			},
 			sol::base_classes, sol::bases< sdk::base_entity >( ) );
+		state.new_usertype< sdk::handle >(
+			XOR( "Handle" ), XOR( "m_Index" ), &sdk::handle::m_idx, XOR( "IsValid" ), &sdk::handle::validate, XOR( "GetEntityRef" ),
+			[ & ]( sdk::handle& h ) { return h.get< sdk::base_entity* >( ); }, XOR( "GetPlayerRef" ),
+			[ & ]( sdk::handle& h ) { return h.get< sdk::cs_player* >( ); }, XOR( "GetWeaponRef" ),
+			[ & ]( sdk::handle& h ) { return h.get< sdk::weapon_cs_base* >( ); } );
+		state[ XOR( "CSPlayer" ) ][ XOR( "GetActiveWeapon" ) ] = [ & ]( sdk::cs_player& p ) { return p.get_active_weapon( ); };
+
 		state.new_usertype< sdk::player >(
 			XOR( "Player" ), sol::constructors< sdk::player( ), sdk::player( sdk::cs_player* ), sdk::player( const sdk::player& ) >( ),
 			XOR( "IsValid" ), &sdk::player::valid, XOR( "GetRef" ), &sdk::player::get, XOR( "GetPlayerInfo" ), &sdk::player::get_player_info );
@@ -316,6 +341,20 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 				return tr;
 			} );
 
+		// Entity List
+		state.new_usertype< sdk::interfaces::ent_list >(
+			XOR( "_EntityList" ), XOR( "GetEntityRef" ), [ & ]( sdk::interfaces::ent_list& e, i32 i ) { return e.get< sdk::base_entity* >( i ); },
+			XOR( "GetPlayerRef" ), [ & ]( sdk::interfaces::ent_list& e, i32 i ) { return e.get< sdk::cs_player* >( i ); }, XOR( "GetWeaponRef" ),
+			[ & ]( sdk::interfaces::ent_list& e, i32 i ) { return e.get< sdk::weapon_cs_base* >( i ); }, XOR( "GetHighestEntityIndex" ),
+			[ & ]( sdk::interfaces::ent_list& e ) { return e.get_highest_entity_index( ); } );
+
+		// Engine
+		state.new_usertype< sdk::interfaces::engine >(
+			XOR( "_EngineClient" ), XOR( "GetLocalPlayerIndex" ), [ & ]( sdk::interfaces::engine& e ) { return e.get_local_player_index( ); },
+			XOR( "GetPlayerInfo" ), [ & ]( sdk::interfaces::engine& e, i32 idx ) { return e.get_player_info( idx ); }, XOR( "IsInGame" ),
+			[ & ]( sdk::interfaces::engine& e ) { return e.is_in_game( ); }, XOR( "ExecuteClientCmd" ),
+			[ & ]( sdk::interfaces::engine& e, std::string&& cmd ) { e.execute_client_cmd( cmd.c_str( ) ); } );
+
 		// Global important variables
 		state.script( XOR( "g_Cmd = UserCmd.new()" ) );
 		state.script( XOR( "g_FrameStage = 0" ) );
@@ -325,6 +364,8 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 		state.set( XOR( "g_ClientModeShared" ), g_csgo.m_client_mode_shared );
 		state.set( XOR( "g_Globals" ), g_csgo.m_globals );
 		state.set( XOR( "g_EngineTrace" ), g_csgo.m_engine_trace );
+		state.set( XOR( "g_EngineClient" ), g_csgo.m_engine );
+		state.set( XOR( "g_EntList" ), g_csgo.m_ent_list );
 
 		// Global enums
 		state.script( R"(
