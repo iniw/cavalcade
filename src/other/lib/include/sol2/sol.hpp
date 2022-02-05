@@ -295,123 +295,20 @@
 
 #define SOL_ALL_SAFETIES_ON_I_ SOL_ON
 
-#if defined(SOL_SAFE_GETTER)
-	#if SOL_SAFE_GETTER != 0
 		#define SOL_SAFE_GETTER_I_ SOL_ON
-	#else
-		#define SOL_SAFE_GETTER_I_ SOL_OFF
-	#endif
-#else
-	#if SOL_IS_ON(SOL_ALL_SAFETIES_ON_I_)
-		#define SOL_SAFE_GETTER_I_ SOL_ON
-	#elif SOL_IS_ON(SOL_DEBUG_BUILD_I_)
-		#define SOL_SAFE_GETTER_I_ SOL_DEFAULT_ON
-	#else
-		#define SOL_SAFE_GETTER_I_ SOL_DEFAULT_OFF
-	#endif
-#endif
 
-#if defined(SOL_SAFE_USERTYPE)
-	#if SOL_SAFE_USERTYPE != 0
-		#define SOL_SAFE_USERTYPE_I_ SOL_ON
-	#else
-		#define SOL_SAFE_USERTYPE_I_ SOL_OFF
-	#endif
-#else
-	#if SOL_IS_ON(SOL_ALL_SAFETIES_ON_I_)
-		#define SOL_SAFE_USERTYPE_I_ SOL_ON
-	#elif SOL_IS_ON(SOL_DEBUG_BUILD_I_)
 		#define SOL_SAFE_USERTYPE_I_ SOL_DEFAULT_ON
-	#else
-		#define SOL_SAFE_USERTYPE_I_ SOL_DEFAULT_OFF
-	#endif
-#endif
 
-#if defined(SOL_SAFE_REFERENCES)
-	#if SOL_SAFE_REFERENCES != 0
 		#define SOL_SAFE_REFERENCES_I_ SOL_ON
-	#else
-		#define SOL_SAFE_REFERENCES_I_ SOL_OFF
-	#endif
-#else
-	#if SOL_IS_ON(SOL_ALL_SAFETIES_ON_I_)
-		#define SOL_SAFE_REFERENCES_I_ SOL_ON
-	#elif SOL_IS_ON(SOL_DEBUG_BUILD_I_)
-		#define SOL_SAFE_REFERENCES_I_ SOL_DEFAULT_ON
-	#else
-		#define SOL_SAFE_REFERENCES_I_ SOL_DEFAULT_OFF
-	#endif
-#endif
 
-#if defined(SOL_SAFE_FUNCTIONS)
-	#if SOL_SAFE_FUNCTIONS != 0
 		#define SOL_SAFE_FUNCTION_OBJECTS_I_ SOL_ON
-	#else
-		#define SOL_SAFE_FUNCTION_OBJECTS_I_ SOL_OFF
-	#endif
-#elif defined (SOL_SAFE_FUNCTION_OBJECTS)
-	#if SOL_SAFE_FUNCTION_OBJECTS != 0
-		#define SOL_SAFE_FUNCTION_OBJECTS_I_ SOL_ON
-	#else
-		#define SOL_SAFE_FUNCTION_OBJECTS_I_ SOL_OFF
-	#endif
-#else
-	#if SOL_IS_ON(SOL_ALL_SAFETIES_ON_I_)
-		#define SOL_SAFE_FUNCTION_OBJECTS_I_ SOL_ON
-	#elif SOL_IS_ON(SOL_DEBUG_BUILD_I_)
-		#define SOL_SAFE_FUNCTION_OBJECTS_I_ SOL_DEFAULT_ON
-	#else
-		#define SOL_SAFE_FUNCTION_OBJECTS_I_ SOL_DEFAULT_OFF
-	#endif
-#endif
-
-#if defined(SOL_SAFE_FUNCTION_CALLS)
-	#if SOL_SAFE_FUNCTION_CALLS != 0
 		#define SOL_SAFE_FUNCTION_CALLS_I_ SOL_ON
-	#else
-		#define SOL_SAFE_FUNCTION_CALLS_I_ SOL_OFF
-	#endif
-#else
-	#if SOL_IS_ON(SOL_ALL_SAFETIES_ON_I_)
-		#define SOL_SAFE_FUNCTION_CALLS_I_ SOL_ON
-	#elif SOL_IS_ON(SOL_DEBUG_BUILD_I_)
-		#define SOL_SAFE_FUNCTION_CALLS_I_ SOL_DEFAULT_ON
-	#else
-		#define SOL_SAFE_FUNCTION_CALLS_I_ SOL_DEFAULT_OFF
-	#endif
-#endif
 
-#if defined(SOL_SAFE_PROXIES)
-	#if SOL_SAFE_PROXIES != 0
-		#define SOL_SAFE_PROXIES_I_ SOL_ON
-	#else
-		#define SOL_SAFE_PROXIES_I_ SOL_OFF
-	#endif
-#else
-	#if SOL_IS_ON(SOL_ALL_SAFETIES_ON_I_)
-		#define SOL_SAFE_PROXIES_I_ SOL_ON
-	#elif SOL_IS_ON(SOL_DEBUG_BUILD_I_)
+
 		#define SOL_SAFE_PROXIES_I_ SOL_DEFAULT_ON
-	#else
-		#define SOL_SAFE_PROXIES_I_ SOL_DEFAULT_OFF
-	#endif
-#endif
 
-#if defined(SOL_SAFE_NUMERICS)
-	#if SOL_SAFE_NUMERICS != 0
-		#define SOL_SAFE_NUMERICS_I_ SOL_ON
-	#else
-		#define SOL_SAFE_NUMERICS_I_ SOL_OFF
-	#endif
-#else
-	#if SOL_IS_ON(SOL_ALL_SAFETIES_ON_I_)
-		#define SOL_SAFE_NUMERICS_I_ SOL_ON
-	#elif SOL_IS_ON(SOL_DEBUG_BUILD_I_)
 		#define SOL_SAFE_NUMERICS_I_ SOL_DEFAULT_ON
-	#else
-		#define SOL_SAFE_NUMERICS_I_ SOL_DEFAULT_OFF
-	#endif
-#endif
+
 
 #if defined(SOL_ALL_INTEGER_VALUES_FIT)
 	#if (SOL_ALL_INTEGER_VALUES_FIT != 0)
@@ -515,21 +412,8 @@
 	#define SOL_USERTYPE_TYPE_BINDING_INFO_I_ SOL_DEFAULT_ON
 #endif // We should generate a my_type.__type table with lots of class information for usertypes
 
-#if defined(SOL_AUTOMAGICAL_TYPES_BY_DEFAULT)
-	#if (SOL_AUTOMAGICAL_TYPES_BY_DEFAULT != 0)
 		#define SOL_DEFAULT_AUTOMAGICAL_USERTYPES_I_ SOL_ON
-	#else
-		#define SOL_DEFAULT_AUTOMAGICAL_USERTYPES_I_ SOL_OFF
-	#endif
-#elif defined(SOL_DEFAULT_AUTOMAGICAL_USERTYPES)
-	#if (SOL_DEFAULT_AUTOMAGICAL_USERTYPES != 0)
-		#define SOL_DEFAULT_AUTOMAGICAL_USERTYPES_I_ SOL_ON
-	#else
-		#define SOL_DEFAULT_AUTOMAGICAL_USERTYPES_I_ SOL_OFF
-	#endif
-#else
-	#define SOL_DEFAULT_AUTOMAGICAL_USERTYPES_I_ SOL_DEFAULT_ON
-#endif // make is_automagical on/off by default
+
 
 #if defined(SOL_STD_VARIANT)
 	#if (SOL_STD_VARIANT != 0)
