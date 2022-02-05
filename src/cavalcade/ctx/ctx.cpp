@@ -609,6 +609,35 @@ void cavalcade::lua_impl::push( std::string_view code ) {
         )" );
 
 		state.script( R"(   
+        CmdButtons = {
+            IN_ATTACK = bit.lshift(1,  0),
+            IN_JUMP = bit.lshift(1,  1),
+            IN_DUCK = bit.lshift(1,  2),
+            IN_FORWARD = bit.lshift(1,  3),
+            IN_BACK = bit.lshift(1,  4),
+            IN_USE = bit.lshift(1,  5),
+            IN_CANCEL = bit.lshift(1,  6),
+            IN_LEFT = bit.lshift(1,  7),
+            IN_RIGHT = bit.lshift(1,  8),
+            IN_MOVELEFT = bit.lshift(1,  9),
+            IN_MOVERIGHT = bit.lshift(1,  10),
+            IN_ATTACK2 = bit.lshift(1,  11),
+            IN_RUN = bit.lshift(1,  12),
+            IN_RELOAD = bit.lshift(1,  13),
+            IN_ALT1 = bit.lshift(1,  14),
+            IN_ALT2 = bit.lshift(1,  15),
+            IN_SCORE = bit.lshift(1,  16),   -- Used by client.dll for when scoreboard is held down
+            IN_SPEED = bit.lshift(1,  17),	-- Player is holding the speed key
+            IN_WALK = bit.lshift(1,  18),	-- Player holding walk key
+            IN_ZOOM = bit.lshift(1,  19),	-- Zoom key for HUD zoom
+            IN_WEAPON1 = bit.lshift(1,  20),	-- weapon defines these bits
+            IN_WEAPON2 = bit.lshift(1,  21),	-- weapon defines these bits
+            IN_BULLRUSH = bit.lshift(1,  22),
+            IN_GRENADE1 = bit.lshift(1,  23),	-- grenade 1
+            IN_GRENADE2 = bit.lshift(1,  24),	-- grenade 2
+            IN_LOOKSPIN = bit.lshift(1,  25)
+        }
+        
         LifeStates = {
             ALIVE = 0,
             DYING = 1,
