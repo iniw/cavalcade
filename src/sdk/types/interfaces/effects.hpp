@@ -7,7 +7,7 @@
 
 namespace sdk::interfaces {
 	struct effects {
-		VFUNC( auxiliary::dlight*, alloc_dlight, 5, ( i32 key ), key );
+		VFUNC( auxiliary::dlight*, alloc_dlight, 4, ( i32 key ), key );
 	};
 } // namespace sdk::interfaces
 

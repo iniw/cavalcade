@@ -65,13 +65,13 @@ void hack::esp::run( ) {
 		static auto f = &g_render.m_fonts[ render::font::ESP ];
 
 		if ( anim.m_animation_factor > 0.F ) {
-			// sdk::auxiliary::dlight* light = g_csgo.m_effects->alloc_dlight( p.get( ).get_networkable_index( ) );
-			// light->m_die                  = g_csgo.m_globals->m_curtime + .05F;
-			// light->m_radius               = 200.F;
-			// light->m_color                = render::color( 255, 255, 255, /* exp */ 5 );
-			// light->m_key                  = p.get( ).get_networkable_index( );
-			// light->m_decay                = light->m_radius / 5.F;
-			// light->m_origin               = p.get( ).get_abs_origin( ) + math::v3f( 0, 0, 2 );
+			sdk::auxiliary::dlight* light = g_csgo.m_effects->alloc_dlight( p.get( ).get_networkable_index( ) );
+			light->m_die                  = g_csgo.m_globals->m_curtime + .05F;
+			light->m_radius               = 200.F;
+			light->m_color                = render::color( 255, 255, 255, /* exp */ 5 );
+			light->m_key                  = p.get( ).get_networkable_index( );
+			light->m_decay                = light->m_radius / 5.F;
+			light->m_origin               = p.get( ).get_abs_origin( ) + math::v3f( 0, 0, 2 );
 
 			std::pair< render::point, render::point > bbox;
 			auto box = bounding_box( p, bbox );
@@ -81,13 +81,12 @@ void hack::esp::run( ) {
 				if ( boxb )
 					aa[ 1 ] += 16 - ( 16 * anim.m_animation_factor );
 
+				auto clr = render::color( 0xffffffff ).frac_alpha( anim.m_animation_factor );
 				if ( box_w > 0 || box_h > 0 ) {
 					auto cw = .5F * ( box_w * .01F );
 					auto ch = .5F * ( box_h * .01F );
 					auto ow = box_w >= 99 ? 1 : 0;
 					auto oh = box_h >= 99 ? 1 : 0;
-
-					auto clr = render::color( 0xffffffff ).frac_alpha( anim.m_animation_factor );
 
 					if ( ow && oh ) {
 						g_render.m_safe.draw_shape< render::geometry::rect >(
@@ -132,32 +131,31 @@ void hack::esp::run( ) {
 							render::point{ aa[ 0 ] + bb[ 0 ] - 1, aa[ 1 ] + bb[ 1 ] - 1 },
 							render::point{ aa[ 0 ] + bb[ 0 ] - 1, aa[ 1 ] + bb[ 1 ] * ( 1.F - ch ) }, clr );
 					}
+				}
 
-					auto name   = std::string( p.get_name( ) );
-					auto offset = /* HACK */ name.find( XOR( "ygjpq" ) ) != std::string::npos ? 4 : 0;
-					auto text   = std::make_shared< render::geometry::text >( f, aa, std::move( name ), clr );
-					auto ts     = text->calc_size( );
-					text->m_point[ 0 ] += bb[ 0 ] / 2;
-					text->m_point[ 0 ] -= ts[ 0 ] / 2;
-					text->m_point[ 1 ] -= ts[ 1 ] + 3 + offset;
-					g_render.m_safe.draw_shape_p( std::move( text ) );
+				auto name   = std::string( p.get_name( ) );
+				auto offset = /* HACK */ name.find( XOR( "ygjpq" ) ) != std::string::npos ? 4 : 0;
+				auto text   = std::make_shared< render::geometry::text >( f, aa, std::move( name ), clr );
+				auto ts     = text->calc_size( );
+				text->m_point[ 0 ] += bb[ 0 ] / 2;
+				text->m_point[ 0 ] -= ts[ 0 ] / 2;
+				text->m_point[ 1 ] -= ts[ 1 ] + 3 + offset;
+				g_render.m_safe.draw_shape_p( std::move( text ) );
 
-					constexpr auto max_health = 100;
-					auto health               = std::min( max_health, p.get( ).get_health( ) );
-					auto height               = health * bb[ 1 ] / max_health;
+				constexpr auto max_health = 100;
+				auto health               = std::min( max_health, p.get( ).get_health( ) );
+				auto height               = health * bb[ 1 ] / max_health;
 
-					{
-						auto health_aa = render::point{ aa[ 0 ] - 7, aa[ 1 ] + bb[ 1 ] - height + 1 };
-						g_render.m_safe.draw_shape< render::geometry::rect_filled >(
-							health_aa, health_aa + render::point{ 3, height - 2 },
-							render::color( 0x00000044 ).frac_alpha( anim.m_animation_factor ) );
-						g_render.m_safe.draw_shape< render::geometry::rect_filled >( health_aa, health_aa + render::point{ 3, height - 2 },
-						                                                             render::color( 0xffff00ff ).mod_alpha( clr.m_a ) );
-					}
-					{
-						auto health_aa = render::point{ aa[ 0 ] - 8, aa[ 1 ] };
-						g_render.m_safe.draw_shape< render::geometry::rect >( health_aa, health_aa + render::point{ 5, bb[ 1 ] }, clr, 1.F );
-					}
+				{
+					auto health_aa = render::point{ aa[ 0 ] - 7, aa[ 1 ] + bb[ 1 ] - height + 1 };
+					g_render.m_safe.draw_shape< render::geometry::rect_filled >( health_aa, health_aa + render::point{ 3, height - 2 },
+					                                                             render::color( 0x00000044 ).frac_alpha( anim.m_animation_factor ) );
+					g_render.m_safe.draw_shape< render::geometry::rect_filled >( health_aa, health_aa + render::point{ 3, height - 2 },
+					                                                             render::color( 0xffff00ff ).mod_alpha( clr.m_a ) );
+				}
+				{
+					auto health_aa = render::point{ aa[ 0 ] - 8, aa[ 1 ] };
+					g_render.m_safe.draw_shape< render::geometry::rect >( health_aa, health_aa + render::point{ 5, bb[ 1 ] }, clr, 1.F );
 				}
 			}
 			{
