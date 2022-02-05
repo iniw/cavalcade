@@ -25,6 +25,7 @@ namespace sdk {
 		interfaces::engine_trace* m_engine_trace;
 		interfaces::physics_surface_props* m_physics_surface_props;
 		interfaces::engine_sound* m_engine_sound;
+		interfaces::effects* m_effects;
 
 		globals* m_globals;
 		move_helper* m_move_helper;

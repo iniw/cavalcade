@@ -22,6 +22,7 @@
 #include "enginetrace.hpp"
 #include "physicssurfaceprops.hpp"
 #include "enginesound.hpp"
+#include "effects.hpp"
 
 namespace sdk::interfaces {
 	struct registry {

@@ -30,6 +30,7 @@ set(SOURCES
     src/cavalcade/hack/indicators/screen.cpp
     src/cavalcade/hack/nightmode/nightmode.cpp
     src/cavalcade/hack/fog/fog.cpp
+    src/cavalcade/hack/sunset/sunset.cpp
     src/cavalcade/hack/movement/movement.cpp
     src/cavalcade/hack/hitmarker/hitmarker.cpp
     # hooks - functions

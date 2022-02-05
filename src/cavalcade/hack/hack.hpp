@@ -11,6 +11,7 @@
 #include "movement/movement.hpp"
 #include "hitmarker/hitmarker.hpp"
 #include "fog/fog.hpp"
+#include "sunset/sunset.hpp"
 
 namespace hack {
 	struct impl {
@@ -25,6 +26,7 @@ namespace hack {
 		movement m_movement;
 		hitmarker m_hitmarker;
 		fog m_fog;
+		sunset m_sunset;
 	};
 } // namespace hack
 

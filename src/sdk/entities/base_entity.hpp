@@ -56,6 +56,9 @@ namespace sdk {
 
 		NETVAR( render::color, fog_color_secondary, "DT_FogController->m_fog.colorSecondary" );
 
+		NETVAR( math::v3f, light_shadow_direction, "DT_CascadeLight->m_envLightShadowDirection" );
+		NETVAR( f32, max_shadow_dist, "DT_CascadeLight->m_flMaxShadowDist" );
+
 		auto physics_run_think( i32 think_method = 0 ) {
 			static auto function = g_mem[ CLIENT_DLL ].get_address< bool( __thiscall* )( void*, i32 ) >( HASH_CT( "C_BaseEntity::PhysicsRunThink" ) );
 

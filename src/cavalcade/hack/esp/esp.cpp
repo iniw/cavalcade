@@ -65,6 +65,14 @@ void hack::esp::run( ) {
 		static auto f = &g_render.m_fonts[ render::font::ESP ];
 
 		if ( anim.m_animation_factor > 0.F ) {
+			// sdk::auxiliary::dlight* light = g_csgo.m_effects->alloc_dlight( p.get( ).get_networkable_index( ) );
+			// light->m_die                  = g_csgo.m_globals->m_curtime + .05F;
+			// light->m_radius               = 200.F;
+			// light->m_color                = render::color( 255, 255, 255, /* exp */ 5 );
+			// light->m_key                  = p.get( ).get_networkable_index( );
+			// light->m_decay                = light->m_radius / 5.F;
+			// light->m_origin               = p.get( ).get_abs_origin( ) + math::v3f( 0, 0, 2 );
+
 			std::pair< render::point, render::point > bbox;
 			auto box = bounding_box( p, bbox );
 			if ( box ) {
