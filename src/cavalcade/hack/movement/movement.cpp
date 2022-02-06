@@ -80,9 +80,8 @@ void hack::movement::jumpbug( ) {
 		return;
 	}
 
-	m_in_jumpbug = false;
+	m_in_jumpbug = true;
 	if ( g_ctx.m_local.get( ).get_flags( ) & 1 ) {
-		m_in_jumpbug = true;
 		if ( !( m_base_flags & 1 ) )
 			g_ctx.m_cmd->m_buttons |= ( 1 << 2 );
 
@@ -255,13 +254,12 @@ void hack::movement::edgebug::run( i32 base_flags, f32 base_velocity ) {
 		return;
 	}
 
-	m_in_edgebug = false;
+	m_in_edgebug = true;
 	g_ctx.m_cmd->m_buttons &= ~( 1 << 2 );
 	if ( !m_predicted ) {
 		m_should_duck = false;
 
 		for ( auto runs = 0; runs < 2; ++runs ) {
-			m_in_edgebug = true;
 			if ( runs == 1 ) {
 				m_should_duck = true;
 				set( );
@@ -309,8 +307,6 @@ void hack::movement::edgebug::run( i32 base_flags, f32 base_velocity ) {
 		}
 	} else {
 		if ( g_csgo.m_globals->m_tickcount < ( m_simulation_tick + m_simulation_timestamp ) ) {
-			m_in_edgebug = true;
-
 			g_ctx.m_cmd->m_buttons &= ~( 1 << 3 );
 			g_ctx.m_cmd->m_buttons &= ~( 1 << 4 );
 			g_ctx.m_cmd->m_forward_move = 0.F;
