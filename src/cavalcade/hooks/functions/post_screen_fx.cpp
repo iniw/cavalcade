@@ -24,7 +24,7 @@ void __fastcall cavalcade::hooks::fx::post_screen_fx( unk ecx, unk edx, unk view
 
 		obj.m_full_bloom_render = false;
 		obj.m_glow_style        = 0;
-		obj.set( 1.F, 1.F, 1.f, 1.F );
+		obj.set( 1.F, 1.F, 1.f, 0.3F );
 	}
 
 	og( ecx, edx, view );

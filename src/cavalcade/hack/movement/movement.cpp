@@ -236,9 +236,7 @@ void hack::movement::edgebug::predict( i32 base_flags, f32 base_velocity ) {
 
 		auto gravity_velocity = roundf( ( -g_ctx.m_cvars.sv_gravity->get_float( ) ) * g_csgo.m_globals->m_interval_per_tick + zvel );
 
-		static auto& moe = gui::cfg::get< f32 >( HASH_CT( "main:group1:edgebug margin of error" ) );
-
-		if ( fabs( gravity_velocity - roundf( g_ctx.m_local.get( ).get_velocity( )[ 2 ] ) ) < ( ( moe * 0.001 ) + 0.0001 ) ) {
+		if ( gravity_velocity == roundf( g_ctx.m_local.get( ).get_velocity( )[ 2 ] ) ) {
 			m_predicted    = true;
 			m_fail_predict = false;
 		} else {
