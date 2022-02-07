@@ -13,13 +13,13 @@ const static std::map< hack::aimbot::e_hitboxes, std::vector< sdk::e_hitbox > > 
 
 	{ hack::aimbot::e_hitboxes::BODY, { sdk::e_hitbox::BELLY, sdk::e_hitbox::THORAX, sdk::e_hitbox::LOWER_CHEST, sdk::e_hitbox::UPPER_CHEST } },
 
-	{ hack::aimbot::e_hitboxes::ARMS,
-	  { sdk::e_hitbox::LEFT_HAND, sdk::e_hitbox::RIGHT_HAND, sdk::e_hitbox::RIGHT_UPPER_ARM, sdk::e_hitbox::RIGHT_FOREARM,
-	    sdk::e_hitbox::LEFT_UPPER_ARM, sdk::e_hitbox::LEFT_FOREARM } },
+	// { hack::aimbot::e_hitboxes::ARMS,
+	//   { sdk::e_hitbox::LEFT_HAND, sdk::e_hitbox::RIGHT_HAND, sdk::e_hitbox::RIGHT_UPPER_ARM, sdk::e_hitbox::RIGHT_FOREARM,
+	//     sdk::e_hitbox::LEFT_UPPER_ARM, sdk::e_hitbox::LEFT_FOREARM } },
 
-	{ hack::aimbot::e_hitboxes::LEGS,
-	  { sdk::e_hitbox::LEFT_THIGH, sdk::e_hitbox::RIGHT_THIGH, sdk::e_hitbox::LEFT_CALF, sdk::e_hitbox::RIGHT_CALF, sdk::e_hitbox::LEFT_FOOT,
-	    sdk::e_hitbox::RIGHT_FOOT } }
+	// { hack::aimbot::e_hitboxes::LEGS,
+	//   { sdk::e_hitbox::LEFT_THIGH, sdk::e_hitbox::RIGHT_THIGH, sdk::e_hitbox::LEFT_CALF, sdk::e_hitbox::RIGHT_CALF, sdk::e_hitbox::LEFT_FOOT,
+	//     sdk::e_hitbox::RIGHT_FOOT } }
 };
 
 static bool can_see( sdk::cs_player* e, const math::v3f& p ) {
