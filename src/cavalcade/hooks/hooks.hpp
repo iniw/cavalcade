@@ -61,8 +61,8 @@ namespace cavalcade {
 		};
 
 		struct base_player {
-			using create_move_fn = bool( __thiscall* )( sdk::cs_player*, f32, sdk::user_cmd* );
-			static bool __fastcall create_move( sdk::cs_player* ecx, unk, f32 input_sample_time, sdk::user_cmd* cmd );
+			using create_move_fn = bool( __stdcall* )( f32, sdk::user_cmd* );
+			static bool __stdcall create_move( f32 input_sample_time, sdk::user_cmd* cmd );
 		};
 
 		struct d3d9_device {

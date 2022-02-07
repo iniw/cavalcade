@@ -185,8 +185,8 @@ void mem::impl::add_addresses( ) {
 			ADD_PATTERN( CLIENT_DLL, "C_BasePlayer::InvalidateBoneCache", "80 3D ? ? ? ? ? 74 16 A1 ? ? ? ? 48 C7 81" );
 
 			ADD_PATTERN_REL( CLIENT_DLL, "C_BasePlayer::PostThinkVPhysics", "E8 ? ? ? ? 8B CF E8 ? ? ? ? 8B 06" );
-			ADD_PATTERN_REL( CLIENT_DLL, "C_BasePlayer::CreateMove", "E8 ? ? ? ? FF 15 ? ? ? ? 84 C0 74 29" );
 		}
+		ADD_PATTERN( CLIENT_DLL, "CreateMove", "55 8B EC 56 8D 75 04 8B 0E E8 ? ? ? ? 8B 0E" );
 
 		{ // C_BaseAnimating
 			ADD_PATTERN( CLIENT_DLL, "C_BaseAnimating::ShouldSkipAnimationFrame", "57 8B F9 8B 07 8B 80 ? ? ? ? FF D0 84 C0 75 02" );
