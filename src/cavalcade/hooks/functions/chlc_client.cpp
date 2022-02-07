@@ -48,6 +48,19 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	// std::unique_lock lock( g_lua.m_mutex );
 
+	g_csgo.m_map_name = std::nullopt;
+	g_csgo.m_sky_name = std::nullopt;
+	g_ctx.m_cmd       = nullptr;
+	g_hack.m_translator.m_pending_translations.clear( );
+	g_ctx.m_in_deathcam = false;
+	g_entity_cacher.clear( );
+	g_hack.m_trainer.clear( );
+	g_hack.m_esp.clear( );
+	g_hack.m_velgraph.clear( );
+	g_hack.m_indscreen.clear( );
+	g_hack.m_hitmarker.clear( );
+	g_hack.m_movement.clear( );
+
 	// NOTE(para): it's particularly important for this to be here, before og
 	g_hack.m_nightmode.clear( );
 	g_hack.m_fog.reset( );
