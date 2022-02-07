@@ -1,5 +1,16 @@
 #include "../hooks.hpp"
 
+static bool prev = false;
+
+void cavalcade::hooks::engine_client::set_view_angles( unk ecx, unk edx, unk ang ) {
+	if ( prev )
+		return;
+
+	static auto og = g_mem[ CLIENT_DLL ].get_og< set_view_angles_fn >( HASH_CT( "SetViewAngles" ) );
+
+	return og( ecx, edx, ang );
+}
+
 #define MULTIPLAYER_BACKUP 150
 bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 input_sample_time, sdk::user_cmd* cmd ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< create_move_fn >( HASH_CT( "C_BasePlayer::CreateMove" ) );
@@ -21,12 +32,6 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 		return og( ecx, input_sample_time, cmd );
 	}
 
-	if ( !cmd || !cmd->m_command_number || !input_sample_time )
-		return og( ecx, input_sample_time, cmd );
-
-	if ( og( ecx, input_sample_time, cmd ) )
-		ecx->set_local_view_angles( cmd->m_view_angles );
-
 	// NOTE(para): update our command after modification, just in case
 	auto slot         = cmd->m_command_number % MULTIPLAYER_BACKUP;
 	auto verified_cmd = g_csgo.m_input->get_verified_cmd( slot );
@@ -34,7 +39,19 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 	if ( !verified_cmd )
 		return og( ecx, input_sample_time, cmd );
 
+	if ( !cmd || !cmd->m_command_number )
+		return og( ecx, input_sample_time, cmd );
+
 	g_ctx.m_cmd = cmd;
+
+	if ( !input_sample_time )
+		return og( ecx, input_sample_time, cmd );
+
+	const auto cur = cmd->m_view_angles;
+
+	prev = true;
+	og( ecx, input_sample_time, cmd );
+	prev = false;
 
 	for ( auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 		state.set( XOR( "g_Cmd" ), g_ctx.m_cmd );
@@ -64,11 +81,17 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 
 	g_hack.m_trainer.run( );
 
+	auto old_angles = cmd->m_view_angles;
 	// NOTE(para): RED BLOCK
 	{
 		g_hack.m_prediction.update( );
 		g_hack.m_prediction.start( );
 		g_hack.m_prediction.apply( );
+		static auto& silent = gui::cfg::get< bool >( HASH_CT( "main:group1:silent" ) );
+
+		if ( silent )
+			g_hack.m_aimbot.run( cmd->m_view_angles.pitch, cmd->m_view_angles.yaw, true );
+
 		g_hack.m_prediction.restore( );
 
 		g_hack.m_movement.post( );
@@ -85,11 +108,29 @@ bool cavalcade::hooks::base_player::create_move( sdk::cs_player* ecx, unk, f32 i
 		}
 
 		cmd->m_view_angles.sanitize( );
+
+		constexpr auto DEG2RAD = []( const f32 x ) -> f32 { return x * ( M_PI / 180.F ); };
+
+		if ( silent ) {
+			auto yaw       = cur.yaw;
+			auto old_yaw   = yaw + ( yaw < 0.0f ? 360.0f : 0.0f );
+			auto new_yaw   = cmd->m_view_angles.yaw + ( cmd->m_view_angles.yaw < 0.0f ? 360.0f : 0.0f );
+			auto yaw_delta = new_yaw < old_yaw ? fabsf( new_yaw - old_yaw ) : 360.0f - fabsf( new_yaw - old_yaw );
+			yaw_delta      = 360.0f - yaw_delta;
+
+			auto forwardmove    = cmd->m_forward_move;
+			auto sidemove       = cmd->m_side_move;
+			cmd->m_forward_move = cos( DEG2RAD( yaw_delta ) ) * forwardmove + cos( DEG2RAD( yaw_delta + 90.0f ) ) * sidemove;
+			cmd->m_side_move    = sin( DEG2RAD( yaw_delta ) ) * forwardmove + sin( DEG2RAD( yaw_delta + 90.0f ) ) * sidemove;
+			cmd->m_forward_move = std::clamp( cmd->m_forward_move, -450.0f, 450.0f );
+			cmd->m_side_move    = std::clamp( cmd->m_side_move, -450.0f, 450.0f );
+		}
+
 		cmd->m_view_angles.clamp_angle( );
 	}
 
 	verified_cmd->m_cmd = *cmd;
-	verified_cmd->m_crc = cmd->get_checksum( );
+	verified_cmd->m_crc = verified_cmd->m_cmd.get_checksum( );
 
 	return false;
 }

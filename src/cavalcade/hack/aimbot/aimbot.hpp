@@ -22,7 +22,7 @@ namespace hack {
 		static math::ang pixels_to_angle( f32 x, f32 y );
 		static math::ang angle_to_pixels( const math::ang& );
 
-		void run( f32& x, f32& y );
+		void run( f32& x, f32& y, bool arg_is_angle = false );
 
 		sdk::cs_player* m_best_player{ nullptr };
 		f32 m_best_fov{ std::numeric_limits< f32 >::max( ) };

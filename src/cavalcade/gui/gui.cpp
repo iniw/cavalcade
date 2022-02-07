@@ -29,6 +29,7 @@ void gui::impl::init( ) {
 		/* NOTE: default value: 32 */
 		gb->add< objects::slider< i32 > >( XOR( "edgebug radius" ), XOR( "edgebug radius" ), 0, 128 );
 		gb->add< objects::checkbox >( XOR( "on attack" ), XOR( "on attack" ) );
+		gb->add< objects::checkbox >( XOR( "silent" ), XOR( "silent" ) );
 		gb->add< objects::slider< i32 > >( XOR( "fov" ), XOR( "fov" ), 0, 180 );
 		gb->add< objects::slider< i32 > >( XOR( "smoothing" ), XOR( "smoothing" ), 0, 100 );
 		gb->add< objects::slider< i32 > >( XOR( "bw" ), XOR( "bw" ), 0, 100 );

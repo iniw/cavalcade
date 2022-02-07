@@ -73,11 +73,6 @@ namespace cavalcade {
 			static HRESULT D3DAPI reset( IDirect3DDevice9* device, D3DPRESENT_PARAMETERS* presentation_params );
 		};
 
-		struct engine_client {
-			using is_hltv_fn = bool( __thiscall* )( unk );
-			static bool __fastcall is_hltv( unk ecx, unk );
-		};
-
 		struct prediction {
 			using setup_move_fn = void( __fastcall* )( unk, unk, sdk::cs_player*, sdk::user_cmd*, unk, sdk::move_data* );
 			static void __fastcall setup_move( unk, unk, sdk::cs_player*, sdk::user_cmd*, unk, sdk::move_data* );
@@ -137,6 +132,11 @@ namespace cavalcade {
 			                                   const char* sample, f32 volume, f32 attenuation, i32 seed, i32 flags, i32 pitch,
 			                                   const math::v3f* origin, const math::v3f* direction, math::v3f* vec_origins, bool update_positions,
 			                                   f32 sound_time, i32 speaker_entity, unk params );
+		};
+
+		struct engine_client {
+			using set_view_angles_fn = void( __fastcall* )( unk, unk, unk );
+			static void __fastcall set_view_angles( unk, unk, unk );
 		};
 
 		struct fx {

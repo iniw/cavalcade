@@ -86,6 +86,7 @@ void mem::impl::add_addresses( ) {
 		ADD_PATTERN( CLIENT_DLL, "g_pWorld", "A1 ? ? ? ? 81 C4 ? ? ? ? B9 ? ? ? ? 89 4D FC 85 C0 0F 84 ? ? ? ? F3 0F " );
 		ADD_PATTERN_REL( CLIENT_DLL, "GetFullFrameFrameBufferTexture", "E8 ? ? ? ? 8B 1E 8B F8" );
 		ADD_ADDRESS( ENGINE_DLL, "EmitSound", get_v_func( g_csgo.m_engine_sound, 5 ) );
+		ADD_ADDRESS( CLIENT_DLL, "SetViewAngles", get_v_func( g_csgo.m_engine, 19 ) );
 		ADD_PATTERN(
 			ENGINE_DLL, "MaterialSystem",
 			"8B 0D ? ? ? ? 6A 00 6A 01 68 ? ? ? ? 8B 01 68 ? ? ? ? FF 90 ? ? ? ? C3 85 C9 78 35 3B 0D ? ? ? ? 7D 2D A1 ? ? ? ? 8B 0C 88 85 C9" );

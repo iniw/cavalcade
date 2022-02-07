@@ -13,6 +13,7 @@ bool cavalcade::hooks::init( ) {
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "ReportHit" ), &protobuf::report_hit );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CEngineClient::ClientCmd" ), &client_cmd_::client_cmd );
 	// MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CPrediction::SetupMove" ), &prediction::setup_move );
+	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "SetViewAngles" ), &engine_client::set_view_angles );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "C_BasePlayer::CreateMove" ), &base_player::create_move );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CEntityListener::OnAddEntity" ), &entity_listener::on_add_entity );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CEntityListener::OnRemoveEntity" ), &entity_listener::on_remove_entity );

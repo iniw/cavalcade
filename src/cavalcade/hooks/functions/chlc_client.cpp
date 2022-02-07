@@ -139,6 +139,9 @@ void cavalcade::hooks::chlc_client::on_override_mouse_input( unk ecx, unk edx, i
 
 	og( ecx, edx, slot, std::ref( x ), std::ref( y ) );
 
-	g_hack.m_aimbot.run( x, y );
+	static auto& silent = gui::cfg::get< bool >( HASH_CT( "main:group1:silent" ) );
+
+	if ( !silent )
+		g_hack.m_aimbot.run( x, y );
 	g_hack.m_movement.edgebug_scale_mouse( x );
 }

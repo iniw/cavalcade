@@ -41,7 +41,7 @@ void hack::other::prediction::start( ) {
 
 	g_csgo.m_prediction->check_moving_ground( g_ctx.m_local, g_csgo.m_globals->m_frametime );
 
-	g_ctx.m_local.get( ).set_local_view_angles( g_ctx.m_cmd->m_view_angles );
+	// g_ctx.m_local.get( ).set_local_view_angles( g_ctx.m_cmd->m_view_angles );
 
 	g_csgo.m_prediction->run_pre_think( g_ctx.m_local );
 

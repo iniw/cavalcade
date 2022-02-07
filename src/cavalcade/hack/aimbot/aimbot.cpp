@@ -55,7 +55,7 @@ static auto get_fov( const math::ang& view, const math::ang& aim ) {
 	return RAD2DEG( acos( _aim.dot_product( _ang ) / _aim.length_sqr( ) ) );
 }
 
-void hack::aimbot::run( f32& x, f32& y ) {
+void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 	m_aiming = false;
 
 	sdk::weapon_cs_base* weap = nullptr;
@@ -192,16 +192,26 @@ void hack::aimbot::run( f32& x, f32& y ) {
 				delta.pitch = std::clamp( view_delta[ 0 ], -delta_x, delta_x );
 				delta.yaw   = std::clamp( view_delta[ 1 ], -delta_y, delta_y );
 
-				auto pixels = angle_to_pixels( delta );
+				if ( arg_is_angle ) {
+					x += delta.pitch;
+					y += delta.yaw;
+				} else {
+					auto pixels = angle_to_pixels( delta );
 
-				x += pixels.pitch;
-				y += pixels.yaw;
-
+					x += pixels.pitch;
+					y += pixels.yaw;
+				}
 			} else {
-				auto position = angle_to_pixels( _view_delta );
+				if ( arg_is_angle ) {
+					auto a = aim_angle.clamp_angle( );
+					x      = a.pitch;
+					y      = a.yaw;
+				} else {
+					auto position = angle_to_pixels( _view_delta );
 
-				x = position.pitch;
-				y = position.yaw;
+					x = position.pitch;
+					y = position.yaw;
+				}
 			}
 		}
 	}
