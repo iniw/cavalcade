@@ -50,6 +50,7 @@ void render::impl::end( ) {
 	for ( auto& e : m_safe.m_queue_front ) {
 		e->draw( );
 	}
+
 	m_imgui.end( );
 
 	m_d3d9.restore_render_states( );

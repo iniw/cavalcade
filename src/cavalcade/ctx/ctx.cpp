@@ -52,6 +52,7 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 	auto state = sol::state{ };
 	auto map   = std::unordered_map< std::string, std::vector< sol::protected_function > >{ };
 	// Initialize callbacks dictionary
+	map[ XOR( "Paint" ) ]               = { };
 	map[ XOR( "FrameStageNotify" ) ]    = { };
 	map[ XOR( "CreateMove" ) ]          = { };
 	map[ XOR( "LevelInitPreEntity" ) ]  = { };
