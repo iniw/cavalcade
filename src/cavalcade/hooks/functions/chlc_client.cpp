@@ -7,6 +7,20 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 		g_render.m_safe.frame( [ & ]( ) {
 			// std::unique_lock lock( g_lua.m_mutex );
 
+			if ( g_csgo.m_engine->is_in_game( ) && g_ctx.m_local ) {
+				g_hack.m_esp.run( );
+
+				g_hack.m_fog.run( );
+				g_hack.m_sunset.run( );
+
+				if ( !g_ctx.m_in_deathcam && g_ctx.m_local.get( ).is_alive( ) ) {
+					g_hack.m_velgraph.draw( );
+					g_hack.m_indscreen.draw( );
+					g_hack.m_hitmarker.draw( );
+					g_hack.m_movement.pixelsurf_calculator( );
+				}
+			}
+
 			for ( const auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 				for ( const auto& callback : callbacks.at( XOR( "Paint" ) ) ) {
 					if ( callback.valid( ) ) {
@@ -23,24 +37,6 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 						}
 					}
 				}
-			}
-
-			if ( !g_csgo.m_engine->is_in_game( ) )
-				return;
-
-			if ( !g_ctx.m_local )
-				return;
-
-			g_hack.m_esp.run( );
-
-			g_hack.m_fog.run( );
-			g_hack.m_sunset.run( );
-
-			if ( !g_ctx.m_in_deathcam && g_ctx.m_local.get( ).is_alive( ) ) {
-				g_hack.m_velgraph.draw( );
-				g_hack.m_indscreen.draw( );
-				g_hack.m_hitmarker.draw( );
-				g_hack.m_movement.pixelsurf_calculator( );
 			}
 		} );
 	}
