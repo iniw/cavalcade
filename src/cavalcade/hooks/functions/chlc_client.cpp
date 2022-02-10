@@ -172,4 +172,8 @@ void cavalcade::hooks::chlc_client::on_override_mouse_input( unk ecx, unk edx, i
 	if ( !silent )
 		g_hack.m_aimbot.run( x, y );
 	g_hack.m_movement.edgebug_scale_mouse( x );
+	if ( g_hack.m_movement.m_pixelsurf.m_lock_mouse ) {
+		x = 0;
+		y = 0;
+	}
 }

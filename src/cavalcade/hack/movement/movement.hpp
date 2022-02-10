@@ -40,6 +40,18 @@ namespace hack {
 		void jumpbug( );
 		void longjump( );
 		void ladderjump( );
+
+		struct pixelsurf {
+			void run( );
+			void autoalign( );
+			void clear( );
+
+			i32 m_old_buttons{ 0 };
+			i32 m_duration{ 0 };
+			bool m_autoalign{ false };
+			bool m_lock_mouse{ false };
+		} m_pixelsurf;
+
 		void pixelsurf_calculator( );
 
 		// Aug 3, 2021
