@@ -156,6 +156,7 @@ void mem::impl::add_addresses( ) {
 		ADD_PATTERN_REL( CLIENT_DLL, "GetCachedBoneMatrix", "E8 ? ? ? ? 8B 4C 24 10 8D 44 24 6C" );
 
 		ADD_PATTERN( MATERIALSYSTEM_DLL, "GetColorModulation", "55 8B EC 83 EC ? 56 8B F1 8A 46" );
+		ADD_PATTERN_REL( CLIENT_DLL, "RestoreEntityToPredictedFrame", "E8 ? ? ? ? FF 74 3B 1C" );
 
 		{ // C_BaseEntity
 			ADD_PATTERN( CLIENT_DLL, "C_BaseEntity->m_vecAbsVelocity", "F3 0F 10 A6 ? ? ? ? F3 0F 11 64 24 ?" );

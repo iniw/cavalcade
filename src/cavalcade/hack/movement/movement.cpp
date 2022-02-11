@@ -54,7 +54,17 @@ void hack::movement::pre( ) {
 	m_lj_grounded    = g_ctx.m_local.get( ).get_ground_entity( ).get( ) && g_ctx.m_local.get( ).get_flags( ) & 1;
 
 	no_duck_delay( );
+
 	bunnyhop( );
+
+	m_in_minijump = false;
+	if ( ( true && g_io.key_state< io::key_state::DOWN >( 'B' ) ) && !local_on_ladder_or_noclip( ) ) {
+		auto buttons = g_ctx.m_cmd->m_buttons;
+		if ( ( buttons & 2 ) != 0 ) {
+			g_ctx.m_cmd->m_buttons = buttons | 4;
+			m_in_minijump          = true;
+		}
+	}
 
 	m_edgebug.prepare( );
 }
@@ -224,21 +234,22 @@ void hack::movement::edgebug::change_move_data( ) {
 }
 
 void hack::movement::edgebug::predict( i32 base_flags, f32 base_velocity ) {
-	if ( static_cast< int >( g_ctx.m_local.get( ).get_velocity( )[ 2 ] ) == 0 || base_flags & 1 ) {
+	if ( roundf( g_ctx.m_local.get( ).get_velocity( )[ 2 ] ) == 0.F || base_flags & 1 ) {
 		m_predicted    = false;
 		m_fail_predict = true;
 	} else if ( base_velocity < -6.25F && floor( g_ctx.m_local.get( ).get_velocity( )[ 2 ] ) > floor( base_velocity ) &&
 	            g_ctx.m_local.get( ).get_velocity( )[ 2 ] < -6.25F && !( g_ctx.m_local.get( ).get_flags( ) & 1 ) ) {
-		auto zvel = g_ctx.m_local.get( ).get_velocity( )[ 2 ];
+		auto velocity = g_ctx.m_local.get( ).get_velocity( )[ 2 ];
 
 		g_hack.m_prediction.start( );
 		change_move_data( );
 		g_hack.m_prediction.apply( );
 		g_hack.m_prediction.restore( );
 
-		auto gravity_velocity = roundf( ( -g_ctx.m_cvars.sv_gravity->get_float( ) ) * g_csgo.m_globals->m_interval_per_tick + zvel );
+		velocity = velocity - ( float )( g_ctx.m_cvars.sv_gravity->get_float( ) * g_csgo.m_globals->m_interval_per_tick );
+		velocity = roundf( velocity );
 
-		if ( gravity_velocity == roundf( g_ctx.m_local.get( ).get_velocity( )[ 2 ] ) ) {
+		if ( velocity == roundf( g_ctx.m_local.get( ).get_velocity( )[ 2 ] ) ) {
 			m_predicted    = true;
 			m_fail_predict = false;
 		} else {
@@ -256,6 +267,9 @@ void hack::movement::edgebug::run( i32 base_flags, f32 base_velocity ) {
 		m_in_edgebug  = false;
 		return;
 	}
+
+	static auto addy = g_mem[ CLIENT_DLL ].get_address< void( __stdcall* )( int a, int b ) >( HASH_CT( "RestoreEntityToPredictedFrame" ) );
+	addy( 0, g_csgo.m_prediction->m_commands_predicted - 1 );
 
 	m_in_edgebug = true;
 	g_ctx.m_cmd->m_buttons &= ~( 1 << 2 );
@@ -308,7 +322,9 @@ void hack::movement::edgebug::run( i32 base_flags, f32 base_velocity ) {
 			if ( m_predicted )
 				break;
 		}
-	} else {
+	}
+
+	if ( m_predicted ) {
 		if ( g_csgo.m_globals->m_tickcount < ( m_simulation_tick + m_simulation_timestamp ) ) {
 			g_ctx.m_cmd->m_buttons &= ~( 1 << 3 );
 			g_ctx.m_cmd->m_buttons &= ~( 1 << 4 );
@@ -348,20 +364,24 @@ void hack::movement::pixelsurf::run( ) {
 		return;
 	}
 
+	static auto addy = g_mem[ CLIENT_DLL ].get_address< void( __stdcall* )( int a, int b ) >( HASH_CT( "RestoreEntityToPredictedFrame" ) );
+	addy( 0, g_csgo.m_prediction->m_commands_predicted - 1 );
+
 	i32 ticks       = 0;
 	bool predicted  = false;
 	static auto& pt = gui::cfg::get< i32 >( HASH_CT( "main:group1:pixelsurf ticks" ) );
 
+	m_in_pixelsurf = false;
+
 	if ( pt > 0 ) {
 		do {
 			auto base_velocity = g_ctx.m_local.get( ).get_velocity( )[ 2 ];
-
 			g_hack.m_prediction.start( );
 			g_hack.m_prediction.apply( );
 
 			// NOTE(para): I have no idea why this is running <<during>> prediction, but whatever the boss says
-			if ( base_velocity < -6.25F && g_ctx.m_local.get( ).get_velocity( )[ 2 ] < 6.25F &&
-			     g_ctx.m_local.get( ).get_velocity( )[ 2 ] > base_velocity && !( g_ctx.m_local.get( ).get_flags( ) & 1 ) ) {
+			if ( g_ctx.m_local.get( ).get_velocity( )[ 2 ] < -6.25F && g_ctx.m_local.get( ).get_velocity( )[ 2 ] > base_velocity &&
+			     !( g_ctx.m_local.get( ).get_flags( ) & 1 ) ) {
 				predicted     = true;
 				m_duration    = ticks;
 				m_old_buttons = g_ctx.m_cmd->m_buttons;
@@ -370,16 +390,19 @@ void hack::movement::pixelsurf::run( ) {
 			g_hack.m_prediction.restore( );
 
 			++ticks;
-		} while ( ticks < pt && !predicted );
+		} while ( ticks < pt );
 
 		if ( predicted )
 			goto apply;
 	}
 
-	if ( g_ctx.m_local.get( ).get_velocity( )[ 2 ] == -6.25F || g_ctx.m_local.get( ).get_velocity( )[ 2 ] == -3.125 ) {
+	if ( g_ctx.m_local.get( ).get_velocity( )[ 2 ] == -6.25F || g_ctx.m_local.get( ).get_velocity( )[ 2 ] == -3.125F ) {
 	apply:
 		m_autoalign = true;
 		g_ctx.m_cmd->m_buttons |= 4;
+		m_old_buttons |= 4;
+
+		m_in_pixelsurf = true;
 	} else {
 		m_autoalign = false;
 	}
@@ -449,16 +472,15 @@ void hack::movement::pixelsurf::autoalign( ) {
 		v17         = floor( origin[ 0 ] );
 		f32 v21     = origin[ 0 ] - v17;
 
-		float v8   = 0;
-		int v9     = 0;
-		int v6     = 0;
-		int v7     = 0;
-		int v10    = 0;
-		float v11  = 0.F;
-		int v12    = 0;
-		bool state = false;
+		float v8  = 0;
+		int v9    = 0;
+		int v6    = 0;
+		int v7    = 0;
+		int v10   = 0;
+		float v11 = 0.F;
+		int v12   = 0;
 		if ( ( g_ctx.m_local.get( ).get_flags( ) & 1 ) ) {
-			state = false;
+			v7 = 0;
 			goto LABEL_35;
 		}
 		v6 = trace( );
@@ -516,10 +538,21 @@ void hack::movement::pixelsurf::autoalign( ) {
 			goto LABEL_36;
 		}
 
+		v8 = g_ctx.m_cmd->m_side_move;
+		if ( v8 <= 0.0 ) {
+			v6 = ( v8 >= 0.0 ) - 1;
+			// LODWORD( MoveFixAngle[ 0 ] ) = v6;
+		}
+		v9 = v6;
+		if ( v8 <= 0.0 )
+			goto LABEL_33;
+		v10 = 1;
+
 	LABEL_36:
 		auto v13 = g_ctx.m_local.get( ).get_velocity( );
 		v17      = atan2( 30.F, v13.length_2d( ) );
-		auto v14 = v17 * 57.295776;
+		auto v14 = ( v17 * 57.295776 ) * 6.2831855;
+
 		if ( v14 <= 90.F ) {
 			if ( v14 < 0.F )
 				v14 = 0;
@@ -528,8 +561,8 @@ void hack::movement::pixelsurf::autoalign( ) {
 		}
 
 		if ( g_ctx.m_cmd->m_side_move != 0.F && v7 &&
-		     ( v19 >= 0.00098999997 && v19 <= 0.03125 || v20 >= 0.00098999997 && v20 <= 0.03125 || v21 >= 0.00098999997 && v21 <= 0.03125 ||
-		       v22 >= 0.00098999997 && v22 <= 0.03125 ) ) {
+		     ( v19 >= 0.00050000002 && v19 <= 0.03125 || v20 >= 0.00050000002 && v20 <= 0.03125 || v21 >= 0.00050000002 && v21 <= 0.03125 ||
+		       v22 >= 0.00050000002 && v22 <= 0.03125 ) ) {
 			// NOTE(para): ???? is this a cursed optimization
 			for ( i = ( float )( ( float )v10 * v14 ) + ( float )( ( float )v9 * 90.0 ); i < -180.0; i = i + 360.0 )
 				;
@@ -556,9 +589,10 @@ void hack::movement::pixelsurf::autoalign( ) {
 }
 
 void hack::movement::pixelsurf::clear( ) {
-	m_duration   = -1;
-	m_lock_mouse = 0;
-	m_autoalign  = false;
+	m_duration     = -1;
+	m_lock_mouse   = 0;
+	m_autoalign    = false;
+	m_in_pixelsurf = false;
 }
 
 void hack::movement::clear( ) {
@@ -571,4 +605,5 @@ void hack::movement::clear( ) {
 	m_edgebug.m_simulation_tick      = 0;
 	m_edgebug.m_simulation_timestamp = 0;
 	m_pixelsurf.clear( );
+	m_in_minijump = false;
 }

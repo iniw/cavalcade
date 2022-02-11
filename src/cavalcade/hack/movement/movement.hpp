@@ -50,6 +50,7 @@ namespace hack {
 			i32 m_duration{ 0 };
 			bool m_autoalign{ false };
 			bool m_lock_mouse{ false };
+			bool m_in_pixelsurf{ false };
 		} m_pixelsurf;
 
 		void pixelsurf_calculator( );
@@ -96,6 +97,7 @@ namespace hack {
 		f32 m_old_velocity_z{ 0 };
 		i32 m_ladder_jump_tick{ 0 };
 		bool m_in_ladderjump{ false };
+		bool m_in_minijump{ false };
 		std::optional< math::v3f > m_pixelsurf_calculator_point{ };
 	};
 } // namespace hack

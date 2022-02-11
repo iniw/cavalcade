@@ -113,6 +113,10 @@ void hack::indicators::screen::draw( ) {
 			flags.push_back( flag( g_hack.m_movement.m_in_ladderjump, XOR( "LAJ" ) ) );
 		if ( g_io.key_state< io::key_state::DOWN >( VK_MBUTTON ) )
 			flags.push_back( flag( g_hack.m_movement.m_edgebug.m_predicted, XOR( "EB" ) ) );
+		if ( g_io.key_state< io::key_state::DOWN >( 'C' ) )
+			flags.push_back( flag( g_hack.m_movement.m_pixelsurf.m_in_pixelsurf, XOR( "PX" ) ) );
+		if ( g_io.key_state< io::key_state::DOWN >( 'B' ) )
+			flags.push_back( flag( g_hack.m_movement.m_in_minijump, XOR( "MJ" ) ) );
 
 		auto container_text = std::make_shared< render::geometry::text >( fa, render::point{ ss[ 0 ] / 2, vi ? flags_y : y }, flags.m_string,
 		                                                                  render::color( 255, 255, 255, 255 ) );

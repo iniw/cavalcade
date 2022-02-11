@@ -10,6 +10,7 @@ namespace sdk::interfaces {
 		bool m_engine_paused;
 		PAD( 0xD );
 		bool m_is_first_time_predicted;
+		i32 m_commands_predicted;
 
 		VFUNC( void, update, 3, ( i32 start_frame, bool valid_frame, i32 incoming_acknowledged, i32 outgoing_command ), start_frame, valid_frame,
 		       incoming_acknowledged, outgoing_command );
