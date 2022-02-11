@@ -171,7 +171,7 @@ void hack::movement::ladderjump( ) {
 	}
 
 	if ( claj ) {
-		if ( ( g_csgo.m_globals->m_tickcount - m_ladder_jump_tick ) > 1 && ( g_csgo.m_globals->m_tickcount - m_ladder_jump_tick ) < 15 ) {
+		if ( ( g_csgo.m_globals->m_tickcount - m_ladder_jump_tick ) > 3 && ( g_csgo.m_globals->m_tickcount - m_ladder_jump_tick ) < 15 ) {
 			g_ctx.m_cmd->m_forward_move = 0;
 			g_ctx.m_cmd->m_side_move    = 0;
 			g_ctx.m_cmd->m_buttons &= ~( 1 << 3 );
@@ -366,10 +366,11 @@ void hack::movement::pixelsurf::run( ) {
 				m_duration    = ticks;
 				m_old_buttons = g_ctx.m_cmd->m_buttons;
 			}
+
 			g_hack.m_prediction.restore( );
 
 			++ticks;
-		} while ( ticks < pt );
+		} while ( ticks < pt && !predicted );
 
 		if ( predicted )
 			goto apply;

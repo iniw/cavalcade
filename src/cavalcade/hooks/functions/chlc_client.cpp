@@ -75,6 +75,7 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	g_hack.m_indscreen.clear( );
 	g_hack.m_hitmarker.clear( );
 	g_hack.m_movement.clear( );
+	g_hack.m_prediction.m_prevent_sounds = false;
 
 	// NOTE(para): it's particularly important for this to be here, before og
 	g_hack.m_nightmode.clear( );
@@ -139,6 +140,7 @@ void cavalcade::hooks::chlc_client::level_shutdown( unk ecx, unk edx ) {
 	g_hack.m_indscreen.clear( );
 	g_hack.m_hitmarker.clear( );
 	g_hack.m_movement.clear( );
+	g_hack.m_prediction.m_prevent_sounds = false;
 
 	for ( auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 		state.set( XOR( "g_Cmd" ), sol::lua_nil );

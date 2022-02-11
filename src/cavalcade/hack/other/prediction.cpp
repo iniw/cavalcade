@@ -5,6 +5,8 @@
 void hack::other::prediction::start( ) {
 	g_csgo.m_move_helper->set_host( g_ctx.m_local );
 
+	m_prevent_sounds = true;
+
 	g_csgo.m_prediction->start_command( g_ctx.m_local, g_ctx.m_cmd );
 
 	m_backup_curtime   = g_csgo.m_globals->m_curtime;
@@ -61,6 +63,8 @@ void hack::other::prediction::apply( ) {
 }
 
 void hack::other::prediction::restore( ) {
+	m_prevent_sounds = false;
+
 	g_csgo.m_prediction->run_post_think( g_ctx.m_local );
 
 	g_csgo.m_game_movement->finish_track_prediction_errors( g_ctx.m_local );

@@ -24,13 +24,8 @@ void cavalcade::hooks::engine_sound::emit_sound( unk ecx, unk edx, unk filter, i
 		return og( ecx, edx, filter, entity_index, channel, sound_entry, sound_entry_hash, sample, volume, attenuation, seed, flags, pitch, origin,
 		           direction, vec_origins, update_positions, sound_time, speaker_entity, params );
 
-	if ( entity_index == g_ctx.m_local.get( ).get_networkable_index( ) ) {
-		if ( se.find( "land" ) != std::string_view::npos ) {
-			if ( g_hack.m_movement.m_in_jumpbug || g_hack.m_movement.m_edgebug.m_in_edgebug || g_hack.m_movement.m_in_ladderjump ) {
-				volume = 0.F;
-			}
-		}
-	}
+	if ( g_hack.m_prediction.m_prevent_sounds )
+		return;
 
 	og( ecx, edx, filter, entity_index, channel, sound_entry, sound_entry_hash, sample, volume, attenuation, seed, flags, pitch, origin, direction,
 	    vec_origins, update_positions, sound_time, speaker_entity, params );

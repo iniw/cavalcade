@@ -15,6 +15,8 @@ namespace hack::other {
 
 	public:
 
+		bool m_prevent_sounds{ false };
+
 		sdk::move_data m_move_data;
 
 		void start( );
