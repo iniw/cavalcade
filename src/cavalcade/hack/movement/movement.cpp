@@ -380,14 +380,17 @@ void hack::movement::pixelsurf::run( ) {
 			g_hack.m_prediction.apply( );
 
 			// NOTE(para): I have no idea why this is running <<during>> prediction, but whatever the boss says
-			if ( g_ctx.m_local.get( ).get_velocity( )[ 2 ] < -6.25F && g_ctx.m_local.get( ).get_velocity( )[ 2 ] > base_velocity &&
-			     !( g_ctx.m_local.get( ).get_flags( ) & 1 ) ) {
+			if ( base_velocity < -6.25F && g_ctx.m_local.get( ).get_velocity( )[ 2 ] < -6.25F &&
+			     g_ctx.m_local.get( ).get_velocity( )[ 2 ] > base_velocity && !( g_ctx.m_local.get( ).get_flags( ) & 1 ) ) {
 				predicted     = true;
 				m_duration    = ticks;
 				m_old_buttons = g_ctx.m_cmd->m_buttons;
 			}
 
 			g_hack.m_prediction.restore( );
+
+			// if ( predicted )
+			// 	break;
 
 			++ticks;
 		} while ( ticks < pt );
@@ -398,13 +401,13 @@ void hack::movement::pixelsurf::run( ) {
 
 	if ( g_ctx.m_local.get( ).get_velocity( )[ 2 ] == -6.25F || g_ctx.m_local.get( ).get_velocity( )[ 2 ] == -3.125F ) {
 	apply:
-		m_autoalign = true;
+		m_autoalign = false;
 		g_ctx.m_cmd->m_buttons |= 4;
 		m_old_buttons |= 4;
 
 		m_in_pixelsurf = true;
 	} else {
-		m_autoalign = false;
+		m_autoalign = true;
 	}
 
 	if ( m_duration == -1 ) {
@@ -416,8 +419,9 @@ void hack::movement::pixelsurf::run( ) {
 	}
 }
 
-constexpr static int positions[] = { 16.0399, 0,   0,   16.0399, 0,   0,   0,   30,  60,  142, 81,  120, 61,  141, 82,
-	                                 121,     268, 121, 249,     141, 270, 120, 249, 142, 255, 255, 255, 255, -1,  -16.0399 };
+// constexpr static float positions[] = { 16.0399, 0,   0,   16.0399, 0,   0,   0,   30,  60,  142, 81,  120, 61,  141, 82,
+// 	                                 121,     268, 121, 249,     141, 270, 120, 249, 142, 255, 255, 255, 255, -1,  -16.0399 };
+constexpr static float positions[] = { 0.F, 0.F, 16.0399F, -16.0399F, 0.F, 0.F, -16.0399F, 0.F, 0.F };
 
 // NOTE(para): thanks @soar for help here
 static int trace( ) {
@@ -427,8 +431,8 @@ static int trace( ) {
 	int v17 = 0;
 	float i;
 
-	for ( auto i = 1; i < sizeof( positions ) / sizeof( int ); ++i ) {
-		if ( i > sizeof( positions ) / sizeof( int ) )
+	for ( auto i = 1; i < sizeof( positions ) / sizeof( float ); ++i ) {
+		if ( i > sizeof( positions ) / sizeof( float ) )
 			break;
 
 		sdk::trace trace{ };
@@ -456,142 +460,268 @@ static int trace( ) {
 			break;
 	}
 
+	// g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), io::format( XOR( "chiggy bungus: {}\n" ), v11 ).c_str( ) );
+
 	return v11;
 }
 
 void hack::movement::pixelsurf::autoalign( ) {
 	if ( m_autoalign ) {
-		float i;
-		auto origin = g_ctx.m_local.get( ).get_origin( );
-		f32 v17     = floor( origin[ 1 ] );
-		f32 v20     = 1.F - ( origin[ 1 ] - v17 );
-		v17         = floor( origin[ 0 ] );
-		f32 v19     = 1.F - ( origin[ 0 ] - v17 );
-		v17         = floor( origin[ 1 ] );
-		f32 v22     = origin[ 0 ] - v17;
-		v17         = floor( origin[ 0 ] );
-		f32 v21     = origin[ 0 ] - v17;
+		// g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "chiggy bungus - inside\n" ) );
 
-		float v8  = 0;
-		int v9    = 0;
-		int v6    = 0;
-		int v7    = 0;
-		int v10   = 0;
-		float v11 = 0.F;
-		int v12   = 0;
-		if ( ( g_ctx.m_local.get( ).get_flags( ) & 1 ) ) {
-			v7 = 0;
-			goto LABEL_35;
-		}
-		v6 = trace( );
-		v7 = v6;
+		i32 AlignmentValue = 0;
+		i32 StateInteger   = 0;
+		i32 v6             = 0;
+		f32 v8             = 0.F;
+		bool v10           = false;
+		bool v11           = false;
+		f32 v9             = 0.F;
+		f32 v12            = 0.F;
+		f32 v13            = 0.F;
+		f32 v16            = 0.F;
+		bool v17           = false;
+		bool v18           = false;
+		i32 v56            = 0;
+		f32 v57            = 0.F;
+		bool v14           = false;
+		bool v15           = false;
 
-		if ( v6 != -1 ) {
-			switch ( v6 ) {
-			case 2:
-				v9  = 0;
-				v11 = g_ctx.m_cmd->m_side_move;
-				if ( v11 > 0.F )
-					v9 = 2;
-				if ( v11 <= 0.F )
-					v10 = ( v11 >= 0.F ) - 1;
-				else
-					v10 = 1;
-				goto LABEL_36;
-			case 3:
-				v8 = g_ctx.m_cmd->m_side_move;
-				if ( v8 <= 0.F ) {
-					v17 = v8 < 0.F;
-					v9  = v17;
-				} else {
-					v9 = -1;
-				}
+		f32 v23  = 0.F;
+		f32 __Za = 0.F;
+		f32 __Zb = 0.F;
+		f32 v24  = 0.F;
+		f32 v25  = 0.F;
+		f32 v26  = 0.F;
+		f32 v27  = 0.F;
+		f32 v28  = 0.F;
+		f32 v29  = 0.F;
+		f32 v30  = 0.F;
+		f32 v31  = 0.F;
+		f32 v32  = 0.F;
+		f32 v33  = 0.F;
+		f32 v34  = 0.F;
+		f32 v35  = 0.F;
 
-				if ( v8 > 0.F ) {
-					v10 = 1;
-					goto LABEL_36;
-				}
-			LABEL_33:
-				v10 = ( v8 >= 0.F ) - 1;
-				goto LABEL_36;
-			case 4:
-				v8 = g_ctx.m_cmd->m_side_move;
-				if ( v8 <= 0.F ) {
-					v12 = 0;
-					if ( v8 < 0.F )
-						v12 = -2;
+		f32 StateIntegera = 0.F;
+		f32 StateIntegerb = 0.F;
+		f32 StateIntegerc = 0.F;
+		auto origin       = g_ctx.m_local.get( ).get_origin( );
+		f32 __floor       = floor( origin[ 1 ] );
+		f32 __X           = 1.F - ( origin[ 1 ] - __floor );
+		v17               = floor( origin[ 0 ] );
+		f32 __Y           = 1.F - ( origin[ 0 ] - __floor );
+		v17               = floor( origin[ 1 ] );
+		f32 __Z           = origin[ 0 ] - __floor;
+		v17               = floor( origin[ 0 ] );
+		f32 __W           = origin[ 0 ] - __floor;
 
-					v17 = v12;
-					v9  = v12;
-				} else {
-					v9 = 0;
-				}
-				if ( v8 > 0.F ) {
-					v10 = 1;
-					goto LABEL_36;
-				}
-				goto LABEL_33;
-			}
-		LABEL_35:
-			v9  = 0;
-			v10 = 0;
-			goto LABEL_36;
-		}
-
-		v8 = g_ctx.m_cmd->m_side_move;
-		if ( v8 <= 0.0 ) {
-			v6 = ( v8 >= 0.0 ) - 1;
-			// LODWORD( MoveFixAngle[ 0 ] ) = v6;
-		}
-		v9 = v6;
-		if ( v8 <= 0.0 )
-			goto LABEL_33;
-		v10 = 1;
-
-	LABEL_36:
-		auto v13 = g_ctx.m_local.get( ).get_velocity( );
-		v17      = atan2( 30.F, v13.length_2d( ) );
-		auto v14 = ( v17 * 57.295776 ) * 6.2831855;
-
-		if ( v14 <= 90.F ) {
-			if ( v14 < 0.F )
-				v14 = 0;
+		if ( g_ctx.m_local.get( ).get_flags( ) & 1 ) {
+			AlignmentValue = 0;
+			StateInteger   = 0;
+			// g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "chiggy bungus - F AIL\n" ) );
 		} else {
-			v14 = 90.F;
-		}
+			v6             = trace( );
+			AlignmentValue = v6;
+			// g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "chiggy bungus - chiggy bungus - passed trace\n" ) );
 
-		if ( g_ctx.m_cmd->m_side_move != 0.F && v7 &&
-		     ( v19 >= 0.00050000002 && v19 <= 0.03125 || v20 >= 0.00050000002 && v20 <= 0.03125 || v21 >= 0.00050000002 && v21 <= 0.03125 ||
-		       v22 >= 0.00050000002 && v22 <= 0.03125 ) ) {
-			// NOTE(para): ???? is this a cursed optimization
-			for ( i = ( float )( ( float )v10 * v14 ) + ( float )( ( float )v9 * 90.0 ); i < -180.0; i = i + 360.0 )
-				;
-			for ( ; i > 180.0; i = i - 360.0 )
-				;
-			{
-				constexpr auto DEG2RAD = []( const f32 x ) -> f32 { return x * ( M_PI / 180.F ); };
+			switch ( v6 ) {
+			case 1:
+				// g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "chiggy bungus - case 1\n" ) );
 
-				auto yaw       = i;
-				auto old_yaw   = yaw + ( yaw < 0.0f ? 360.0f : 0.0f );
-				auto new_yaw   = g_ctx.m_cmd->m_view_angles.yaw + ( g_ctx.m_cmd->m_view_angles.yaw < 0.0f ? 360.0f : 0.0f );
-				auto yaw_delta = new_yaw < old_yaw ? fabsf( new_yaw - old_yaw ) : 360.0f - fabsf( new_yaw - old_yaw );
-				yaw_delta      = 360.0f - yaw_delta;
+				v8 = g_ctx.m_cmd->m_side_move;
+				if ( v8 <= 0.0 ) {
+					v10          = v8 > 0.0;
+					v11          = 0.0 == v8;
+					StateInteger = -1;
+					v9           = 0.0;
+					if ( v10 || v11 )
+						StateInteger = 0;
+				} else {
+					v9           = 0.0;
+					StateInteger = 1;
+				}
+				v12 = g_ctx.m_cmd->m_side_move;
+				if ( v12 > v9 ) {
+					v56 = 1;
+					goto LABEL_39;
+				}
+			LABEL_15:
+				if ( v12 < v9 ) {
+					v56 = -1;
+					goto LABEL_39;
+				}
+				goto LABEL_38;
+			case 2:
+				// g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "chiggy bungus - case 2\n" ) );
 
-				auto forwardmove            = g_ctx.m_cmd->m_forward_move;
-				auto sidemove               = g_ctx.m_cmd->m_side_move;
-				g_ctx.m_cmd->m_forward_move = cos( DEG2RAD( yaw_delta ) ) * forwardmove + cos( DEG2RAD( yaw_delta + 90.0f ) ) * sidemove;
-				g_ctx.m_cmd->m_side_move    = sin( DEG2RAD( yaw_delta ) ) * forwardmove + sin( DEG2RAD( yaw_delta + 90.0f ) ) * sidemove;
-				g_ctx.m_cmd->m_forward_move = std::clamp( g_ctx.m_cmd->m_forward_move, -450.0f, 450.0f );
-				g_ctx.m_cmd->m_side_move    = std::clamp( g_ctx.m_cmd->m_side_move, -450.0f, 450.0f );
+				StateInteger = 2;
+				v9           = 0.0;
+				if ( g_ctx.m_cmd->m_side_move <= 0.0 )
+					StateInteger = 0;
+				v12 = g_ctx.m_cmd->m_side_move;
+				if ( v12 > 0.0 ) {
+					v56 = 1;
+					goto LABEL_39;
+				}
+				goto LABEL_15;
+			case 3:
+				// g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "chiggy bungus - case 3\n" ) );
+
+				v13 = g_ctx.m_cmd->m_side_move;
+				if ( v13 <= 0.0 ) {
+					v14          = v13 > 0.0;
+					v15          = 0.0 == v13;
+					StateInteger = 1;
+					v9           = 0.0;
+					if ( v14 || v15 )
+						StateInteger = 0;
+				} else {
+					v9           = 0.0;
+					StateInteger = -1;
+				}
+				v12 = g_ctx.m_cmd->m_side_move;
+				if ( v12 > v9 ) {
+					v56 = 1;
+					goto LABEL_39;
+				}
+				goto LABEL_15;
+			case 4:
+				// g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "chiggy bungus - case 4\n" ) );
+
+				v57 = g_ctx.m_cmd->m_side_move;
+				v16 = v57;
+				if ( v57 <= 0.0 ) {
+					v17          = v16 > 0.0;
+					v18          = 0.0 == v16;
+					StateInteger = -2;
+					v9           = 0.0;
+					if ( !v17 && !v18 )
+						goto LABEL_34;
+				} else {
+					v9 = 0.0;
+				}
+				StateInteger = 0;
+			LABEL_34:
+				v12 = v57;
+				if ( v57 > v9 ) {
+					v56 = 1;
+					goto LABEL_39;
+				}
+				goto LABEL_15;
 			}
+			StateInteger = 0;
 		}
+
+	LABEL_38:
+		v56 = 0;
+	LABEL_39:
+		auto v46 = g_ctx.m_local.get( ).get_velocity( ).length_2d( );
+		auto v47 = 4.5 / v46;
+		auto v48 = atan( v47 );
+		auto v49 = v48 * 57.2957763671875;
+		auto v50 = v49 * 6.283185482025146;
+		f32 v20  = 0.F;
+		f32 v21  = 0.F;
+		f32 v22  = 0.F;
+		f32 v51  = 0.F;
+		if ( v50 > 90.0 ) {
+			v20 = 90.0;
+			v21 = 90.0;
+		LABEL_44:
+			v51 = v21;
+			v22 = 0.0;
+			goto LABEL_45;
+		}
+		if ( v50 >= 0.0 ) {
+			v21 = v50;
+			v20 = 90.0;
+			goto LABEL_44;
+		}
+		v20 = 90.0;
+		v22 = 0.0;
+		v51 = 0.0;
+
+	LABEL_45:
+		if ( g_ctx.m_cmd->m_side_move == v22 || !AlignmentValue )
+			return;
+		if ( __Y < 0.00050000002 ) {
+			v23 = 0.03125;
+		LABEL_52:
+			if ( ( __X < 0.00050000002 || __X > v23 ) && ( __W < 0.00050000002 || __W > v23 ) && ( __Z < 0.00050000002 || v23 < __Z ) )
+				return;
+			goto LABEL_49;
+		}
+		v23 = 0.03125;
+		if ( __Y > 0.03125 )
+			goto LABEL_52;
+	LABEL_49:
+		__Za          = ( float )v56;
+		v24           = __Za * v51;
+		__Zb          = ( float )StateInteger;
+		StateIntegerc = v20 * __Zb + v24;
+		v25           = StateIntegerc;
+		v26           = 360.0;
+		if ( StateIntegerc < -180.0 ) {
+			while ( 1 ) {
+				v28           = v26;
+				v29           = v25 + v26;
+				v30           = v28;
+				StateIntegera = v29;
+				if ( StateIntegera >= -180.0 )
+					break;
+				v26 = v30;
+				v25 = StateIntegera;
+			}
+			v31 = v30;
+			v25 = StateIntegera;
+			v27 = v31;
+		} else {
+			v27 = 360.0;
+		}
+		v32          = 180.0;
+		f32 setangle = 0.F;
+		if ( v25 > 180.0 ) {
+			while ( 1 ) {
+				v33           = v32;
+				v34           = v25;
+				v35           = v33;
+				StateIntegerb = v34 - v27;
+				if ( StateIntegerb <= v33 )
+					break;
+				v32 = v35;
+				v25 = StateIntegerb;
+			}
+			setangle = StateIntegerb;
+		} else {
+			setangle = v25;
+		}
+
+		{
+			constexpr auto DEG2RAD = []( const f32 x ) -> f32 { return x * ( M_PI / 180.F ); };
+			float rotation         = DEG2RAD( g_ctx.m_cmd->m_view_angles.yaw - setangle );
+
+			float cos_rot = std::cos( rotation );
+			float sin_rot = std::sin( rotation );
+
+			auto fmove = g_ctx.m_cmd->m_forward_move;
+			auto smove = g_ctx.m_cmd->m_side_move;
+
+			float new_forwardmove = ( cos_rot * fmove ) - ( sin_rot * smove );
+			float new_sidemove    = ( sin_rot * fmove ) + ( cos_rot * smove );
+
+			g_ctx.m_cmd->m_forward_move = new_forwardmove;
+			g_ctx.m_cmd->m_side_move    = new_sidemove;
+		}
+		// } else {
+		// 	g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "chiggy bungus - FAIL\n" ) );
+		// }
 	}
 }
 
 void hack::movement::pixelsurf::clear( ) {
-	m_duration     = -1;
-	m_lock_mouse   = 0;
-	m_autoalign    = false;
+	m_duration   = -1;
+	m_lock_mouse = 0;
+	// m_autoalign    = false;
 	m_in_pixelsurf = false;
 }
 
