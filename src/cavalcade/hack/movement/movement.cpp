@@ -66,6 +66,8 @@ void hack::movement::pre( ) {
 		}
 	}
 
+	m_jumpstats.run( );
+
 	m_edgebug.prepare( );
 }
 
@@ -103,7 +105,8 @@ void hack::movement::jumpbug( ) {
 	                 ( !g_ctx.m_local.get( ).get_ground_entity( ).get( ) && !( m_base_flags & 1 ) && !( g_ctx.m_local.get( ).get_flags( ) & 1 ) ) ) &&
 	               !local_on_ladder_or_noclip( );
 
-	if ( m_jumpbugged )
+	// NOTE(para): uncomment this when jumpstast are menu option because it looks ugly with this and em on
+	if ( m_jumpbugged && false )
 		g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
 			0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#fbf7f5\">movement</font><font color=\"#B9B9B9\"> | jumpbugged</font>" ) );
 }
@@ -338,6 +341,8 @@ void hack::movement::edgebug::run( i32 base_flags, f32 base_velocity ) {
 		} else {
 			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
 				0, 0, XOR( "<<<NO_TRANSLATE>>> <font color=\"#fbf7f5\">movement</font><font color=\"#B9B9B9\"> | edgebugged</font>" ) );
+
+			g_hack.m_movement.m_jumpstats.reset( );
 
 			m_predicted   = false;
 			m_should_duck = false;
@@ -725,6 +730,257 @@ void hack::movement::pixelsurf::clear( ) {
 	m_in_pixelsurf = false;
 }
 
+void hack::movement::jumpstats::run( ) {
+	if ( local_on_ladder_or_noclip( ) ) {
+		reset( );
+		return;
+	}
+
+	bool landed   = false;
+	auto velocity = g_ctx.m_local.get( ).get_velocity( );
+
+	i32 strafe_ticks       = 0;
+	i32 perfect_sync_ticks = 0;
+
+	if ( g_ctx.m_cmd->m_buttons & 2 && !m_calculate_height ) {
+		m_jump_origin      = g_ctx.m_local.get( ).get_origin( );
+		m_calculate_height = true;
+	}
+
+	if ( !( g_ctx.m_local.get( ).get_flags( ) & 1 ) ) {
+		m_air_tick = g_csgo.m_globals->m_tickcount;
+
+		if ( g_ctx.m_cmd->m_moused_x < 0 ) {
+			++strafe_ticks;
+
+			if ( !m_strafe_left && !m_strafe_right )
+				m_strafe_right = true;
+		} else if ( g_ctx.m_cmd->m_moused_x > 0 ) {
+			++strafe_ticks;
+
+			if ( !m_strafe_left && !m_strafe_right )
+				m_strafe_left = true;
+		}
+
+		if ( g_ctx.m_cmd->m_moused_x < 0 && m_strafe_left && !m_strafe_right ) {
+			m_strafe_right = true;
+			m_strafe_left  = false;
+
+			if ( g_ctx.m_cmd->m_buttons & ( 1 << 10 ) && !( g_ctx.m_cmd->m_buttons & ( 1 << 9 ) ) )
+				++perfect_sync_ticks;
+
+			++m_strafes;
+		} else if ( g_ctx.m_cmd->m_moused_x > 0 && !m_strafe_left && m_strafe_right ) {
+			m_strafe_left  = true;
+			m_strafe_right = false;
+
+			if ( !( g_ctx.m_cmd->m_buttons & ( 1 << 10 ) ) && g_ctx.m_cmd->m_buttons & ( 1 << 9 ) )
+				++perfect_sync_ticks;
+
+			++m_strafes;
+		}
+
+		if ( g_csgo.m_globals->m_tickcount != m_duration_ticks ) {
+			m_duration_ticks_pending = g_csgo.m_globals->m_tickcount - m_on_ground_tick;
+			m_duration_ticks         = g_csgo.m_globals->m_tickcount;
+		}
+
+		m_max    = std::max( m_max, ( i32 )g_ctx.m_local.get( ).get_velocity( ).length_2d( ) );
+		m_height = std::max( m_height, g_ctx.m_local.get( ).get_origin( )[ 2 ] - m_jump_origin[ 2 ] + 4.5999F );
+
+		if ( !m_last_jumping ) {
+			m_jump_position[ 0 ] = g_ctx.m_local.get( ).get_origin( );
+			m_pre                = g_ctx.m_local.get( ).get_velocity( ).length_2d( );
+		}
+
+		m_last_jumping = true;
+		goto update;
+	}
+
+	if ( g_ctx.m_local.get( ).get_flags( ) & 1 ) {
+		m_on_ground_tick = g_csgo.m_globals->m_tickcount;
+
+		if ( m_last_jumping ) {
+			landed               = true;
+			m_jump_position[ 1 ] = g_ctx.m_local.get( ).get_origin( );
+		}
+
+		m_last_jumping = false;
+	}
+
+	if ( !landed )
+		goto update;
+
+	m_distance = 32.F + ( m_jump_position[ 1 ] - m_jump_position[ 0 ] ).length_2d( );
+	if ( perfect_sync_ticks && strafe_ticks )
+		m_sync = std::min( 100.F, ( perfect_sync_ticks / strafe_ticks ) * 100.F );
+	else
+		m_sync = 0.F;
+
+	if ( ( m_distance > 200.F && m_distance < 280.F ) && ( m_jump_position[ 1 ][ 2 ] - m_jump_position[ 0 ][ 2 ] ) <= 64.F &&
+	     ( m_jump_position[ 1 ][ 2 ] - m_jump_position[ 0 ][ 2 ] ) >= -8.F ) {
+		// bhop
+		if ( m_hops == 1 && !m_jumpbug ) {
+			m_height -= 3.2F;
+			m_distance += 2.7F;
+
+			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
+				0, 0,
+				io::format( XOR( "<<<NO_TRANSLATE>>> <font color=\"#fbf7f5\">movement</font><font color=\"#B9B9B9\"> | bhop: </font><font "
+			                     "color=\"#00ff00\">{:.1f}</font><font color=\"#B9B9B9\"> | strafes: </font><font "
+			                     "color=\"#00ff00\">{}</font><font color=\"#B9B9B9\"> | speed: </font><font "
+			                     "color=\"#00ff00\">{}/{}</font><font color=\"#B9B9B9\"> | height: </font><font "
+			                     "color=\"#00ff00\">{:.1f}</font>" ),
+			                m_distance, m_strafes, m_pre, m_max, m_height )
+					.c_str( ) );
+
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "bhop: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{:.1f} " ), m_distance ).c_str( ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "| strafes: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{} " ), m_strafes ).c_str( ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "| speed: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{}/{} " ), m_pre, m_max ).c_str( ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "| height: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{:.1f}\n" ), m_height ).c_str( ) );
+		} else if ( m_hops > 1 && !m_jumpbug ) {
+			m_height -= 3.5F;
+			m_distance += 4.2F;
+			m_height -= 3.2F;
+			m_distance += 2.7F;
+
+			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
+				0, 0,
+				io::format( XOR( "<<<NO_TRANSLATE>>> <font color=\"#fbf7f5\">movement</font><font color=\"#B9B9B9\"> | mbhop: </font><font "
+			                     "color=\"#00ff00\">{:.1f}</font><font color=\"#B9B9B9\"> | hops: </font><font "
+			                     "color=\"#00ff00\">{}</font><font color=\"#B9B9B9\"> | strafes: </font><font "
+			                     "color=\"#00ff00\">{}</font><font color=\"#B9B9B9\"> | speed: </font><font "
+			                     "color=\"#00ff00\">{}/{}</font><font color=\"#B9B9B9\"> | height: </font><font "
+			                     "color=\"#00ff00\">{:.1f}</font>" ),
+			                m_distance, m_hops, m_strafes, m_pre, m_max, m_height )
+					.c_str( ) );
+
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "mbhop: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{:.1f} " ), m_distance ).c_str( ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "| hops: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{} " ), m_hops ).c_str( ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "| strafes: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{} " ), m_strafes ).c_str( ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "| speed: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{}/{} " ), m_pre, m_max ).c_str( ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "| height: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{:.1f}\n" ), m_height ).c_str( ) );
+		} else if ( m_jumpbug && m_hops == 0 ) {
+			m_height -= 4.6F;
+			m_distance += 1.4F;
+
+			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
+				0, 0,
+				io::format( XOR( "<<<NO_TRANSLATE>>> <font color=\"#fbf7f5\">movement</font><font color=\"#B9B9B9\"> | jumpbug: </font><font "
+			                     "color=\"#00ff00\">{:.1f}</font><font color=\"#B9B9B9\"> | strafes: </font><font "
+			                     "color=\"#00ff00\">{}</font><font color=\"#B9B9B9\"> | speed: </font><font "
+			                     "color=\"#00ff00\">{}/{}</font><font color=\"#B9B9B9\"> | height: </font><font "
+			                     "color=\"#00ff00\">{:.1f}</font>" ),
+			                m_distance, m_strafes, m_pre, m_max, m_height )
+					.c_str( ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "jumpbug: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{:.1f} " ), m_distance ).c_str( ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "| strafes: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{} " ), m_strafes ).c_str( ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "| speed: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{}/{} " ), m_pre, m_max ).c_str( ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "| height: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{:.1f}\n" ), m_height ).c_str( ) );
+		} else if ( !m_jumpbug && m_hops == 0 ) {
+			m_height -= 4.6F;
+			m_distance += 4.6F;
+
+			g_csgo.m_client_mode_shared->m_chat_element->chat_printf(
+				0, 0,
+				io::format( XOR( "<<<NO_TRANSLATE>>> <font color=\"#fbf7f5\">movement</font><font color=\"#B9B9B9\"> | longjump: </font><font "
+			                     "color=\"#00ff00\">{:.1f}</font><font color=\"#B9B9B9\"> | strafes: </font><font "
+			                     "color=\"#00ff00\">{}</font><font color=\"#B9B9B9\"> | speed: </font><font "
+			                     "color=\"#00ff00\">{}/{}</font><font color=\"#B9B9B9\"> | height: </font><font "
+			                     "color=\"#00ff00\">{:.1f}</font>" ),
+			                m_distance, m_strafes, m_pre, m_max, m_height )
+					.c_str( ) );
+
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "longjump: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{:.1f} " ), m_distance ).c_str( ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "| strafes: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{} " ), m_strafes ).c_str( ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "| speed: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{}/{} " ), m_pre, m_max ).c_str( ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "| height: " ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{:.1f}\n" ), m_height ).c_str( ) );
+		}
+	}
+
+	reset( );
+
+update:
+	if ( !( g_ctx.m_local.get( ).get_flags( ) & 1 ) ) {
+		if ( g_ctx.m_local.get( ).get_velocity( )[ 2 ] < m_jumpbug_z ) {
+			m_jumpbug_z      = g_ctx.m_local.get( ).get_velocity( )[ 2 ];
+			m_jumpbug_update = true;
+		}
+
+		if ( g_ctx.m_local.get( ).get_velocity( )[ 2 ] > m_jumpbug_z && m_jumpbug_update ) {
+			m_strafes                = 0;
+			m_strafe_left            = false;
+			m_strafe_right           = false;
+			m_duration_ticks_pending = 0;
+			m_duration_ticks         = 0;
+			m_pre                    = g_ctx.m_local.get( ).get_velocity( ).length_2d( );
+			m_jump_position[ 0 ]     = g_ctx.m_local.get( ).get_abs_origin( );
+			m_jumpbug                = true;
+			m_jumpbug_update         = false;
+		}
+	} else if ( !m_jumpbug ) {
+		m_jumpbug_update = false;
+	}
+
+	if ( ( g_ctx.m_local.get( ).get_flags( ) & 1 ) && ( g_ctx.m_cmd->m_buttons & 2 ) ) {
+		m_hops++;
+		m_jumpbug_z = 0;
+	}
+
+	if ( m_hops >= 0 && ( g_csgo.m_globals->m_tickcount - m_air_tick ) > 1 ) {
+		m_hops = 0;
+	}
+}
+
+void hack::movement::jumpstats::reset( ) {
+	m_distance               = 0;
+	m_pre                    = 0;
+	m_max                    = 0;
+	m_strafes                = 0;
+	m_jump_origin            = { };
+	m_jump_position[ 0 ]     = { };
+	m_jump_position[ 1 ]     = { };
+	m_height                 = 0;
+	m_last_jumping           = false;
+	m_strafe_left            = false;
+	m_strafe_right           = false;
+	m_calculate_height       = false;
+	m_duration_ticks_pending = 0;
+	m_duration_ticks         = 0;
+	m_on_ground_tick         = 0;
+	m_jumpbug                = false;
+	m_jumpbug_z              = 0;
+}
+
 void hack::movement::clear( ) {
 	m_pixelsurf_calculator_point     = std::nullopt;
 	m_jumpbugged                     = false;
@@ -735,5 +991,6 @@ void hack::movement::clear( ) {
 	m_edgebug.m_simulation_tick      = 0;
 	m_edgebug.m_simulation_timestamp = 0;
 	m_pixelsurf.clear( );
+	m_jumpstats.reset( );
 	m_in_minijump = false;
 }

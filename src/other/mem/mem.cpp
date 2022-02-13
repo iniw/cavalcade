@@ -30,6 +30,18 @@ bool mem::impl::init( ) {
 			e.hook( HASH_CT( "retaddr_bypass" ), &cavalcade::hooks::valve::retaddr_bypass );
 			g_io.log( XOR( "retaddr check found in {}" ), name );
 		}
+
+		if ( HASH_RT( name ) == HASH_CT( "client.dll" ) ) {
+			// NOTE(para):  Step 1: go to trusted module
+			// Step 2: "search byte array"
+			// Step 3: in the case, look for "jmp dword ptr"
+			// Step 4: ???
+			// Step 5: profit
+			constexpr i32 pattern[] = { 0x81, 0xE1, -1, -1, -1, -1, 0x8B, 0xDA, 0x03, 0xD8, 0x83, 0xC3, 0x10, 0xFF, 0x23 };
+			constexpr auto size     = sizeof( pattern ) / sizeof( *pattern );
+			constexpr auto padding  = size - 2;
+			gadget = ( uintptr_t )( ( uintptr_t )e.search_byte_array( pattern, size, e.m_sections[ HASH_CT( ".text" ) ] ) + padding );
+		}
 	}
 
 	g_io.log( XOR( "initialized modules" ) );

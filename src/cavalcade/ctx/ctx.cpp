@@ -257,7 +257,7 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			XOR( "ConsolePrint" ),
 			[ & ]( sdk::interfaces::cvars& cv, std::string&& s ) {
 				cv.console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-				cv.console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
+				cv.console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
 				cv.console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 				cv.console_color_printf( render::color( 255, 255, 255, 255 ), ( s + XOR( "\n" ) ).c_str( ) );
 			} );
@@ -992,7 +992,7 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 				map[ at ].push_back( what );
 			} else {
 				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
 				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 				g_csgo.m_cvars->console_color_printf(
 					render::color( 255, 255, 255, 255 ),
@@ -1009,7 +1009,7 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 		g_io.log( XOR( "{} {}" ), ( i32 )load.status( ), err.what( ) );
 		// alert...
 		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade" ) );
+		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
 		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 		g_csgo.m_cvars->console_color_printf( render::color( 255, 0, 0, 255 ), XOR( "ERROR: " ) );
 		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), io::format( XOR( "{}\n" ), err.what( ) ).c_str( ) );

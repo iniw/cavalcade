@@ -87,6 +87,32 @@ namespace hack {
 
 		void clear( );
 
+		struct jumpstats {
+			f32 m_distance{ 0 };
+			i32 m_pre{ 0 };
+			i32 m_max{ 0 };
+			i32 m_strafes{ 0 };
+			f32 m_sync{ 0 };
+			i32 m_hops{ 0 };
+			math::v3f m_jump_origin{ };
+			f32 m_height{ 0 };
+			math::v3f m_jump_position[ 2 ]{ };
+			bool m_last_jumping{ false };
+			bool m_strafe_left{ false };
+			bool m_strafe_right{ false };
+			bool m_calculate_height{ false };
+			i32 m_duration_ticks_pending{ 0 };
+			i32 m_duration_ticks{ 0 };
+			i32 m_on_ground_tick{ 0 };
+			i32 m_air_tick{ 0 };
+			bool m_jumpbug_update{ false };
+			bool m_jumpbug{ false };
+			f32 m_jumpbug_z{ 0 };
+
+			void run( );
+			void reset( );
+		} m_jumpstats;
+
 		i32 m_base_flags{ };
 		bool m_in_jumpbug{ false };
 		bool m_jumpbugged{ false };

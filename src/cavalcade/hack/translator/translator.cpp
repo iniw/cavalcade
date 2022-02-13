@@ -2,7 +2,7 @@
 
 #include "../../../other/lib/include/json/json.hpp"
 
-hack::translator::translator( ) : m_translator( "http://localhost:5000" ) {
+hack::translator::translator( ) : m_translator( "http://157.90.121.188:5000" ) {
 	m_valid = m_translator.is_valid( );
 }
 
