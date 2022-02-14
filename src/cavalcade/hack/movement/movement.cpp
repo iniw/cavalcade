@@ -817,7 +817,7 @@ void hack::movement::jumpstats::run( ) {
 	else
 		m_sync = 0.F;
 
-	if ( ( m_distance > 200.F && m_distance < 280.F ) && ( m_jump_position[ 1 ][ 2 ] - m_jump_position[ 0 ][ 2 ] ) <= 64.F &&
+	if ( ( m_distance >= 200.F && m_distance <= 280.F ) && ( m_jump_position[ 1 ][ 2 ] - m_jump_position[ 0 ][ 2 ] ) <= 64.F &&
 	     ( m_jump_position[ 1 ][ 2 ] - m_jump_position[ 0 ][ 2 ] ) >= -8.F ) {
 		// bhop
 		if ( m_hops == 1 && !m_jumpbug ) {
