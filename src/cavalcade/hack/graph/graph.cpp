@@ -52,15 +52,17 @@ void hack::graph::draw( ) {
 	if ( m_data.size( ) < 2 )
 		return;
 
+	static auto& wasd = gui::cfg::get< bool >( HASH_CT( "main:group1:wasd ind" ) );
+
 	for ( auto i = 0; i < m_data.size( ) - 1; ++i ) {
 		const auto& c = m_data[ i ];
 		const auto& n = m_data[ i + 1 ];
 
 		auto ss  = g_render.get_screen_size( );
 		auto pad = ceil( ss[ 1 ] * .12F );
-		auto pos = render::point{ ss[ 0 ] / 2 + gs * ( gsc / 2.F ), ss[ 1 ] / 1.2F + pad };
+		auto pos = render::point{ ss[ 0 ] / 2 + gs * ( gsc / 2.F ), ss[ 1 ] / 1.2F + pad - ( wasd ? 5 : 0 ) };
 
-		auto alpha = std::max( 10, std::min( 255, c.m_speed + 5 ) ) * .75F;
+		auto alpha = std::max( 25, std::min( 255, c.m_speed + 5 ) ) * .75F;
 
 		g_render.m_safe.draw_shape< render::geometry::line >( render::point{ pos[ 0 ] - ( i - 1 ) * gsc, pos[ 1 ] - ( c.m_speed * gsch ) },
 		                                                      render::point{ pos[ 0 ] - i * gsc, pos[ 1 ] - ( n.m_speed * gsch ) },

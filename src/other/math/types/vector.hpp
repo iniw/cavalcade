@@ -265,6 +265,11 @@ namespace math {
 			return a;
 		}
 
+		inline vec_t to_angle( ) {
+			constexpr auto RAD2DEG = []( const float x ) { return x * ( 180.f / M_PI ); };
+			return vec_t( RAD2DEG( std::atan2( -m_data[ Z ], length_2d( ) ) ), RAD2DEG( std::atan2( m_data[ Y ], m_data[ X ] ) ), 0.F );
+		}
+
 		constexpr vec_t& floor( ) {
 			for ( u32 i = 0; i < N; i++ )
 				m_data[ i ] = std::floor( m_data[ i ] );

@@ -42,7 +42,7 @@ namespace hack {
 		void ladderjump( );
 
 		struct pixelsurf {
-			void run( );
+			void run( const math::v3f& );
 			void autoalign( );
 			void clear( );
 
@@ -112,6 +112,8 @@ namespace hack {
 			void run( );
 			void reset( );
 		} m_jumpstats;
+
+		math::v3f m_base_origin{ };
 
 		i32 m_base_flags{ };
 		bool m_in_jumpbug{ false };

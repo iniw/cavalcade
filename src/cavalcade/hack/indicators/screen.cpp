@@ -23,16 +23,17 @@ void hack::indicators::screen::draw( ) {
 	static auto& bi   = gui::cfg::get< bool >( HASH_CT( "main:group1:binds ind" ) );
 	static auto fa    = &g_render.m_fonts[ render::font::IND_BIG ];
 	static auto fb    = &g_render.m_fonts[ render::font::IND_SMALL ];
+	static auto& g    = gui::cfg::get< bool >( HASH_CT( "main:group1:graph" ) );
 
 	auto y = g_hack.m_velgraph.get_upmost_y_scenario( );
 
 	auto ss = g_render.get_screen_size( );
 
 	if ( wasd && g_ctx.m_cmd ) {
-		auto w      = g_ctx.m_cmd->m_forward_move > 0;
-		auto a      = g_ctx.m_cmd->m_side_move < 0;
-		auto s      = g_ctx.m_cmd->m_forward_move < 0;
-		auto d      = g_ctx.m_cmd->m_side_move > 0;
+		auto w      = g_ctx.m_cmd->m_buttons & ( 1 << 3 );
+		auto a      = g_ctx.m_cmd->m_buttons & ( 1 << 9 );
+		auto s      = g_ctx.m_cmd->m_buttons & ( 1 << 4 );
+		auto d      = g_ctx.m_cmd->m_buttons & ( 1 << 10 );
 		auto c      = g_ctx.m_cmd->m_buttons & ( 1 << 2 );
 		auto j      = !( g_ctx.m_local.get( ).get_flags( ) & 1 ) && !local_on_ladder_or_noclip( );
 		auto format = []( bool state, char case_be ) { return state ? case_be : '_'; };
@@ -69,7 +70,7 @@ void hack::indicators::screen::draw( ) {
 			                                                            render::color( 185, 185, 185, 255 ) );
 			new_text->m_point[ 0 ] -= new_text->calc_size( )[ 0 ] / 2;
 			container_pad = ( size[ 1 ] - 5 ) * m_anim_last_vel.m_animation_factor;
-			new_text->m_point[ 1 ] -= container_pad + 2;
+			new_text->m_point[ 1 ] -= container_pad + 3;
 			new_text->m_color = render::color( 185, 185, 185, 255 ).frac_alpha( m_anim_last_vel.m_animation_factor );
 			g_render.m_safe.draw_shape_p( std::move( new_text ) );
 		}
@@ -123,7 +124,7 @@ void hack::indicators::screen::draw( ) {
 
 		auto css = container_text->calc_size( );
 		container_text->m_point[ 0 ] -= css[ 0 ] / 2;
-		container_text->m_point[ 1 ] -= css[ 1 ] + 2;
+		container_text->m_point[ 1 ] -= css[ 1 ] + ( vi ? 4 : 10 );
 
 		auto old_x = container_text->m_point[ 0 ];
 		g_render.m_safe.draw_shape_p( std::move( container_text ) );
