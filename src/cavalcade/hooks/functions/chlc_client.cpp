@@ -1,8 +1,75 @@
 #include "../hooks.hpp"
 
+auto get_panel( u32 _hash ) {
+	auto engine = g_csgo.m_panorama->access_ui_engine( );
+	auto panel  = engine->get_last_dispatched_event_target_panel( );
+
+	auto itr                       = panel;
+	sdk::interfaces::ui_panel* ret = nullptr;
+
+	while ( itr && engine->is_valid_panel_pointer( itr ) ) {
+		auto hash = HASH_RT( itr->get_id( ) );
+		if ( hash == _hash ) {
+			ret = itr;
+			break;
+		}
+		itr = itr->get_parent( );
+	}
+
+	return ret;
+}
+
 void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame_stage stage ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< frame_stage_notify_fn >( HASH_CT( "CHLClient::FrameStageNotify" ) );
 	og( ecx, stage );
+	if ( g_io.key_state< io::key_state::DOWN >( 'L' ) ) {
+		auto a = get_panel( HASH_CT( "CSGOHud" ) );
+		if ( a != nullptr ) {
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ),
+			                                      io::format( "{:x} {}\n", ( uintptr_t )a, a->get_id( ) ).c_str( ) );
+
+			auto cc = a->get_child_count( );
+			if ( cc > 0 ) {
+				for ( auto i = 0; i < cc; ++i ) {
+					auto child = a->get_child( i );
+					if ( !child )
+						continue;
+
+					g_csgo.m_cvars->console_color_printf( render::color( 0, 255, 0, 255 ),
+					                                      io::format( "{:x} {}\n", ( uintptr_t )child, child->get_id( ) ).c_str( ) );
+
+					auto cc = child->get_child_count( );
+					if ( cc > 0 ) {
+						for ( auto i = 0; i < cc; ++i ) {
+							auto ch = child->get_child( i );
+							if ( !ch )
+								continue;
+
+							g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ),
+							                                      io::format( "{:x} {}\n", ( uintptr_t )ch, ch->get_id( ) ).c_str( ) );
+
+							if ( HASH_RT( ch->get_id( ) ) == HASH_CT( "HudTopLeft" ) ) {
+								auto cc = ch->get_child_count( );
+								if ( cc > 0 ) {
+									for ( auto i = 0; i < cc; ++i ) {
+										auto child = ch->get_child( i );
+										if ( !child )
+											continue;
+
+										g_csgo.m_cvars->console_color_printf(
+											render::color( 255, 0, 0, 255 ),
+											io::format( "{:x} {}\n", ( uintptr_t )child, child->get_id( ) ).c_str( ) );
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		} else {
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), "bungus\n" );
+		}
+	}
 	if ( stage == sdk::frame_stage::RENDER_END ) {
 		g_render.m_safe.frame( [ & ]( ) {
 			// std::unique_lock lock( g_lua.m_mutex );

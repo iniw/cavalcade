@@ -52,7 +52,8 @@ DWORD WINAPI cavalcade::init( unk module_handle ) {
 	//         local function hello_again(stage)
 	//             if (g_Local ~= nil and g_Local:IsValid() and g_Local:GetRef():IsAlive()) then
 	//                --g_PlayerCache:ForEach(function (player)
-	//                --    if (player:GetRef():IsAlive() and player:GetRef():IsDormant() ~= true and player:GetRef():IsEnemy(g_Local:GetRef())) then
+	//                --    if (player:GetRef():IsAlive() and player:GetRef():IsDormant() ~= true and player:GetRef():IsEnemy(g_Local:GetRef()))
+	//                then
 	//                --        --if (player:GetRef():GetActiveWeapon():GetWeaponRef() ~= nil) then
 	//                --            --g_ConVars:ConsolePrint('max clip: ' ..
 	//                player:GetRef():GetActiveWeapon():GetWeaponRef():GetCSWeaponInfo().m_MaxClip1)
