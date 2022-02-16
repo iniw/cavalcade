@@ -1,37 +1,35 @@
 #include "checkbox.hpp"
-#include "styling.hpp"
-
-gui::objects::checkbox::checkbox( std::string_view name, std::string_view label ) {
-	// basic identification
-	m_name  = name;
-	m_label = label;
-}
+#include "detail.hpp"
 
 void gui::objects::checkbox::init( ) {
-	m_var = cfg::add_entry< var_type >( m_id >> 32 );
+	base_child::init( );
 
-	auto& cursor      = m_parent->get_cursor( );
-	auto label_offset = personal::padding::label + g_render.text_size< render::font::MENU >( m_label )[ X ];
+	auto size = style::sizing::button / 2;
 
-	m_static_area.pos( cursor );
-	m_static_area.size( personal::sizing::main );
+	m_static_area.set_pos( m_parent->cursor( ) );
+	m_static_area.set_size( { size.w + style::padding::obj_spacing + m_label_size.w, size.h + size.h / 2 } );
 
-	m_dynamic_area = m_static_area.shrink( 2 );
+	m_dynamic_area.set_pos( { m_static_area.x, ( m_static_area.y + m_static_area.h / 2 ) - size.h / 2 } );
+	m_dynamic_area.set_size( size );
 
-	m_static_area[ WIDTH ] += label_offset;
+	m_label_pos = m_static_area.pos( );
+	m_label_pos.x += size.w + style::padding::obj_spacing;
 
-	m_label_pos = cursor;
-	m_label_pos[ X ] += personal::sizing::main[ X ] + personal::padding::label;
-
-	m_parent->push_cursor( m_static_area[ HEIGHT ] );
+	m_parent->push_cursor( m_static_area.h );
 }
 
 void gui::objects::checkbox::render( ) const {
-	auto color = *m_var ? general::pallete::highlight : general::pallete::primary;
+	// background & outline
+	g_render.rectangle_filled( m_dynamic_area, style::palette::background );
 
-	g_render.rectangle_filled( m_dynamic_area, color ).outline( general::pallete::secondary );
+	// inner rect
+	g_render.rectangle_filled( m_dynamic_area.shrink( 1 ), style::palette::highlight.mod_alpha( m_alpha ) );
 
-	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
+	// outline
+	g_render.rectangle( m_dynamic_area, style::palette::stroke );
+
+	// label
+	g_render.text< render::font::MENU >( m_label_pos, m_label, style::palette::text );
 }
 
 bool gui::objects::checkbox::think( ) {
@@ -41,4 +39,8 @@ bool gui::objects::checkbox::think( ) {
 		*m_var = !*m_var;
 
 	return active;
+}
+
+void gui::objects::checkbox::animate( ) {
+	utils::animate( m_alpha, *m_var ? 1.f : 0.f, detail::anim::alpha_speed );
 }

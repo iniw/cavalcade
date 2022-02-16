@@ -1,5 +1,4 @@
-#ifndef MOVEMENT_HPP
-#define MOVEMENT_HPP
+
 
 #pragma once
 
@@ -127,5 +126,3 @@ namespace hack {
 		std::optional< math::v3f > m_pixelsurf_calculator_point{ };
 	};
 } // namespace hack
-
-#endif /* MOVEMENT_HPP */

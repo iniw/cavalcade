@@ -3,16 +3,28 @@
 #include "../base/base.hpp"
 
 namespace gui::objects {
-	struct checkbox : public base_child< bool >, public base_traits< checkbox > {
-		checkbox( std::string_view name, std::string_view label );
+	struct checkbox : base_child< bool > {
+	protected:
 
-		void init( ) override;
+		float m_alpha = 0.f;
 
-		void render( ) const override;
+	public:
 
-		bool think( ) override;
+		checkbox( ) = default;
+
+		checkbox( std::string_view label ) : base_object( label ) { }
+
+		virtual ~checkbox( ) = default;
+
+		virtual void init( ) override;
+
+		virtual void render( ) const override;
+
+		virtual bool think( ) override;
+
+		virtual void animate( ) override;
 
 		// we don't wanna resize
-		void resize( const render::point& delta ) override { }
+		virtual void resize( const render::size& delta ) override { }
 	};
 } // namespace gui::objects

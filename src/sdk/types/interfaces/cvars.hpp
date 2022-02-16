@@ -11,7 +11,7 @@ namespace sdk::interfaces {
 		};
 
 		VFUNC( cvar*, find_var, idx::FIND_VAR, ( std::string_view name ), name.data( ) );
-		void console_color_printf( const render::color& clr, const char* fmt ) {
+		void console_color_printf( render::color clr, cstr fmt ) {
 			const uint8_t c[ 4 ] = { clr.m_r, clr.m_g, clr.m_b, clr.m_a };
 			return mem::call_v_func_cdecl< void, idx::CONSOLE_COLOR_PRINTF >( this, c, fmt );
 		}

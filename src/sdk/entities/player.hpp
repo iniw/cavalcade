@@ -1,5 +1,4 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
+
 
 #pragma once
 
@@ -30,5 +29,3 @@ namespace sdk {
 		sdk::auxiliary::player_info_t m_player_info;
 	};
 } // namespace sdk
-
-#endif /* PLAYER_HPP */

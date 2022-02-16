@@ -57,14 +57,15 @@ void hack::graph::draw( ) {
 		const auto& n = m_data[ i + 1 ];
 
 		auto ss  = g_render.get_screen_size( );
-		auto pad = ceil( ss[ 1 ] * .12F );
-		auto pos = render::point{ ss[ 0 ] / 2 + gs * ( gsc / 2.F ), ss[ 1 ] / 1.2F + pad };
+		auto pad = ceil( ss.h * .12F );
+		auto pos = render::point{ ss.w / 2 + gs * static_cast< int >( ( gsc / 2.F ) ), static_cast< int >( ss.h / 1.2F + pad ) };
 
 		auto alpha = std::max( 10, std::min( 255, c.m_speed + 5 ) ) * .75F;
 
-		g_render.m_safe.draw_shape< render::geometry::line >( render::point{ pos[ 0 ] - ( i - 1 ) * gsc, pos[ 1 ] - ( c.m_speed * gsch ) },
-		                                                      render::point{ pos[ 0 ] - i * gsc, pos[ 1 ] - ( n.m_speed * gsch ) },
-		                                                      render::color( 255, 255, 255, alpha ), 1.F );
+		g_render.m_safe.draw_shape< render::geometry::line >(
+			render::point{ static_cast< i32 >( pos[ 0 ] - ( i - 1 ) * gsc ), pos.y - static_cast< int >( ( c.m_speed * gsch ) ) },
+			render::point{ static_cast< i32 >( pos[ 0 ] - i * gsc ), pos.y - static_cast< int >( ( n.m_speed * gsch ) ) },
+			render::color( 255, 255, 255, alpha ), 1.F );
 	}
 }
 
@@ -85,12 +86,12 @@ i32 hack::graph::get_upmost_y_scenario( ) {
 		return get_bottommost_y_scenario( );
 
 	auto ss  = g_render.get_screen_size( );
-	auto pad = ceil( ss[ 1 ] * .12F );
-	return ( ss[ 1 ] / 1.2F + pad ) - ( 250 * gsch );
+	auto pad = ceil( ss.h * .12F );
+	return ( ss.h / 1.2F + pad ) - ( 250 * gsch );
 }
 
 i32 hack::graph::get_bottommost_y_scenario( ) {
 	auto ss  = g_render.get_screen_size( );
-	auto pad = ceil( ss[ 1 ] * .12F );
-	return ( ss[ 1 ] / 1.2F + pad );
+	auto pad = ceil( ss.h * .12F );
+	return ( ss.h / 1.2F + pad );
 }

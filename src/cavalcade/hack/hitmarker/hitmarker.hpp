@@ -1,5 +1,4 @@
-#ifndef HITMARKER_HPP
-#define HITMARKER_HPP
+
 
 #pragma once
 
@@ -21,5 +20,3 @@ namespace hack {
 		std::vector< hitmark > m_hits;
 	};
 } // namespace hack
-
-#endif /* HITMARKER_HPP */

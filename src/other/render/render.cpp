@@ -1,7 +1,7 @@
 #include "render.hpp"
 
-#include "imgui.h"
-#include "imgui_impl_dx9.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_dx9.h"
 
 #include "../../sdk/csgo/csgo.hpp"
 
@@ -20,7 +20,7 @@ bool render::impl::init( ) {
 
 	MOCKING_CATCH( return false );
 
-	update_screen_size( g_csgo.m_client_mode_shared->m_root_size );
+	update_screen_size( { g_csgo.m_client_mode_shared->m_root_size[ X ], g_csgo.m_client_mode_shared->m_root_size[ Y ] } );
 
 	g_io.log( XOR( "initialized renderer" ) );
 
@@ -56,18 +56,27 @@ void render::impl::end( ) {
 	m_d3d9.restore_render_states( );
 }
 
-void render::impl::update_screen_size( const math::v2i& screen_size ) {
+void render::impl::update_screen_size( const render::size& screen_size ) {
 	m_screen_size               = screen_size;
-	m_imgui.m_io->DisplaySize.x = static_cast< f32 >( screen_size[ X ] );
-	m_imgui.m_io->DisplaySize.y = static_cast< f32 >( screen_size[ Y ] );
+	m_screen_center             = { screen_size.w / 2, screen_size.h / 2 };
+	m_imgui.m_io->DisplaySize.x = static_cast< f32 >( screen_size.w );
+	m_imgui.m_io->DisplaySize.y = static_cast< f32 >( screen_size.h );
 }
 
-const math::v2i& render::impl::get_screen_size( ) const {
+const render::size& render::impl::get_screen_size( ) const {
 	return m_screen_size;
 }
 
-void render::impl::push_clip_rect( const rect& rect ) {
-	geometry::base_shape::s_draw_list->PushClipRect( rect.pos( ), rect.pos( ) + rect.size( ) );
+const render::point& render::impl::get_screen_center( ) const {
+	return m_screen_center;
+}
+
+render::geometry::line render::impl::line( const point& point1, const point& point2, color col, f32 thickness ) {
+	return draw_shape< geometry::line >( point1, point2, col, thickness );
+}
+
+void render::impl::push_clip_rect( const rect& rect, bool intersect ) {
+	geometry::base_shape::s_draw_list->PushClipRect( rect.pos( ), rect.pos( ) + rect.size( ), intersect );
 }
 
 void render::impl::pop_clip_rect( ) {
@@ -80,10 +89,18 @@ void render::impl::pre_reset( ) {
 }
 
 void render::impl::post_reset( ) {
-	update_screen_size( g_csgo.m_engine->get_screen_size( ) );
+	update_screen_size( { g_csgo.m_engine->get_screen_size( )[ X ], g_csgo.m_engine->get_screen_size( )[ Y ] } );
 
 	ImGui_ImplDX9_CreateDeviceObjects( );
 	g_render.m_safe.clear( );
+}
+
+void render::impl::push_alpha( f32 alpha ) {
+	m_alphas.push( alpha );
+}
+
+void render::impl::pop_alpha( ) {
+	m_alphas.pop( );
 }
 
 render::point render::impl::handle_alignment( align alignment, const point& pos, const size& size ) {

@@ -1,9 +1,8 @@
-#ifndef IMATRENDERCONTEXT_HPP
-#define IMATRENDERCONTEXT_HPP
+
 
 #pragma once
 
-#include "material.hh"
+#include "material.hpp"
 
 struct Rect_t {
 	int x, y;
@@ -29,10 +28,8 @@ namespace sdk {
 		       src_texture_height, client_renderable, x_dice, y_dice );
 		VFUNC( void, push_render_target_and_viewport, 119, ( ) );
 		VFUNC( void, pop_render_target_and_viewport, 120, ( ) );
-		VFUNC( void, begin_pix_event, 143, ( unsigned long clr, const char* name ), clr, name );
-		VFUNC( void, end_pix_event, 144, ( unsigned long clr, const char* name ), clr, name );
+		VFUNC( void, begin_pix_event, 143, ( unsigned long clr, cstr name ), clr, name );
+		VFUNC( void, end_pix_event, 144, ( unsigned long clr, cstr name ), clr, name );
 		VFUNC( void, copy_Render_target_to_texture_ex, 122, ( texture * t, i32 id, Rect_t* src, Rect_t* dest ), t, id, src, dest );
 	};
 } // namespace sdk
-
-#endif /* IMATRENDERCONTEXT_HPP */

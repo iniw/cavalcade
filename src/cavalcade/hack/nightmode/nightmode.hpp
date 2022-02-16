@@ -1,5 +1,4 @@
-#ifndef NIGHTMODE_HPP
-#define NIGHTMODE_HPP
+
 
 #pragma once
 
@@ -26,10 +25,8 @@ namespace hack {
 		// std::optional< math::v4f > m_old_color;
 		std::optional< i32 > m_old_factor;
 
-		bool m_set{false};
-		bool m_reset{false};
+		bool m_set{ false };
+		bool m_reset{ false };
 		std::vector< static_prop > m_static_props;
 	};
 } // namespace hack
-
-#endif /* NIGHTMODE_HPP */

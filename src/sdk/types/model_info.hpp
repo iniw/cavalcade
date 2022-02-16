@@ -1,5 +1,4 @@
-#ifndef MODEL_INFO_HPP
-#define MODEL_INFO_HPP
+
 
 #pragma once
 
@@ -45,8 +44,8 @@ namespace sdk {
 		i32 m_num_hitboxes;
 		i32 m_hitbox_index;
 
-		const char* get_name( ) {
-			return m_name_index ? ( const char* )( ( uintptr_t )this + m_name_index ) : nullptr;
+		cstr get_name( ) {
+			return m_name_index ? ( cstr )( ( uintptr_t )this + m_name_index ) : nullptr;
 		}
 
 		studio_bbox* get_hitbox( i32 i ) {
@@ -61,8 +60,8 @@ namespace sdk {
 		i32 m_flags;
 		PAD( 52 );
 
-		const char* get_name( ) {
-			return m_name_index ? ( const char* )( ( uintptr_t )this + m_name_index ) : nullptr;
+		cstr get_name( ) {
+			return m_name_index ? ( cstr )( ( uintptr_t )this + m_name_index ) : nullptr;
 		}
 	};
 
@@ -115,9 +114,8 @@ namespace sdk {
 				GET_STUDIO_MODEL = 32
 			};
 
-			VFUNC( i32, get_model_index, idx::GET_MODEL_INDEX, ( const char* name ), name );
+			VFUNC( i32, get_model_index, idx::GET_MODEL_INDEX, ( cstr name ), name );
 			VFUNC( studio_hdr*, get_studio_model, idx::GET_STUDIO_MODEL, ( const model* mod ), mod );
 		};
 	} // namespace interfaces
 } // namespace sdk
-#endif /* MODEL_INFO_HPP */

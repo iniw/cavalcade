@@ -37,6 +37,7 @@ set(PCH
     <vector>
     <array>
     <deque>
+	<stack>
     #safety
     <mutex>
     <shared_mutex>

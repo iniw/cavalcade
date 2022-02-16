@@ -10,7 +10,7 @@ void cavalcade::hooks::material_system::get_color_modulation( sdk::material* ecx
 	g_hack.m_nightmode.run( ecx, r, g, b );
 }
 
-unk cavalcade::hooks::material_system::find_material( unk ecx, unk edx, const char* name, const char* group, i32 arg, i32 arg2 ) {
+unk cavalcade::hooks::material_system::find_material( unk ecx, unk edx, cstr name, cstr group, i32 arg, i32 arg2 ) {
 	static auto og = g_mem[ MATERIALSYSTEM_DLL ].get_og< find_material_fn >( HASH_CT( "GetColorModulation" ) );
 
 	if ( g_csgo.m_sky_name.has_value( ) && std::string_view{ name }.find( g_csgo.m_sky_name.value( ) ) != std::string_view::npos ) {

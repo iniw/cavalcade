@@ -1,5 +1,4 @@
-#ifndef TEXT_HPP
-#define TEXT_HPP
+
 
 #pragma once
 
@@ -18,7 +17,7 @@ namespace render::geometry {
 
 		constexpr text( ) = default;
 
-		text( const font* f, const point& p, std::string text, const render::color& col ) : m_point( p ), m_text( std::move( text ) ), m_font( f ) {
+		text( const font* f, const point& p, std::string text, render::color col ) : m_point( p ), m_text( std::move( text ) ), m_font( f ) {
 			m_color = col;
 		}
 
@@ -27,5 +26,3 @@ namespace render::geometry {
 		size calc_size( ) const;
 	};
 } // namespace render::geometry
-
-#endif /* TEXT_HPP */

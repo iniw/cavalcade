@@ -1,5 +1,4 @@
-#ifndef DLIGHT_HPP
-#define DLIGHT_HPP
+
 
 #pragma once
 
@@ -22,5 +21,3 @@ namespace sdk::auxiliary {
 		f32 m_outer_angle;
 	};
 } // namespace sdk::auxiliary
-
-#endif /* DLIGHT_HPP */

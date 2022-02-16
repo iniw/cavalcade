@@ -32,8 +32,8 @@ namespace cavalcade {
 			using frame_stage_notify_fn = void( __thiscall* )( unk, sdk::frame_stage );
 			static void __fastcall frame_stage_notify( unk ecx, unk, sdk::frame_stage stage );
 
-			using level_init_pre_entity_fn = void( __stdcall* )( const char* );
-			static void __stdcall level_init_pre_entity( const char* name );
+			using level_init_pre_entity_fn = void( __stdcall* )( cstr );
+			static void __stdcall level_init_pre_entity( cstr name );
 
 			using level_init_post_entity_fn = void( __cdecl* )( );
 			static void __cdecl level_init_post_entity( );
@@ -46,13 +46,13 @@ namespace cavalcade {
 		};
 
 		struct push_notice_ {
-			using push_notice_fn = void( __fastcall* )( unk, unk, const char*, int, const char* );
-			static void __fastcall push_notice( unk, unk, const char*, int, const char* );
+			using push_notice_fn = void( __fastcall* )( unk, unk, cstr, int, cstr );
+			static void __fastcall push_notice( unk, unk, cstr, int, cstr );
 		};
 
 		struct client_cmd_ {
-			using client_cmd_fn = void( __fastcall* )( unk, unk, const char* );
-			static void __fastcall client_cmd( unk, unk, const char* );
+			using client_cmd_fn = void( __fastcall* )( unk, unk, cstr );
+			static void __fastcall client_cmd( unk, unk, cstr );
 		};
 
 		struct leaf_system {
@@ -113,8 +113,8 @@ namespace cavalcade {
 			using get_color_modulation_fn = void( __fastcall* )( sdk::material*, unk, f32&, f32&, f32& );
 			static void __fastcall get_color_modulation( sdk::material*, unk, f32&, f32&, f32& );
 
-			using find_material_fn = unk( __fastcall* )( unk, unk, const char*, const char*, i32, i32 );
-			static unk __fastcall find_material( unk, unk, const char*, const char*, i32, i32 );
+			using find_material_fn = unk( __fastcall* )( unk, unk, cstr, cstr, i32, i32 );
+			static unk __fastcall find_material( unk, unk, cstr, cstr, i32, i32 );
 		};
 
 		struct protobuf {
@@ -123,15 +123,15 @@ namespace cavalcade {
 		};
 
 		struct engine_sound {
-			using emit_sound_fn = void( __fastcall* )( unk, unk, unk filter, i32 entity_index, i32 channel, const char* sound_entry,
-			                                           u32 sound_entry_hash, const char* sample, f32 volume, f32 attenuation, i32 seed, i32 flags,
-			                                           i32 pitch, const math::v3f* origin, const math::v3f* direction, math::v3f* vec_origins,
+			using emit_sound_fn = void( __fastcall* )( unk, unk, unk filter, i32 entity_index, i32 channel, cstr sound_entry, u32 sound_entry_hash,
+			                                           cstr sample, f32 volume, f32 attenuation, i32 seed, i32 flags, i32 pitch,
+			                                           const math::v3f* origin, const math::v3f* direction, math::v3f* vec_origins,
 			                                           bool update_positions, f32 sound_time, i32 speaker_entity, unk params );
 
-			static void __fastcall emit_sound( unk, unk, unk filter, i32 entity_index, i32 channel, const char* sound_entry, u32 sound_entry_hash,
-			                                   const char* sample, f32 volume, f32 attenuation, i32 seed, i32 flags, i32 pitch,
-			                                   const math::v3f* origin, const math::v3f* direction, math::v3f* vec_origins, bool update_positions,
-			                                   f32 sound_time, i32 speaker_entity, unk params );
+			static void __fastcall emit_sound( unk, unk, unk filter, i32 entity_index, i32 channel, cstr sound_entry, u32 sound_entry_hash,
+			                                   cstr sample, f32 volume, f32 attenuation, i32 seed, i32 flags, i32 pitch, const math::v3f* origin,
+			                                   const math::v3f* direction, math::v3f* vec_origins, bool update_positions, f32 sound_time,
+			                                   i32 speaker_entity, unk params );
 		};
 
 		struct engine_client {
@@ -158,8 +158,8 @@ namespace cavalcade {
 		};
 
 		struct valve {
-			using retaddr_bypass_fn = bool( __fastcall* )( unk, unk, const char* );
-			static bool __fastcall retaddr_bypass( unk, unk, const char* );
+			using retaddr_bypass_fn = bool( __fastcall* )( unk, unk, cstr );
+			static bool __fastcall retaddr_bypass( unk, unk, cstr );
 		};
 
 		inline static steam whatever;

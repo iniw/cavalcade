@@ -1,5 +1,4 @@
-#ifndef AUTOWALL_HPP
-#define AUTOWALL_HPP
+
 
 #pragma once
 
@@ -67,5 +66,3 @@ namespace autowall {
 	extern bool simulate_fire_bullet( sdk::base_player* target, sdk::weapon_cs_base* weap, sdk::cs_weapon_info* info, fire_bullet_data& data );
 	extern bool can_hit( sdk::base_player* t, sdk::weapon_cs_base* weap, sdk::cs_weapon_info* info, const math::v3f& dest, f32& dmg );
 } // namespace autowall
-
-#endif /* AUTOWALL_HPP */

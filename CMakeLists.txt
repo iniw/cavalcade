@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.21)
 
 # this has to be set before project() is called
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo" CACHE STRING "Build types" FORCE)
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 project(cavalcade LANGUAGES CXX)
 
@@ -55,23 +56,32 @@ target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
 
 # --- libraries ---
 
+set(CAVAL_LIBS "${PROJECT_SOURCE_DIR}/src/other/lib")
+
+message("${LUA_LIBRARIES}")
+
 find_package(fmt CONFIG REQUIRED)
 find_package(PolyHook_2 CONFIG REQUIRED)
 find_package(Freetype REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Lua REQUIRED)
 
-# thanks para
 link_directories("$ENV{DXSDK_DIR}/Lib/x86")
-include_directories("$ENV{DXSDK_DIR}/Include")
-find_library(LUAJIT_LIBRARY lua51.lib PATHS "C:/dev/vcpkg/packages/luajit_x86-windows-static/lib")  
-find_library(LUA_LIBRARY lua.lib PATHS "C:/dev/vcpkg/packages/lua_x86-windows-static/lib")  
-find_library(D3D9_LIBRARY d3d9.lib PATHS "$ENV{DXSDK_DIR}/Lib/x86")  
+include_directories("$ENV{DXSDK_DIR}/Include" "${PROJECT_SOURCE_DIR}/src/" "${PROJECT_SOURCE_DIR}/src/other/lib/include")
+
+find_library(LUA_LIBRARY lua.lib PATHS "$ENV{VCPKG}/packages/lua_x86-windows-static/lib")  
+find_library(LUAJIT_LIBRARY lua51.lib PATHS "$ENV{VCPKG}/packages/luajit_x86-windows-static/lib")
+find_library(D3D9_LIBRARY d3d9.lib PATHS "$ENV{DXSDK_DIR}/Lib/x86")
 find_library(D3DX9_LIBRARY d3dx9.lib PATHS "$ENV{DXSDK_DIR}/Lib/x86")
-find_library(STEAM_SDK steam_api.lib PATHS "${PROJECT_SOURCE_DIR}")
+find_library(STEAM_API steam_api.lib PATHS "${CAVAL_LIBS}/steam")
 
-include_directories("src/other/render/imgui")
-
-message("${LUA_INCLUDE_DIR}")
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${LUA_INCLUDE_DIR} "C:/dev/vcpkg/packages/luajit_x86-windows-static/include/luajit")
-target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE fmt::fmt PolyHook_2::PolyHook_2 Freetype::Freetype OpenSSL::SSL ${LUAJIT_LIBRARY} ${LUA_LIBRARY} ${D3D9_LIBRARY} ${D3DX9_LIBRARY} ${STEAM_SDK})
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${LUA_INCLUDE_DIR} "$ENV{VCPKG}/packages/luajit_x86-windows-static/include/luajit")
+target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
+	fmt::fmt
+	PolyHook_2::PolyHook_2
+	Freetype::Freetype
+	OpenSSL::SSL
+	${LUAJIT_LIBRARY}
+	${D3D9_LIBRARY}
+	${D3DX9_LIBRARY}
+	${STEAM_API})

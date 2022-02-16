@@ -1,5 +1,4 @@
-#ifndef VIEW_HPP
-#define VIEW_HPP
+
 
 #pragma once
 
@@ -71,5 +70,3 @@ namespace sdk {
 		char pad2[ 0x40 ];
 	}; // Size=0x014C
 } // namespace sdk
-
-#endif /* VIEW_HPP */

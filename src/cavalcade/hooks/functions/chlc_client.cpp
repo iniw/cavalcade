@@ -60,7 +60,7 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 	}
 }
 
-void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
+void cavalcade::hooks::chlc_client::level_init_pre_entity( cstr name ) {
 	// std::unique_lock lock( g_lua.m_mutex );
 
 	g_csgo.m_map_name = std::nullopt;

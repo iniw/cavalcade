@@ -1,6 +1,6 @@
 #include "../hooks.hpp"
 
-void cavalcade::hooks::client_cmd_::client_cmd( unk ecx, unk edx, const char* cmd ) {
+void cavalcade::hooks::client_cmd_::client_cmd( unk ecx, unk edx, cstr cmd ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< client_cmd_fn >( HASH_CT( "CEngineClient::ClientCmd" ) );
 
 	std::string_view text{ cmd };

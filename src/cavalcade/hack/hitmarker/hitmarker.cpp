@@ -13,7 +13,7 @@ void hack::hitmarker::draw( ) {
 	if ( m_hits.empty( ) )
 		return;
 
-	constexpr auto cross = [ & ]( i32 x, i32 y, i32 length, const render::color& clr ) {
+	constexpr auto cross = [ & ]( i32 x, i32 y, i32 length, render::color clr ) {
 		i32 padding = 8;
 		g_render.m_safe.draw_shape< render::geometry::line >( render::point{ x - length - padding, y - length - padding },
 		                                                      render::point{ x - length / 4 - padding, y - length / 4 - padding }, clr, 1.F );
@@ -54,7 +54,7 @@ void hack::hitmarker::draw( ) {
 
 	auto& last = m_hits.back( );
 	auto ss    = g_render.get_screen_size( );
-	cross( ss[ 0 ] / 2, ss[ 1 ] / 2, 4, render::color( 255, 255, 255, last.m_alpha ) );
+	cross( ss.w / 2, ss.h / 2, 4, render::color( 255, 255, 255, last.m_alpha ) );
 }
 
 void hack::hitmarker::clear( ) {

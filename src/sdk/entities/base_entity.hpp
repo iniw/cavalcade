@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../types/types.hpp"
+#include "../../types/types.hpp"
 
 namespace sdk {
 	struct base_entity : interfaces::client_entity {

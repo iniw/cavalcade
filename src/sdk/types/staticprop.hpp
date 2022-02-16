@@ -1,5 +1,4 @@
-#ifndef STATICPROP_HPP
-#define STATICPROP_HPP
+
 
 #pragma once
 
@@ -12,5 +11,3 @@ namespace sdk {
 		math::v4f m_diffuse_modulation;
 	};
 } // namespace sdk
-
-#endif /* STATICPROP_HPP */

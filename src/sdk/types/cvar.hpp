@@ -33,12 +33,12 @@ namespace sdk {
 		}
 
 		PAD( 9 );
-		const char* m_name;
+		cstr m_name;
 
 		PAD( 0xC );
 		cvar* m_parent;
 		PAD( 0x4 );
-		const char* m_string;
+		cstr m_string;
 		PAD( 0x4 );
 		f32 m_f32;
 		i32 m_i32;

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "interfaces/auxiliary/chudchat.hpp"
+#include "interfaces/auxiliary/hud_chat.hpp"
 
 namespace sdk {
 	struct client_mode_shared {
 		PAD( 28 );
-		auxiliary::c_hud_chat* m_chat_element;
+		auxiliary::hud_chat* m_chat_element;
 		PAD( 8 );
 		math::v2i m_root_size;
 	};

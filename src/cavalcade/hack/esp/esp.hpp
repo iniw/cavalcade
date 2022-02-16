@@ -1,5 +1,4 @@
-#ifndef ESP_HPP
-#define ESP_HPP
+
 
 #pragma once
 
@@ -14,5 +13,3 @@ namespace hack {
 		std::unordered_map< i32, animator > m_alpha{ };
 	};
 } // namespace hack
-
-#endif /* ESP_HPP */

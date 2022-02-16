@@ -105,28 +105,28 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 		                                     sol::constructors< render::color( ), render::color( u8, u8, u8, u8 ), render::color( u32 ) >( ),
 		                                     XOR( "ToU32" ), &render::color::to_u32, XOR( "FracAlpha" ), &render::color::frac_alpha );
 		state.new_usertype< ::lua::render >( XOR( "_Render" ) );
-		state[ XOR( "_Render" ) ][ XOR( "Rect" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, const render::color& clr ) {
+		state[ XOR( "_Render" ) ][ XOR( "Rect" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, render::color clr ) {
 			g_render.m_safe.draw_shape< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), clr, t );
 		};
-		state[ XOR( "_Render" ) ][ XOR( "RectForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, const render::color& clr ) {
+		state[ XOR( "_Render" ) ][ XOR( "RectForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, render::color clr ) {
 			g_render.m_safe.draw_shape_front< render::geometry::rect >( render::point( x, y ), render::point( x2, y2 ), clr, t );
 		};
-		state[ XOR( "_Render" ) ][ XOR( "Line" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, const render::color& clr ) {
+		state[ XOR( "_Render" ) ][ XOR( "Line" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, render::color clr ) {
 			g_render.m_safe.draw_shape< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), clr, t );
 		};
-		state[ XOR( "_Render" ) ][ XOR( "LineForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, const render::color& clr ) {
+		state[ XOR( "_Render" ) ][ XOR( "LineForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, f32 t, render::color clr ) {
 			g_render.m_safe.draw_shape_front< render::geometry::line >( render::point( x, y ), render::point( x2, y2 ), clr, t );
 		};
-		state[ XOR( "_Render" ) ][ XOR( "RectFilled" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, const render::color& clr ) {
+		state[ XOR( "_Render" ) ][ XOR( "RectFilled" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, render::color clr ) {
 			g_render.m_safe.draw_shape< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), clr );
 		};
-		state[ XOR( "_Render" ) ][ XOR( "RectFilledForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, const render::color& clr ) {
+		state[ XOR( "_Render" ) ][ XOR( "RectFilledForward" ) ] = [ & ]( i32 x, i32 y, i32 x2, i32 y2, render::color clr ) {
 			g_render.m_safe.draw_shape_front< render::geometry::rect_filled >( render::point( x, y ), render::point( x2, y2 ), clr );
 		};
-		state[ XOR( "_Render" ) ][ XOR( "Text" ) ] = [ & ]( i32 x, i32 y, std::string&& text, u32 font, const render::color& clr ) {
+		state[ XOR( "_Render" ) ][ XOR( "Text" ) ] = [ & ]( i32 x, i32 y, std::string&& text, u32 font, render::color clr ) {
 			g_render.m_safe.draw_shape< render::geometry::text >( &g_render.m_fonts[ font ], render::point( x, y ), std::move( text ), clr );
 		};
-		state[ XOR( "_Render" ) ][ XOR( "TextForward" ) ] = [ & ]( i32 x, i32 y, std::string&& text, u32 font, const render::color& clr ) {
+		state[ XOR( "_Render" ) ][ XOR( "TextForward" ) ] = [ & ]( i32 x, i32 y, std::string&& text, u32 font, render::color clr ) {
 			g_render.m_safe.draw_shape_front< render::geometry::text >( &g_render.m_fonts[ font ], render::point( x, y ), std::move( text ), clr );
 		};
 		state[ XOR( "_Render" ) ][ XOR( "WorldToScreen" ) ] = [ & ]( ::lua::vec v ) {
@@ -263,7 +263,7 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			} );
 
 		// Cms
-		state.new_usertype< sdk::auxiliary::c_hud_chat >( XOR( "HudChat" ), XOR( "Print" ), [ & ]( sdk::auxiliary::c_hud_chat& h, std::string&& s ) {
+		state.new_usertype< sdk::auxiliary::hud_chat >( XOR( "HudChat" ), XOR( "Print" ), [ & ]( sdk::auxiliary::hud_chat& h, std::string&& s ) {
 			h.chat_printf( 0, 0, io::format( XOR( "<<<NO_TRANSLATE>>> {}" ), std::move( s ) ).c_str( ) );
 		} );
 		state.new_usertype< sdk::client_mode_shared >( XOR( "_ClientModeShared" ), XOR( "m_ChatElement" ), &sdk::client_mode_shared::m_chat_element );

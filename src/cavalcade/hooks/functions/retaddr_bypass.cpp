@@ -3,7 +3,7 @@
 
 // NOTE(para): verifies if return address is within module
 // NOTE(para): we'd probably be fine if we just returned true too
-bool cavalcade::hooks::valve::retaddr_bypass( unk ecx, unk edx, const char* addy ) {
+bool cavalcade::hooks::valve::retaddr_bypass( unk ecx, unk edx, cstr addy ) {
 	if ( ( uintptr_t )addy >= ( uintptr_t )cavalcade::handle ) {
 		auto dos_header = ( PIMAGE_DOS_HEADER )cavalcade::handle;
 		auto nt_headers = ( PIMAGE_NT_HEADERS )( ( uintptr_t )cavalcade::handle + dos_header->e_lfanew );

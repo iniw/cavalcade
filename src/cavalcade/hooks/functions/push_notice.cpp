@@ -1,6 +1,6 @@
 #include "../hooks.hpp"
 
-void cavalcade::hooks::push_notice_::push_notice( unk ecx, unk edx, const char* text, int len, const char* normalizer ) {
+void cavalcade::hooks::push_notice_::push_notice( unk ecx, unk edx, cstr text, int len, cstr normalizer ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< push_notice_fn >( HASH_CT( "PushNotice" ) );
 
 	// TODO: properly verify if the text is being translated

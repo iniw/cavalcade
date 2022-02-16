@@ -1,5 +1,4 @@
-#ifndef SCREEN_HPP
-#define SCREEN_HPP
+
 
 #pragma once
 
@@ -17,5 +16,3 @@ namespace hack::indicators {
 		f32 m_time{ 0 };
 	};
 } // namespace hack::indicators
-
-#endif /* SCREEN_HPP */

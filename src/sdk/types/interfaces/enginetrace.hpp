@@ -1,5 +1,4 @@
-#ifndef ENGINETRACE_HPP
-#define ENGINETRACE_HPP
+
 
 #pragma once
 
@@ -103,7 +102,7 @@ namespace sdk {
 		bool m_start_solid;
 		PAD( 4 );
 		struct surface {
-			const char* m_name;
+			cstr m_name;
 			short m_surface_props;
 			unsigned short m_flags;
 		} m_surface;
@@ -129,5 +128,3 @@ namespace sdk {
 		};
 	} // namespace interfaces
 } // namespace sdk
-
-#endif /* ENGINETRACE_HPP */

@@ -5,6 +5,8 @@
 #include "input/input.hpp"
 #include "log_level/log_level.hpp"
 
+#include "../render/types/types.hpp"
+
 namespace io {
 	template< typename... VA >
 	inline std::string format( std::string_view fmt, VA&&... args );
@@ -28,9 +30,13 @@ namespace io {
 
 		fs::path& directory( dirs id );
 
-		const math::v2i& mouse_pos( );
+		render::point mouse_pos( );
+
+		render::point mouse_delta( );
 
 		i32 mouse_scroll( );
+
+		void update_input( );
 
 		std::string_view key_name( u8 key_id );
 

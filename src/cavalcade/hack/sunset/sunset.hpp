@@ -1,5 +1,4 @@
-#ifndef SUNSET_HPP
-#define SUNSET_HPP
+
 
 #pragma once
 
@@ -13,5 +12,3 @@ namespace hack {
 		f32 m_max_shadow_dist{ };
 	};
 } // namespace hack
-
-#endif /* SUNSET_HPP */

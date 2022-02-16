@@ -1,5 +1,4 @@
-#ifndef AIMBOT_HPP
-#define AIMBOT_HPP
+
 
 #include "../../../other/other.hpp"
 
@@ -35,5 +34,3 @@ namespace hack {
 		bool m_rcs{ true };
 	};
 } // namespace hack
-
-#endif /* AIMBOT_HPP */

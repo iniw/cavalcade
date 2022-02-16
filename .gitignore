@@ -1,4 +1,5 @@
 .vscode\browse\
+.cache
 build
 checks.json
 *.DB

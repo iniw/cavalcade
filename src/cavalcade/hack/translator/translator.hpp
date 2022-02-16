@@ -1,5 +1,4 @@
-#ifndef TRANSLATOR_HPP
-#define TRANSLATOR_HPP
+
 
 #pragma once
 
@@ -222,5 +221,3 @@ namespace hack {
 		void translate( e_languages source, e_languages target, const std::string& text, const std::string& suffix = "" );
 	};
 } // namespace hack
-
-#endif /* TRANSLATOR_HPP */

@@ -1,5 +1,4 @@
-#ifndef FOG_HPP
-#define FOG_HPP
+
 
 #pragma once
 
@@ -19,5 +18,3 @@ namespace hack {
 		render::color m_fog_color_secondary;
 	};
 } // namespace hack
-
-#endif /* FOG_HPP */

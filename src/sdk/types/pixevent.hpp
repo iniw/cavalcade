@@ -1,5 +1,4 @@
-#ifndef PIXEVENT_HPP
-#define PIXEVENT_HPP
+
 
 #pragma once
 
@@ -7,7 +6,7 @@
 
 namespace sdk {
 	struct pix_event {
-		pix_event( mat_render_context* ctx, const char* name, unsigned long color = 0xFFF5940F ) {
+		pix_event( mat_render_context* ctx, cstr name, unsigned long color = 0xFFF5940F ) {
 			m_render_context = ctx;
 			ctx->begin_pix_event( color, name );
 		}
@@ -21,5 +20,3 @@ namespace sdk {
 } // namespace sdk
 
 #define PIXEVENT sdk::pix_event _pixEvent
-
-#endif /* PIXEVENT_HPP */

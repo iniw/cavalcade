@@ -1,7 +1,5 @@
 #include "../hooks.hpp"
 
-#include <shared_mutex>
-
 HRESULT D3DAPI cavalcade::hooks::d3d9_device::end_scene( IDirect3DDevice9* device ) {
 	static auto og = g_mem[ SHADERAPIDX9_DLL ].get_og< end_scene_fn >( HASH_CT( "IDirect3DDevice9::EndScene" ) );
 
@@ -16,7 +14,11 @@ HRESULT D3DAPI cavalcade::hooks::d3d9_device::end_scene( IDirect3DDevice9* devic
 		}
 	}
 
+	g_io.update_input( );
+
 	g_render.begin( );
+
+	g_gui.think( );
 
 	g_gui.render( );
 

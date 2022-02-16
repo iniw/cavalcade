@@ -1,57 +1,52 @@
 #pragma once
 
-// gives access to the rendering and utility functions to every object
-#include "../../../other/other.hpp"
-
 namespace gui::objects {
-	template< class T >
-	struct base_traits {
-		using ptr = std::shared_ptr< T >;
-		struct type {
-			// NOTE(para): just use an indexed sequence to form a character array with the precalculated fixed size to get around ct string
-			// shittery...
-			// NOTE(wini): or maybe not
-			constexpr static utils::cx::string name{ utils::cx::type_name< T >( ) };
-		};
-	};
 
 	struct base_object;
-	using base_ptr = std::shared_ptr< base_object >;
 
 	struct base_parent;
-	using parent_raw_ptr = base_parent*;
-	using parent_ptr     = std::shared_ptr< base_parent >;
 
 	template< typename T >
 	concept Object = std::is_base_of_v< base_object, T > && !std::is_same_v< T, base_object >;
 
-	// list of flags that every object has
+	constexpr auto CFG_SEPARATOR = ":";
+
 	// implemented by base_object::m_flags
 	enum flags
 	{
-		// set to true when hovered
+		// hovered state
 		HOVERED = 0,
 		// set to true when we are being interacted with
-		// if this is active think() returned true
+		// if this is true think() returned true
 		ACTIVE,
-		// mostly a debugging flag
-		// prevents think() from being called
+		// disables rendering and thinking
 		DISABLED,
+		// TODO
+		INACTIVE,
+		// draws rectangles around the object's bounds
+		DEBUG_BOUNDS,
 		// :)
 		MAX
 	};
 
+	using base_ptr = std::unique_ptr< base_object >;
+
+	using parent_ptr = std::unique_ptr< base_parent >;
+
 	using flags_set = std::bitset< flags::MAX >;
 
-	// used in base_object::identify() to separate the names of objects
-	constexpr cstr NAME_SEPARATOR = ":";
-
+	using callback_fn = std::function< void( base_ptr& ) >;
 } // namespace gui::objects
 
-#include "../../managers/managers.hpp"
+#include "../../../../other/other.hpp"
 #include "../../cfg/cfg.hpp"
+#include "../../managers/managers.hpp"
+#include "../../style/style.hpp"
+#include "../../utilities/utilities.hpp"
 
-#include "base_object.hpp"
-#include "base_child.hpp"
-#include "base_parent.hpp"
-#include "base_styling.hpp"
+#include "traits/base_traits.hpp"
+#include "object/base_object.hpp"
+#include "child/base_child.hpp"
+#include "parent/base_parent.hpp"
+
+#include "../../helpers/helpers.hpp"

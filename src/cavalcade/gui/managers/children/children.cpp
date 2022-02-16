@@ -1,60 +1,82 @@
-#include "../../objects/base/base.hpp"
-#include "../../objects/scrollbar/scrollbar.hpp"
+#include "../../objects/objects.hpp"
 
-u32 gui::managers::children::size( ) {
-	return m_list.size( );
-}
+void gui::managers::children::render( const render::rect& area, bool intersect_clip_rect ) const {
+	if ( m_list.empty( ) )
+		return;
 
-void gui::managers::children::render( const render::rect& area, const objects::base_parent* parent ) const {
-	g_render.push_clip_rect( area );
+	g_render.push_clip_rect( area, intersect_clip_rect );
 
-	// iterate our children in reverse, guarantees that the most recently interacted-with object renders last
-	for ( auto it = m_list.rbegin( ); it != m_list.rend( ); ++it )
-		if ( ( *it ) != nullptr )
-			( *it )->render( );
+	// iterate our children in reverse
+	// guarantees that the most recently interacted-with object renders last
+	for ( auto it = m_list.rbegin( ); it != m_list.rend( ); ++it ) {
+		auto& child = *it;
+
+		if ( child->disabled( ) )
+			continue;
+
+		// don't render the scrollbar now
+		if ( !child->is< objects::scrollbar >( ) )
+			child->render( );
+
+		if ( child->flags( ).test( objects::flags::DEBUG_BOUNDS ) || style::debug::render_bounds )
+			child->render_debug_bounds( );
+	}
 
 	g_render.pop_clip_rect( );
 
-	// the scrollbar should always be the last one to render, it has the highest priority in the list
-	if ( parent->m_scrollbar )
-		parent->m_scrollbar->render( );
+	// we have to render the scrollbar here for two reasons:
+	// give a false sense of overlay, since it'll render above all other children
+	// but mostly importantly, to respect our grandparent's clip_rect
+	auto scrollbar = m_parent->scrollbar( );
+	if ( scrollbar && !scrollbar->disabled( ) )
+		scrollbar->render( );
 }
 
-bool gui::managers::children::think( const objects::base_parent* parent ) {
-	bool active = false;
+bool gui::managers::children::think( ) {
+	if ( m_list.empty( ) )
+		return false;
+
+	bool activity = false;
 
 	for ( auto& child : m_list ) {
-		// we need to check for out of bounds elements when we have a scrollbar
-		if ( parent->m_scrollbar && child != parent->m_scrollbar )
-			if ( ( child->m_dynamic_area[ Y ] + child->m_dynamic_area[ HEIGHT ] ) < parent->m_dynamic_area[ Y ] ||
-			     child->m_dynamic_area[ Y ] > ( parent->m_dynamic_area[ Y ] + parent->m_dynamic_area[ HEIGHT ] ) )
+		// we need to check for vertically out of bounds elements when we have a scrollbar
+		if ( m_parent->scrollbar( ) )
+			// don't do oob check if the chld is a master_checkbox
+			if ( !child->is< objects::master_checkbox >( ) &&
+			     ( child->stt_area( ).y2( ) <= m_parent->dyn_area( ).y || child->stt_area( ).y >= m_parent->dyn_area( ).y2( ) ) )
 				continue;
 
-		// NOTE(wini): might be of interest to make a virtual to handle flags
-		// since not all objects behave the same, e.g: tab's HOVERED doesn't use static_area
-
-		// don't think if the child is disabled
-		if ( child->m_flags.test( objects::flags::DISABLED ) )
+		if ( child->disabled( ) )
 			continue;
 
-		child->m_flags.reset( );
+		child->update_flags( );
 
-		child->m_flags.set( objects::flags::HOVERED, g_io.mouse_pos( ).in_rect( child->m_static_area ) );
+		activity = child->think( );
 
-		child->m_flags.set( objects::flags::ACTIVE, child->think( ) );
+		if ( activity ) {
+			child->flags( ).set( objects::flags::ACTIVE );
 
-		// if the child had an interaction: update it's time and stop iterating
-		if ( child->m_flags.test( objects::flags::ACTIVE ) ) {
-			active = child->m_time = LI_FN( GetTickCount64 )( );
+			child->set_time( GetTickCount64( ) );
+
+			auto& callback = child->callback( );
+			if ( callback )
+				callback( child );
+
 			break;
 		}
 	}
 
-	// if there was activity sort our children by time, guarantees that the most recently interacted-with object thinks first
-	if ( active )
-		std::ranges::sort( m_list, []( objects::base_ptr& a, objects::base_ptr& b ) { return a->m_time > b->m_time; } );
+	// if there was activity sort our children by time
+	// guarantees that the most recently interacted-with object thinks first
+	if ( activity )
+		m_list.sort( []( const auto& a, const auto& b ) { return a->time( ) > b->time( ); } );
 
-	return active;
+	return activity;
+}
+
+void gui::managers::children::animate( ) {
+	for ( auto& child : m_list )
+		child->animate( );
 }
 
 void gui::managers::children::reposition( const render::point& delta ) {
@@ -62,11 +84,56 @@ void gui::managers::children::reposition( const render::point& delta ) {
 		child->reposition( delta );
 }
 
-void gui::managers::children::resize( const render::point& delta ) {
+void gui::managers::children::resize( const render::size& delta ) {
 	for ( auto& child : m_list )
 		child->resize( delta );
 }
 
-gui::objects::base_ptr& gui::managers::children::add( const objects::base_ptr& child ) {
-	return m_list.emplace_back( child );
+gui::objects::base_object* gui::managers::children::find_oldest_child( int filter ) {
+	if ( m_list.empty( ) )
+		return nullptr;
+
+	objects::base_object* ret = nullptr;
+
+	for ( const auto& obj : m_list ) {
+		if ( filter & find_filter::COLUMNS )
+			if ( obj->is< objects::column >( ) )
+				continue;
+
+		if ( filter & find_filter::SCROLLBARS )
+			if ( obj->is< objects::scrollbar >( ) )
+				continue;
+
+		if ( obj->idx( ) == 0 ) {
+			ret = obj.get( );
+			break;
+		}
+	}
+
+	return ret;
+}
+
+gui::objects::base_object* gui::managers::children::find_latest_child( int filter ) {
+	if ( m_list.empty( ) )
+		return nullptr;
+
+	objects::base_object* ret = nullptr;
+	uint32_t idx              = 0;
+
+	for ( const auto& obj : m_list ) {
+		if ( filter & find_filter::COLUMNS )
+			if ( obj->is< objects::column >( ) )
+				continue;
+
+		if ( filter & find_filter::SCROLLBARS )
+			if ( obj->is< objects::scrollbar >( ) )
+				continue;
+
+		if ( obj->idx( ) > idx ) {
+			ret = obj.get( );
+			idx = obj->idx( );
+		}
+	}
+
+	return ret;
 }

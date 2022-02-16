@@ -1,91 +1,98 @@
 #include "tab.hpp"
-#include "styling.hpp"
-
-gui::objects::tab::tab( std::string_view name, std::string_view label ) {
-	// basic identification
-	m_name  = name;
-	m_label = label;
-}
 
 // TODO(wini): figure out a way for tabs to work with dynamically sized groupboxes
 void gui::objects::tab::init( ) {
-	auto& info = s_info[ m_parent->m_id ];
+	children_info::add_to_list( this );
 
-	// add us to the list
-	info.m_list.emplace_back( dynamic_cast< tab* >( this ) );
+	// our areas will mimic our parent's
+	m_static_area = m_parent->dyn_area( );
 
-	// our areas will mimic those of our parent's
-	m_static_area  = m_parent->m_dynamic_area;
-	m_dynamic_area = m_static_area; // this is temporary
-
-	// the height is the same for all tabs
-	m_button_area[ HEIGHT ] = personal::sizing::button_height;
-
-	// the width available for all tabs to share
-	i32 available_width = m_dynamic_area[ WIDTH ];
-
-	// update the button area for all tabs in this parent
-	for ( i32 i = 0; i < info.m_list.size( ); i++ ) {
-		auto& tab         = info.m_list[ i ];
-		auto& button_area = tab->m_button_area;
-
-		button_area.pos( m_dynamic_area.pos( ) );
-		button_area[ WIDTH ] = available_width / info.m_list.size( );
-		button_area[ X ] += button_area[ WIDTH ] * i;
-
-		// also update the label position
-		auto label_size = g_render.text_size< render::font::MENU >( tab->m_label );
-
-		tab->m_label_pos[ X ] = ( button_area[ X ] + button_area[ WIDTH ] / 2 ) - label_size[ X ] / 2;
-		tab->m_label_pos[ Y ] = button_area[ Y ] + label_size[ Y ] / 2;
-	}
-
-	// fix our dynamic area (after updating everyone)
-	// TODO(wini): make a function that wraps this operation of adding to an axis and subtracting from the size's equivalent
-	m_dynamic_area[ Y ] += personal::sizing::button_height + general::padding::obj_margin;
-	m_dynamic_area[ HEIGHT ] -= personal::sizing::button_height + general::padding::obj_margin;
-	m_dynamic_area[ X ] += general::padding::margin;
-	m_dynamic_area[ WIDTH ] -= general::padding::margin * 2;
+	m_dynamic_area = m_static_area;
+	m_dynamic_area.vertical_cut( style::sizing::button.h + style::padding::margin );
 
 	m_cursor = m_dynamic_area.pos( );
+
+	center_tabs( );
 }
 
 void gui::objects::tab::render( ) const {
-	bool active      = is_active( );
-	auto outline_col = active ? general::pallete::highlight : general::pallete::secondary;
+	if ( children_info::is_active( this ) ) {
+		g_render.line( { m_button_area.x, m_button_area.y2( ) }, m_button_area.max( ), style::palette::highlight );
+		m_children_mgr.render( m_dynamic_area );
+	}
 
-	g_render.rectangle( m_button_area.shrink( 1 ), general::pallete::primary ).outline( outline_col );
-
-	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
-
-	if ( active )
-		m_children.render( m_dynamic_area, this );
+	g_render.text< render::font::MENU >( m_label_pos, m_label, style::palette::text );
 }
 
 bool gui::objects::tab::think( ) {
-	// override our HOVERED flag
-	m_flags.set( flags::HOVERED, g_io.mouse_pos( ).in_rect( m_button_area ) );
-
-	bool active = m_flags.test( flags::HOVERED ) && g_io.key_state< io::key_state::RELEASED >( VK_LBUTTON );
+	bool active = m_button_area.hovered( ) && g_io.key_state< io::key_state::RELEASED >( VK_LBUTTON );
 
 	if ( active )
-		set_active( );
+		children_info::set_active( this );
 
-	if ( is_active( ) )
-		if ( m_children.think( this ) )
-			active = true;
+	if ( children_info::is_active( this ) )
+		return m_children_mgr.think( );
 
 	return active;
 }
 
-void gui::objects::tab::reposition( const render::point& delta ) {
-	m_button_area.pos( m_button_area.pos( ) + delta );
-	base_parent::reposition( delta );
+void gui::objects::tab::update_flags( ) {
+	base_object::update_flags( );
+	// override hovered
+	m_flags.set( flags::HOVERED, m_flags.test( flags::HOVERED ) || m_button_area.hovered( ) );
 }
 
-void gui::objects::tab::resize( const render::point& delta ) {
-	base_parent::resize( delta );
+void gui::objects::tab::on_add_child( base_object* child ) {
+	bool gone_past = child->stt_area( ).y2( ) > m_dynamic_area.y2( );
+	if ( !gone_past )
+		return;
 
-	// add the new width to the button area too
-	m_button_area[ WIDTH ] += delta[ X ];
+	if ( m_scrollbar ) {
+		// enable it again if it already existed
+		m_scrollbar->enable( );
+		// now update
+		m_scrollbar->update_height( );
+	} else {
+		m_children_mgr.resize( { -style::padding::margin, 0 } );
+		// create it if it doesn't exist
+		create_scrollbar( );
+		m_static_area.w -= style::padding::margin;
+		m_dynamic_area.w -= style::padding::margin;
+	}
+}
+
+void gui::objects::tab::reposition( const render::point& delta ) {
+	base_parent::reposition( delta );
+	m_button_area.add_pos( delta );
+}
+
+void gui::objects::tab::resize( const render::size& delta ) {
+	base_parent::resize( delta );
+	center_tabs( );
+}
+
+void gui::objects::tab::render_debug_bounds( ) const {
+	base_parent::render_debug_bounds( );
+	g_render.m_safe.draw_shape_front< render::geometry::rect >( m_button_area, style::palette::debug_bounds_other );
+}
+
+void gui::objects::tab::center_tabs( ) {
+	auto& info = children_info::get( this );
+
+	// the width available for all tabs to share
+	int available_width = m_static_area.w;
+	// the width of all buttons
+	int button_width = available_width / info.list.size( );
+
+	// update the button area for all tabs in this parent
+	for ( int i = 0; i < info.list.size( ); i++ ) {
+		auto tab = info.list[ i ];
+
+		auto& button_area = tab->m_button_area;
+		button_area.set_pos( { m_static_area.x + button_width * i, m_static_area.y } );
+		button_area.set_size( { button_width, style::sizing::button.h } );
+
+		// also update the label position
+		tab->m_label_pos = utils::center_label( tab->m_label, tab->m_button_area );
+	}
 }

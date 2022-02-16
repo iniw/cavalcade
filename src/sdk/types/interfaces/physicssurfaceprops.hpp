@@ -1,5 +1,4 @@
-#ifndef PHYSICSSURFACEPROPS_HPP
-#define PHYSICSSURFACEPROPS_HPP
+
 
 #pragma once
 
@@ -22,5 +21,3 @@ namespace sdk {
 		};
 	} // namespace interfaces
 } // namespace sdk
-
-#endif /* PHYSICSSURFACEPROPS_HPP */

@@ -1,5 +1,4 @@
-#ifndef TRAINER_HPP
-#define TRAINER_HPP
+
 
 #pragma once
 
@@ -15,5 +14,3 @@ namespace hack {
 		void clear( );
 	};
 } // namespace hack
-
-#endif /* TRAINER_HPP */

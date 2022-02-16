@@ -62,7 +62,7 @@ namespace sdk::interfaces {
 			return math::v2i( w, h );
 		}
 
-		void execute_client_cmd( const char* cmd ) {
+		void execute_client_cmd( cstr cmd ) {
 			return mem::call_v_func< void, 108 >( this, cmd );
 		}
 

@@ -1,5 +1,4 @@
-#ifndef IVDEBUGOVERLAY_HPP
-#define IVDEBUGOVERLAY_HPP
+
 
 #pragma once
 
@@ -10,5 +9,3 @@ namespace sdk::interfaces {
 		}
 	};
 } // namespace sdk::interfaces
-
-#endif /* IVDEBUGOVERLAY_HPP */

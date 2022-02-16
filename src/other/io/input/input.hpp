@@ -34,7 +34,9 @@ namespace io {
 
 		struct {
 			math::v2i pos;
+			math::v2i delta;
 			i32 scroll_amt;
+			i32 scroll_buffer;
 		} m_mouse;
 
 	public:

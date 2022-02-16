@@ -1,5 +1,4 @@
-#ifndef PLAYER_INFO_HPP
-#define PLAYER_INFO_HPP
+
 
 #pragma once
 
@@ -18,5 +17,3 @@ namespace sdk::auxiliary {
 		uint8_t m_files_downloaded;
 	};
 } // namespace sdk::auxiliary
-
-#endif /* PLAYER_INFO_HPP */

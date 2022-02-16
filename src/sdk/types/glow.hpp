@@ -1,5 +1,4 @@
-#ifndef GLOW_HPP
-#define GLOW_HPP
+
 
 #pragma once
 
@@ -40,5 +39,3 @@ namespace sdk {
 		i32 m_size;
 	};
 } // namespace sdk
-
-#endif /* GLOW_HPP */

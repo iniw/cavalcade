@@ -1,5 +1,4 @@
-#ifndef GRAPH_HPP
-#define GRAPH_HPP
+
 
 #pragma once
 
@@ -25,5 +24,3 @@ namespace hack {
 		i32 get_bottommost_y_scenario( );
 	};
 } // namespace hack
-
-#endif /* GRAPH_HPP */

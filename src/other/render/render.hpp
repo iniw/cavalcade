@@ -70,7 +70,10 @@ namespace render {
 			void end( );
 		} m_imgui;
 
-		math::v2i m_screen_size;
+		size m_screen_size;
+		point m_screen_center;
+
+		std::stack< f32 > m_alphas;
 
 		// to the abstraced wrappers we pass pos + size,
 		// but the geometry classes use two positions,
@@ -129,6 +132,14 @@ namespace render {
 			}
 		} m_safe;
 
+		auto& get_font( font idx ) {
+			return m_fonts[ idx ];
+		}
+
+		const auto& alphas( ) {
+			return m_alphas;
+		}
+
 		bool init( );
 
 		void unload( );
@@ -149,13 +160,15 @@ namespace render {
 		template< align alignment = align::NORMAL >
 		geometry::rect_filled rectangle_filled( const rect& rect, color col );
 
+		geometry::line line( const point& point1, const point& point2, color col, f32 thickness = 1.F );
+
 		template< font font_choice >
 		size text( const point& pos, std::string_view text, color col, align alignment = align::NONE );
 
 		template< font font_choice >
 		size text_size( std::string_view text );
 
-		void push_clip_rect( const rect& rect );
+		void push_clip_rect( const rect& rect, bool intersect = false );
 
 		void pop_clip_rect( );
 
@@ -163,9 +176,15 @@ namespace render {
 
 		void post_reset( );
 
-		void update_screen_size( const math::v2i& screen_size );
+		void update_screen_size( const size& screen_size );
 
-		const math::v2i& get_screen_size( ) const;
+		const size& get_screen_size( ) const;
+
+		const point& get_screen_center( ) const;
+
+		void push_alpha( f32 alpha );
+
+		void pop_alpha( );
 	};
 } // namespace render
 

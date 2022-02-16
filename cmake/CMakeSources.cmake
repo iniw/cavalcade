@@ -3,16 +3,25 @@ set(SOURCES
     # --- cavalcade ---
     # gui - other
     src/cavalcade/gui/managers/children/children.cpp
-    # gui - objects
-    src/cavalcade/gui/objects/base/base_parent.cpp
-    src/cavalcade/gui/objects/base/base_object.cpp
+	# gui - helpers
+    src/cavalcade/gui/helpers/list_option/list_option.cpp
+    src/cavalcade/gui/helpers/popup/popup.cpp
+	# gui - objects
+    src/cavalcade/gui/objects/base/parent/base_parent.cpp
+    src/cavalcade/gui/objects/base/object/base_object.cpp
+    src/cavalcade/gui/objects/button/button.cpp
     src/cavalcade/gui/objects/checkbox/checkbox.cpp
+    src/cavalcade/gui/objects/colorpicker/colorpicker.cpp
     src/cavalcade/gui/objects/column/column.cpp
     src/cavalcade/gui/objects/groupbox/groupbox.cpp
+    src/cavalcade/gui/objects/listbox/listbox.cpp
+    src/cavalcade/gui/objects/master_checkbox/master_checkbox.cpp
     src/cavalcade/gui/objects/scrollbar/scrollbar.cpp
+    src/cavalcade/gui/objects/selectable/selectable.cpp
     src/cavalcade/gui/objects/tab/tab.cpp
     src/cavalcade/gui/objects/window/window.cpp
-    # gui
+    src/cavalcade/gui/utilities/utilities.cpp
+	# gui
     src/cavalcade/gui/gui.cpp
     # ctx
     src/cavalcade/ctx/ctx.cpp
@@ -72,13 +81,17 @@ set(SOURCES
     # math
     src/other/math/math.cpp
     src/other/lib/include/crc32/crc32.cpp
+	# render - types
+	src/other/render/types/color.cpp
+	src/other/render/types/rect.cpp
+	src/other/render/types/point.cpp
     # render - imgui
-    src/other/render/imgui/misc/freetype/imgui_freetype.cpp
-    src/other/render/imgui/imgui_draw.cpp
-    src/other/render/imgui/imgui_impl_dx9.cpp
-    src/other/render/imgui/imgui_tables.cpp
-    src/other/render/imgui/imgui_widgets.cpp
-    src/other/render/imgui/imgui.cpp
+    src/other/lib/include/imgui/imgui_freetype.cpp
+    src/other/lib/include/imgui/imgui_draw.cpp
+    src/other/lib/include/imgui/imgui_impl_dx9.cpp
+    src/other/lib/include/imgui/imgui_tables.cpp
+    src/other/lib/include/imgui/imgui_widgets.cpp
+    src/other/lib/include/imgui/imgui.cpp
     # render - geometry
     src/other/render/geometry/rect/rect.cpp
     src/other/render/geometry/rect/rect_filled.cpp

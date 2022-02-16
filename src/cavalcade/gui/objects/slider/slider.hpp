@@ -4,31 +4,39 @@
 
 namespace gui::objects {
 	template< math::Number T >
-	struct slider : public base_child< T >, public base_traits< slider< T > > {
+	struct slider : base_child< T > {
 	protected:
 
-		bool m_dragging;
+		bool m_dragging = false;
 
 		T m_min, m_max;
 
-		i32 m_precision;
+		uint8_t m_precision;
 
-		render::point m_var_text_pos;
 		std::string m_var_text;
+		render::point m_var_text_pos;
+
+		float m_val_width = 0.f;
 
 	public:
 
-		slider( std::string_view name, std::string_view label, T min, T max, i32 precision = 2 );
+		slider( ) = default;
 
-		void init( ) override;
+		slider( std::string_view label, T min, T max, uint8_t precision = 2 );
 
-		void render( ) const override;
+		virtual ~slider( ) = default;
 
-		bool think( ) override;
+		virtual void init( ) override;
 
-		void reposition( const render::point& delta ) override;
+		virtual void render( ) const override;
 
-		void resize( const render::point& delta ) override;
+		virtual bool think( ) override;
+
+		virtual void animate( ) override;
+
+		virtual void reposition( const render::point& delta ) override;
+
+		virtual void resize( const render::size& delta ) override;
 	};
 } // namespace gui::objects
 

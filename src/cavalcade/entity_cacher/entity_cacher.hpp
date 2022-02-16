@@ -1,5 +1,4 @@
-#ifndef ENTITY_CACHER_HPP
-#define ENTITY_CACHER_HPP
+
 
 #pragma once
 
@@ -22,5 +21,3 @@ struct entity_cacher {
 };
 
 inline entity_cacher g_entity_cacher;
-
-#endif /* ENTITY_CACHER_HPP */

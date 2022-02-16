@@ -1,7 +1,10 @@
 #include "polyfill.hpp"
 
-#include "imgui.h"
+#include "imgui/imgui.h"
 
 void render::geometry::polyfill::draw( ) {
-	s_draw_list->AddConvexPolyFilled( m_points.data( ), m_points.size( ), m_color.to_imgui( ) );
+	std::vector< ImVec2 > im_data( m_points.size( ) );
+	for ( auto& p : m_points )
+		im_data.push_back( p );
+	s_draw_list->AddConvexPolyFilled( im_data.data( ), m_points.size( ), m_color.convert( ) );
 }

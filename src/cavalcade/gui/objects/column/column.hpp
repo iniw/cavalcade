@@ -4,18 +4,17 @@
 
 namespace gui::objects {
 	// an almost proxy-like object that serves only as a positioning tool
-	struct column : public base_parent, public base_traits< column > {
+	struct column : base_parent {
 		column( ) = default;
 
-		// don't allow construction with any arguments
-		column( auto... args ) = delete;
+		virtual ~column( ) = default;
 
-		void init( ) override;
+		virtual void init( ) override;
 
-		void render( ) const override;
+		virtual void render( ) const override;
 
-		bool think( ) override;
+		virtual bool think( ) override;
 
-		void identify( base_parent* parent ) override;
+		virtual void on_add_child( base_object* child ) override;
 	};
 } // namespace gui::objects

@@ -11,6 +11,7 @@ namespace render::geometry {
 
 		ImFont* m_font;
 		f32 m_size;
+		i32 m_height;
 
 	public:
 
@@ -21,5 +22,9 @@ namespace render::geometry {
 		void draw( const point& pos, std::string_view text, color col ) const;
 
 		size calc_size( std::string_view text ) const;
+
+		int height( ) const {
+			return m_height;
+		}
 	};
 } // namespace render::geometry

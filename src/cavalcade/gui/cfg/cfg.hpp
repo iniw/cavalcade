@@ -3,30 +3,27 @@
 namespace gui {
 	// wonder if there's a better way to do this
 	template< typename T >
-	concept ConfigEntry = std::is_same_v< T, bool > || std::is_same_v< T, f32 > || std::is_same_v< T, i32 >;
+	concept ConfigEntry = std::is_same_v< T, bool > || std::is_same_v< T, float > || std::is_same_v< T, int > || std::is_same_v< T, uint32_t > ||
+		std::is_same_v< T, render::color >;
 
 	struct cfg {
 	private:
 
-		using types = std::variant< bool, f32, i32 >;
+		using variants = std::variant< bool, float, int, uint32_t, render::color >;
 
-		static inline std::unordered_map< u32, types > s_entries{ };
+		static inline std::unordered_map< uint32_t, variants > s_entries{ };
 
 	public:
 
 		template< ConfigEntry T >
-		static T* add_entry( u32 hash ) {
+		static T* add( uint32_t hash ) {
 			s_entries.insert( { hash, T( ) } );
 			return &get< T >( hash );
 		}
 
 		template< ConfigEntry T >
-		static T& get( u32 hash ) {
-			ENFORCE( s_entries.contains( hash ), "bad hash given to cfg::get, hash: {}", hash );
-
+		static T& get( uint32_t hash ) {
 			auto& entry = s_entries.at( hash );
-
-			ENFORCE( std::holds_alternative< T >( entry ), "bad type given to cfg::get, hash: {}", hash );
 
 			return std::get< T >( entry );
 		}

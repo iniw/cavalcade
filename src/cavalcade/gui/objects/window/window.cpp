@@ -1,10 +1,7 @@
 #include "window.hpp"
+#include "detail.hpp"
 
-gui::objects::window::window( std::string_view name, std::string_view label, const render::size& size ) {
-	// basic identification
-	m_name  = name;
-	m_label = label;
-
+gui::objects::window::window( std::string_view label, const render::size& size ) : base_object::base_object( label ) {
 	m_size     = size;
 	m_dragging = false;
 
@@ -12,106 +9,100 @@ gui::objects::window::window( std::string_view name, std::string_view label, con
 	// this is the only object that gets created manually
 	identify( nullptr );
 
+	auto center = g_render.get_screen_center( ) - m_size / 2;
+
 	// center ourselves
-	auto center   = ( g_render.get_screen_size( ) - m_size ) / 2;
-	m_static_area = render::rect( center[ X ], center[ Y ], m_size[ X ], m_size[ Y ] );
+	m_static_area.set_pos( center );
+	m_static_area.set_size( m_size );
 
-	// account for outline
-	m_static_area = m_static_area.shrink( 1 );
-
-	render::size label_size = g_render.text_size< render::font::MENU >( m_label );
-
-	m_dynamic_area = m_static_area.shrink( general::padding::margin );
-	// account for our label
-	m_dynamic_area[ Y ] += label_size[ Y ] * 2;
-	m_dynamic_area[ HEIGHT ] -= label_size[ Y ] * 2;
+	m_dynamic_area = m_static_area.shrink( style::padding::margin );
+	m_dynamic_area.vertical_cut( m_label_size.h );
 
 	m_cursor = m_dynamic_area.pos( );
 
-	m_label_pos =
-		render::point( ( m_static_area[ X ] + m_static_area[ WIDTH ] / 2 ) - label_size[ X ] / 2, m_static_area[ Y ] + label_size[ Y ] / 2 );
-
 	// the drag area is basically the header of the window
-	m_drag_area           = m_static_area;
-	m_drag_area[ HEIGHT ] = label_size[ Y ] * 2;
+	m_reposition_area   = m_static_area;
+	m_reposition_area.h = m_label_size.h + m_label_size.h / 2;
 
-	m_resize_area.size( { 50, 50 } );
-	m_resize_area.pos( ( m_static_area.pos( ) + m_static_area.size( ) ) - m_resize_area.size( ) );
+	m_label_pos = utils::center_label( m_label, m_reposition_area );
+
+	m_resize_area.set_pos( m_static_area.max( ) - detail::sizing::resize_area );
+	m_resize_area.set_size( detail::sizing::resize_area );
 }
 
 void gui::objects::window::render( ) const {
 	if ( m_flags.test( flags::DISABLED ) )
 		return;
 
-	auto outline_color = m_flags.test( flags::HOVERED ) ? general::pallete::highlight : general::pallete::secondary;
+	g_render.rectangle_filled( m_static_area, style::palette::primary ).outline( style::palette::stroke );
 
-	g_render.rectangle_filled( m_static_area, general::pallete::primary ).outline( outline_color );
+	g_render.text< render::font::MENU >( m_label_pos, m_label, style::palette::text );
 
-	g_render.text< render::font::MENU >( m_label_pos, m_label, general::pallete::text );
-
-	return m_children.render( m_dynamic_area, this );
+	m_children_mgr.render( m_dynamic_area );
 }
 
-// TODO(wini): resizing
 bool gui::objects::window::think( ) {
-	if ( g_io.key_state< io::key_state::RELEASED >( VK_INSERT ) )
-		m_flags.flip( flags::DISABLED );
-
-	// we have to handle our flags manually since we are fatherless :(
 	if ( m_flags.test( flags::DISABLED ) )
 		return false;
 
-	auto& mouse_pos = g_io.mouse_pos( );
+	render::point mouse_pos = g_io.mouse_pos( );
 
-	m_flags.reset( );
+	// return if one of our kids had activity, before handling dragging
+	if ( m_flags.test( flags::ACTIVE ) ) {
+		m_previous_mouse_pos = mouse_pos;
+		return false;
+	}
 
-	m_flags.set( flags::HOVERED, mouse_pos.in_rect( m_static_area ) );
-
-	m_flags.set( flags::ACTIVE, m_children.think( this ) );
-
-	// return if we have activity, before handling dragging
-	if ( m_flags.test( flags::ACTIVE ) )
-		return true;
-
-	if ( m_dragging || mouse_pos.in_rect( m_drag_area ) )
+	if ( m_dragging || m_reposition_area.hovered( ) )
 		m_dragging = g_io.key_state( VK_LBUTTON );
 
 	if ( m_dragging ) {
 		auto delta = mouse_pos - m_previous_mouse_pos;
-		if ( !delta.empty( ) )
+		if ( !delta.is_zero( ) )
 			reposition( delta );
+	}
+
+	if ( m_resize_area.hovered( ) && g_io.key_state( VK_LBUTTON ) ) {
+		auto delta = mouse_pos - m_previous_mouse_pos;
+		if ( !delta.is_zero( ) )
+			resize( { delta.x, delta.y } );
 	}
 
 	m_previous_mouse_pos = mouse_pos;
 
-	/* TODO(wini): come back to this later
-	if ( mouse_pos.in_rect( m_resize_area ) ) {
-	    auto delta = mouse_pos - m_previous_mouse_pos;
-	    if ( !delta.empty( ) )
-	        resize( delta );
-	}
-	*/
-
-	// it doesn't matter what we return here
 	return true;
 }
 
 void gui::objects::window::reposition( const render::point& delta ) {
-	m_drag_area.pos( m_drag_area.pos( ) + delta );
-	m_resize_area.pos( m_resize_area.pos( ) + delta );
 	base_parent::reposition( delta );
+	m_reposition_area.add_pos( delta );
+	m_resize_area.add_pos( delta );
 }
 
-void gui::objects::window::resize( const render::point& delta ) {
+void gui::objects::window::resize( const render::size& delta ) {
 	auto size = m_static_area.size( );
-	if ( ( size[ X ] + delta[ X ] ) <= m_size[ X ] || ( size[ Y ] + delta[ Y ] ) <= m_size[ Y ] )
+	// don't go below our initial size
+	if ( ( size.w + delta.w ) <= m_size.w || ( size.h + delta.h ) <= m_size.h )
 		return;
 
 	base_parent::resize( delta );
+	m_reposition_area.w += delta.w;
+	m_label_pos = utils::center_label( m_label, m_reposition_area );
+	// resize area should maitain it's size
+	m_resize_area.add_pos( { delta.w, delta.h } );
+}
 
-	// add the new width to the drag area too
-	m_drag_area[ WIDTH ] += delta[ X ];
+void gui::objects::window::update_flags( ) {
+	m_flags.set( flags::HOVERED, m_static_area.hovered( ) );
 
-	// add to the position of the resize area, we don't wanna modify it's size
-	m_resize_area.pos( m_resize_area.pos( ) + delta );
+	m_flags.set( flags::ACTIVE, m_children_mgr.think( ) );
+
+	if ( g_io.key_state< io::key_state::RELEASED >( VK_INSERT ) )
+		m_flags.flip( flags::DISABLED );
+}
+
+void gui::objects::window::render_debug_bounds( ) const {
+	base_parent::render_debug_bounds( );
+	g_render.m_safe.draw_shape_front< render::geometry::rect >( m_reposition_area, style::palette::debug_bounds_other );
+	g_render.m_safe.draw_shape_front< render::geometry::rect >( m_resize_area, style::palette::debug_bounds_other );
 }

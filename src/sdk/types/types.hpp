@@ -21,7 +21,7 @@
 #include "client_mode_shared.hpp"
 #include "model_info.hpp"
 #include "staticprop.hpp"
-#include "material.hh"
+#include "material.hpp"
 #include "glow.hpp"
 #include "imatrendercontext.hpp"
 #include "view.hpp"

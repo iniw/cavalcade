@@ -1,5 +1,4 @@
-#ifndef EFFECTS_HPP
-#define EFFECTS_HPP
+
 
 #pragma once
 
@@ -10,5 +9,3 @@ namespace sdk::interfaces {
 		VFUNC( auxiliary::dlight*, alloc_dlight, 4, ( i32 key ), key );
 	};
 } // namespace sdk::interfaces
-
-#endif /* EFFECTS_HPP */

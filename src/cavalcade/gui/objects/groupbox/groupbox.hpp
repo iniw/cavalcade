@@ -3,23 +3,40 @@
 #include "../base/base.hpp"
 
 namespace gui::objects {
-	struct groupbox : public base_parent, public base_traits< groupbox > {
-	protected:
-
-		i32 m_height;
+	struct groupbox : base_parent {
+		enum class preset
+		{
+			// we'll take up the entire area of our parent
+			FULL,
+			// we'll take up half of the area of our parent
+			HALF,
+			// we'll update our height on every child added
+			DYNAMIC
+		};
 
 	public:
 
-		// NOTE(wini): the default param of "-1" means "dynamic",
-		// in the sense that the height will be updated on each add() call
-		groupbox( std::string_view name, std::string_view label, i32 height = -1 );
+		int m_height;
+		preset m_preset;
 
-		void init( ) override;
+	public:
 
-		void render( ) const override;
+		groupbox( ) = default;
 
-		bool think( ) override;
+		groupbox( std::string_view label, uint32_t height );
 
-		void on_add_child( const base_ptr& child ) override;
+		groupbox( std::string_view label, preset preset );
+
+		virtual ~groupbox( ) = default;
+
+		virtual void init( ) override;
+
+		virtual void render( ) const override;
+
+		virtual bool think( ) override;
+
+		virtual void on_add_child( base_object* child ) override;
+
+		virtual void resize( const render::size& delta ) override;
 	};
 } // namespace gui::objects

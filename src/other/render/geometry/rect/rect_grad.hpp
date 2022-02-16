@@ -1,5 +1,4 @@
-#ifndef RECT_GRAD_HPP
-#define RECT_GRAD_HPP
+
 
 #pragma once
 
@@ -9,8 +8,7 @@ namespace render::geometry {
 	struct rect_grad : rect {
 		constexpr rect_grad( ) = default;
 
-		constexpr rect_grad( const point& point1, const point& point2, const render::color& cola, const render::color& colb,
-		                     bool horizontal = false ) {
+		constexpr rect_grad( const point& point1, const point& point2, render::color cola, render::color colb, bool horizontal = false ) {
 			m_point1     = point1;
 			m_point2     = point2;
 			m_thickness  = 1.f;
@@ -27,5 +25,3 @@ namespace render::geometry {
 		bool m_horizontal;
 	};
 } // namespace render::geometry
-
-#endif /* RECT_GRAD_HPP */

@@ -12,7 +12,7 @@ void cavalcade::hooks::steam::on_friend_message( GameConnectedFriendChatMsg_t* c
 		g_ctx.m_steam.m_steam_friends->GetFriendMessage( callback->m_steamIDUser, callback->m_iMessageID, msg, 4096, &chat_type );
 
 		if ( chat_type == EChatEntryType::k_EChatEntryTypeChatMsg ) {
-			auto message_interp = std::string_view{ ( const char* )msg };
+			auto message_interp = std::string_view{ ( cstr )msg };
 
 			std::optional< std::string > image = std::nullopt;
 			// https://steamuserimages-a.akamaihd.net/ugc/1
@@ -34,7 +34,7 @@ void cavalcade::hooks::steam::on_friend_message( GameConnectedFriendChatMsg_t* c
 			g_ctx.m_last_friend_to_message = callback->m_steamIDUser;
 			auto text =
 				io::format( XOR( "<font color=\"#00FF00\">friend</font><font color=\"#B9B9B9\"> | </font>*<font color=\"#00FF00\">{}</font>*: {}" ),
-			                friend_name, ( const char* )msg );
+			                friend_name, ( cstr )msg );
 
 			// hack, we want prefix to translation
 			g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0, XOR( "<<<NO_TRANSLATE>>> %s" ), text.c_str( ) );
@@ -49,7 +49,7 @@ void cavalcade::hooks::steam::on_friend_message( GameConnectedFriendChatMsg_t* c
 				g_csgo.m_client_mode_shared->m_chat_element->chat_printf( 0, 0, fmt.c_str( ) );
 			}
 
-			auto ttext = io::format( XOR( "*{}*: {}" ), friend_name, ( const char* )msg );
+			auto ttext = io::format( XOR( "*{}*: {}" ), friend_name, ( cstr )msg );
 
 			g_hack.m_translator.translate( hack::translator::e_languages::ENGLISH, hack::translator::e_languages::RUSSIAN, ttext,
 			                               XOR( "<font color=\"#00FF00\">friend</font> <font color=\"#B9B9B9\"> |</font>" ) );
