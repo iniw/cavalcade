@@ -35,12 +35,24 @@ namespace sdk::interfaces {
 			return mem::call_v_func< bool, 139 >( this, name );
 		}
 
+		void set_has_class( const char* name, bool has ) {
+			return mem::call_v_func< void, 145 >( this, name, has );
+		}
+
 		float get_attribute_float( const char* name, f32 defalt_value ) {
 			return mem::call_v_func< f32, 278 >( this, name, defalt_value );
 		}
 
 		void set_attribute_float( const char* name, f32 value ) {
 			return mem::call_v_func< void, 288 >( this, name, value );
+		}
+
+		i32 get_classes_count( ) {
+			return *( i32* )( ( uintptr_t )( this ) + 296 );
+		}
+
+		char* get_class( i32 i ) {
+			return *( char** )( ( uintptr_t )( this ) + 284 + ( i * 2 ) );
 		}
 	};
 
@@ -56,9 +68,9 @@ namespace sdk::interfaces {
 		}
 
 		// NOTE(para): 'already_compiled' is never used. a8 is probably v8::Script::Run error handling shit.
-		void run_script( ui_panel* panel, const char* path_to_js, const char* path_to_xml, int a5, int a6, bool already_compiled = false,
+		void run_script( ui_panel* panel, const char* entire_js, const char* path_to_xml, int a5, int a6, bool already_compiled = false,
 		                 bool a8 = false ) {
-			return mem::call_v_func< void, 113 >( this, panel, path_to_js, path_to_xml, a5, a6, already_compiled, a8 );
+			return mem::call_v_func< void, 113 >( this, panel, entire_js, path_to_xml, a5, a6, already_compiled, a8 );
 		}
 
 		// NOTE(para): dispatchevent + 4
