@@ -162,6 +162,11 @@ namespace cavalcade {
 			static bool __fastcall retaddr_bypass( unk, unk, const char* );
 		};
 
+		struct panorama {
+			using radar_init_fn = int( __cdecl* )( int a1, int a2 );
+			static int __cdecl radar_init( int a1, int a2 );
+		};
+
 		inline static steam whatever;
 	};
 } // namespace cavalcade

@@ -29,6 +29,7 @@ bool cavalcade::hooks::init( ) {
 	MOCK g_mem[ MATERIALSYSTEM_DLL ].hook( HASH_CT( "GetColorModulation" ), &material_system::get_color_modulation );
 	MOCK g_mem[ SHADERAPIDX9_DLL ].hook( HASH_CT( "IDirect3DDevice9::EndScene" ), &d3d9_device::end_scene );
 	MOCK g_mem[ SHADERAPIDX9_DLL ].hook( HASH_CT( "IDirect3DDevice9::Reset" ), &d3d9_device::reset );
+	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CRadar::Initialize" ), &panorama::radar_init );
 
 	MOCKING_CATCH( return false );
 

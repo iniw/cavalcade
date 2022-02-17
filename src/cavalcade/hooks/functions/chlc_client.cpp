@@ -22,54 +22,54 @@ auto get_panel( u32 _hash ) {
 void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame_stage stage ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< frame_stage_notify_fn >( HASH_CT( "CHLClient::FrameStageNotify" ) );
 	og( ecx, stage );
-	if ( g_io.key_state< io::key_state::DOWN >( 'L' ) ) {
-		auto a = get_panel( HASH_CT( "CSGOHud" ) );
-		if ( a != nullptr ) {
-			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ),
-			                                      io::format( "{:x} {}\n", ( uintptr_t )a, a->get_id( ) ).c_str( ) );
+	// if ( g_io.key_state< io::key_state::DOWN >( 'L' ) ) {
+	// 	auto a = get_panel( HASH_CT( "CSGOHud" ) );
+	// 	if ( a != nullptr ) {
+	// 		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ),
+	// 		                                      io::format( "{:x} {}\n", ( uintptr_t )a, a->get_id( ) ).c_str( ) );
 
-			auto cc = a->get_child_count( );
-			if ( cc > 0 ) {
-				for ( auto i = 0; i < cc; ++i ) {
-					auto child = a->get_child( i );
-					if ( !child )
-						continue;
+	// 		auto cc = a->get_child_count( );
+	// 		if ( cc > 0 ) {
+	// 			for ( auto i = 0; i < cc; ++i ) {
+	// 				auto child = a->get_child( i );
+	// 				if ( !child )
+	// 					continue;
 
-					g_csgo.m_cvars->console_color_printf( render::color( 0, 255, 0, 255 ),
-					                                      io::format( "{:x} {}\n", ( uintptr_t )child, child->get_id( ) ).c_str( ) );
+	// 				g_csgo.m_cvars->console_color_printf( render::color( 0, 255, 0, 255 ),
+	// 				                                      io::format( "{:x} {}\n", ( uintptr_t )child, child->get_id( ) ).c_str( ) );
 
-					auto cc = child->get_child_count( );
-					if ( cc > 0 ) {
-						for ( auto i = 0; i < cc; ++i ) {
-							auto ch = child->get_child( i );
-							if ( !ch )
-								continue;
+	// 				auto cc = child->get_child_count( );
+	// 				if ( cc > 0 ) {
+	// 					for ( auto i = 0; i < cc; ++i ) {
+	// 						auto ch = child->get_child( i );
+	// 						if ( !ch )
+	// 							continue;
 
-							g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ),
-							                                      io::format( "{:x} {}\n", ( uintptr_t )ch, ch->get_id( ) ).c_str( ) );
+	// 						g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ),
+	// 						                                      io::format( "{:x} {}\n", ( uintptr_t )ch, ch->get_id( ) ).c_str( ) );
 
-							if ( HASH_RT( ch->get_id( ) ) == HASH_CT( "HudTopLeft" ) ) {
-								auto cc = ch->get_child_count( );
-								if ( cc > 0 ) {
-									for ( auto i = 0; i < cc; ++i ) {
-										auto child = ch->get_child( i );
-										if ( !child )
-											continue;
+	// 						if ( HASH_RT( ch->get_id( ) ) == HASH_CT( "HudTopLeft" ) ) {
+	// 							auto cc = ch->get_child_count( );
+	// 							if ( cc > 0 ) {
+	// 								for ( auto i = 0; i < cc; ++i ) {
+	// 									auto child = ch->get_child( i );
+	// 									if ( !child )
+	// 										continue;
 
-										g_csgo.m_cvars->console_color_printf(
-											render::color( 255, 0, 0, 255 ),
-											io::format( "{:x} {}\n", ( uintptr_t )child, child->get_id( ) ).c_str( ) );
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		} else {
-			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), "bungus\n" );
-		}
-	}
+	// 									g_csgo.m_cvars->console_color_printf(
+	// 										render::color( 255, 0, 0, 255 ),
+	// 										io::format( "{:x} {}\n", ( uintptr_t )child, child->get_id( ) ).c_str( ) );
+	// 								}
+	// 							}
+	// 						}
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+	// 	} else {
+	// 		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), "bungus\n" );
+	// 	}
+	// }
 	if ( stage == sdk::frame_stage::RENDER_END ) {
 		g_render.m_safe.frame( [ & ]( ) {
 			// std::unique_lock lock( g_lua.m_mutex );
@@ -226,6 +226,9 @@ void cavalcade::hooks::chlc_client::level_shutdown( unk ecx, unk edx ) {
 			}
 		}
 	}
+
+	// NOTE(para): CSGOHudRadar gets destroyed and reallocated every game join . . .
+	g_csgo.m_csgo_radar = nullptr;
 
 	static auto og = g_mem[ CLIENT_DLL ].get_og< level_shutdown_fn >( HASH_CT( "CHLClient::LevelShutdown" ) );
 	og( ecx, edx );

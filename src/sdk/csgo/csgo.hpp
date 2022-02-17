@@ -35,6 +35,7 @@ namespace sdk {
 		client_mode_shared* m_client_mode_shared;
 		IDirect3DDevice9* m_d3d9_device;
 		math::v3f* m_main_view_origin;
+		interfaces::panel_2d* m_csgo_radar;
 
 		std::optional< std::string > m_map_name;
 		std::optional< std::string > m_sky_name;

@@ -52,6 +52,7 @@ set(SOURCES
     src/cavalcade/hooks/functions/engine_sound.cpp
     src/cavalcade/hooks/functions/post_screen_fx.cpp
     src/cavalcade/hooks/functions/retaddr_bypass.cpp
+    src/cavalcade/hooks/functions/panorama.cpp
     # hooks
     src/cavalcade/hooks/hooks.cpp
 

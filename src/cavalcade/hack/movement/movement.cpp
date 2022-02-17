@@ -365,7 +365,7 @@ void hack::movement::edgebug_scale_mouse( f32& x ) {
 
 void hack::movement::pixelsurf::run( const math::v3f& base_origin ) {
 	auto get_align_side = [ & ]( const math::v3f& base_origin ) -> std::optional< math::v3f > {
-		f32 best_fraction = -1.F;
+		f32 best_fraction = std::numeric_limits< f32 >::max( );
 		i32 best_trace    = -1;
 
 		auto mins = g_ctx.m_local.get( ).get_mins( );
@@ -405,10 +405,10 @@ void hack::movement::pixelsurf::run( const math::v3f& base_origin ) {
 
 			if ( ( trace.m_fraction < 1.F || trace.m_all_solid || trace.m_start_solid ) &&
 			     ( trace.m_entity ? !trace.m_entity->is_player( ) : true ) ) {
-				// if ( best_fraction < trace.m_fraction ) {
-				best_fraction = trace.m_fraction;
-				best_trace    = i;
-				// }
+				if ( best_fraction > trace.m_fraction ) {
+					best_fraction = trace.m_fraction;
+					best_trace    = i;
+				}
 			}
 		}
 
@@ -433,8 +433,33 @@ void hack::movement::pixelsurf::run( const math::v3f& base_origin ) {
 	auto backup_fmove = g_ctx.m_cmd->m_forward_move;
 	auto backup_smove = g_ctx.m_cmd->m_side_move;
 	if ( side.has_value( ) && !( g_ctx.m_local.get( ).get_flags( ) & 1 ) && g_ctx.m_cmd->m_side_move == 0.F && g_ctx.m_cmd->m_forward_move == 0.F ) {
+		constexpr auto normalize = []( const math::ang& a ) {
+			math::ang b = a;
+			b.pitch     = std::clamp( b.pitch, -89.f, 89.f );
+
+			float rot;
+			float& angle = b.yaw;
+			// bad number.
+			if ( !std::isfinite( angle ) ) {
+				angle = 0.f;
+				return b;
+			}
+
+			// no need to normalize this angle.
+			if ( angle >= -180.f && angle <= 180.f )
+				return b;
+
+			// get amount of rotations needed.
+			rot = std::round( std::abs( angle / 360.f ) );
+
+			// normalize.
+			angle = ( angle < 0.f ) ? angle + ( 360.f * rot ) : angle - ( 360.f * rot );
+
+			b.roll = 0.f;
+			return b;
+		};
 		auto _diff = ( ( side.value( ) - base_origin ).to_angle( ) - ( *( math::v3f* )&g_ctx.m_cmd->m_view_angles ) );
-		auto diff  = ( *( math::ang* )&_diff ).clamp_angle( );
+		auto diff  = normalize( *( math::ang* )&_diff );
 
 		auto move = math::v3f( 450.F, 0.F, 0.F );
 		auto len  = move.length( );
@@ -450,7 +475,7 @@ void hack::movement::pixelsurf::run( const math::v3f& base_origin ) {
 			auto dir = angle_vectors( *( math::ang* )&move_angle );
 			dir *= len;
 
-			if ( g_ctx.m_cmd->m_view_angles.pitch < -90.F || g_ctx.m_cmd->m_view_angles.yaw > 90 )
+			if ( g_ctx.m_cmd->m_view_angles.pitch < -90.F || g_ctx.m_cmd->m_view_angles.pitch > 90 )
 				dir[ 0 ] = -dir[ 0 ];
 
 			g_ctx.m_cmd->m_forward_move = -dir[ 0 ];

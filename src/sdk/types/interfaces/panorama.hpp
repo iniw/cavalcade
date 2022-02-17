@@ -14,6 +14,15 @@ namespace sdk::interfaces {
 			return mem::call_v_func< ui_panel*, 25 >( this );
 		}
 
+		// wtf lol literally dose the same thing as @139
+		bool has_class_2( const char* name ) {
+			return mem::call_v_func< bool, 41 >( this, name );
+		}
+
+		bool load_layout_from_string( const char* str, bool a1 = false, bool a2 = false ) {
+			return mem::call_v_func< bool, 19 >( this, str, a1, a2 );
+		}
+
 		i32 get_child_count( ) {
 			return mem::call_v_func< i32, 48 >( this );
 		}
@@ -33,6 +42,11 @@ namespace sdk::interfaces {
 		void set_attribute_float( const char* name, f32 value ) {
 			return mem::call_v_func< void, 288 >( this, name, value );
 		}
+	};
+
+	struct panel_2d {
+		PAD( 4 );
+		ui_panel* m_panel;
 	};
 
 	struct ui_engine {

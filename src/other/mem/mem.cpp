@@ -247,6 +247,12 @@ void mem::impl::add_addresses( ) {
 		ADD_ADDRESS( SHADERAPIDX9_DLL, "IDirect3DDevice9::EndScene", get_v_func( g_csgo.m_d3d9_device, 42 ) );
 	}
 
+	ADD_PATTERN(
+		CLIENT_DLL, "CRadar::Initialize",
+		"55 8B EC A1 ? ? ? ? 56 68 ? ? ? ? 8B 08 8B 01 FF 50 04 68 ? ? ? ? 8B F0 6A 00 56 E8 ? ? ? ? 83 C4 0C 85 F6 74 2A 8B 4D 0C 85 C9 74 13 8B 01 "
+		"FF 50 1C FF 75 08 8B CE 50 E8 ? ? ? ? 5E 5D C3 FF 75 08 33 C0 8B CE 50 E8 ? ? ? ? 5E 5D C3 33 C0 5E 5D C3 CC CC CC CC CC CC 55 8B EC 51 68 "
+		"? ? ? ? B9 ? ? ? ? E8 ? ? ? ? 85 C0 74 0E FF 75 08 8D 48 EC E8 ? ? ? ? 59 5D C3 B0 01 59 5D C3 CC CC CC CC CC CC 68" );
+
 #undef ADD_PATTERN
 #undef ADD_PATTERN_REL
 #undef ADD_ADDRESS
