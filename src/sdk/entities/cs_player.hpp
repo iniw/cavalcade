@@ -18,6 +18,8 @@ namespace sdk {
 
 		NETVAR( i32, armor_value, "DT_CSPlayer->m_ArmorValue" );
 
+		NETVAR( i16, current_equip_value, "DT_CSPlayer->m_unCurrentEquipmentValue" );
+
 		NETVAR_OFFSET( bool, is_using_new_anim_state, "DT_CSPlayer->m_flLastExoJumpTime", 0x8 );
 
 		bool is_enemy( base_player* player );

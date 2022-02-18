@@ -33,6 +33,7 @@ set(SOURCES
     src/cavalcade/hack/sunset/sunset.cpp
     src/cavalcade/hack/movement/movement.cpp
     src/cavalcade/hack/hitmarker/hitmarker.cpp
+    src/cavalcade/hack/scaleform/scaleform.cpp
     # hooks - functions
     src/cavalcade/hooks/functions/push_notice.cpp
     src/cavalcade/hooks/functions/client_cmd.cpp

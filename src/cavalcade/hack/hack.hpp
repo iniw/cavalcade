@@ -12,6 +12,7 @@
 #include "hitmarker/hitmarker.hpp"
 #include "fog/fog.hpp"
 #include "sunset/sunset.hpp"
+#include "scaleform/scaleform.hpp"
 
 namespace hack {
 	struct impl {
@@ -27,6 +28,7 @@ namespace hack {
 		hitmarker m_hitmarker;
 		fog m_fog;
 		sunset m_sunset;
+		scaleform m_scaleform;
 	};
 } // namespace hack
 

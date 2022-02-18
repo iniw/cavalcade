@@ -1,50 +1,11 @@
 #include "../hooks.hpp"
 
-#define DEBUG_SCALEFORM 1
-
-#if !DEBUG_SCALEFORM
-constexpr const char* scaleform =
-#	include "scaleform.txt"
-	;
-#endif
-
-auto get_panel( u32 _hash ) {
-	auto engine = g_csgo.m_panorama->access_ui_engine( );
-	auto panel  = engine->get_last_dispatched_event_target_panel( );
-
-	auto itr                       = panel;
-	sdk::interfaces::ui_panel* ret = nullptr;
-
-	while ( itr && engine->is_valid_panel_pointer( itr ) ) {
-		auto hash = HASH_RT( itr->get_id( ) );
-		if ( hash == _hash ) {
-			ret = itr;
-			break;
-		}
-		itr = itr->get_parent( );
-	}
-
-	return ret;
-}
-
-#include <fstream>
 void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame_stage stage ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< frame_stage_notify_fn >( HASH_CT( "CHLClient::FrameStageNotify" ) );
 	og( ecx, stage );
 
-	if ( g_io.key_state< io::key_state::DOWN >( 'L' ) ) {
-		if ( auto a = get_panel( HASH_CT( "CSGOHud" ) ); a != nullptr ) {
-#if DEBUG_SCALEFORM
-			std::ifstream s( "E:\\scaleform.txt" );
-			std::string _scaleform( ( std::istreambuf_iterator< char >( s ) ), std::istreambuf_iterator< char >( ) );
-			s.close( );
-			const char* scaleform = _scaleform.c_str( );
-#endif
-			g_csgo.m_panorama->access_ui_engine( )->run_script( a, scaleform, "panorama/layout/hud/hud.xml", 8, 10, false );
-		}
-	}
-
 	if ( stage == sdk::frame_stage::RENDER_END ) {
+		g_hack.m_scaleform.update( );
 		g_render.m_safe.frame( [ & ]( ) {
 			// std::unique_lock lock( g_lua.m_mutex );
 
@@ -122,6 +83,7 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	g_hack.m_nightmode.clear( );
 	g_hack.m_fog.reset( );
 	g_hack.m_sunset.reset( );
+	g_hack.m_scaleform.reset( );
 
 	static auto og = g_mem[ CLIENT_DLL ].get_og< level_init_pre_entity_fn >( HASH_CT( "CHLClient::LevelInitPreEntity" ) );
 	og( name );
@@ -150,6 +112,7 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 void cavalcade::hooks::chlc_client::level_init_post_entity( ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< level_init_post_entity_fn >( HASH_CT( "CHLClient::LevelInitPostEntity" ) );
 	og( );
+	g_hack.m_scaleform.install( );
 	for ( const auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 		for ( const auto& callback : callbacks.at( XOR( "LevelInitPostEntity" ) ) ) {
 			if ( callback.valid( ) ) {

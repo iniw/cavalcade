@@ -83,9 +83,9 @@ void hack::other::prediction::restore( ) {
 }
 
 void hack::other::prediction::update( ) {
-	if ( g_csgo.m_client_state->m_delta_tick > 0 ) {
-		g_csgo.m_prediction->update( g_csgo.m_client_state->m_delta_tick, g_csgo.m_client_state->m_delta_tick > 0,
-		                             g_csgo.m_client_state->m_last_command_ack,
-		                             g_csgo.m_client_state->m_last_outgoing_command + g_csgo.m_client_state->m_choked_commands );
-	}
+	// if ( g_csgo.m_client_state->m_delta_tick > 0 ) {
+	// 	g_csgo.m_prediction->update( g_csgo.m_client_state->m_delta_tick, g_csgo.m_client_state->m_delta_tick > 0,
+	// 	                             g_csgo.m_client_state->m_last_command_ack,
+	// 	                             g_csgo.m_client_state->m_last_outgoing_command + g_csgo.m_client_state->m_choked_commands );
+	// }
 }

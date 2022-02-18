@@ -1,0 +1,19 @@
+R"(
+
+(function() {
+    var context_panel = $.GetContextPanel();
+    for (var row of context_panel.FindChildTraverse('HudWeaponSelection').FindChildrenWithClassTraverse('weapon-selection-item')) {
+        if (row.BHasClass('weapon-selection-item--selected')) {
+            row.style.paddingLeft = '100px';
+            row.style.marginLeft = '-100px';
+            row.style.backgroundColor = 'gradient( linear, 0% 0%, 100% 0%, from( #00000000 ), to( #00000099 ) )';
+        } else {
+            row.style.backgroundColor = '#00000000';
+        }
+    }
+
+    var hud_ws = context_panel.FindChildTraverse('HudWeaponPanel').FindChildTraverse('WeaponPanelBottomBG');
+    hud_ws.style.visibility = 'visible';
+})();
+
+)"
