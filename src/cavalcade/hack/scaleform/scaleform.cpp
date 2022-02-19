@@ -2,6 +2,7 @@
 #include "scaleform.hpp"
 
 #include "../../ctx/ctx.hpp"
+#include "../../gui/cfg/cfg.hpp"
 #include <fstream>
 
 auto get_panel( u32 _hash ) {
@@ -29,16 +30,20 @@ constexpr const char* scaleformy =
 #include "scaleform.txt"
 	;
 
-constexpr const char* frame =
-#include "frame.txt"
-	;
+// constexpr const char* frame =
+// #include "frame.txt"
+// 	;
 
 constexpr const char* radars[] =
 #include "radar.txt"
 	;
 
 void hack::scaleform::install( ) {
-	m_focus = get_panel( HASH_CT( "CSGOHud" ) );
+	m_focus                = get_panel( HASH_CT( "CSGOHud" ) );
+	static auto& scaleform = gui::cfg::get< bool >( HASH_CT( "main:group1:scaleform" ) );
+	if ( !scaleform )
+		return;
+
 	g_csgo.m_panorama->access_ui_engine( )->run_script( m_focus, scaleformy, "panorama/layout/hud/hud.xml", 8, 10, false );
 	auto color = std::max( 0, std::min( 11, g_ctx.m_cvars.cl_hud_color->get_int( ) ) );
 	g_csgo.m_panorama->access_ui_engine( )->run_script( m_focus, radars[ color ], "panorama/layout/hud/hud.xml", 8, 10, false );
@@ -47,6 +52,9 @@ void hack::scaleform::install( ) {
 
 void hack::scaleform::update( ) {
 	if ( !g_csgo.m_engine->is_in_game( ) || !m_focus )
+		return;
+	static auto& scaleform = gui::cfg::get< bool >( HASH_CT( "main:group1:scaleform" ) );
+	if ( !scaleform )
 		return;
 
 	auto hud_color = std::max( 0, std::min( 11, g_ctx.m_cvars.cl_hud_color->get_int( ) ) );
@@ -59,7 +67,8 @@ void hack::scaleform::update( ) {
 	if ( !g_ctx.m_local )
 		return;
 
-	g_csgo.m_panorama->access_ui_engine( )->run_script( m_focus, frame, "panorama/layout/hud/hud.xml", 8, 10, false );
+		// NOTE(para): really bad idea....
+		// g_csgo.m_panorama->access_ui_engine( )->run_script( m_focus, frame, "panorama/layout/hud/hud.xml", 8, 10, false );
 
 #if DEBUG_SCALEFORM
 	if ( g_io.key_state< io::key_state::DOWN >( 'L' ) ) {
