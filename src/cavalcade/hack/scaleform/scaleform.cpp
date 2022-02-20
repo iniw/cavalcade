@@ -24,7 +24,7 @@ auto get_panel( u32 _hash ) {
 	return ret;
 }
 
-#define DEBUG_SCALEFORM 1
+#define DEBUG_SCALEFORM 0
 
 constexpr const char* scaleformy =
 #include "scaleform.txt"
@@ -56,14 +56,14 @@ void hack::scaleform::update( ) {
 	static auto& scaleform = gui::cfg::get< bool >( HASH_CT( "main:group1:scaleform" ) );
 	if ( !scaleform )
 		return;
-
+	
 	auto hud_color = std::max( 0, std::min( 11, g_ctx.m_cvars.cl_hud_color->get_int( ) ) );
 
 	if ( m_old_hud_color != hud_color ) {
 		g_csgo.m_panorama->access_ui_engine( )->run_script( m_focus, radars[ hud_color ], "panorama/layout/hud/hud.xml", 8, 10, false );
 		m_old_hud_color = hud_color;
 	}
-
+	
 	if ( !g_ctx.m_local )
 		return;
 

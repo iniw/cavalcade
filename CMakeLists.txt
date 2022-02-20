@@ -36,11 +36,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${SOURCES})
 
 target_precompile_headers(${CMAKE_PROJECT_NAME} PRIVATE ${PCH})
 
-target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE 
-    ${OPTIONS_GENERAL} 
-    "$<$<CONFIG:RelWithDebInfo>:${OPTIONS_RELWITHDEBINFO}>" 
-    "$<$<CONFIG:Release>:${OPTIONS_RELEASE}>"
-    "$<$<CONFIG:Debug>:${OPTIONS_DEBUG}>")
+add_definitions(/bigobj /Oi /Ot /MT /Zi /GL /MP)
+string(REPLACE "/MD" "" ${CMAKE_CXX_FLAGS} "${CMAKE_CXX_FLAGS}")
 
 target_link_options(${CMAKE_PROJECT_NAME} PRIVATE 
     "$<$<CONFIG:Debug>:${LINKER_OPTIONS_DEBUG}>" 
