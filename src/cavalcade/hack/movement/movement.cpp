@@ -481,8 +481,8 @@ void hack::movement::pixelsurf::run( const math::v3f& base_origin ) {
 			g_ctx.m_cmd->m_forward_move = -dir[ 0 ];
 			g_ctx.m_cmd->m_side_move    = dir[ 1 ];
 
-			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ),
-			                                      io::format( "-> {} {}\n", g_ctx.m_cmd->m_forward_move, g_ctx.m_cmd->m_side_move ).c_str( ) );
+			/*g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ),
+			                                      io::format( "-> {} {}\n", g_ctx.m_cmd->m_forward_move, g_ctx.m_cmd->m_side_move ).c_str( ) );*/
 		}
 	}
 

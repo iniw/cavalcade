@@ -6,8 +6,8 @@ void gui::impl::init( ) {
 
 	auto gb = window->add< objects::groupbox >( XOR( "group1" ), XOR( "test" ), 70 );
 	{
-		gb->add< objects::checkbox >( XOR( "check1" ), "check 1" );
-		gb->add< objects::checkbox >( XOR( "scaleform" ), "scaleform" );
+		gb->add< objects::checkbox >( XOR( "check1" ), XOR( "check 1" ) );
+		gb->add< objects::checkbox >( XOR( "scaleform" ), XOR("scaleform") );
 		gb->add< objects::checkbox >( XOR( "zeus bug" ), XOR( "zeus bug" ) );
 		gb->add< objects::checkbox >( XOR( "trainer" ), XOR( "trainer" ) );
 		gb->add< objects::checkbox >( XOR( "graph" ), XOR( "graph" ) );
@@ -34,6 +34,7 @@ void gui::impl::init( ) {
 		gb->add< objects::checkbox >( XOR( "silent" ), XOR( "silent" ) );
 		gb->add< objects::slider< i32 > >( XOR( "fov" ), XOR( "fov" ), 0, 180 );
 		gb->add< objects::slider< i32 > >( XOR( "smoothing" ), XOR( "smoothing" ), 0, 100 );
+		gb->add< objects::checkbox >( XOR( "dlights" ), XOR( "dlights" ) );
 		gb->add< objects::slider< i32 > >( XOR( "bw" ), XOR( "bw" ), 0, 100 );
 		gb->add< objects::slider< i32 > >( XOR( "bh" ), XOR( "bh" ), 0, 100 );
 	}

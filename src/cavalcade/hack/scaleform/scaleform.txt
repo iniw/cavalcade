@@ -69,6 +69,10 @@ R"(
     alive_text_ct.style.textShadow = '1px 1px 1px 0.0 #000000';
     alive_text_t.style.color = '#7F8C8D';
     alive_text_ct.style.color = '#7F8C8D';
+    var wins_t = hud_team_counter.FindChildTraverse('ScoreT');
+    var wins_ct = hud_team_counter.FindChildTraverse('ScoreCT');
+    wins_t.style.color = '#5C7F8AC8';
+    wins_ct.style.color = '#A38B60C8';
     
     var location = context_panel.FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
     location.style.horizontalAlign = 'center';

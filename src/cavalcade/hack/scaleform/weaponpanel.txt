@@ -1,0 +1,8 @@
+R"(
+
+(function(){
+    var hud_ws = $.GetContextPanel().FindChildrenByClassTraverse('WeaponPanelBottomBG');
+    hud_ws.style.visibility = 'visible';
+})();
+
+)"

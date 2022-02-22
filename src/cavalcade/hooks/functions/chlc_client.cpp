@@ -5,7 +5,6 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 	og( ecx, stage );
 
 	if ( stage == sdk::frame_stage::RENDER_END ) {
-		g_hack.m_scaleform.update( );
 		g_render.m_safe.frame( [ & ]( ) {
 			// std::unique_lock lock( g_lua.m_mutex );
 

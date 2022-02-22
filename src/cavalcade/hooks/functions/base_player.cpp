@@ -44,6 +44,8 @@ bool cavalcade::hooks::base_player::create_move( f32 input_sample_time, sdk::use
 
 	g_ctx.m_cmd = cmd;
 
+	g_hack.m_scaleform.update( );
+
 	if ( !input_sample_time )
 		return og( input_sample_time, cmd );
 

@@ -1,0 +1,16 @@
+R"(
+
+(function() {
+    var context_panel = $.GetContextPanel();
+
+    for (var row of context_panel.FindChildTraverse('HudWeaponSelection').FindChildrenWithClassTraverse('weapon-row')) {
+        if (row.BHasClass('weapon-row--selected')) {
+            row.style.width = '260px';
+            row.style.backgroundColor = 'gradient( linear, 0% 0%, 100% 0%, from( #00000000 ), to( #00000099 ) )';
+        } else {
+            row.style.backgroundColor = '#00000000';
+        }
+    }
+})();
+
+)"
