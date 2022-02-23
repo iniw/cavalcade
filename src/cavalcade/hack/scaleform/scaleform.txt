@@ -73,6 +73,8 @@ R"(
     var wins_ct = hud_team_counter.FindChildTraverse('ScoreCT');
     wins_t.style.color = '#5C7F8AC8';
     wins_ct.style.color = '#A38B60C8';
+    var timer = hud_team_counter.FindChildTraverse('TimerText');
+    timer.style.fontFamily = 'Stratum2 Bold';
     
     var location = context_panel.FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
     location.style.horizontalAlign = 'center';
@@ -88,6 +90,25 @@ R"(
     location.style.paddingLeft = '20px';
     location.style.paddingTop = '10px';
     location.style.borderTopLeftRadius = '15px';
+
+    var history_text = context_panel.FindChildTraverse('HudChat').FindChildTraverse('ChatHistoryText');
+    history_text.style.fontFamily = 'Stratum2';
+    history_text.style.fontSize = '18px';
+    history_text.style.fontWeight = 'lighter';
+    history_text.style.letterSpacing = '0px';
+    history_text.style.backgroundColor = '#00000099';
+
+    var text_entry = context_panel.FindChildTraverse('HudChat').FindChildTraverse('ChatTextEntryBox');
+    text_entry.style.fontFamily = 'Stratum2';
+    text_entry.style.fontSize = '18px';
+    text_entry.style.fontWeight = 'lighter';
+    text_entry.style.letterSpacing = '0px';
+
+    var send = context_panel.FindChildTraverse('HudChat').FindChildTraverse('ChatSendButton');
+    send.style.fontFamily = 'Stratum2';
+    send.style.fontSize = '18px';
+    send.style.fontWeight = 'lighter';
+    send.style.letterSpacing = '0px';
 })();
 
 )"

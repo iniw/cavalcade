@@ -114,7 +114,7 @@ void hack::indicators::screen::draw( ) {
 			flags.push_back( flag( g_hack.m_movement.m_in_ladderjump, XOR( "LAJ" ) ) );
 		if ( g_io.key_state< io::key_state::DOWN >( VK_MBUTTON ) )
 			flags.push_back( flag( g_hack.m_movement.m_edgebug.m_predicted, XOR( "EB" ) ) );
-		if ( g_io.key_state< io::key_state::DOWN >( 'C' ) )
+		if ( g_io.key_state< io::key_state::DOWN >( 'F' ) )
 			flags.push_back( flag( g_hack.m_movement.m_pixelsurf.m_in_pixelsurf, XOR( "PX" ) ) );
 		if ( g_io.key_state< io::key_state::DOWN >( 'B' ) )
 			flags.push_back( flag( g_hack.m_movement.m_in_minijump, XOR( "MJ" ) ) );

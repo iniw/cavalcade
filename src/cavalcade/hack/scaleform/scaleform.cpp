@@ -24,7 +24,7 @@ auto get_panel( u32 _hash ) {
 	return ret;
 }
 
-#define DEBUG_SCALEFORM 0
+#define DEBUG_SCALEFORM 1
 
 constexpr const char* scaleformy =
 #include "scaleform.txt"

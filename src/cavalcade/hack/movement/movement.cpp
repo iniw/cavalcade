@@ -421,7 +421,7 @@ void hack::movement::pixelsurf::run( const math::v3f& base_origin ) {
 	/* soar style comment */
 	/* credits: bitcheat */
 
-	if ( !( true && g_io.key_state< io::key_state::DOWN >( 'C' ) ) || local_on_ladder_or_noclip( ) ) {
+	if ( !( true && g_io.key_state< io::key_state::DOWN >( 'F' ) ) || local_on_ladder_or_noclip( ) ) {
 		clear( );
 		return;
 	}
