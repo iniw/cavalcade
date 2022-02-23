@@ -105,18 +105,6 @@ void gui::impl::think( ) {
 	if ( window_list.empty( ) )
 		init( );
 
-	// static const auto& primary = cfg::get<render::color>(fnv::const_hash("clarity:tab 1:poopage:colors:colors:primary"));
-	// static const auto& background = cfg::get<render::color>(fnv::const_hash("clarity:tab 1:poopage:colors:colors:background"));
-	// static const auto& secondary = cfg::get<render::color>(fnv::const_hash("clarity:tab 1:poopage:colors:colors:secondary"));
-	// static const auto& highlight = cfg::get<render::color>(fnv::const_hash("clarity:tab 1:poopage:colors:colors:highlight"));
-	// static const auto& stroke = cfg::get<render::color>(fnv::const_hash("clarity:tab 1:poopage:colors:colors:stroke"));
-
-	// style::palette::primary = primary;
-	// style::palette::background = background;
-	// style::palette::secondary = secondary;
-	// style::palette::highlight = highlight;
-	// style::palette::stroke = stroke;
-
 	for ( auto& window : window_list ) {
 		window->update_flags( );
 

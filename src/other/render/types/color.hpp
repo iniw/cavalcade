@@ -23,15 +23,19 @@ namespace render {
 		std::tuple< f32, f32, f32 > to_hsb( ) const;
 
 		constexpr u32 to_imgui( ) const {
-			return ( ( m_a & 0xff ) << 24 ) + ( ( m_b & 0xff ) << 16 ) + ( ( m_g & 0xff ) << 8 ) + ( m_r & 0xff );
+			return ( ( m_a & 0xFF ) << 24 ) | ( ( m_b & 0xFF ) << 16 ) | ( ( m_g & 0xFF ) << 8 ) | ( m_r & 0xFF );
 		}
 
 		constexpr u32 to_u32( ) const {
-			return ( ( m_r & 0xff ) << 24 ) + ( ( m_g & 0xff ) << 16 ) + ( ( m_b & 0xff ) << 8 ) + ( m_a & 0xff );
+			return ( ( m_r & 0xff ) << 24 ) | ( ( m_g & 0xff ) << 16 ) | ( ( m_b & 0xff ) << 8 ) | ( m_a & 0xff );
 		}
 
-		constexpr color mod_alpha( u8 new_alpha ) {
-			return color( m_r, m_g, m_b, new_alpha );
+		constexpr color mod_alpha( u8 alpha ) {
+			return color( m_r, m_g, m_b, alpha );
+		}
+
+		constexpr color mod_alpha( f32 alpha ) {
+			return color( m_r, m_g, m_b, m_a * std::clamp( alpha, 0.f, 1.f ) );
 		}
 
 		constexpr color frac_alpha( f32 mod ) {

@@ -3,19 +3,19 @@
 template< render::align alignment >
 render::geometry::rect render::impl::rectangle( const point& pos, const size& size, color col, f32 thickness ) {
 	auto correct_pos = handle_alignment( alignment, pos, size );
-	return draw_shape< geometry::rect >( pos, correct_pos, col.convert( ), thickness );
+	return draw_shape< geometry::rect >( pos, correct_pos, col, thickness );
 }
 
 template< render::align alignment >
 render::geometry::rect render::impl::rectangle( const rect& rect, color col, f32 thickness ) {
 	auto correct_pos = handle_alignment( alignment, rect.pos( ), rect.size( ) );
-	return draw_shape< geometry::rect >( rect.pos( ), correct_pos, col.convert( ), thickness );
+	return draw_shape< geometry::rect >( rect.pos( ), correct_pos, col, thickness );
 }
 
 template< render::align alignment >
 render::geometry::rect_filled render::impl::rectangle_filled( const point& pos, const size& size, color col ) {
 	auto correct_pos = handle_alignment( alignment, pos, size );
-	return draw_shape< geometry::rect_filled >( pos, correct_pos, col.convert( ) );
+	return draw_shape< geometry::rect_filled >( pos, correct_pos, col );
 }
 
 template< render::align alignment >
