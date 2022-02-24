@@ -45,10 +45,6 @@ void hack::other::prediction::start( ) {
 
 	// g_ctx.m_local.get( ).set_local_view_angles( g_ctx.m_cmd->m_view_angles );
 
-	g_csgo.m_prediction->run_pre_think( g_ctx.m_local );
-
-	g_csgo.m_prediction->run_think( g_ctx.m_local, g_ctx.m_local.get( ).get_tickbase( ) );
-
 	memset( &m_move_data, 0, sizeof( decltype( m_move_data ) ) );
 
 	g_csgo.m_prediction->setup_move( g_ctx.m_local, g_ctx.m_cmd, g_csgo.m_move_helper, &m_move_data );
@@ -64,8 +60,6 @@ void hack::other::prediction::apply( ) {
 
 void hack::other::prediction::restore( ) {
 	m_prevent_sounds = false;
-
-	g_csgo.m_prediction->run_post_think( g_ctx.m_local );
 
 	g_csgo.m_game_movement->finish_track_prediction_errors( g_ctx.m_local );
 

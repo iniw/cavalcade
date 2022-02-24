@@ -4,7 +4,7 @@
 #include "../../entity_cacher/entity_cacher.hpp"
 
 void hack::sunset::run( ) {
-	static auto& ss = gui::cfg::get< bool >( HASH_CT( "main:group1:sunset" ) );
+	static auto& ss = gui::cfg::get< bool >( HASH_CT( "sunset" ) );
 	for ( i32 i = 1; i <= g_csgo.m_ent_list->get_highest_entity_index( ); ++i ) {
 		auto e = g_csgo.m_ent_list->get< sdk::base_entity* >( i );
 		if ( !e || !e->get_client_class( ) || e->get_client_class( )->m_class_id != sdk::class_id::CASCADE_LIGHT )

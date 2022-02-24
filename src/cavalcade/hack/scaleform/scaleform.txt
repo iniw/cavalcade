@@ -1,0 +1,114 @@
+R"(
+    
+// NOTE(para): not guaranteed to be latest until its done
+
+(function() {
+    var context_panel = $.GetContextPanel();
+    
+    context_panel.FindChildTraverse('HudHealthArmor').style.marginLeft = '0px';
+    var hud_ha = context_panel.FindChildTraverse('HudHealthArmor').FindChildTraverse('HudHealthBG');
+    hud_ha.style.backgroundColor = 'gradient( linear, 0% 0%, 100% 0%, from( #000000CC ), color-stop( 0.1, #000000CC ), to( #000000CC ) )';
+    hud_ha.style.horizontalAlign = 'left';
+    hud_ha.style.opacity = '1.0';
+    hud_ha.style.borderBottomLeftRadius = '15px';
+
+
+    var hud_ws = context_panel.FindChildTraverse('HudWeaponPanel').FindChildTraverse('WeaponPanelBottomBG');
+    hud_ws.style.backgroundColor = 'gradient( linear, 100% 0%, 0% 0%, from( #000000CC ), color-stop( 0.1, #000000CC ) , color-stop(0.4, #000000CC), color-stop( 0.7, #000000CC ), to( #00000000 ) )';
+    hud_ws.style.borderBottomRightRadius = '15px';
+
+
+    var hud_money = context_panel.FindChildTraverse('HudMoney');
+    var money_bg = hud_money.FindChildTraverse('MoneyBG');
+    money_bg.style.width = '260px';
+    money_bg.style.height = '40px';
+    money_bg.style.horizontalAlign = 'center';
+    money_bg.style.verticalAlign = 'center';
+    money_bg.style.marginLeft = '0px';
+    money_bg.style.backgroundColor = 'gradient( linear, 100% 0%, 0% 0%, from( #00000000 ), color-stop( 0.5, #000000CC ) , color-stop(0.6, #000000CC), color-stop( 0.9, #000000CC ), to( #000000CC ) )';
+    var money_bg_bm = context_panel.FindChildTraverse('BuyMenu').FindChildTraverse('BuyMenuMoney');
+    money_bg_bm.style.width = '260px';
+    money_bg_bm.style.height = '500px';
+    money_bg_bm.style.horizontalAlign = 'left';
+    money_bg_bm.style.verticalAlign = 'top';
+    //money_bg_bm.style.paddingTop = '356px';
+    money_bg_bm.style.backgroundColor = '#00000000';
+    money_bg_bm.style.opacity = '0.09';
+
+    for (var text of hud_money.FindChildrenWithClassTraverse('money-text')) {
+        text.style.horizontalAlign = 'center';
+        text.style.flowChildren = 'right';
+        text.style.verticalAlign = 'middle';
+        text.style.marginLeft = '0px';
+    }
+
+    for (var text of hud_money.FindChildrenWithClassTraverse('money-text-label')) {
+        text.style.marginTop = '3px';
+        text.style.marginLeft = '0px';
+    }
+
+    for (var text of hud_money.FindChildrenWithClassTraverse('money-text-buy-icon')) {
+        text.style.marginTop = '5px';
+        text.style.marginLeft = '0px';
+        text.style.marginRight = '25px';
+    }
+
+    var money_add = hud_money.FindChildTraverse('Money-Add');
+    var money_adf = hud_money.FindChildTraverse('Money-AddFlash');
+    var money_rem = hud_money.FindChildTraverse('Money-Remove');
+    money_add.style.color = '#7CC213';
+    money_adf.style.color = '#d3e798';
+    money_rem.style.color = '#fd2424';
+
+    var hud_team_counter = context_panel.FindChildTraverse('HudTeamCounter');
+    var alive_text_t = hud_team_counter.FindChildTraverse('AliveTextT');
+    var alive_text_ct = hud_team_counter.FindChildTraverse('AliveTextCT');
+    alive_text_t.style.fontSize = '12';
+    alive_text_ct.style.fontSize = '12';
+    alive_text_t.style.textShadow = '1px 1px 1px 0.0 #000000';
+    alive_text_ct.style.textShadow = '1px 1px 1px 0.0 #000000';
+    alive_text_t.style.color = '#7F8C8D';
+    alive_text_ct.style.color = '#7F8C8D';
+    var wins_t = hud_team_counter.FindChildTraverse('ScoreT');
+    var wins_ct = hud_team_counter.FindChildTraverse('ScoreCT');
+    wins_t.style.color = '#5C7F8AC8';
+    wins_ct.style.color = '#A38B60C8';
+    var timer = hud_team_counter.FindChildTraverse('TimerText');
+    timer.style.fontFamily = 'Stratum2 Bold';
+    
+    var location = context_panel.FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
+    location.style.horizontalAlign = 'center';
+    location.style.verticalAlign = 'center';
+    location.style.marginLeft = '0px';
+    location.style.marginTop = '-15px';
+    location.style.width = '240px';
+    location.style.height = '30px';
+    location.style.backgroundColor = 'gradient( linear, 100% 0%, 0% 0%, from( #00000000 ), color-stop( 0.5, #000000CC ) , color-stop(0.6, #000000CC), color-stop( 0.9, #000000CC ), to( #000000CC ) )';
+    location.style.opacity = '0.9';
+    location.style.width = '260px';
+    location.style.height = '46px';
+    location.style.paddingLeft = '20px';
+    location.style.paddingTop = '10px';
+    location.style.borderTopLeftRadius = '15px';
+
+    var history_text = context_panel.FindChildTraverse('HudChat').FindChildTraverse('ChatHistoryText');
+    history_text.style.fontFamily = 'Stratum2';
+    history_text.style.fontSize = '18px';
+    history_text.style.fontWeight = 'lighter';
+    history_text.style.letterSpacing = '0px';
+    history_text.style.backgroundColor = '#00000099';
+
+    var text_entry = context_panel.FindChildTraverse('HudChat').FindChildTraverse('ChatTextEntryBox');
+    text_entry.style.fontFamily = 'Stratum2';
+    text_entry.style.fontSize = '18px';
+    text_entry.style.fontWeight = 'lighter';
+    text_entry.style.letterSpacing = '0px';
+
+    var send = context_panel.FindChildTraverse('HudChat').FindChildTraverse('ChatSendButton');
+    send.style.fontFamily = 'Stratum2';
+    send.style.fontSize = '18px';
+    send.style.fontWeight = 'lighter';
+    send.style.letterSpacing = '0px';
+})();
+
+)"

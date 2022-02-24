@@ -2,6 +2,8 @@
 #include "movement.hpp"
 #include "../../ctx/ctx.hpp"
 #include "../../gui/cfg/cfg.hpp"
+#include <limits>
+#include "../aimbot/autowall/autowall.hpp"
 
 static bool local_on_ladder_or_noclip( ) {
 	return g_ctx.m_local &&
@@ -51,6 +53,7 @@ void hack::movement::pre( ) {
 	m_longjumped     = false;
 	m_old_velocity_z = g_ctx.m_local.get( ).get_velocity( )[ 2 ];
 	m_base_flags     = g_ctx.m_local.get( ).get_flags( );
+	m_base_origin    = g_ctx.m_local.get( ).get_origin( );
 	m_lj_grounded    = g_ctx.m_local.get( ).get_ground_entity( ).get( ) && g_ctx.m_local.get( ).get_flags( ) & 1;
 
 	no_duck_delay( );
@@ -113,7 +116,7 @@ void hack::movement::jumpbug( ) {
 
 // NOTE(para): this could be red but should be explicitly advertised as so
 void hack::movement::longjump( ) {
-	static auto& oe = gui::cfg::get< bool >( HASH_CT( "main:group1:longjump on edge" ) );
+	static auto& oe = gui::cfg::get< bool >( HASH_CT( "longjump on edge" ) );
 
 	if ( !( true && g_io.key_state< io::key_state::DOWN >( VK_XBUTTON2 ) ) || local_on_ladder_or_noclip( ) ) {
 		m_lj_ducked_ticks    = 0;
@@ -163,7 +166,7 @@ void hack::movement::ladderjump( ) {
 
 	m_in_ladderjump = false;
 
-	static auto& claj = gui::cfg::get< bool >( HASH_CT( "main:group1:crouch after ladderjump" ) );
+	static auto& claj = gui::cfg::get< bool >( HASH_CT( "crouch after ladderjump" ) );
 
 	auto base_move_type = g_ctx.m_local.get( ).get_move_type( );
 
@@ -207,7 +210,7 @@ void hack::movement::post( ) {
 	// if ( *( g_csgo.m_main_view_origin )[ 2 ] )
 	edgebug( );
 
-	m_pixelsurf.run( );
+	m_pixelsurf.run( m_base_origin );
 	m_pixelsurf.autoalign( );
 }
 
@@ -263,7 +266,7 @@ void hack::movement::edgebug::predict( i32 base_flags, f32 base_velocity ) {
 }
 
 void hack::movement::edgebug::run( i32 base_flags, f32 base_velocity ) {
-	static auto& rd = gui::cfg::get< i32 >( HASH_CT( "main:group1:edgebug radius" ) );
+	static auto& rd = gui::cfg::get< i32 >( HASH_CT( "edgebug radius" ) );
 	if ( !( true && g_io.key_state< io::key_state::DOWN >( VK_MBUTTON ) ) || local_on_ladder_or_noclip( ) ) {
 		m_predicted   = false;
 		m_should_duck = false;
@@ -355,16 +358,70 @@ void hack::movement::edgebug( ) {
 }
 
 void hack::movement::edgebug_scale_mouse( f32& x ) {
-	static auto& es = gui::cfg::get< i32 >( HASH_CT( "main:group1:edgebug scaling" ) );
+	static auto& es = gui::cfg::get< i32 >( HASH_CT( "edgebug scaling" ) );
 	if ( ( true && g_io.key_state< io::key_state::DOWN >( VK_MBUTTON ) ) && m_edgebug.m_predicted )
 		x *= ( 1.F - ( .01F * es ) );
 }
 
-void hack::movement::pixelsurf::run( ) {
+void hack::movement::pixelsurf::run( const math::v3f& base_origin ) {
+	auto get_align_side = [ & ]( const math::v3f& base_origin ) -> std::optional< math::v3f > {
+		f32 best_fraction = std::numeric_limits< f32 >::max( );
+		i32 best_trace    = -1;
+
+		auto mins = g_ctx.m_local.get( ).get_mins( );
+		auto maxs = g_ctx.m_local.get( ).get_maxs( );
+
+		sdk::trace info[ 4 ];
+
+		for ( auto i = 0; i < 4; ++i ) {
+			auto start = base_origin, end = base_origin;
+			switch ( i ) {
+			case 0:
+				start[ 1 ] += mins[ 1 ];
+				end[ 1 ] = floor( start[ 1 ] );
+				break;
+			case 1:
+				start[ 0 ] += maxs[ 0 ];
+				end[ 0 ] = floor( start[ 0 ] ) + 1.F;
+				break;
+			case 2:
+				start[ 1 ] += maxs[ 1 ];
+				end[ 1 ] = floor( start[ 1 ] ) + 1.F;
+				break;
+			case 3:
+				start[ 0 ] += mins[ 0 ];
+				end[ 0 ] = floor( start[ 0 ] );
+				break;
+			}
+
+			sdk::trace_filter filter( g_ctx.m_local );
+			sdk::ray ray( base_origin, end );
+			auto& trace = info[ i ];
+			g_csgo.m_engine_trace->trace_ray( ray, 0x201400b, filter, trace );
+		}
+
+		for ( auto i = 0; i < 4; ++i ) {
+			const auto& trace = info[ i ];
+
+			if ( ( trace.m_fraction < 1.F || trace.m_all_solid || trace.m_start_solid ) &&
+			     ( trace.m_entity ? !trace.m_entity->is_player( ) : true ) ) {
+				if ( best_fraction > trace.m_fraction ) {
+					best_fraction = trace.m_fraction;
+					best_trace    = i;
+				}
+			}
+		}
+
+		if ( best_trace != -1 ) {
+			return info[ best_trace ].m_end;
+		}
+
+		return std::nullopt;
+	};
 	/* soar style comment */
 	/* credits: bitcheat */
 
-	if ( !( true && g_io.key_state< io::key_state::DOWN >( 'C' ) ) || local_on_ladder_or_noclip( ) ) {
+	if ( !( true && g_io.key_state< io::key_state::DOWN >( 'F' ) ) || local_on_ladder_or_noclip( ) ) {
 		clear( );
 		return;
 	}
@@ -372,9 +429,66 @@ void hack::movement::pixelsurf::run( ) {
 	static auto addy = g_mem[ CLIENT_DLL ].get_address< void( __stdcall* )( int a, int b ) >( HASH_CT( "RestoreEntityToPredictedFrame" ) );
 	addy( 0, g_csgo.m_prediction->m_commands_predicted - 1 );
 
+	auto side         = get_align_side( base_origin );
+	auto backup_fmove = g_ctx.m_cmd->m_forward_move;
+	auto backup_smove = g_ctx.m_cmd->m_side_move;
+	if ( side.has_value( ) && !( g_ctx.m_local.get( ).get_flags( ) & 1 ) && g_ctx.m_cmd->m_side_move == 0.F && g_ctx.m_cmd->m_forward_move == 0.F ) {
+		constexpr auto normalize = []( const math::ang& a ) {
+			math::ang b = a;
+			b.pitch     = std::clamp( b.pitch, -89.f, 89.f );
+
+			float rot;
+			float& angle = b.yaw;
+			// bad number.
+			if ( !std::isfinite( angle ) ) {
+				angle = 0.f;
+				return b;
+			}
+
+			// no need to normalize this angle.
+			if ( angle >= -180.f && angle <= 180.f )
+				return b;
+
+			// get amount of rotations needed.
+			rot = std::round( std::abs( angle / 360.f ) );
+
+			// normalize.
+			angle = ( angle < 0.f ) ? angle + ( 360.f * rot ) : angle - ( 360.f * rot );
+
+			b.roll = 0.f;
+			return b;
+		};
+		auto _diff = ( ( side.value( ) - base_origin ).to_angle( ) - ( *( math::v3f* )&g_ctx.m_cmd->m_view_angles ) );
+		auto diff  = normalize( *( math::ang* )&_diff );
+
+		auto move = math::v3f( 450.F, 0.F, 0.F );
+		auto len  = move.length( );
+		move.normalize( );
+
+		if ( len ) {
+			math::v3f move_angle{ };
+			move_angle.vector_angles( move );
+
+			auto delta = ( ( g_ctx.m_cmd->m_view_angles.yaw + diff.yaw ) - g_ctx.m_cmd->m_view_angles.yaw );
+			move_angle[ 1 ] += delta;
+
+			auto dir = angle_vectors( *( math::ang* )&move_angle );
+			dir *= len;
+
+			if ( g_ctx.m_cmd->m_view_angles.pitch < -90.F || g_ctx.m_cmd->m_view_angles.pitch > 90 )
+				dir[ 0 ] = -dir[ 0 ];
+
+			g_ctx.m_cmd->m_forward_move = -dir[ 0 ];
+			g_ctx.m_cmd->m_side_move    = dir[ 1 ];
+
+			/*g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ),
+			                                      io::format( "-> {} {}\n", g_ctx.m_cmd->m_forward_move, g_ctx.m_cmd->m_side_move ).c_str( ) );*/
+		}
+	}
+
 	i32 ticks       = 0;
 	bool predicted  = false;
-	static auto& pt = gui::cfg::get< i32 >( HASH_CT( "main:group1:pixelsurf ticks" ) );
+	static auto& pt = gui::cfg::get< i32 >( HASH_CT( "pixelsurf radius" ) );
 
 	m_in_pixelsurf = false;
 
@@ -394,9 +508,8 @@ void hack::movement::pixelsurf::run( ) {
 
 			g_hack.m_prediction.restore( );
 
-			// if ( predicted )
-			// 	break;
-
+			if ( predicted )
+				break;
 			++ticks;
 		} while ( ticks < pt );
 
@@ -408,12 +521,19 @@ void hack::movement::pixelsurf::run( ) {
 	apply:
 		m_autoalign = false;
 		g_ctx.m_cmd->m_buttons |= 4;
-		m_old_buttons |= 4;
+		// m_old_buttons |= 4;
 
 		m_in_pixelsurf = true;
 	} else {
-		m_autoalign = true;
+		// g_ctx.m_cmd->m_forward_move = backup_fmove;
+		// g_ctx.m_cmd->m_side_move    = backup_smove;
+		// m_autoalign = true;
 	}
+
+	// if ( !predicted ) {
+	// 	g_ctx.m_cmd->m_forward_move = backup_fmove;
+	// 	g_ctx.m_cmd->m_side_move    = backup_smove;
+	// }
 
 	if ( m_duration == -1 ) {
 		m_lock_mouse = false;
@@ -424,8 +544,9 @@ void hack::movement::pixelsurf::run( ) {
 	}
 }
 
-// constexpr static float positions[] = { 16.0399, 0,   0,   16.0399, 0,   0,   0,   30,  60,  142, 81,  120, 61,  141, 82,
-// 	                                 121,     268, 121, 249,     141, 270, 120, 249, 142, 255, 255, 255, 255, -1,  -16.0399 };
+// constexpr static float positions[] = { 16.0399, 0,   0,   16.0399, 0,   0,   0,   30,  60,  142, 81,  120,
+// 61,  141, 82, 	                                 121,     268, 121, 249,     141, 270, 120, 249, 142, 255,
+// 255, 255, 255, -1,  -16.0399 };
 constexpr static float positions[] = { 0.F, 0.F, 16.0399F, -16.0399F, 0.F, 0.F, -16.0399F, 0.F, 0.F };
 
 // NOTE(para): thanks @soar for help here
@@ -527,7 +648,8 @@ void hack::movement::pixelsurf::autoalign( ) {
 		} else {
 			v6             = trace( );
 			AlignmentValue = v6;
-			// g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "chiggy bungus - chiggy bungus - passed trace\n" ) );
+			// g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "chiggy bungus - chiggy bungus - passed trace\n" )
+			// );
 
 			switch ( v6 ) {
 			case 1:
@@ -817,7 +939,7 @@ void hack::movement::jumpstats::run( ) {
 	else
 		m_sync = 0.F;
 
-	if ( ( m_distance >= 200.F && m_distance <= 280.F ) && ( m_jump_position[ 1 ][ 2 ] - m_jump_position[ 0 ][ 2 ] ) <= 64.F &&
+	if ( ( m_distance >= 200.F && m_distance <= 320.F ) && ( m_jump_position[ 1 ][ 2 ] - m_jump_position[ 0 ][ 2 ] ) <= 64.F &&
 	     ( m_jump_position[ 1 ][ 2 ] - m_jump_position[ 0 ][ 2 ] ) >= -8.F ) {
 		// bhop
 		if ( m_hops == 1 && !m_jumpbug ) {

@@ -19,7 +19,7 @@ bool cavalcade::hooks::base_player::create_move( f32 input_sample_time, sdk::use
 		state.set( XOR( "g_Cmd" ), sol::lua_nil );
 	}
 	static bool shoot = false;
-	static auto& zb   = gui::cfg::get< bool >( HASH_CT( "main:group1:zeus bug" ) );
+	static auto& zb   = gui::cfg::get< bool >( HASH_CT( "zeus bug" ) );
 
 	// NOTE(para): don't do local checks in features ty
 	// sidenote: when I see pointer checks I want to cry myself to Rust now, honestly
@@ -43,6 +43,8 @@ bool cavalcade::hooks::base_player::create_move( f32 input_sample_time, sdk::use
 		return og( input_sample_time, cmd );
 
 	g_ctx.m_cmd = cmd;
+
+	g_hack.m_scaleform.update( );
 
 	if ( !input_sample_time )
 		return og( input_sample_time, cmd );
@@ -85,7 +87,7 @@ bool cavalcade::hooks::base_player::create_move( f32 input_sample_time, sdk::use
 		g_hack.m_prediction.update( );
 		g_hack.m_prediction.start( );
 		g_hack.m_prediction.apply( );
-		static auto& silent = gui::cfg::get< bool >( HASH_CT( "main:group1:silent" ) );
+		static auto& silent = gui::cfg::get< bool >( HASH_CT( "silent" ) );
 
 		if ( silent )
 			g_hack.m_aimbot.run( cmd->m_view_angles.pitch, cmd->m_view_angles.yaw, true );

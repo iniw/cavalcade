@@ -3,6 +3,7 @@
 void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame_stage stage ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< frame_stage_notify_fn >( HASH_CT( "CHLClient::FrameStageNotify" ) );
 	og( ecx, stage );
+
 	if ( stage == sdk::frame_stage::RENDER_END ) {
 		g_render.m_safe.frame( [ & ]( ) {
 			// std::unique_lock lock( g_lua.m_mutex );
@@ -60,7 +61,7 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 	}
 }
 
-void cavalcade::hooks::chlc_client::level_init_pre_entity( cstr name ) {
+void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	// std::unique_lock lock( g_lua.m_mutex );
 
 	g_csgo.m_map_name = std::nullopt;
@@ -81,6 +82,7 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( cstr name ) {
 	g_hack.m_nightmode.clear( );
 	g_hack.m_fog.reset( );
 	g_hack.m_sunset.reset( );
+	g_hack.m_scaleform.reset( );
 
 	static auto og = g_mem[ CLIENT_DLL ].get_og< level_init_pre_entity_fn >( HASH_CT( "CHLClient::LevelInitPreEntity" ) );
 	og( name );
@@ -109,6 +111,7 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( cstr name ) {
 void cavalcade::hooks::chlc_client::level_init_post_entity( ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< level_init_post_entity_fn >( HASH_CT( "CHLClient::LevelInitPostEntity" ) );
 	og( );
+	g_hack.m_scaleform.install( );
 	for ( const auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 		for ( const auto& callback : callbacks.at( XOR( "LevelInitPostEntity" ) ) ) {
 			if ( callback.valid( ) ) {
@@ -169,7 +172,7 @@ void cavalcade::hooks::chlc_client::on_override_mouse_input( unk ecx, unk edx, i
 
 	og( ecx, edx, slot, std::ref( x ), std::ref( y ) );
 
-	static auto& silent = gui::cfg::get< bool >( HASH_CT( "main:group1:silent" ) );
+	static auto& silent = gui::cfg::get< bool >( HASH_CT( "silent" ) );
 
 	if ( !silent )
 		g_hack.m_aimbot.run( x, y );

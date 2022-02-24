@@ -47,6 +47,7 @@ namespace cavalcade {
 
 			sdk::cvar* m_pitch;
 			sdk::cvar* m_yaw;
+			sdk::cvar* cl_hud_color;
 
 		} m_cvars;
 

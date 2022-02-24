@@ -27,6 +27,7 @@ namespace sdk {
 		interfaces::engine_sound* m_engine_sound;
 		interfaces::effects* m_effects;
 		interfaces::material_system* m_material_system;
+		interfaces::panorama_ui_engine* m_panorama;
 
 		globals* m_globals;
 		move_helper* m_move_helper;

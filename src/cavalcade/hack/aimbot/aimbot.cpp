@@ -71,9 +71,9 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 		else
 			return;
 
-		static auto& fov       = gui::cfg::get< i32 >( HASH_CT( "main:group1:fov" ) );
-		static auto& smooth    = gui::cfg::get< i32 >( HASH_CT( "main:group1:smoothing" ) );
-		static auto& on_attack = gui::cfg::get< bool >( HASH_CT( "main:group1:on attack" ) );
+		static auto& fov       = gui::cfg::get< i32 >( HASH_CT( "fov" ) );
+		static auto& smooth    = gui::cfg::get< i32 >( HASH_CT( "smoothing" ) );
+		static auto& on_attack = gui::cfg::get< bool >( HASH_CT( "on attack" ) );
 
 		auto local_pos   = g_ctx.m_local.get( ).get_eye_position( );
 		auto rcs_angle   = g_ctx.m_local.get( ).get_aim_punch_angle( ) * 2;

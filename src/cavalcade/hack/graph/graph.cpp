@@ -6,12 +6,12 @@ constexpr auto g_vel_graph_size  = 80;
 constexpr auto g_vel_graph_scale = 4.F;
 
 void hack::graph::gather( ) {
-	static auto& g = gui::cfg::get< bool >( HASH_CT( "main:group1:graph" ) );
+	static auto& g = gui::cfg::get< bool >( HASH_CT( "graph" ) );
 
 	if ( !g )
 		return;
 
-	static auto& gs = gui::cfg::get< i32 >( HASH_CT( "main:group1:graph size" ) );
+	static auto& gs = gui::cfg::get< i32 >( HASH_CT( "graph size" ) );
 	if ( m_data.size( ) > gs ) {
 		m_data.pop_back( );
 	}
@@ -24,10 +24,10 @@ void hack::graph::gather( ) {
 }
 
 void hack::graph::draw( ) {
-	static auto& g    = gui::cfg::get< bool >( HASH_CT( "main:group1:graph" ) );
-	static auto& gs   = gui::cfg::get< i32 >( HASH_CT( "main:group1:graph size" ) );
-	static auto& gsc  = gui::cfg::get< f32 >( HASH_CT( "main:group1:graph width scale" ) );
-	static auto& gsch = gui::cfg::get< f32 >( HASH_CT( "main:group1:graph height scale" ) );
+	static auto& g    = gui::cfg::get< bool >( HASH_CT( "graph" ) );
+	static auto& gs   = gui::cfg::get< i32 >( HASH_CT( "graph size" ) );
+	static auto& gsc  = gui::cfg::get< f32 >( HASH_CT( "graph width scale" ) );
+	static auto& gsch = gui::cfg::get< f32 >( HASH_CT( "graph height scale" ) );
 
 	if ( !g ) {
 		m_data.clear( );
@@ -52,20 +52,21 @@ void hack::graph::draw( ) {
 	if ( m_data.size( ) < 2 )
 		return;
 
+	static auto& wasd = gui::cfg::get< bool >( HASH_CT( "wasd ind" ) );
+
 	for ( auto i = 0; i < m_data.size( ) - 1; ++i ) {
 		const auto& c = m_data[ i ];
 		const auto& n = m_data[ i + 1 ];
 
 		auto ss  = g_render.get_screen_size( );
-		auto pad = ceil( ss.h * .12F );
-		auto pos = render::point{ ss.w / 2 + gs * static_cast< int >( ( gsc / 2.F ) ), static_cast< int >( ss.h / 1.2F + pad ) };
+		auto pad = ceil( ss[ 1 ] * .12F );
+		auto pos = render::point( ss[ 0 ] / 2 + gs * ( gsc / 2.F ), ss[ 1 ] / 1.2F + pad - ( wasd ? 5 : 0 ) );
 
-		auto alpha = std::max( 10, std::min( 255, c.m_speed + 5 ) ) * .75F;
+		auto alpha = std::max( 25, std::min( 255, c.m_speed + 5 ) ) * .75F;
 
-		g_render.m_safe.draw_shape< render::geometry::line >(
-			render::point{ static_cast< i32 >( pos[ 0 ] - ( i - 1 ) * gsc ), pos.y - static_cast< int >( ( c.m_speed * gsch ) ) },
-			render::point{ static_cast< i32 >( pos[ 0 ] - i * gsc ), pos.y - static_cast< int >( ( n.m_speed * gsch ) ) },
-			render::color( 255, 255, 255, alpha ), 1.F );
+		g_render.m_safe.draw_shape< render::geometry::line >( render::point( pos[ 0 ] - ( i - 1 ) * gsc, pos[ 1 ] - ( c.m_speed * gsch ) ),
+		                                                      render::point( pos[ 0 ] - i * gsc, pos[ 1 ] - ( n.m_speed * gsch ) ),
+		                                                      render::color( 255, 255, 255, alpha ), 1.F );
 	}
 }
 
@@ -74,10 +75,10 @@ void hack::graph::clear( ) {
 }
 
 i32 hack::graph::get_upmost_y_scenario( ) {
-	static auto& g    = gui::cfg::get< bool >( HASH_CT( "main:group1:graph" ) );
-	static auto& gs   = gui::cfg::get< i32 >( HASH_CT( "main:group1:graph size" ) );
-	static auto& gsc  = gui::cfg::get< f32 >( HASH_CT( "main:group1:graph width scale" ) );
-	static auto& gsch = gui::cfg::get< f32 >( HASH_CT( "main:group1:graph height scale" ) );
+	static auto& g    = gui::cfg::get< bool >( HASH_CT( "graph" ) );
+	static auto& gs   = gui::cfg::get< i32 >( HASH_CT( "graph size" ) );
+	static auto& gsc  = gui::cfg::get< f32 >( HASH_CT( "graph width scale" ) );
+	static auto& gsch = gui::cfg::get< f32 >( HASH_CT( "graph height scale" ) );
 
 	if ( !g )
 		return get_bottommost_y_scenario( );
@@ -86,12 +87,12 @@ i32 hack::graph::get_upmost_y_scenario( ) {
 		return get_bottommost_y_scenario( );
 
 	auto ss  = g_render.get_screen_size( );
-	auto pad = ceil( ss.h * .12F );
-	return ( ss.h / 1.2F + pad ) - ( 250 * gsch );
+	auto pad = ceil( ss[ 1 ] * .12F );
+	return ( ss[ 1 ] / 1.2F + pad ) - ( 250 * gsch );
 }
 
 i32 hack::graph::get_bottommost_y_scenario( ) {
 	auto ss  = g_render.get_screen_size( );
-	auto pad = ceil( ss.h * .12F );
-	return ( ss.h / 1.2F + pad );
+	auto pad = ceil( ss[ 1 ] * .12F );
+	return ( ss[ 1 ] / 1.2F + pad );
 }

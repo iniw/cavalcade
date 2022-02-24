@@ -1,0 +1,219 @@
+{
+    // Colors
+    R"(
+        (function() {
+            var radar_ol = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Round--Overlay');
+            radar_ol.style.borderRadius = '50% / 50%';
+            radar_ol.style.borderWidth = '2px';
+            radar_ol.style.borderStyle = 'solid';
+            radar_ol.style.borderColor = '#e8e8e826';
+            radar_ol.style.opacity = '1.0';
+            var radar_ols = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Square--Overlay');
+            radar_ols.style.borderRadius = '0px';
+            radar_ols.style.borderWidth = '2px';
+            radar_ols.style.borderStyle = 'solid';
+            radar_ols.style.borderColor = '#e8e8e826';
+            radar_ols.style.opacity = '1.0';
+            var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
+            location.style.color = '#e8e8e8ff';
+        })();
+    )",
+    R"(
+        (function() {
+            var radar_ol = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Round--Overlay');
+            radar_ol.style.borderRadius = '50% / 50%';
+            radar_ol.style.borderWidth = '2px';
+            radar_ol.style.borderStyle = 'solid';
+            radar_ol.style.borderColor = '#ffffff26';
+            radar_ol.style.opacity = '1.0';
+            var radar_ols = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Square--Overlay');
+            radar_ols.style.borderRadius = '0px';
+            radar_ols.style.borderWidth = '2px';
+            radar_ols.style.borderStyle = 'solid';
+            radar_ols.style.borderColor = '#ffffff26';
+            radar_ols.style.opacity = '1.0';
+            var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
+            location.style.color = '#ffffffff';
+        })();
+    )",
+    R"(
+        (function() {
+            var radar_ol = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Round--Overlay');
+            radar_ol.style.borderRadius = '50% / 50%';
+            radar_ol.style.borderWidth = '2px';
+            radar_ol.style.borderStyle = 'solid';
+            radar_ol.style.borderColor = '#96c8ff26';
+            radar_ol.style.opacity = '1.0';
+            var radar_ols = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Square--Overlay');
+            radar_ols.style.borderRadius = '0px';
+            radar_ols.style.borderWidth = '2px';
+            radar_ols.style.borderStyle = 'solid';
+            radar_ols.style.borderColor = '#96c8ff26';
+            radar_ols.style.opacity = '1.0';
+            var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
+            location.style.color = '#96c8ffff';
+        })();
+    )",
+    R"(
+        (function() {
+            var radar_ol = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Round--Overlay');
+            radar_ol.style.borderRadius = '50% / 50%';
+            radar_ol.style.borderWidth = '2px';
+            radar_ol.style.borderStyle = 'solid';
+            radar_ol.style.borderColor = '#356eff26';
+            radar_ol.style.opacity = '1.0';
+            var radar_ols = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Square--Overlay');
+            radar_ols.style.borderRadius = '0px';
+            radar_ols.style.borderWidth = '2px';
+            radar_ols.style.borderStyle = 'solid';
+            radar_ols.style.borderColor = '#356eff26';
+            radar_ols.style.opacity = '1.0';
+            var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
+            location.style.color = '#356effff';
+        })();
+    )",
+    R"(
+        (function() {
+            var radar_ol = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Round--Overlay');
+            radar_ol.style.borderRadius = '50% / 50%';
+            radar_ol.style.borderWidth = '2px';
+            radar_ol.style.borderStyle = 'solid';
+            radar_ol.style.borderColor = '#c864ff26';
+            radar_ol.style.opacity = '1.0';
+            var radar_ols = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Square--Overlay');
+            radar_ols.style.borderRadius = '0px';
+            radar_ols.style.borderWidth = '2px';
+            radar_ols.style.borderStyle = 'solid';
+            radar_ols.style.borderColor = '#c864ff26';
+            radar_ols.style.opacity = '1.0';
+            var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
+            location.style.color = '#c864ffff';
+        })();
+    )",
+    R"(
+        (function() {
+            var radar_ol = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Round--Overlay');
+            radar_ol.style.borderRadius = '50% / 50%';
+            radar_ol.style.borderWidth = '2px';
+            radar_ol.style.borderStyle = 'solid';
+            radar_ol.style.borderColor = '#ff292426';
+            radar_ol.style.opacity = '1.0';
+            var radar_ols = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Square--Overlay');
+            radar_ols.style.borderRadius = '0px';
+            radar_ols.style.borderWidth = '2px';
+            radar_ols.style.borderStyle = 'solid';
+            radar_ols.style.borderColor = '#ff292426';
+            radar_ols.style.opacity = '1.0';
+            var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
+            location.style.color = '#ff2924ff';
+        })();
+    )",
+    R"(
+        (function() {
+            var radar_ol = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Round--Overlay');
+            radar_ol.style.borderRadius = '50% / 50%';
+            radar_ol.style.borderWidth = '2px';
+            radar_ol.style.borderStyle = 'solid';
+            radar_ol.style.borderColor = '#ff712426';
+            radar_ol.style.opacity = '1.0';
+            var radar_ols = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Square--Overlay');
+            radar_ols.style.borderRadius = '0px';
+            radar_ols.style.borderWidth = '2px';
+            radar_ols.style.borderStyle = 'solid';
+            radar_ols.style.borderColor = '#ff712426';
+            radar_ols.style.opacity = '1.0';
+            var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
+            location.style.color = '#ff7124ff';
+        })();
+    )",
+    R"(
+        (function() {
+            var radar_ol = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Round--Overlay');
+            radar_ol.style.borderRadius = '50% / 50%';
+            radar_ol.style.borderWidth = '2px';
+            radar_ol.style.borderStyle = 'solid';
+            radar_ol.style.borderColor = '#fff72426';
+            radar_ol.style.opacity = '1.0';
+            var radar_ols = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Square--Overlay');
+            radar_ols.style.borderRadius = '0px';
+            radar_ols.style.borderWidth = '2px';
+            radar_ols.style.borderStyle = 'solid';
+            radar_ols.style.borderColor = '#fff72426';
+            radar_ols.style.opacity = '1.0';
+            var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
+            location.style.color = '#fff724ff';
+        })();
+    )",
+    R"(
+        (function() {
+            var radar_ol = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Round--Overlay');
+            radar_ol.style.borderRadius = '50% / 50%';
+            radar_ol.style.borderWidth = '2px';
+            radar_ol.style.borderStyle = 'solid';
+            radar_ol.style.borderColor = '#3eff2426';
+            radar_ol.style.opacity = '1.0';
+            var radar_ols = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Square--Overlay');
+            radar_ols.style.borderRadius = '0px';
+            radar_ols.style.borderWidth = '2px';
+            radar_ols.style.borderStyle = 'solid';
+            radar_ols.style.borderColor = '#3eff2426';
+            radar_ols.style.opacity = '1.0';
+            var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
+            location.style.color = '#3eff24ff';
+        })();
+    )",
+    R"(
+        (function() {
+            var radar_ol = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Round--Overlay');
+            radar_ol.style.borderRadius = '50% / 50%';
+            radar_ol.style.borderWidth = '2px';
+            radar_ol.style.borderStyle = 'solid';
+            radar_ol.style.borderColor = '#24ff9026';
+            radar_ol.style.opacity = '1.0';
+            var radar_ols = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Square--Overlay');
+            radar_ols.style.borderRadius = '0px';
+            radar_ols.style.borderWidth = '2px';
+            radar_ols.style.borderStyle = 'solid';
+            radar_ols.style.borderColor = '#24ff9026';
+            radar_ols.style.opacity = '1.0';
+            var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
+            location.style.color = '#24ff90ff';
+        })();
+    )",
+    R"(
+        (function() {
+            var radar_ol = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Round--Overlay');
+            radar_ol.style.borderRadius = '50% / 50%';
+            radar_ol.style.borderWidth = '2px';
+            radar_ol.style.borderStyle = 'solid';
+            radar_ol.style.borderColor = '#ff799926';
+            radar_ol.style.opacity = '1.0';
+            var radar_ols = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Square--Overlay');
+            radar_ols.style.borderRadius = '0px';
+            radar_ols.style.borderWidth = '2px';
+            radar_ols.style.borderStyle = 'solid';
+            radar_ols.style.borderColor = '#ff799926';
+            radar_ols.style.opacity = '1.0';
+            var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
+            location.style.color = '#ff7999ff';
+        })();
+    )",
+    R"(
+        (function() {
+            var radar_ol = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Round--Overlay');
+            radar_ol.style.borderRadius = '50% / 50%';
+            radar_ol.style.borderWidth = '2px';
+            radar_ol.style.borderStyle = 'solid';
+            radar_ol.style.borderColor = '#d5e28626';
+            radar_ol.style.opacity = '1.0';
+            var radar_ols = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('Radar__Square--Overlay');
+            radar_ols.style.borderRadius = '0px';
+            radar_ols.style.borderWidth = '2px';
+            radar_ols.style.borderStyle = 'solid';
+            radar_ols.style.borderColor = '#d5e28626';
+            radar_ols.style.opacity = '1.0';
+            var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
+            location.style.color = '#d5e286ff';
+        })();
+    )"
+}

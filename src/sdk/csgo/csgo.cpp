@@ -57,6 +57,14 @@ bool sdk::csgo::init( ) {
 		m_material_system = find_interface< interfaces::material_system* >( g_mem[ MATERIALSYSTEM_DLL ], HASH_CT( "VMaterialSystem" ) );
 		if ( !m_material_system )
 			return false;
+
+		m_panorama = g_mem[ PANORAMA_DLL ]
+		                 .find_pattern( STB( "B9 ? ? ? ? 56 FF 50 40 8B F0 68 ? ? ? ? 56 8B 0E FF 91 ? ? ? ? 0F 10 05 ? ? ? ? 68 ? "
+		                                     "? ? ? 56 0F 11 05 ? ? ? ? F3 0F 7E 05 ? ? ? ? 66 0F D6 05" ) )
+		                 .add( 1 )
+		                 .get< interfaces::panorama_ui_engine* >( 1 );
+		if ( !m_panorama )
+			return false;
 	}
 
 	m_globals = mem::get_v_func( m_client, 11 ).add( 0xA ).get< globals* >( 2 );

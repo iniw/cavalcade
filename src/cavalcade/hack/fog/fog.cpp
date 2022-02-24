@@ -4,9 +4,9 @@
 #include "../../entity_cacher/entity_cacher.hpp"
 
 void hack::fog::run( ) {
-	static auto& fog = gui::cfg::get< bool >( HASH_CT( "main:group1:fog" ) );
-	static auto& fe  = gui::cfg::get< f32 >( HASH_CT( "main:group1:fog end" ) );
-	static auto& fd  = gui::cfg::get< f32 >( HASH_CT( "main:group1:fog density" ) );
+	static auto& fog = gui::cfg::get< bool >( HASH_CT( "fog" ) );
+	static auto& fe  = gui::cfg::get< f32 >( HASH_CT( "fog end" ) );
+	static auto& fd  = gui::cfg::get< f32 >( HASH_CT( "fog density" ) );
 	for ( i32 i = 1; i <= g_csgo.m_ent_list->get_highest_entity_index( ); ++i ) {
 		auto e = g_csgo.m_ent_list->get< sdk::base_entity* >( i );
 		if ( !e || !e->get_client_class( ) || e->get_client_class( )->m_class_id != sdk::class_id::FOG_CONTROLLER )

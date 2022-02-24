@@ -24,6 +24,7 @@
 #include "enginesound.hpp"
 #include "effects.hpp"
 #include "imaterialsystem.hpp"
+#include "panorama.hpp"
 
 namespace sdk::interfaces {
 	struct registry {

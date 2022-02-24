@@ -36,7 +36,7 @@ void hack::trainer::go( ) {
 }
 
 void hack::trainer::run( ) {
-	static auto& tr = gui::cfg::get< bool >( HASH_CT( "main:group1:trainer" ) );
+	static auto& tr = gui::cfg::get< bool >( HASH_CT( "trainer" ) );
 	if ( !tr )
 		return;
 

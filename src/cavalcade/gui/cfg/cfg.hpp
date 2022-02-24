@@ -23,9 +23,10 @@ namespace gui {
 
 		template< ConfigEntry T >
 		static T& get( uint32_t hash ) {
-			auto& entry = s_entries.at( hash );
-
-			return std::get< T >( entry );
+			try {
+				auto& entry = s_entries.at( hash );
+				return std::get< T >( entry );
+			} catch ( const std::exception& e ) { __debugbreak( ); }
 		}
 	};
 } // namespace gui

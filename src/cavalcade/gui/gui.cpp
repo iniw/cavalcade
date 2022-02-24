@@ -11,11 +11,35 @@ void gui::impl::init( ) {
 		{
 			auto gb1 = col->add< groupbox >( "poop", groupbox::preset::HALF );
 			{
-				for ( int i = 1; i <= 25; i++ )
-					gb1->add< slider< int > >( fmt::format( "slider {}", i ), 0, i * 20 );
-
-				for ( int i = 1; i <= 25; i++ )
-					gb1->add< slider< float > >( fmt::format( "float slider {}", i ), 0.f, i * 20.f );
+				gb1->add< checkbox >( XOR( "scaleform" ) );
+				gb1->add< checkbox >( XOR( "zeus bug" ) );
+				gb1->add< checkbox >( XOR( "trainer" ) );
+				gb1->add< checkbox >( XOR( "graph" ) );
+				gb1->add< slider< i32 > >( XOR( "graph size" ), 10, 200 );
+				gb1->add< slider< f32 > >( XOR( "graph width scale" ), 1.F, 4.5F );
+				gb1->add< slider< f32 > >( XOR( "graph height scale" ), 0.F, 1.F );
+				gb1->add< checkbox >( XOR( "velocity ind" ) );
+				gb1->add< checkbox >( XOR( "binds ind" ) );
+				gb1->add< checkbox >( XOR( "wasd ind" ) );
+				gb1->add< checkbox >( XOR( "box bob" ) );
+				gb1->add< checkbox >( XOR( "longjump on edge" ) );
+				gb1->add< checkbox >( XOR( "crouch after ladderjump" ) );
+				gb1->add< checkbox >( XOR( "nightmode" ) );
+				gb1->add< slider< i32 > >( XOR( "factor" ), 0, 100 );
+				gb1->add< checkbox >( XOR( "sunset" ) );
+				gb1->add< checkbox >( XOR( "fog" ) );
+				gb1->add< slider< f32 > >( XOR( "fog end" ), 0.F, 1.F );
+				gb1->add< slider< f32 > >( XOR( "fog density" ), 0.F, 1.F );
+				gb1->add< slider< i32 > >( XOR( "edgebug scaling" ), 0, 100 );
+				gb1->add< slider< i32 > >( XOR( "edgebug radius" ), 0, 128 );
+				gb1->add< slider< i32 > >( XOR( "pixelsurf radius" ), 0, 4 );
+				gb1->add< checkbox >( XOR( "on attack" ) );
+				gb1->add< checkbox >( XOR( "silent" ) );
+				gb1->add< slider< i32 > >( XOR( "fov" ), 0, 180 );
+				gb1->add< slider< i32 > >( XOR( "smoothing" ), 0, 100 );
+				gb1->add< checkbox >( XOR( "dlights" ) );
+				gb1->add< slider< i32 > >( XOR( "bw" ), 0, 100 );
+				gb1->add< slider< i32 > >( XOR( "bh" ), 0, 100 );
 			}
 
 			auto gb2 = col->add< groupbox >( "poop 2", groupbox::preset::HALF );

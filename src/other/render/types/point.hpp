@@ -16,7 +16,8 @@ namespace render {
 
 		constexpr point( i32 x, i32 y ) : x{ x }, y{ y } { }
 
-		constexpr point( f32 x, f32 y ) : x{ static_cast< i32 >( x ) }, y{ static_cast< i32 >( y ) } { }
+		explicit constexpr point( std::floating_point auto x, std::floating_point auto y )
+			: x{ static_cast< i32 >( x ) }, y{ static_cast< i32 >( y ) } { }
 
 	public:
 

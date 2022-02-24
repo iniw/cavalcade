@@ -1,0 +1,27 @@
+R"(
+
+(function() {
+    var context_panel = $.GetContextPanel();
+    for (var row of context_panel.FindChildTraverse('HudWeaponSelection').FindChildrenWithClassTraverse('weapon-selection-item')) {
+        if (row.BHasClass('weapon-selection-item--selected')) {
+            row.style.paddingLeft = '100px';
+            row.style.marginLeft = '-100px';
+            row.style.backgroundColor = 'gradient( linear, 0% 0%, 100% 0%, from( #00000000 ), to( #00000099 ) )';
+        } else {
+            row.style.backgroundColor = '#00000000';
+        }
+    }
+
+    var hud_ws = context_panel.FindChildTraverse('HudWeaponPanel').FindChildTraverse('WeaponPanelBottomBG');
+    hud_ws.style.visibility = 'visible';
+
+    var death_notice = context_panel.FindChildTraverse('HudDeathNotice');
+
+    for (var ico of death_notice.FindChildrenWithClassTraverse('DeathNoticeIcon')) {
+        ico.style.height = '16px';
+        ico.style.verticalAlign = 'middle';
+        ico.style.margin = '-2px 5px 3px 5px';
+    }
+})();
+
+)"

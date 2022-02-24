@@ -1,4 +1,5 @@
-
+#ifndef MOVEMENT_HPP
+#define MOVEMENT_HPP
 
 #pragma once
 
@@ -41,7 +42,7 @@ namespace hack {
 		void ladderjump( );
 
 		struct pixelsurf {
-			void run( );
+			void run( const math::v3f& );
 			void autoalign( );
 			void clear( );
 
@@ -112,6 +113,8 @@ namespace hack {
 			void reset( );
 		} m_jumpstats;
 
+		math::v3f m_base_origin{ };
+
 		i32 m_base_flags{ };
 		bool m_in_jumpbug{ false };
 		bool m_jumpbugged{ false };
@@ -126,3 +129,5 @@ namespace hack {
 		std::optional< math::v3f > m_pixelsurf_calculator_point{ };
 	};
 } // namespace hack
+
+#endif /* MOVEMENT_HPP */

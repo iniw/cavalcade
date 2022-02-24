@@ -4,7 +4,6 @@ cmake_minimum_required(VERSION 3.21)
 
 # this has to be set before project() is called
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo" CACHE STRING "Build types" FORCE)
-set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
 project(cavalcade LANGUAGES CXX)
 
@@ -37,11 +36,14 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${SOURCES})
 
 target_precompile_headers(${CMAKE_PROJECT_NAME} PRIVATE ${PCH})
 
-target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE 
-    ${OPTIONS_GENERAL} 
-    "$<$<CONFIG:RelWithDebInfo>:${OPTIONS_RELWITHDEBINFO}>" 
-    "$<$<CONFIG:Release>:${OPTIONS_RELEASE}>"
-    "$<$<CONFIG:Debug>:${OPTIONS_DEBUG}>")
+add_definitions(/bigobj /Oi /Ot /Zi /GL /MP)
+string(REPLACE "/MD" "" ${CMAKE_CXX_FLAGS} "${CMAKE_CXX_FLAGS}")
+string(REPLACE "/MDd" "" ${CMAKE_CXX_FLAGS} "${CMAKE_CXX_FLAGS}")
+if(NOT ${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+	add_definitions(/MT)
+else()
+	add_definitions(/MTd)
+endif()
 
 target_link_options(${CMAKE_PROJECT_NAME} PRIVATE 
     "$<$<CONFIG:Debug>:${LINKER_OPTIONS_DEBUG}>" 
@@ -66,6 +68,7 @@ find_package(Freetype REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(Lua REQUIRED)
 
+# thanks para
 link_directories("$ENV{DXSDK_DIR}/Lib/x86")
 include_directories("$ENV{DXSDK_DIR}/Include" "${PROJECT_SOURCE_DIR}/src/" "${PROJECT_SOURCE_DIR}/src/other/lib/include")
 
@@ -74,6 +77,8 @@ find_library(LUAJIT_LIBRARY lua51.lib PATHS "$ENV{VCPKG}/packages/luajit_x86-win
 find_library(D3D9_LIBRARY d3d9.lib PATHS "$ENV{DXSDK_DIR}/Lib/x86")
 find_library(D3DX9_LIBRARY d3dx9.lib PATHS "$ENV{DXSDK_DIR}/Lib/x86")
 find_library(STEAM_API steam_api.lib PATHS "${CAVAL_LIBS}/steam")
+
+message("$ENV{VCPKG}")
 
 target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${LUA_INCLUDE_DIR} "$ENV{VCPKG}/packages/luajit_x86-windows-static/include/luajit")
 target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
@@ -84,4 +89,4 @@ target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
 	${LUAJIT_LIBRARY}
 	${D3D9_LIBRARY}
 	${D3DX9_LIBRARY}
-	${STEAM_API})
+	${STEAM_API}) 

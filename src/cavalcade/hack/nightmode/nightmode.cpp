@@ -14,8 +14,8 @@ void hack::nightmode::clear( ) {
 }
 
 void hack::nightmode::run_props( ) {
-	static auto& nm = gui::cfg::get< bool >( HASH_CT( "main:group1:nightmode" ) );
-	static auto& ft = gui::cfg::get< i32 >( HASH_CT( "main:group1:factor" ) );
+	static auto& nm = gui::cfg::get< bool >( HASH_CT( "nightmode" ) );
+	static auto& ft = gui::cfg::get< i32 >( HASH_CT( "factor" ) );
 
 	if ( !nm ) {
 		// we've turned off nightmode, so next we should update our props
@@ -49,8 +49,8 @@ void hack::nightmode::run_props( ) {
 }
 
 void hack::nightmode::run( sdk::material* mat, f32& r, f32& g, f32& b ) {
-	static auto& nm = gui::cfg::get< bool >( HASH_CT( "main:group1:nightmode" ) );
-	static auto& ft = gui::cfg::get< i32 >( HASH_CT( "main:group1:factor" ) );
+	static auto& nm = gui::cfg::get< bool >( HASH_CT( "nightmode" ) );
+	static auto& ft = gui::cfg::get< i32 >( HASH_CT( "factor" ) );
 
 	if ( nm ) {
 		auto material = HASH_RT( mat->get_texture_group_name( ) );

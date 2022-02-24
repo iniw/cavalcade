@@ -5,3 +5,6 @@ checks.json
 *.DB
 *.DB-shm
 *.DB-wal
+.vs
+out
+_clang-format
