@@ -90,13 +90,13 @@ static void do_motionblur( ) {
 	//======================================================================================================//
 	// Get these convars here to make it easier to remove them later and to default each client differently //
 	//======================================================================================================//
-	float range                         = 0.25f;       // 0.15
+	float range                         = 0.35f;       // 0.15
 	float flMotionBlurRotationIntensity = 1.0 * range; // The default is to not blur past 15% of the range
 	float flMotionBlurRollIntensity     = 0.4f; // * mat_motion_blur_roll_intensity.GetFloat(); // The default is to not blur past 30% of the range
 	float flMotionBlurFallingIntensity  = 1.0;
 	float flMotionBlurFallingMin        = 10.0;
 	float flMotionBlurFallingMax        = 20.0;
-	float flMotionBlurGlobalStrength    = 1.0;
+	float flMotionBlurGlobalStrength    = 1.15;
 
 	if ( true ) {
 		//=====================//

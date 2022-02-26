@@ -24,7 +24,7 @@ auto get_panel( u32 _hash ) {
 	return ret;
 }
 
-#define DEBUG_SCALEFORM 1
+#define DEBUG_SCALEFORM 0
 
 constexpr const char* scaleformy =
 #include "scaleform.txt"
@@ -62,10 +62,14 @@ void hack::scaleform::update( ) {
 	if ( !scaleform )
 		return;
 
+	auto engine = g_csgo.m_panorama->access_ui_engine( );
+	if ( !engine )
+		return;
+
 	auto hud_color = std::max( 0, std::min( 11, g_ctx.m_cvars.cl_hud_color->get_int( ) ) );
 
 	if ( m_old_hud_color != hud_color ) {
-		g_csgo.m_panorama->access_ui_engine( )->run_script( m_focus, radars[ hud_color ], "panorama/layout/hud/hud.xml", 8, 10, false );
+		engine->run_script( m_focus, radars[ hud_color ], "panorama/layout/hud/hud.xml", 8, 10, false );
 		m_old_hud_color = hud_color;
 	}
 
@@ -84,7 +88,7 @@ void hack::scaleform::update( ) {
 
 	if ( --m_pending_ticks == 0 ) {
 		if ( m_pending_ticks == 0 )
-			g_csgo.m_panorama->access_ui_engine( )->run_script( m_focus, weaponselect, "panorama/layout/hud/hud.xml", 8, 10, false );
+			engine->run_script( m_focus, weaponselect, "panorama/layout/hud/hud.xml", 8, 10, false );
 	}
 
 	// NOTE(para): really bad idea....

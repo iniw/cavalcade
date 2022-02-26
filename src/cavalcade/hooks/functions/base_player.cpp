@@ -44,6 +44,19 @@ bool cavalcade::hooks::base_player::create_move( f32 input_sample_time, sdk::use
 
 	g_ctx.m_cmd = cmd;
 
+	static int waiting_update = 0;
+	static bool pending       = false;
+
+	if ( pending ) {
+		if ( --waiting_update == 0 ) {
+			g_hack.m_scaleform.m_old_weaponselect = -1;
+			pending                               = false;
+		}
+
+		if ( waiting_update < 0 )
+			pending = false;
+	}
+
 	g_hack.m_scaleform.update( );
 
 	if ( !input_sample_time )
@@ -99,7 +112,9 @@ bool cavalcade::hooks::base_player::create_move( f32 input_sample_time, sdk::use
 		if ( zb ) {
 			if ( shoot ) {
 				g_csgo.m_engine->execute_client_cmd( XOR( "use weapon_taser" ) );
-				shoot = false;
+				shoot          = false;
+				waiting_update = 5;
+				pending        = true;
 			}
 
 			if ( cmd->m_buttons & 1 && g_ctx.m_local.get( ).can_fire_shot( ) ) {
