@@ -86,9 +86,11 @@ void hack::scaleform::update( ) {
 		}
 	}
 
-	if ( --m_pending_ticks == 0 ) {
-		if ( m_pending_ticks == 0 )
-			engine->run_script( m_focus, weaponselect, "panorama/layout/hud/hud.xml", 8, 10, false );
+	if ( m_pending_ticks > -1 ) {
+		if ( --m_pending_ticks == 0 ) {
+			if ( m_pending_ticks == 0 )
+				engine->run_script( m_focus, weaponselect, "panorama/layout/hud/hud.xml", 8, 10, false );
+		}
 	}
 
 	// NOTE(para): really bad idea....
