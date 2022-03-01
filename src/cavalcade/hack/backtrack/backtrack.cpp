@@ -173,12 +173,12 @@ void hack::backtrack::run( ) {
 
 				auto fov = hack::aimbot::get_fov( view_angles, aim_angle );
 				if ( dis > fov ) {
-					f32 dmg   = 0;
-					auto scan = autowall::can_hit( m_best_player, weap, info, hitbox_pos, dmg );
-					if ( !scan ) {
-						// TODO(para): verify other hitboxes in accordance to config too
-						return;
-					}
+					// f32 dmg   = 0;
+					// auto scan = autowall::can_hit( m_best_player, weap, info, hitbox_pos, dmg );
+					// if ( !scan ) {
+					//	// TODO(para): verify other hitboxes in accordance to config too
+					//	return;
+					// }
 
 					dis = fov;
 				}
