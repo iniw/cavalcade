@@ -1,6 +1,7 @@
 #pragma once
 
 #include "auxiliary/player_info.hpp"
+#include "auxiliary/netchannelinfo.hpp"
 
 namespace sdk::interfaces {
 	struct steam_api_context_t {
@@ -74,6 +75,10 @@ namespace sdk::interfaces {
 			math::ang angles{ };
 			mem::call_v_func< void, 18 >( this, std::ref( angles ) );
 			return angles;
+		}
+
+		sdk::auxiliary::net_channel_info* get_net_channel_info( ) {
+			return mem::call_v_func< sdk::auxiliary::net_channel_info*, 78 >( this );
 		}
 	};
 } // namespace sdk::interfaces

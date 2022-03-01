@@ -87,8 +87,10 @@ bool cavalcade::hooks::base_player::create_move( f32 input_sample_time, sdk::use
 		g_hack.m_prediction.apply( );
 		static auto& silent = gui::cfg::get< bool >( HASH_CT( "main:group1:silent" ) );
 
+		g_hack.m_backtrack.store_records( );
 		if ( silent )
 			g_hack.m_aimbot.run( cmd->m_view_angles.pitch, cmd->m_view_angles.yaw, true );
+		g_hack.m_backtrack.run( );
 
 		g_hack.m_prediction.restore( );
 

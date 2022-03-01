@@ -46,7 +46,7 @@ math::ang hack::aimbot::angle_to_pixels( const math::ang& angle ) {
 	return math::ang( -y, x, 0.F );
 }
 
-static auto get_fov( const math::ang& view, const math::ang& aim ) {
+f32 hack::aimbot::get_fov( const math::ang& view, const math::ang& aim ) {
 	constexpr auto RAD2DEG = []( const f32 x ) -> f32 { return x * ( 180.f / M_PI ); };
 
 	math::v3f _aim = angle_vectors( view );
@@ -74,6 +74,7 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 		static auto& fov       = gui::cfg::get< i32 >( HASH_CT( "main:group1:fov" ) );
 		static auto& smooth    = gui::cfg::get< i32 >( HASH_CT( "main:group1:smoothing" ) );
 		static auto& on_attack = gui::cfg::get< bool >( HASH_CT( "main:group1:on attack" ) );
+		static auto& rcs       = gui::cfg::get< bool >( HASH_CT( "main:group1:rcs" ) );
 
 		auto local_pos   = g_ctx.m_local.get( ).get_eye_position( );
 		auto rcs_angle   = g_ctx.m_local.get( ).get_aim_punch_angle( ) * 2;
@@ -81,7 +82,6 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 
 		m_best_player = nullptr;
 		m_best_fov    = fov;
-
 		if ( fov == 0 )
 			return;
 
@@ -104,24 +104,25 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 
 			auto _aim_angle = local_pos.calculate_angle( hitbox_pos );
 			auto aim_angle  = ( *( math::ang* )&_aim_angle ).clamp_angle( );
-			if ( m_rcs )
-				aim_angle -= rcs_angle;
 
-			f32 dmg   = 0;
-			auto scan = autowall::can_hit( p, weap, info, hitbox_pos, dmg );
-#if AUTOWALL_DEBUG
-			g_io.log( XOR( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
-#endif
-			if ( !scan ) {
-				// TODO(para): verify other hitboxes in accordance to config too
-				return;
-			}
+			if ( rcs )
+				aim_angle -= rcs_angle;
 
 			// if ( !can_see( p, hitbox_pos ) )
 			// 	return;
 
 			auto dis = get_fov( view_angles, aim_angle );
 			if ( m_best_fov > dis ) {
+				f32 dmg   = 0;
+				auto scan = autowall::can_hit( p, weap, info, hitbox_pos, dmg );
+#if AUTOWALL_DEBUG
+				g_io.log( XOR( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
+#endif
+				if ( !scan ) {
+					// TODO(para): verify other hitboxes in accordance to config too
+					return;
+				}
+
 				m_best_player = p;
 				m_best_fov    = dis;
 			}
@@ -144,7 +145,7 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 						auto _aim_angle = local_pos.calculate_angle( hitbox_pos );
 						auto aim_angle  = ( *( math::ang* )&_aim_angle ).clamp_angle( );
 
-						if ( m_rcs )
+						if ( rcs )
 							aim_angle -= rcs_angle;
 
 						f32 dmg   = 0;
@@ -172,8 +173,7 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 			auto hitbox_pos = best_hitbox( );
 			auto _aim_angle = local_pos.calculate_angle( hitbox_pos );
 			auto aim_angle  = ( *( math::ang* )&_aim_angle ).clamp_angle( );
-
-			if ( m_rcs )
+			if ( rcs )
 				aim_angle -= rcs_angle;
 
 			auto _view_delta = ( aim_angle - view_angles ).clamp_angle( );

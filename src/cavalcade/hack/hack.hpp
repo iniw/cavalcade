@@ -13,6 +13,7 @@
 #include "fog/fog.hpp"
 #include "sunset/sunset.hpp"
 #include "scaleform/scaleform.hpp"
+#include "backtrack/backtrack.hpp"
 
 namespace hack {
 	struct impl {
@@ -29,6 +30,7 @@ namespace hack {
 		fog m_fog;
 		sunset m_sunset;
 		scaleform m_scaleform;
+		backtrack m_backtrack;
 	};
 } // namespace hack
 

@@ -17,7 +17,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 include("cmake/CMakeBuildOptions.cmake")
 
 # --- build definitions ---
-
+ 
 include("cmake/CMakeBuildDefinitions.cmake")
 
 # --- pre-compiled headers ---

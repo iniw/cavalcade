@@ -28,6 +28,7 @@ namespace sdk {
 
 		void post_think( );
 
+		math::v3f get_hitbox_position( i32 hitbox_id, const math::matrix_3x4* m );
 		math::v3f get_hitbox_position( i32 hitbox_id );
 
 		math::v3f get_eye_position( );

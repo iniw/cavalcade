@@ -2,7 +2,7 @@
 
 namespace math {
 	struct matrix_3x4 {
-		f32 data[ 3 ][ 4 ];
+		f32 data[ 3 ][ 4 ] = { };
 
 		constexpr matrix_3x4( ) = default;
 

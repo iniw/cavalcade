@@ -2,6 +2,7 @@
 #include "../../ctx/ctx.hpp"
 #include "../../entity_cacher/entity_cacher.hpp"
 #include "../../gui/cfg/cfg.hpp"
+#include "../hack.hpp"
 
 static bool bounding_box( sdk::player& p, std::pair< render::point, render::point >& out ) {
 	math::v3f mins{ }, maxs{ };
@@ -161,6 +162,20 @@ void hack::esp::run( ) {
 				{
 					auto health_aa = render::point{ aa[ 0 ] - 8, aa[ 1 ] };
 					g_render.m_safe.draw_shape< render::geometry::rect >( health_aa, health_aa + render::point{ 5, bb[ 1 ] }, clr, 1.F );
+				}
+				{
+					if ( g_hack.m_backtrack.m_records.contains( p.get( ).get_networkable_index( ) ) ) {
+						const auto& recs = g_hack.m_backtrack.m_records[ p.get( ).get_networkable_index( ) ];
+						for ( const auto& rec : recs ) {
+							auto hitbox_pos = p.get( ).get_hitbox_position( sdk::e_hitbox::HEAD, rec.m_matrix );
+							math::v3f out{ };
+							if ( !g_csgo.m_debug_overlay->screen_position( hitbox_pos, out ) ) {
+								render::point aa{ out[ 0 ] - 2, out[ 1 ] - 2 };
+								g_render.m_safe.draw_shape< render::geometry::rect_filled >( aa, aa + 4,
+								                                                             render::color( 0xffffffff ).mod_alpha( clr.m_a ) );
+							}
+						}
+					}
 				}
 			}
 			{
