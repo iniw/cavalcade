@@ -2,8 +2,9 @@
 
 #include "../../../other/lib/include/json/json.hpp"
 
+#define TRANSLATOR_ON 0
 hack::translator::translator( ) : m_translator( "http://157.90.121.188:5000" ) {
-	m_valid = m_translator.is_valid( );
+	m_valid = m_translator.is_valid( ) && TRANSLATOR_ON;
 }
 
 void hack::translator::translate( e_languages source, e_languages target, const std::string& text, const std::string& suffix ) {

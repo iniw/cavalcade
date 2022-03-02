@@ -29,6 +29,7 @@ bool cavalcade::hooks::base_player::create_move( f32 input_sample_time, sdk::use
 	if ( ( g_ctx.m_local && !g_ctx.m_local.get( ).is_alive( ) ) ) {
 		shoot = false;
 		g_hack.m_indscreen.clear( );
+		g_hack.m_backtrack.clear( );
 		return og( input_sample_time, cmd );
 	}
 
@@ -90,7 +91,8 @@ bool cavalcade::hooks::base_player::create_move( f32 input_sample_time, sdk::use
 		g_hack.m_backtrack.store_records( );
 		if ( silent )
 			g_hack.m_aimbot.run( cmd->m_view_angles.pitch, cmd->m_view_angles.yaw, true );
-		g_hack.m_backtrack.run( );
+		else
+			g_hack.m_backtrack.run( );
 
 		g_hack.m_prediction.restore( );
 

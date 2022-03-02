@@ -44,8 +44,14 @@ math::v3f sdk::cs_player::get_hitbox_position( i32 hitbox_id, const math::matrix
 		if ( hitbox ) {
 			auto vector_transform = [ & ]( const math::v3f& vec ) -> math::v3f {
 				math::v3f r{ };
-				for ( auto i = 0; i < 3; ++i )
-					r[ i ] = vec.dot_product( m[ hitbox->m_bone ].data[ i ] ) + m[ hitbox->m_bone ].data[ i ][ 3 ];
+
+				for ( auto i = 0; i < 3; ++i ) {
+					auto v = ( f32* )m[ hitbox->m_bone ].data[ i ];
+					if ( ( uintptr_t )v < 0x10000 )
+						return r;
+
+					r[ i ] = vec.dot_product( v ) + v[ 3 ];
+				}
 
 				return r;
 			};

@@ -71,8 +71,8 @@ R"(
     alive_text_ct.style.color = '#7F8C8D';
     var wins_t = hud_team_counter.FindChildTraverse('ScoreT');
     var wins_ct = hud_team_counter.FindChildTraverse('ScoreCT');
-    wins_t.style.color = '#5C7F8AC8';
-    wins_ct.style.color = '#A38B60C8';
+    wins_t.style.color = '#A38B60C8';
+    wins_ct.style.color = '#5C7F8AC8';
     var timer = hud_team_counter.FindChildTraverse('TimerText');
     timer.style.fontFamily = 'Stratum2 Bold';
     

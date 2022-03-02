@@ -40,12 +40,6 @@ bool hack::backtrack::is_tick_valid( f32 sim_time, f32 bt_time ) {
 }
 
 void hack::backtrack::store_records( ) {
-	if ( !g_ctx.m_local.get( ).is_alive( ) ) {
-		clear( );
-
-		return;
-	}
-
 	static auto& bt  = gui::cfg::get< bool >( HASH_CT( "main:group1:backtrack" ) );
 	static auto& btt = gui::cfg::get< f32 >( HASH_CT( "main:group1:backtrack time" ) );
 
