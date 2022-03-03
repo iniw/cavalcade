@@ -7,7 +7,7 @@
 hack::backtrack::tick::tick( sdk::cs_player* p ) {
 	m_simulation_time = p->get_sim_time( );
 
-	for ( auto i = 0; i < 256; ++i ) {
+	for ( auto i = 0; i < 128; ++i ) {
 		m_matrix[ i ] = p->get_cached_bone_matrix( i );
 	}
 }

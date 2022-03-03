@@ -56,7 +56,7 @@ math::v3f sdk::cs_player::get_hitbox_position( i32 hitbox_id, const math::matrix
 				return r;
 			};
 
-			if ( hitbox->m_bone < 0 || hitbox->m_bone > 256 )
+			if ( hitbox->m_bone < 0 || hitbox->m_bone > 128 )
 				return { std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) };
 
 			if ( hitbox->m_bb_min == math::v3f{ 0, 0, 0 } )

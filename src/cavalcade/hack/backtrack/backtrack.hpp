@@ -13,7 +13,7 @@ namespace hack {
 			tick( sdk::cs_player* p );
 
 			std::optional< f32 > m_simulation_time;
-			math::matrix_3x4 m_matrix[ 256 ] = { };
+			math::matrix_3x4 m_matrix[ 128 ] = { };
 		};
 
 		// NOTE(para): maybe move to sdk::player
