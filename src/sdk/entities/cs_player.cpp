@@ -56,7 +56,7 @@ math::v3f sdk::cs_player::get_hitbox_position( i32 hitbox_id, const math::matrix
 				return r;
 			};
 
-			if ( hitbox->m_bone < 0 || hitbox->m_bone > 128 )
+			if ( hitbox->m_bone < 0 || hitbox->m_bone > 256 )
 				return { std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ) };
 
 			if ( hitbox->m_bb_min == math::v3f{ 0, 0, 0 } )
@@ -111,7 +111,7 @@ math::v3f sdk::cs_player::get_hitbox_position( i32 hitbox_id ) {
 }
 
 math::v3f sdk::cs_player::get_eye_position( ) {
-	math::v3f v;
+	math::v3f v{ };
 	mem::call_v_func< void, 285 >( this, std::ref( v ) );
 	return v;
 }
@@ -137,4 +137,12 @@ bool sdk::cs_player::can_fire_shot( ) {
 		return false;
 
 	return true;
+}
+
+sdk::varmapping* sdk::cs_player::varmapping( ) {
+	return ( sdk::varmapping* )( ( uintptr_t )this + 0x24 );
+}
+
+sdk::utl_vector< math::matrix_3x4 >& sdk::cs_player::get_cached_bones( ) {
+	return *( sdk::utl_vector< math::matrix_3x4 >* )( ( uintptr_t )this + 9896 );
 }

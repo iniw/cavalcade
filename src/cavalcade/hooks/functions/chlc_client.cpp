@@ -2,7 +2,30 @@
 
 void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame_stage stage ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< frame_stage_notify_fn >( HASH_CT( "CHLClient::FrameStageNotify" ) );
-	og( ecx, stage );
+
+	if ( g_csgo.m_engine->is_in_game( ) ) {
+		if ( stage == sdk::frame_stage::NET_UPDATE_POSTDATAUPDATE_START ) {
+			g_entity_cacher.for_each( [ & ]( auto& p ) {
+				if ( p && p != g_ctx.m_local && !p.get( ).is_dormant( ) && p.get( ).is_alive( ) && p.get( ).is_enemy( g_ctx.m_local ) ) {
+					p.get( ).set_abs_origin( p.get( ).get_origin( ) );
+				}
+			} );
+		} /*else if ( stage == sdk::frame_stage::NET_UPDATE_START ) {
+		    static auto& bt  = gui::cfg::get< bool >( HASH_CT( "main:group1:backtrack" ) );
+		    static auto& btt = gui::cfg::get< f32 >( HASH_CT( "main:group1:backtrack time" ) );
+
+		    g_entity_cacher.for_each( [ & ]( auto& p ) {
+		        if ( p && p != g_ctx.m_local && p.get( ).is_enemy( g_ctx.m_local ) ) {
+		            auto map = p.get( ).varmapping( );
+		            if ( map ) {
+		                for ( auto i = 0; i < map->m_interp_entries; ++i ) {
+		                    map->m_entries[ i ].m_needs_interp = !( bt && btt > 0.F );
+		                }
+		            }
+		        }
+		    } );
+		}*/
+	}
 
 	if ( stage == sdk::frame_stage::RENDER_END ) {
 		g_render.m_safe.frame( [ & ]( ) {
@@ -30,7 +53,7 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 						if ( !result.valid( ) ) {
 							sol::error err = result;
 							g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-							g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+							g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade.cc" ) );
 							g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 							g_csgo.m_cvars->console_color_printf( render::color( 255, 0, 0, 255 ), XOR( "ERROR: " ) );
 							g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ),
@@ -51,7 +74,7 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 				if ( !result.valid( ) ) {
 					sol::error err = result;
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade.cc" ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 0, 0, 255 ), XOR( "ERROR: " ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), io::format( XOR( "{}\n" ), err.what( ) ).c_str( ) );
@@ -59,6 +82,8 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 			}
 		}
 	}
+
+	og( ecx, stage );
 }
 
 void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
@@ -85,6 +110,13 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 	g_hack.m_sunset.reset( );
 	g_hack.m_scaleform.reset( );
 
+	f32 tickrate = 1.F / g_csgo.m_globals->m_interval_per_tick;
+
+	g_ctx.m_cvars.cl_interp_ratio->set_value( 2.F );
+	g_ctx.m_cvars.cl_interp->set_value( g_csgo.m_globals->m_interval_per_tick * 2.F );
+	g_ctx.m_cvars.cl_cmdrate->set_value( tickrate );
+	g_ctx.m_cvars.cl_updaterate->set_value( tickrate );
+
 	static auto og = g_mem[ CLIENT_DLL ].get_og< level_init_pre_entity_fn >( HASH_CT( "CHLClient::LevelInitPreEntity" ) );
 	og( name );
 
@@ -99,7 +131,7 @@ void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
 				if ( !result.valid( ) ) {
 					sol::error err = result;
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade.cc" ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 0, 0, 255 ), XOR( "ERROR: " ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), io::format( XOR( "{}\n" ), err.what( ) ).c_str( ) );
@@ -121,7 +153,7 @@ void cavalcade::hooks::chlc_client::level_init_post_entity( ) {
 				if ( !result.valid( ) ) {
 					sol::error err = result;
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade.cc" ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 0, 0, 255 ), XOR( "ERROR: " ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), io::format( XOR( "{}\n" ), err.what( ) ).c_str( ) );
@@ -156,7 +188,7 @@ void cavalcade::hooks::chlc_client::level_shutdown( unk ecx, unk edx ) {
 				if ( !result.valid( ) ) {
 					sol::error err = result;
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade.cc" ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 0, 0, 255 ), XOR( "ERROR: " ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), io::format( XOR( "{}\n" ), err.what( ) ).c_str( ) );

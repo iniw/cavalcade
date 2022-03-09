@@ -36,7 +36,7 @@ void gui::impl::init( ) {
 		gb->add< objects::slider< i32 > >( XOR( "fov" ), XOR( "fov" ), 0, 180 );
 		gb->add< objects::slider< i32 > >( XOR( "smoothing" ), XOR( "smoothing" ), 0, 100 );
 		gb->add< objects::checkbox >( XOR( "backtrack" ), XOR( "backtrack" ) );
-		gb->add< objects::slider< f32 > >( XOR( "backtrack time" ), XOR( "backtrack time" ), 0.F, 0.2F );
+		gb->add< objects::slider< f32 > >( XOR( "backtrack time" ), XOR( "backtrack time" ), 0.F, 0.19F );
 
 		gb->add< objects::checkbox >( XOR( "dlights" ), XOR( "dlights" ) );
 		gb->add< objects::slider< i32 > >( XOR( "bw" ), XOR( "bw" ), 0, 100 );

@@ -257,7 +257,7 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 			XOR( "ConsolePrint" ),
 			[ & ]( sdk::interfaces::cvars& cv, std::string&& s ) {
 				cv.console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-				cv.console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+				cv.console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade.cc" ) );
 				cv.console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 				cv.console_color_printf( render::color( 255, 255, 255, 255 ), ( s + XOR( "\n" ) ).c_str( ) );
 			} );
@@ -992,7 +992,7 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 				map[ at ].push_back( what );
 			} else {
 				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade.cc" ) );
 				g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 				g_csgo.m_cvars->console_color_printf(
 					render::color( 255, 255, 255, 255 ),
@@ -1009,7 +1009,7 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 		g_io.log( XOR( "{} {}" ), ( i32 )load.status( ), err.what( ) );
 		// alert...
 		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade.cc" ) );
 		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 		g_csgo.m_cvars->console_color_printf( render::color( 255, 0, 0, 255 ), XOR( "ERROR: " ) );
 		g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), io::format( XOR( "{}\n" ), err.what( ) ).c_str( ) );
@@ -1025,7 +1025,9 @@ void cavalcade::lua_impl::push( std::string_view code ) {
 bool cavalcade::ctx::init( ) {
 	MOCKING_TRY;
 
+	MOCK m_cvars.host_timescale                  = g_csgo.m_cvars->find_var( XOR( "host_timescale" ) );
 	MOCK m_cvars.sv_cheats                       = g_csgo.m_cvars->find_var( XOR( "sv_cheats" ) );
+	MOCK m_cvars.cl_cmdrate                      = g_csgo.m_cvars->find_var( XOR( "cl_cmdrate" ) );
 	MOCK m_cvars.cl_updaterate                   = g_csgo.m_cvars->find_var( XOR( "cl_updaterate" ) );
 	MOCK m_cvars.sv_minupdaterate                = g_csgo.m_cvars->find_var( XOR( "sv_minupdaterate" ) );
 	MOCK m_cvars.sv_maxupdaterate                = g_csgo.m_cvars->find_var( XOR( "sv_maxupdaterate" ) );

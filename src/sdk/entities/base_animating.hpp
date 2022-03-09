@@ -9,7 +9,8 @@ namespace sdk {
 
 		VFUNC( void, update_client_side_animation, idx::UPDATE_CLIENT_SIDE_ANIMATION, ( ) )
 
-		NETVAR( f32, get_pose_parameter, "DT_BaseAnimating->m_flPoseParameter" );
+		using test = std::array< f32, 24 >;
+		NETVAR( test, get_pose_parameter, "DT_BaseAnimating->m_flPoseParameter" );
 
 		NETVAR( i32, get_sequence, "DT_BaseAnimating->m_nSequence" );
 
@@ -20,7 +21,10 @@ namespace sdk {
 		// NOTE(para): maybe consider IsBoneAvailableForRead?
 		math::matrix_3x4 get_cached_bone_matrix( i32 bone ) {
 			math::matrix_3x4 out{ };
-			if ( bone < 0 || bone > 128 )
+			if ( !this )
+				return out;
+
+			if ( bone < 0 || bone > 256 )
 				return out;
 
 			out = *( math::matrix_3x4* )( 48 * bone + *( DWORD* )( ( uintptr_t )this + 9896 ) );

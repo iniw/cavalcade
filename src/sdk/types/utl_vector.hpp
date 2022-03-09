@@ -8,16 +8,16 @@ namespace sdk {
 	private:
 
 		A m_mem;
-		u32 m_size;
+		i32 m_size;
 		T* m_elements;
 
 	public:
 
-		T& operator[]( u32 idx ) {
+		T& operator[]( i32 idx ) {
 			return m_mem[ idx ];
 		}
 
-		const T& operator[]( u32 idx ) const {
+		const T& operator[]( i32 idx ) const {
 			return m_mem[ idx ];
 		}
 
@@ -29,16 +29,16 @@ namespace sdk {
 			return m_mem.base( ) + m_size;
 		}
 
-		u32 count( ) const {
+		i32 count( ) const {
 			return m_size;
 		}
 
-		void set_size( u32 val ) {
+		void set_size( i32 val ) {
 			m_size = val;
 		}
 
 		void clear( ) {
-			for ( u32 i = m_size; --i >= 0; )
+			for ( i32 i = m_size; --i >= 0; )
 				m_mem[ i ].~T( );
 
 			m_size = 0;

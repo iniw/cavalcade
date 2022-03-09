@@ -61,7 +61,7 @@ bool cavalcade::hooks::base_player::create_move( f32 input_sample_time, sdk::use
 				if ( !result.valid( ) ) {
 					sol::error err = result;
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade.cc" ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 0, 0, 255 ), XOR( "ERROR: " ) );
 					g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), io::format( XOR( "{}\n" ), err.what( ) ).c_str( ) );
@@ -91,8 +91,7 @@ bool cavalcade::hooks::base_player::create_move( f32 input_sample_time, sdk::use
 		g_hack.m_backtrack.store_records( );
 		if ( silent )
 			g_hack.m_aimbot.run( cmd->m_view_angles.pitch, cmd->m_view_angles.yaw, true );
-		else
-			g_hack.m_backtrack.run( );
+		g_hack.m_backtrack.run( );
 
 		g_hack.m_prediction.restore( );
 
@@ -138,4 +137,18 @@ bool cavalcade::hooks::base_player::create_move( f32 input_sample_time, sdk::use
 	g_hack.m_scaleform.update( );
 
 	return false;
+}
+
+int cavalcade::hooks::base_player::some_fn( unk ecx, unk edx, unk a1, unk a2, unk a3, unk a4 ) {
+	static auto og      = g_mem[ CLIENT_DLL ].get_og< some_fn_ >( HASH_CT( "SomeFn" ) );
+	static bool& interp = **g_mem[ CLIENT_DLL ].get_address< mem::address >( HASH_CT( "g_bInterpolationEnabled" ) ).add< bool** >( 2 );
+	static auto& bt     = gui::cfg::get< bool >( HASH_CT( "main:group1:backtrack" ) );
+	static auto& btt    = gui::cfg::get< f32 >( HASH_CT( "main:group1:backtrack time" ) );
+
+	auto backup = interp;
+	if ( ( bt && btt > 0.F ) && g_ctx.m_local && ( ( sdk::cs_player* )( ecx ) )->is_enemy( g_ctx.m_local ) )
+		interp = false;
+	auto ret = og( ecx, edx, a1, a2, a3, a4 );
+	interp   = backup;
+	return ret;
 }

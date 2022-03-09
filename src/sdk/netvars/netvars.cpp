@@ -13,7 +13,7 @@ bool sdk::netvars::init( ) {
 	if ( !m_file.good( ) )
 		return false;
 
-	m_file << io::format( "[ ecstasy.dev - {:%H:%M:%S} ] netvars dump\n", fmt::localtime( std::time( nullptr ) ) );
+	m_file << io::format( "[ cavalcade.cc - {:%H:%M:%S} ] netvars dump\n", fmt::localtime( std::time( nullptr ) ) );
 
 #endif
 

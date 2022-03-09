@@ -14,11 +14,36 @@
       "variables": [
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "C:\\dev\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
+          "value": "C:\\dev\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake",
+          "type": "STRING"
         },
         {
           "name": "VCPKG_TARGET_TRIPLET",
-          "value": "x86-windows-static"
+          "value": "x86-windows-static",
+          "type": "STRING"
+        }
+      ]
+    },
+    {
+      "name": "x86-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "msvc_x86" ],
+      "variables": [
+        {
+          "name": "CMAKE_TOOLCHAIN_FILE",
+          "value": "C:\\dev\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake",
+          "type": "STRING"
+        },
+        {
+          "name": "VCPKG_TARGET_TRIPLET",
+          "value": "x86-windows-static",
+          "type": "STRING"
         }
       ]
     }

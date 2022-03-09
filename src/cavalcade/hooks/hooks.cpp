@@ -16,6 +16,7 @@ bool cavalcade::hooks::init( ) {
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "SetViewAngles" ), &engine_client::set_view_angles );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CreateMove" ), &base_player::create_move );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CEntityListener::OnAddEntity" ), &entity_listener::on_add_entity );
+	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CBaseAnimating::SetupBones" ), &base_animating::setup_bones );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CEntityListener::OnRemoveEntity" ), &entity_listener::on_remove_entity );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "WeaponReticleKnifeShow" ), &sfhud::weapon_reticle_knife_show );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CrosshairShouldDraw" ), &crosshair::should_draw );
@@ -30,6 +31,7 @@ bool cavalcade::hooks::init( ) {
 	MOCK g_mem[ SHADERAPIDX9_DLL ].hook( HASH_CT( "IDirect3DDevice9::EndScene" ), &d3d9_device::end_scene );
 	MOCK g_mem[ SHADERAPIDX9_DLL ].hook( HASH_CT( "IDirect3DDevice9::Reset" ), &d3d9_device::reset );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CRadar::Initialize" ), &panorama::radar_init );
+	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "SomeFn" ), &base_player::some_fn );
 
 	MOCKING_CATCH( return false );
 

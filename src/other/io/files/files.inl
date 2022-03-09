@@ -9,7 +9,7 @@ void io::files::log( std::string_view str ) {
 
 	auto local_time = fmt::localtime( std::time( nullptr ) );
 
-	auto fmt_str = fmt::format( XOR( "[ ecstasy.dev - {:%H:%M:%S} ] {}{}\n" ), local_time, level_options.get_prefix( ), str );
+	auto fmt_str = fmt::format( XOR( "[ cavalcade.cc - {:%H:%M:%S} ] {}{}\n" ), local_time, level_options.get_prefix( ), str );
 	m_log_file << fmt_str;
 	m_log_file.flush( );
 

@@ -35,9 +35,14 @@ add_library(${CMAKE_PROJECT_NAME} SHARED)
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${SOURCES})
 
 target_precompile_headers(${CMAKE_PROJECT_NAME} PRIVATE ${PCH})
-
-add_definitions(/bigobj /Oi /Ot /MT /Zi /GL /MP)
+add_definitions(/bigobj /Oi /Ot /Zi /GL /MP)
 string(REPLACE "/MD" "" ${CMAKE_CXX_FLAGS} "${CMAKE_CXX_FLAGS}")
+string(REPLACE "/MDd" "" ${CMAKE_CXX_FLAGS} "${CMAKE_CXX_FLAGS}")
+if(NOT ${CMAKE_BUILD_TYPE} STREQUAL "Debug")
+	add_definitions(/MT)
+else()
+	add_definitions(/MTd)
+endif()
 
 target_link_options(${CMAKE_PROJECT_NAME} PRIVATE 
     "$<$<CONFIG:Debug>:${LINKER_OPTIONS_DEBUG}>" 

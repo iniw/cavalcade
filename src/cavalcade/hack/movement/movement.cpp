@@ -957,7 +957,7 @@ void hack::movement::jumpstats::run( ) {
 					.c_str( ) );
 
 			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade.cc" ) );
 			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "bhop: " ) );
 			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{:.1f} " ), m_distance ).c_str( ) );
@@ -985,7 +985,7 @@ void hack::movement::jumpstats::run( ) {
 					.c_str( ) );
 
 			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade.cc" ) );
 			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "mbhop: " ) );
 			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{:.1f} " ), m_distance ).c_str( ) );
@@ -1011,7 +1011,7 @@ void hack::movement::jumpstats::run( ) {
 			                m_distance, m_strafes, m_pre, m_max, m_height )
 					.c_str( ) );
 			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade.cc" ) );
 			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "jumpbug: " ) );
 			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{:.1f} " ), m_distance ).c_str( ) );
@@ -1036,7 +1036,7 @@ void hack::movement::jumpstats::run( ) {
 					.c_str( ) );
 
 			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "[" ) );
-			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "ecstasy.dev" ) );
+			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 255, 255 ), XOR( "cavalcade.cc" ) );
 			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), XOR( "] " ) );
 			g_csgo.m_cvars->console_color_printf( render::color( 185, 185, 185, 255 ), XOR( "longjump: " ) );
 			g_csgo.m_cvars->console_color_printf( render::color( 255, 255, 0, 255 ), io::format( XOR( "{:.1f} " ), m_distance ).c_str( ) );

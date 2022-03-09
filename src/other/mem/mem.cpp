@@ -169,7 +169,6 @@ void mem::impl::add_addresses( ) {
 
 		ADD_PATTERN( MATERIALSYSTEM_DLL, "GetColorModulation", "55 8B EC 83 EC ? 56 8B F1 8A 46" );
 		ADD_PATTERN_REL( CLIENT_DLL, "RestoreEntityToPredictedFrame", "E8 ? ? ? ? FF 74 3B 1C" );
-
 		{ // C_BaseEntity
 			ADD_PATTERN( CLIENT_DLL, "C_BaseEntity->m_vecAbsVelocity", "F3 0F 10 A6 ? ? ? ? F3 0F 11 64 24 ?" );
 			ADD_PATTERN( CLIENT_DLL, "C_BaseEntity->m_nAnimOverlay", "8B 80 ? ? ? ? 03 C1 74 15" );
@@ -177,6 +176,7 @@ void mem::impl::add_addresses( ) {
 			ADD_PATTERN( CLIENT_DLL, "C_BaseEntity->m_pPredictionPlayer", "0F 5B C0 89 35 ? ? ? ?" );
 
 			ADD_PATTERN( CLIENT_DLL, "C_BaseEntity::SetAbsOrigin", "55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8" );
+			ADD_PATTERN( CLIENT_DLL, "C_BaseEntity::SetAbsAngles", "55 8B EC 83 E4 F8 83 EC 64 53 56 57 8B F1 E8" );
 
 			ADD_PATTERN_REL( CLIENT_DLL, "WeaponReticleKnifeShow", "E8 ? ? ? ? 84 C0 74 1C A1 ? ? ? ? " );
 
@@ -189,6 +189,7 @@ void mem::impl::add_addresses( ) {
 		}
 
 		{ // C_BasePlayer
+			// ADD_PATTERN( CLIENT_DLL, "CBasePlayer->m_BoneAccessor", "8b 80 ? ? ? ? 03 c7 c7 04 24 ? ? ? ? 50 ff 52 2c" );
 			ADD_PATTERN( CLIENT_DLL, "C_BasePlayer->m_LastCmd", "8D 8E ? ? ? ? 89 5C 24 3C" );
 			ADD_PATTERN( CLIENT_DLL, "C_BasePlayer->m_afButtonForced", "8B 86 ? ? ? ? 09 47 30" );
 			ADD_PATTERN( CLIENT_DLL, "C_BasePlayer->m_afButtonLast", "33 CA 89 86 ? ? ? ?" );
@@ -247,12 +248,18 @@ void mem::impl::add_addresses( ) {
 		ADD_ADDRESS( SHADERAPIDX9_DLL, "IDirect3DDevice9::EndScene", get_v_func( g_csgo.m_d3d9_device, 42 ) );
 	}
 
+	ADD_PATTERN_REL( CLIENT_DLL, "SomeFn", "E8 ? ? ? ? 83 7D FC 00 8B F8" );
+
+	ADD_PATTERN( CLIENT_DLL, "g_bInterpolationEnabled", "88 1D ? ? ? ? 8B 01 8B 80 ? ? ? ? FF D0 84 C0 75 14 8B 0D ? ? ? ? " );
+
 	ADD_PATTERN(
 		CLIENT_DLL, "CRadar::Initialize",
 		"55 8B EC A1 ? ? ? ? 56 68 ? ? ? ? 8B 08 8B 01 FF 50 04 68 ? ? ? ? 8B F0 6A 00 56 E8 ? ? ? ? 83 C4 0C 85 F6 74 2A 8B 4D 0C 85 C9 74 13 8B 01 "
 		"FF 50 1C FF 75 08 8B CE 50 E8 ? ? ? ? 5E 5D C3 FF 75 08 33 C0 8B CE 50 E8 ? ? ? ? 5E 5D C3 33 C0 5E 5D C3 CC CC CC CC CC CC 55 8B EC 51 68 "
 		"? ? ? ? B9 ? ? ? ? E8 ? ? ? ? 85 C0 74 0E FF 75 08 8D 48 EC E8 ? ? ? ? 59 5D C3 B0 01 59 5D C3 CC CC CC CC CC CC 68" );
 
+	ADD_PATTERN( CLIENT_DLL, "CBaseAnimating::SetupBones", "55 8B EC 83 E4 F0 B8 ? ? ? ? E8 ? ? ? ? 56 57 8B F9 8B 0D" );
+	ADD_PATTERN( CLIENT_DLL, "ModelBoneCounter", "80 3D ? ? ? ? ? 74 16 A1 ? ? ? ? 48 C7 81" );
 #undef ADD_PATTERN
 #undef ADD_PATTERN_REL
 #undef ADD_ADDRESS

@@ -19,8 +19,13 @@ namespace sdk {
 		NETVAR( i32, armor_value, "DT_CSPlayer->m_ArmorValue" );
 
 		NETVAR( i16, current_equip_value, "DT_CSPlayer->m_unCurrentEquipmentValue" );
+		NETVAR( math::ang, get_ang_eye_pos, "DT_CSPlayer->m_angEyeAngles[0]" );
 
 		NETVAR_OFFSET( bool, is_using_new_anim_state, "DT_CSPlayer->m_flLastExoJumpTime", 0x8 );
+
+		OFFSET( i32, occlusion_flags, 0xA28 );
+		OFFSET( i32, occlusion_framecount, 0xA30 );
+		OFFSET( i32, get_bone_count, 0x291C );
 
 		bool is_enemy( base_player* player );
 
@@ -30,6 +35,11 @@ namespace sdk {
 
 		math::v3f get_hitbox_position( i32 hitbox_id, const math::matrix_3x4* m );
 		math::v3f get_hitbox_position( i32 hitbox_id );
+
+		// NOTE(para): this is what we modify
+		sdk::utl_vector< math::matrix_3x4 >& get_cached_bones( );
+
+		sdk::varmapping* varmapping( );
 
 		math::v3f get_eye_position( );
 

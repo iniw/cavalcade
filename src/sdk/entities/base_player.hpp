@@ -100,5 +100,18 @@ namespace sdk {
 
 			function( this, origin );
 		}
+
+		void set_abs_angles( const math::ang& origin ) {
+			static auto function =
+				g_mem[ CLIENT_DLL ].get_address< void( __thiscall* )( base_player*, const math::ang& ) >( HASH_CT( "C_BaseEntity::SetAbsAngles" ) );
+
+			function( this, origin );
+		}
+
+		bone_accessor* get_bone_accessor( ) {
+			static auto accessor = g_mem[ CLIENT_DLL ].get_address< uintptr_t >( HASH_CT( "CBasePlayer->m_BoneAccessor" ) );
+
+			return *( bone_accessor** )( ( uintptr_t )this + *( uint32_t* )( accessor + 2 ) );
+		}
 	};
 } // namespace sdk

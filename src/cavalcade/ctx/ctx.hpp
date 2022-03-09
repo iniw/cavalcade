@@ -20,7 +20,9 @@ namespace cavalcade {
 		sdk::view m_view{ };
 
 		struct {
+			sdk::cvar* host_timescale;
 			sdk::cvar* sv_cheats;
+			sdk::cvar* cl_cmdrate;
 			sdk::cvar* cl_updaterate;
 			sdk::cvar* sv_minupdaterate;
 			sdk::cvar* sv_maxupdaterate;

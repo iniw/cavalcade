@@ -6,11 +6,10 @@
 #include "../hack.hpp"
 
 #define AUTOWALL_DEBUG 0
+#define AIMBOT_DEBUG   0
 
 const static std::map< hack::aimbot::e_hitboxes, std::vector< sdk::e_hitbox > > g_aim_hitboxes = {
 	{ hack::aimbot::e_hitboxes::HEAD, { sdk::e_hitbox::HEAD } },
-
-	{ hack::aimbot::e_hitboxes::NECK, { sdk::e_hitbox::NECK } },
 
 	{ hack::aimbot::e_hitboxes::BODY, { sdk::e_hitbox::BELLY, sdk::e_hitbox::THORAX, sdk::e_hitbox::LOWER_CHEST, sdk::e_hitbox::UPPER_CHEST } },
 
@@ -129,12 +128,20 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 			}
 		} );
 
+		static int shot = 0;
+		++shot;
 		if ( m_best_player ) {
 			auto can_bt = g_hack.m_backtrack.m_records.contains( m_best_player->get_networkable_index( ) );
 
 			auto best_hitbox = [ & ]( std::optional< i32 > best_tick = std::nullopt ) -> math::v3f {
 				auto best_fov    = fov;
 				auto best_hitbox = sdk::e_hitbox::HEAD;
+
+				std::optional< i32 > selected_tick{ std::nullopt };
+
+				auto tc = g_ctx.m_cmd ? g_ctx.m_cmd->m_tick_count : 0;
+				if ( best_tick.has_value( ) )
+					g_hack.m_backtrack.apply_record( m_best_player, best_tick.value( ), arg_is_angle );
 
 				for ( const auto& [ k, e ] : g_aim_hitboxes ) {
 					// TODO(para, wini (menu)): verify if k selected, if not, continue
@@ -155,26 +162,40 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 						if ( rcs )
 							aim_angle -= rcs_angle;
 
-						f32 dmg   = 0;
-						auto scan = autowall::can_hit( m_best_player, weap, info, hitbox_pos, dmg );
-#if AUTOWALL_DEBUG
-						g_io.log( XOR( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
-#endif
-						if ( !scan )
-							continue;
-
 						// if ( !can_see( m_best_player, hitbox_pos ) )
 						// 	continue;
 
 						auto dis = get_fov( view_angles, aim_angle );
 						if ( m_best_fov > dis ) {
+							f32 dmg   = 0;
+							auto scan = autowall::can_hit( m_best_player, weap, info, hitbox_pos, dmg );
+#if AUTOWALL_DEBUG
+							g_io.log( XOR( "target: {} scan: {}" ), dmg, scan ? "true" : "false" );
+#endif
+							if ( !scan ) {
+								// TODO(para): verify other hitboxes in accordance to config too
+								continue;
+							}
+
 							best_hitbox = h;
 							best_fov    = dis;
 						}
 					}
 				}
 
-				return m_best_player->get_hitbox_position( best_hitbox );
+				auto pos =
+					!best_tick.has_value( )
+						? m_best_player->get_hitbox_position( best_hitbox )
+						: m_best_player->get_hitbox_position(
+							  best_hitbox, g_hack.m_backtrack.m_records[ m_best_player->get_networkable_index( ) ][ best_tick.value( ) ].m_matrix );
+
+				if ( best_tick.has_value( ) )
+					g_hack.m_backtrack.apply_record( m_best_player, 0 );
+
+				if ( tc != 0 )
+					g_ctx.m_cmd->m_tick_count = tc;
+
+				return pos;
 			};
 
 			math::v3f _aim_angle{ };
@@ -185,7 +206,8 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 			auto best_tick     = std::numeric_limits< i32 >::min( );
 			auto best_tick_pov = std::numeric_limits< f32 >::max( );
 
-			auto may_bt = can_bt && bt && btt > 0.F;
+			bool reset_bt_state = false;
+			auto may_bt         = can_bt && bt && btt > 0.F;
 			if ( may_bt ) {
 				const auto& rec = g_hack.m_backtrack.m_records[ m_best_player->get_networkable_index( ) ];
 				auto size       = rec.size( );
@@ -193,6 +215,10 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 					goto normal;
 
 				for ( auto t = 0; t < size; ++t ) {
+					auto tc = g_ctx.m_cmd ? g_ctx.m_cmd->m_tick_count : 0;
+
+					g_hack.m_backtrack.apply_record( m_best_player, t, arg_is_angle );
+
 					auto dis = std::numeric_limits< f32 >::max( );
 
 					auto set_dis = [ & ]( sdk::e_hitbox h ) {
@@ -210,13 +236,6 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 
 						auto fov = hack::aimbot::get_fov( view_angles, aim_angle );
 						if ( dis > fov ) {
-							f32 dmg   = 0;
-							auto scan = autowall::can_hit( m_best_player, weap, info, hitbox_pos, dmg );
-							if ( !scan ) {
-								// TODO(para): verify other hitboxes in accordance to config too
-								return;
-							}
-
 							dis = fov;
 						}
 					};
@@ -227,15 +246,26 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 					set_dis( sdk::e_hitbox::LOWER_CHEST );
 					set_dis( sdk::e_hitbox::UPPER_CHEST );
 
+					g_hack.m_backtrack.apply_record( m_best_player, 0 );
+					if ( tc != 0 )
+						g_ctx.m_cmd->m_tick_count = tc;
+
 					if ( best_tick_pov > dis ) {
 						best_tick_pov = dis;
 						best_tick     = t;
 					}
 				}
 
+				if ( best_tick < 0 )
+					goto normal;
+
 				auto hitbox_pos = best_hitbox( best_tick );
-				_aim_angle      = local_pos.calculate_angle( hitbox_pos );
-				aim_angle       = ( *( math::ang* )&_aim_angle ).clamp_angle( );
+
+				if ( hitbox_pos.length_sqr( ) == 0 )
+					goto normal;
+
+				_aim_angle = local_pos.calculate_angle( hitbox_pos );
+				aim_angle  = ( *( math::ang* )&_aim_angle ).clamp_angle( );
 			} else {
 			normal:
 				auto hitbox_pos = best_hitbox( );
@@ -283,16 +313,11 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 					y = position.yaw;
 				}
 			}
+		} else {
+#if AIMBOT_DEBUG
 
-			if ( arg_is_angle ) {
-				if ( may_bt ) {
-					const auto& rec = g_hack.m_backtrack.m_records[ m_best_player->get_networkable_index( ) ];
-
-					if ( g_ctx.m_cmd && best_tick != std::numeric_limits< i32 >::min( ) && rec[ best_tick ].m_simulation_time.has_value( ) &&
-					     ( g_ctx.m_cmd->m_buttons & ( 1 << 0 ) ) )
-						g_ctx.m_cmd->m_tick_count = sdk::time_to_ticks( rec[ best_tick ].m_simulation_time.value( ) );
-				}
-			}
+			g_csgo.m_cvars->console_color_printf( render::color( 0, 255, 0, 255 ), io::format( "[aim] no best player on {}\n", shot ).c_str( ) );
+#endif
 		}
 	}
 }

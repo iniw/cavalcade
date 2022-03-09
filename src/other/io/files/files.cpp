@@ -29,7 +29,7 @@ bool io::files::create_directories( ) {
 	} else
 		return false;
 
-	m_directories[ dirs::CHEAT ].assign( m_directories[ dirs::DOCS ] ).append( XOR( "ecstasy.dev" ) );
+	m_directories[ dirs::CHEAT ].assign( m_directories[ dirs::DOCS ] ).append( XOR( "cavalcade.cc" ) );
 	if ( !fs::exists( m_directories[ dirs::CHEAT ] ) )
 		ret = fs::create_directory( m_directories[ dirs::CHEAT ] );
 

@@ -16,6 +16,9 @@ namespace cavalcade {
 			using build_transformations_fn = void( __thiscall* )( sdk::cs_player*, unk, unk, unk, unk, i32, unk );
 			static void __fastcall build_transformations( sdk::cs_player* ecx, unk, unk hdr, unk pos, unk q, unk camera_transform, i32 bone_mask,
 			                                              unk bone_computed );
+
+			using setup_bones_fn = bool( __fastcall* )( unk, unk, math::matrix_3x4*, i32, i32, f32 );
+			static bool __fastcall setup_bones( unk, unk, math::matrix_3x4*, i32, i32, f32 );
 		};
 
 		struct csgo_player_anim_state {
@@ -63,6 +66,9 @@ namespace cavalcade {
 		struct base_player {
 			using create_move_fn = bool( __stdcall* )( f32, sdk::user_cmd* );
 			static bool __stdcall create_move( f32 input_sample_time, sdk::user_cmd* cmd );
+
+			using some_fn_ = int( __fastcall* )( unk, unk, unk, unk, unk, unk );
+			static int __fastcall some_fn( unk, unk, unk, unk, unk, unk );
 		};
 
 		struct d3d9_device {

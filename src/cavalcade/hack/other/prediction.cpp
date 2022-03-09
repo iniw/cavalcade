@@ -9,11 +9,22 @@ void hack::other::prediction::start( ) {
 
 	g_csgo.m_prediction->start_command( g_ctx.m_local, g_ctx.m_cmd );
 
+	if ( m_last_cmd ) {
+		if ( m_last_cmd->m_has_been_predicted )
+			m_correct_tickbase = g_ctx.m_local.get( ).get_tickbase( );
+		else
+			++m_correct_tickbase;
+	}
+
+	m_last_cmd = g_ctx.m_cmd;
+
+	m_backup_tickbase  = g_ctx.m_local.get( ).get_tickbase( );
 	m_backup_curtime   = g_csgo.m_globals->m_curtime;
 	m_backup_frametime = g_csgo.m_globals->m_frametime;
 
-	g_csgo.m_globals->m_curtime   = sdk::ticks_to_time( g_ctx.m_local.get( ).get_tickbase( ) );
-	g_csgo.m_globals->m_frametime = g_csgo.m_prediction->m_engine_paused ? 0.f : g_csgo.m_globals->m_interval_per_tick;
+	g_ctx.m_local.get( ).get_tickbase( ) = m_correct_tickbase;
+	g_csgo.m_globals->m_curtime          = sdk::ticks_to_time( g_ctx.m_local.get( ).get_tickbase( ) );
+	g_csgo.m_globals->m_frametime        = g_csgo.m_prediction->m_engine_paused ? 0.f : g_csgo.m_globals->m_interval_per_tick;
 
 	m_backup_is_first_time_predicted = g_csgo.m_prediction->m_is_first_time_predicted;
 	m_backup_in_prediction           = g_csgo.m_prediction->m_in_prediction;
@@ -66,8 +77,9 @@ void hack::other::prediction::restore( ) {
 	g_csgo.m_prediction->m_in_prediction           = m_backup_in_prediction;
 	g_csgo.m_prediction->m_is_first_time_predicted = m_backup_is_first_time_predicted;
 
-	g_csgo.m_globals->m_curtime   = m_backup_curtime;
-	g_csgo.m_globals->m_frametime = m_backup_frametime;
+	g_ctx.m_local.get( ).get_tickbase( ) = m_backup_tickbase;
+	g_csgo.m_globals->m_curtime          = m_backup_curtime;
+	g_csgo.m_globals->m_frametime        = m_backup_frametime;
 
 	g_csgo.m_prediction->finish_command( g_ctx.m_local );
 

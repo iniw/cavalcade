@@ -25,5 +25,6 @@
 #include "glow.hpp"
 #include "imatrendercontext.hpp"
 #include "view.hpp"
-
+#include "boneaccessor.hpp"
+#include "varmapping.hpp"
 #include "interfaces/interfaces.hpp"

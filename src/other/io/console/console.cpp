@@ -8,7 +8,7 @@ bool io::console::init( ) {
 
 	freopen_s( reinterpret_cast< _iobuf** >( stdout ), "CONOUT$", "w", stdout );
 
-	SetConsoleTitleA( "ecstasy.dev" );
+	SetConsoleTitleA( "cavalcade.cc" );
 
 	HANDLE handle = GetStdHandle( STD_OUTPUT_HANDLE );
 	MOCK handle;
