@@ -28,6 +28,7 @@ namespace sdk {
 		interfaces::effects* m_effects;
 		interfaces::material_system* m_material_system;
 		interfaces::panorama_ui_engine* m_panorama;
+		interfaces::physics_collison* m_physics_collisions;
 
 		globals* m_globals;
 		move_helper* m_move_helper;

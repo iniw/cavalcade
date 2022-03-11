@@ -84,6 +84,10 @@ void cavalcade::hooks::chlc_client::frame_stage_notify( unk ecx, unk, sdk::frame
 	}
 
 	og( ecx, stage );
+
+	if ( g_csgo.m_engine->is_in_game( ) && g_ctx.m_local )
+		if ( stage == sdk::frame_stage::RENDER_START )
+			g_hack.m_weather.run( );
 }
 
 void cavalcade::hooks::chlc_client::level_init_pre_entity( const char* name ) {
@@ -145,6 +149,7 @@ void cavalcade::hooks::chlc_client::level_init_post_entity( ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< level_init_post_entity_fn >( HASH_CT( "CHLClient::LevelInitPostEntity" ) );
 	og( );
 	g_hack.m_scaleform.install( );
+	g_hack.m_weather.reset( );
 	for ( const auto& [ state, callbacks ] : g_lua.m_callbacks ) {
 		for ( const auto& callback : callbacks.at( XOR( "LevelInitPostEntity" ) ) ) {
 			if ( callback.valid( ) ) {
@@ -199,6 +204,8 @@ void cavalcade::hooks::chlc_client::level_shutdown( unk ecx, unk edx ) {
 
 	// NOTE(para): CSGOHudRadar gets destroyed and reallocated every game join . . .
 	g_csgo.m_csgo_radar = nullptr;
+
+	g_hack.m_weather.reset( );
 
 	static auto og = g_mem[ CLIENT_DLL ].get_og< level_shutdown_fn >( HASH_CT( "CHLClient::LevelShutdown" ) );
 	og( ecx, edx );

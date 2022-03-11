@@ -1048,6 +1048,7 @@ bool cavalcade::ctx::init( ) {
 	MOCK m_cvars.sv_skyname   = g_csgo.m_cvars->find_var( XOR( "sv_skyname" ) );
 	MOCK m_cvars.sv_gravity   = g_csgo.m_cvars->find_var( XOR( "sv_gravity" ) );
 	MOCK m_cvars.cl_hud_color = g_csgo.m_cvars->find_var( XOR( "cl_hud_color" ) );
+	MOCK m_cvars.r_rainradius = g_csgo.m_cvars->find_var( XOR( "r_RainRadius" ) );
 
 	MOCK m_steam.m_steam_client = g_csgo.m_engine->get_steam_api_context( )->m_steam_client;
 

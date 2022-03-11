@@ -21,8 +21,8 @@ static void invalidate_bone_cache( sdk::cs_player* p ) {
 }
 
 static void create_bones( sdk::cs_player* p, math::matrix_3x4* matrix, i32 maxbones, i32 flags, f32 time ) {
-	/*p->occlusion_flags( )      = 0;
-	p->occlusion_framecount( ) = 0;*/
+	// p->occlusion_flags( )      = 0;
+	// p->occlusion_framecount( ) = 0;
 
 	invalidate_bone_cache( p );
 
@@ -42,14 +42,9 @@ hack::backtrack::tick::tick( sdk::cs_player* p ) {
 	m_simulation_time     = p->get_sim_time( );
 	m_origin              = p->get_origin( );
 	m_abs_angles          = p->get_abs_angles( );
-	m_velocity            = p->get_velocity( );
 	m_ang_eye_pos         = p->get_ang_eye_pos( );
-	m_eflags              = p->get_eflags( );
-	m_flags               = p->get_flags( );
-	m_mins                = p->get_collideable( )->obb_mins( );
-	m_maxs                = p->get_collideable( )->obb_maxs( );
-	m_pose_parameters     = p->get_pose_parameter( );
-	m_duck_amount         = p->get_duck_amount( );
+	m_mins                = p->get_mins( );
+	m_maxs                = p->get_maxs( );
 	m_bone_count          = p->get_bone_count( );
 
 	create_bones( p, m_matrix, 256, 0x7FF00, 0.F );
@@ -128,32 +123,28 @@ void hack::backtrack::store_records( ) {
 	} );
 }
 
-void hack::backtrack::apply_record( sdk::cs_player* p, i32 record, bool set_tickcount ) {
-	const auto& rec = m_records[ p->get_networkable_index( ) ];
-	if ( record != std::numeric_limits< i32 >::min( ) && rec[ record ].m_simulation_time && ( g_ctx.m_cmd->m_buttons & ( 1 << 0 ) ) &&
-	     g_ctx.m_local.get( ).can_fire_shot( ) ) {
-		const auto& frec = rec[ record ];
-		auto& bones      = p->get_cached_bones( );
+void hack::backtrack::apply_record( sdk::cs_player* p, const tick& frec, bool set_tickcount ) {
+	if ( frec.m_simulation_time && ( g_ctx.m_cmd->m_buttons & ( 1 << 0 ) ) && g_ctx.m_local.get( ).can_fire_shot( ) ) {
+		auto& bones = p->get_cached_bones( );
 
 		p->get_origin( ) = frec.m_origin;
 		p->set_abs_origin( frec.m_origin );
 		p->set_abs_angles( frec.m_abs_angles );
-		p->get_collideable( )->obb_mins( ) = frec.m_mins;
-		p->get_collideable( )->obb_maxs( ) = frec.m_maxs;
-		p->get_ang_eye_pos( )              = frec.m_ang_eye_pos;
-		p->get_pose_parameter( )           = frec.m_pose_parameters;
+		p->get_mins( )        = frec.m_mins;
+		p->get_maxs( )        = frec.m_maxs;
+		p->get_ang_eye_pos( ) = frec.m_ang_eye_pos;
 		memcpy( ( void* )bones.begin( ), frec.m_matrix, 48 * frec.m_bone_count );
-		p->get_bone_count( )  = frec.m_bone_count;
-		p->get_velocity( )    = frec.m_velocity;
-		p->get_eflags( )      = frec.m_eflags;
-		p->get_flags( )       = frec.m_flags;
-		p->get_duck_amount( ) = frec.m_duck_amount;
+		p->get_bone_count( ) = frec.m_bone_count;
 		if ( set_tickcount ) {
-			#if BACKTRACK_DEBUG == 1
-			g_csgo.m_cvars->console_color_printf( render::color( 0, 255, 0, 255 ), io::format( "backtracked {} ticks\n", record ).c_str( ) );
-			#endif
 			g_ctx.m_cmd->m_tick_count = sdk::time_to_ticks( frec.m_simulation_time + get_interpolation( ) );
 		}
+	}
+}
+
+void hack::backtrack::apply_record( sdk::cs_player* p, i32 record, bool set_tickcount ) {
+	const auto& rec = m_records[ p->get_networkable_index( ) ];
+	if ( record != std::numeric_limits< i32 >::min( ) ) {
+		apply_record( p, rec[ record ], set_tickcount );
 	}
 }
 

@@ -8,7 +8,7 @@ void cavalcade::hooks::csgo_player_anim_state::modify_eye_position( unk, unk, ma
 bool cavalcade::hooks::base_animating::setup_bones( unk ecx, unk edx, math::matrix_3x4* bonetoworldout, i32 max, i32 mask, f32 time ) {
 	static auto og = g_mem[ CLIENT_DLL ].get_og< setup_bones_fn >( HASH_CT( "CBaseAnimating::SetupBones" ) );
 
-	if ( g_ctx.m_local && g_csgo.m_engine->is_in_game( ) ) {
+	if ( !g_ctx.m_in_deathcam && g_ctx.m_local && g_ctx.m_local.get( ).is_alive( ) && g_csgo.m_engine->is_in_game( ) ) {
 		auto thisptr = ( sdk::cs_player* )ecx;
 		if ( thisptr && thisptr->is_alive( ) ) {
 			auto clazz = thisptr->get_client_class( );

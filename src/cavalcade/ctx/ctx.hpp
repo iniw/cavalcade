@@ -50,6 +50,7 @@ namespace cavalcade {
 			sdk::cvar* m_pitch;
 			sdk::cvar* m_yaw;
 			sdk::cvar* cl_hud_color;
+			sdk::cvar* r_rainradius;
 
 		} m_cvars;
 

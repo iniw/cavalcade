@@ -19,15 +19,10 @@ namespace hack {
 			f32 m_simulation_time{ 0.F };
 			math::v3f m_origin{ };
 			math::ang m_abs_angles{ };
-			math::v3f m_velocity{ };
 			math::v3f m_mins{ };
 			math::v3f m_maxs{ };
 			math::ang m_ang_eye_pos{ };
-			i32 m_flags{ };
-			i32 m_eflags{ };
-			f32 m_duck_amount{ };
 			i32 m_bone_count{ };
-			std::array< f32, 24 > m_pose_parameters{ };
 			math::matrix_3x4 m_matrix[ 256 ] = { };
 		};
 
@@ -39,6 +34,7 @@ namespace hack {
 
 		bool is_tick_valid( const tick& rec, f32 bt_time );
 		void store_records( );
+		void apply_record( sdk::cs_player* p, const tick& record, bool set_tickcount = false );
 		void apply_record( sdk::cs_player* p, i32 record, bool set_tickcount = false );
 		void run( );
 		void clear( );

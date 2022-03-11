@@ -25,6 +25,7 @@
 #include "effects.hpp"
 #include "imaterialsystem.hpp"
 #include "panorama.hpp"
+#include "physics_collisions.hpp"
 
 namespace sdk::interfaces {
 	struct registry {

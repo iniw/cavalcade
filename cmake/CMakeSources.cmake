@@ -29,6 +29,7 @@ set(SOURCES
     src/cavalcade/hack/graph/graph.cpp
     src/cavalcade/hack/indicators/screen.cpp
     src/cavalcade/hack/nightmode/nightmode.cpp
+    src/cavalcade/hack/weather/weather.cpp
     src/cavalcade/hack/fog/fog.cpp
     src/cavalcade/hack/sunset/sunset.cpp
     src/cavalcade/hack/movement/movement.cpp
@@ -41,6 +42,7 @@ set(SOURCES
     src/cavalcade/hooks/functions/base_player.cpp
     src/cavalcade/hooks/functions/prediction.cpp
     src/cavalcade/hooks/functions/chlc_client.cpp
+    src/cavalcade/hooks/functions/vphysics.cpp
     src/cavalcade/hooks/functions/d3d9_device.cpp
     src/cavalcade/hooks/functions/steam.cpp
     src/cavalcade/hooks/functions/viewrender.cpp

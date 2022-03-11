@@ -188,6 +188,8 @@ void mem::impl::add_addresses( ) {
 			ADD_PATTERN_REL( CLIENT_DLL, "C_BaseEntity::CheckHasThinkFunction", "E8 ? ? ? ? EB 11 8B 86 ? ? ? ?" );
 		}
 
+		ADD_ADDRESS( PHYSICS_DLL, "GetVCollide", get_v_func( g_csgo.m_model_info, 6 ) );
+
 		{ // C_BasePlayer
 			// ADD_PATTERN( CLIENT_DLL, "CBasePlayer->m_BoneAccessor", "8b 80 ? ? ? ? 03 c7 c7 04 24 ? ? ? ? 50 ff 52 2c" );
 			ADD_PATTERN( CLIENT_DLL, "C_BasePlayer->m_LastCmd", "8D 8E ? ? ? ? 89 5C 24 3C" );

@@ -22,6 +22,7 @@ void gui::impl::init( ) {
 		gb->add< objects::checkbox >( XOR( "crouch after ladderjump" ), XOR( "crouch after ladderjump" ) );
 		gb->add< objects::checkbox >( XOR( "nightmode" ), XOR( "nightmode" ) );
 		gb->add< objects::slider< i32 > >( XOR( "factor" ), XOR( "factor" ), 0, 100 );
+		gb->add< objects::slider< i32 > >( XOR( "weather" ), XOR( "weather" ), 0, 2 );
 		gb->add< objects::checkbox >( XOR( "sunset" ), XOR( "sunset" ) );
 		gb->add< objects::checkbox >( XOR( "fog" ), XOR( "fog" ) );
 		gb->add< objects::slider< f32 > >( XOR( "fog end" ), XOR( "fog end" ), 0.F, 1.F );
@@ -41,6 +42,10 @@ void gui::impl::init( ) {
 		gb->add< objects::checkbox >( XOR( "dlights" ), XOR( "dlights" ) );
 		gb->add< objects::slider< i32 > >( XOR( "bw" ), XOR( "bw" ), 0, 100 );
 		gb->add< objects::slider< i32 > >( XOR( "bh" ), XOR( "bh" ), 0, 100 );
+		gb->add< objects::checkbox >( XOR( "name" ), XOR( "name" ) );
+		gb->add< objects::checkbox >( XOR( "health" ), XOR( "health" ) );
+		gb->add< objects::checkbox >( XOR( "weapon" ), XOR( "weapon" ) );
+		gb->add< objects::checkbox >( XOR( "glow" ), XOR( "glow" ) );
 	}
 
 	auto gb3 = window->add< objects::groupbox >( XOR( "group2" ), ( "test 3" ), 90 );

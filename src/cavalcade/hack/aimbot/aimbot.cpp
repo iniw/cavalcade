@@ -139,19 +139,19 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 
 				std::optional< i32 > selected_tick{ std::nullopt };
 
+				hack::backtrack::tick tick( m_best_player );
+
 				auto tc = g_ctx.m_cmd ? g_ctx.m_cmd->m_tick_count : 0;
 				if ( best_tick.has_value( ) )
 					g_hack.m_backtrack.apply_record( m_best_player, best_tick.value( ), arg_is_angle );
 
+				const auto& rec = g_hack.m_backtrack.m_records[ m_best_player->get_networkable_index( ) ];
 				for ( const auto& [ k, e ] : g_aim_hitboxes ) {
 					// TODO(para, wini (menu)): verify if k selected, if not, continue
 
 					for ( auto h : e ) {
-						auto hitbox_pos =
-							!best_tick.has_value( )
-								? m_best_player->get_hitbox_position( h )
-								: m_best_player->get_hitbox_position(
-									  h, g_hack.m_backtrack.m_records[ m_best_player->get_networkable_index( ) ][ best_tick.value( ) ].m_matrix );
+						auto hitbox_pos = !best_tick.has_value( ) ? m_best_player->get_hitbox_position( h )
+						                                          : m_best_player->get_hitbox_position( h, rec[ best_tick.value( ) ].m_matrix );
 						if ( hitbox_pos == math::v3f{ std::numeric_limits< f32 >::max( ), std::numeric_limits< f32 >::max( ),
 						                              std::numeric_limits< f32 >::max( ) } ||
 						     hitbox_pos == math::v3f{ 0, 0, 0 } )
@@ -183,14 +183,11 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 					}
 				}
 
-				auto pos =
-					!best_tick.has_value( )
-						? m_best_player->get_hitbox_position( best_hitbox )
-						: m_best_player->get_hitbox_position(
-							  best_hitbox, g_hack.m_backtrack.m_records[ m_best_player->get_networkable_index( ) ][ best_tick.value( ) ].m_matrix );
+				auto pos = !best_tick.has_value( ) ? m_best_player->get_hitbox_position( best_hitbox )
+				                                   : m_best_player->get_hitbox_position( best_hitbox, rec[ best_tick.value( ) ].m_matrix );
 
 				if ( best_tick.has_value( ) )
-					g_hack.m_backtrack.apply_record( m_best_player, 0 );
+					g_hack.m_backtrack.apply_record( m_best_player, tick );
 
 				if ( tc != 0 )
 					g_ctx.m_cmd->m_tick_count = tc;
@@ -216,6 +213,8 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 
 				for ( auto t = 0; t < size; ++t ) {
 					auto tc = g_ctx.m_cmd ? g_ctx.m_cmd->m_tick_count : 0;
+
+					hack::backtrack::tick tick( m_best_player );
 
 					g_hack.m_backtrack.apply_record( m_best_player, t, arg_is_angle );
 
@@ -246,7 +245,7 @@ void hack::aimbot::run( f32& x, f32& y, bool arg_is_angle ) {
 					set_dis( sdk::e_hitbox::LOWER_CHEST );
 					set_dis( sdk::e_hitbox::UPPER_CHEST );
 
-					g_hack.m_backtrack.apply_record( m_best_player, 0 );
+					g_hack.m_backtrack.apply_record( m_best_player, tick );
 					if ( tc != 0 )
 						g_ctx.m_cmd->m_tick_count = tc;
 

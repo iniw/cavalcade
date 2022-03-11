@@ -146,7 +146,7 @@ int cavalcade::hooks::base_player::some_fn( unk ecx, unk edx, unk a1, unk a2, un
 	static auto& btt    = gui::cfg::get< f32 >( HASH_CT( "main:group1:backtrack time" ) );
 
 	auto backup = interp;
-	if ( ( bt && btt > 0.F ) && g_ctx.m_local && ( ( sdk::cs_player* )( ecx ) )->is_enemy( g_ctx.m_local ) )
+	if ( ( bt && btt > 0.F ) && !g_ctx.m_in_deathcam && g_ctx.m_local && g_ctx.m_local.get( ).is_alive() && ( ( sdk::cs_player* )( ecx ) )->is_enemy( g_ctx.m_local ) )
 		interp = false;
 	auto ret = og( ecx, edx, a1, a2, a3, a4 );
 	interp   = backup;

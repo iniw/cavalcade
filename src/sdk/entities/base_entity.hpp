@@ -58,6 +58,9 @@ namespace sdk {
 
 		NETVAR( math::v3f, light_shadow_direction, "DT_CascadeLight->m_envLightShadowDirection" );
 		NETVAR( f32, max_shadow_dist, "DT_CascadeLight->m_flMaxShadowDist" );
+		NETVAR( i16, model_index, "DT_BaseEntity->m_nModelIndex" );
+
+		OFFSET( i32, index, 100 );
 
 		auto physics_run_think( i32 think_method = 0 ) {
 			static auto function = g_mem[ CLIENT_DLL ].get_address< bool( __thiscall* )( void*, i32 ) >( HASH_CT( "C_BaseEntity::PhysicsRunThink" ) );

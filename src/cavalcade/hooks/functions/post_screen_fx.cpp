@@ -9,6 +9,11 @@ void __fastcall cavalcade::hooks::fx::post_screen_fx( unk ecx, unk edx, unk view
 	if ( !g_ctx.m_local )
 		return og( ecx, edx, view );
 
+	static auto& gw = gui::cfg::get< bool >( HASH_CT( "main:group1:glow" ) );
+
+	if ( !gw )
+		return og( ecx, edx, view );
+
 	static auto glow_mgr = ( sdk::glow_manager* )( *( uintptr_t* )( g_mem[ CLIENT_DLL ].get_address< uintptr_t >( HASH_CT( "GlowManager" ) ) + 3 ) );
 
 	for ( auto i = 0; i < glow_mgr->m_size; ++i ) {
@@ -24,7 +29,7 @@ void __fastcall cavalcade::hooks::fx::post_screen_fx( unk ecx, unk edx, unk view
 
 		obj.m_full_bloom_render = false;
 		obj.m_glow_style        = 0;
-		obj.set( 1.F, 1.F, 1.f, 0.3F );
+		obj.set( 0.67F, 0.83F, 0.89f, 0.45F );
 	}
 
 	og( ecx, edx, view );

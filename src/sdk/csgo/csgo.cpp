@@ -65,6 +65,10 @@ bool sdk::csgo::init( ) {
 		                 .get< interfaces::panorama_ui_engine* >( 1 );
 		if ( !m_panorama )
 			return false;
+
+		m_physics_collisions = find_interface< interfaces::physics_collison* >( g_mem[ PHYSICS_DLL ], HASH_CT( "VPhysicsCollision" ) );
+		if ( !m_physics_collisions )
+			return false;
 	}
 
 	m_globals = mem::get_v_func( m_client, 11 ).add( 0xA ).get< globals* >( 2 );

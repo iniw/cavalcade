@@ -31,6 +31,11 @@ namespace cavalcade {
 			                                                 unk ik_context );
 		};
 
+		struct vphysics {
+			using get_collide_fn = void*( __fastcall* )( unk, unk, i32 );
+			static void* __fastcall get_collide( unk, unk, i32 );
+		};
+
 		struct chlc_client {
 			using frame_stage_notify_fn = void( __thiscall* )( unk, sdk::frame_stage );
 			static void __fastcall frame_stage_notify( unk ecx, unk, sdk::frame_stage stage );
