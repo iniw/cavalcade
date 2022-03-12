@@ -46,6 +46,8 @@ void gui::impl::init( ) {
 		gb->add< objects::checkbox >( XOR( "health" ), XOR( "health" ) );
 		gb->add< objects::checkbox >( XOR( "weapon" ), XOR( "weapon" ) );
 		gb->add< objects::checkbox >( XOR( "glow" ), XOR( "glow" ) );
+		gb->add< objects::checkbox >( XOR( "chams" ), XOR( "chams" ) );
+		gb->add< objects::checkbox >( XOR( "chams bt alltick" ), XOR( "chams bt alltick" ) );
 	}
 
 	auto gb3 = window->add< objects::groupbox >( XOR( "group2" ), ( "test 3" ), 90 );

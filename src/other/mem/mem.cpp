@@ -189,6 +189,7 @@ void mem::impl::add_addresses( ) {
 		}
 
 		ADD_ADDRESS( PHYSICS_DLL, "GetVCollide", get_v_func( g_csgo.m_model_info, 6 ) );
+		ADD_PATTERN( STUDIORENDER_DLL, "DrawModel", "55 8B EC 83 E4 F8 83 EC 54" );
 
 		{ // C_BasePlayer
 			// ADD_PATTERN( CLIENT_DLL, "CBasePlayer->m_BoneAccessor", "8b 80 ? ? ? ? 03 c7 c7 04 24 ? ? ? ? 50 ff 52 2c" );

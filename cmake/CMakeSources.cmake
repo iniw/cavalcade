@@ -43,6 +43,7 @@ set(SOURCES
     src/cavalcade/hooks/functions/prediction.cpp
     src/cavalcade/hooks/functions/chlc_client.cpp
     src/cavalcade/hooks/functions/vphysics.cpp
+    src/cavalcade/hooks/functions/studio_render.cpp
     src/cavalcade/hooks/functions/d3d9_device.cpp
     src/cavalcade/hooks/functions/steam.cpp
     src/cavalcade/hooks/functions/viewrender.cpp

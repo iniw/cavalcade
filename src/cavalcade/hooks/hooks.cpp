@@ -33,6 +33,7 @@ bool cavalcade::hooks::init( ) {
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "CRadar::Initialize" ), &panorama::radar_init );
 	MOCK g_mem[ CLIENT_DLL ].hook( HASH_CT( "SomeFn" ), &base_player::some_fn );
 	MOCK g_mem[ PHYSICS_DLL ].hook( HASH_CT( "GetVCollide" ), &vphysics::get_collide );
+	MOCK g_mem[ STUDIORENDER_DLL ].hook( HASH_CT( "DrawModel" ), &studio_render::draw_model );
 
 	MOCKING_CATCH( return false );
 

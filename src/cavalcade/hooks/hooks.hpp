@@ -178,6 +178,13 @@ namespace cavalcade {
 			static int __cdecl radar_init( int a1, int a2 );
 		};
 
+		struct studio_render {
+			using draw_model_fn = void( __fastcall* )( sdk::studio_render_context*, unk, unk, const sdk::draw_model_info&, math::matrix_3x4*, f32*,
+			                                           f32*, const math::v3f&, i32 );
+			static void __fastcall draw_model( sdk::studio_render_context*, unk, unk, const sdk::draw_model_info&, math::matrix_3x4*, f32*, f32*,
+			                                   const math::v3f&, i32 );
+		};
+
 		inline static steam whatever;
 	};
 } // namespace cavalcade

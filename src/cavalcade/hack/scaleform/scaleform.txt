@@ -84,7 +84,7 @@ R"(
     location.style.width = '240px';
     location.style.height = '30px';
     location.style.backgroundColor = 'gradient( linear, 100% 0%, 0% 0%, from( #00000000 ), color-stop( 0.5, #000000CC ) , color-stop(0.6, #000000CC), color-stop( 0.9, #000000CC ), to( #000000CC ) )';
-    location.style.opacity = '0.9';
+    location.style.opacity = '1.0';
     location.style.width = '260px';
     location.style.height = '46px';
     location.style.paddingLeft = '20px';

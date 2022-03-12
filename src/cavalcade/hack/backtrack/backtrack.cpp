@@ -174,6 +174,9 @@ void hack::backtrack::run( ) {
 			return;
 	}
 
+	if ( !( g_ctx.m_cmd->m_buttons & ( 1 << 0 ) ) )
+		return;
+
 	auto rcs_angle   = g_ctx.m_local.get( ).get_aim_punch_angle( ) * 2;
 	auto view_angles = g_csgo.m_engine->get_view_angles( );
 

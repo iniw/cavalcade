@@ -16,6 +16,7 @@
             radar_ols.style.opacity = '1.0';
             var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
             location.style.color = '#e8e8e8ff';
+            location.style.opacity = '1.0';
         })();
     )",
     R"(
@@ -34,6 +35,8 @@
             radar_ols.style.opacity = '1.0';
             var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
             location.style.color = '#ffffffff';
+            location.style.opacity = '1.0';
+
         })();
     )",
     R"(
@@ -52,6 +55,8 @@
             radar_ols.style.opacity = '1.0';
             var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
             location.style.color = '#96c8ffff';
+            location.style.opacity = '1.0';
+
         })();
     )",
     R"(
@@ -70,6 +75,8 @@
             radar_ols.style.opacity = '1.0';
             var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
             location.style.color = '#356effff';
+            location.style.opacity = '1.0';
+
         })();
     )",
     R"(
@@ -88,6 +95,8 @@
             radar_ols.style.opacity = '1.0';
             var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
             location.style.color = '#c864ffff';
+            location.style.opacity = '1.0';
+
         })();
     )",
     R"(
@@ -106,6 +115,8 @@
             radar_ols.style.opacity = '1.0';
             var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
             location.style.color = '#ff2924ff';
+            location.style.opacity = '1.0';
+
         })();
     )",
     R"(
@@ -124,6 +135,8 @@
             radar_ols.style.opacity = '1.0';
             var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
             location.style.color = '#ff7124ff';
+            location.style.opacity = '1.0';
+
         })();
     )",
     R"(
@@ -142,6 +155,8 @@
             radar_ols.style.opacity = '1.0';
             var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
             location.style.color = '#fff724ff';
+            location.style.opacity = '1.0';
+
         })();
     )",
     R"(
@@ -160,6 +175,8 @@
             radar_ols.style.opacity = '1.0';
             var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
             location.style.color = '#3eff24ff';
+            location.style.opacity = '1.0';
+
         })();
     )",
     R"(
@@ -178,6 +195,8 @@
             radar_ols.style.opacity = '1.0';
             var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
             location.style.color = '#24ff90ff';
+            location.style.opacity = '1.0';
+
         })();
     )",
     R"(
@@ -196,6 +215,8 @@
             radar_ols.style.opacity = '1.0';
             var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
             location.style.color = '#ff7999ff';
+            location.style.opacity = '1.0';
+
         })();
     )",
     R"(
@@ -214,6 +235,8 @@
             radar_ols.style.opacity = '1.0';
             var location = $.GetContextPanel().FindChildTraverse('HudRadar').FindChildTraverse('DashboardLabel'); 
             location.style.color = '#d5e286ff';
+            location.style.opacity = '1.0';
+
         })();
     )"
 }

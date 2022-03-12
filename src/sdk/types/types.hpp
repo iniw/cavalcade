@@ -27,4 +27,5 @@
 #include "view.hpp"
 #include "boneaccessor.hpp"
 #include "varmapping.hpp"
+#include "studio.hpp"
 #include "interfaces/interfaces.hpp"
