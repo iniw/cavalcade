@@ -325,13 +325,15 @@ void hack::movement::edgebug::run( i32 base_flags, f32 base_velocity ) {
 				}
 			}
 
+			addy( 0, g_csgo.m_prediction->m_commands_predicted - 1 );
+
 			if ( m_predicted )
 				break;
 		}
 	}
 
 	if ( m_predicted ) {
-		if ( g_csgo.m_globals->m_tickcount < ( m_simulation_tick + m_simulation_timestamp ) ) {
+		if ( g_csgo.m_globals->m_tickcount <= ( m_simulation_tick + m_simulation_timestamp ) ) {
 			g_ctx.m_cmd->m_buttons &= ~( 1 << 3 );
 			g_ctx.m_cmd->m_buttons &= ~( 1 << 4 );
 			g_ctx.m_cmd->m_forward_move = 0.F;
@@ -499,7 +501,8 @@ void hack::movement::pixelsurf::run( const math::v3f& base_origin ) {
 			g_hack.m_prediction.apply( );
 
 			// NOTE(para): I have no idea why this is running <<during>> prediction, but whatever the boss says
-			if ( base_velocity < -6.25F && g_ctx.m_local.get( ).get_velocity( )[ 2 ] < -6.25F &&
+			if ( ( ( base_velocity < -6.25F && g_ctx.m_local.get( ).get_velocity( )[ 2 ] < -6.25F ) ||
+			       base_velocity < -3.125F && g_ctx.m_local.get( ).get_velocity( )[ 2 ] < -3.125F ) &&
 			     g_ctx.m_local.get( ).get_velocity( )[ 2 ] > base_velocity && !( g_ctx.m_local.get( ).get_flags( ) & 1 ) ) {
 				predicted     = true;
 				m_duration    = ticks;
@@ -528,6 +531,12 @@ void hack::movement::pixelsurf::run( const math::v3f& base_origin ) {
 		// g_ctx.m_cmd->m_forward_move = backup_fmove;
 		// g_ctx.m_cmd->m_side_move    = backup_smove;
 		// m_autoalign = true;
+	}
+
+	if ( m_in_pixelsurf ) {
+		// keep in
+		g_ctx.m_cmd->m_buttons &= ~( 1 << 1 );
+		g_ctx.m_cmd->m_buttons |= 4;
 	}
 
 	// if ( !predicted ) {
